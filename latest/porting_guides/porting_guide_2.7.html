@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansible 2.7 Porting Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/porting_guides/porting_guide_2.7.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ansible 2.6 Porting Guide" href="porting_guide_2.6.html" />
+    <link rel="prev" title="Ansible 2.8 Porting Guide" href="porting_guide_2.8.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="porting_guides.html">Ansible Porting Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_6.html">Ansible 6 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_5.html">Ansible 5 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_4.html">Ansible 4 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_3.html">Ansible 3 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.10.html">Ansible 2.10 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.9.html">Ansible 2.9 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.8.html">Ansible 2.8 Porting Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible 2.7 Porting Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command-line">Command Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-compatibility">Python Compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playbook">Playbook</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#role-precedence-fix-during-role-loading">Role Precedence Fix during Role Loading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#include-role-and-import-role-variable-exposure">include_role and import_role variable exposure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#include-tasks-import-tasks-inline-variables">include_tasks/import_tasks inline variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vars-prompt-with-unknown-algorithms">vars_prompt with unknown algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecated">Deprecated</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#expedited-deprecation-use-of-file-in-ansiblemodule">Expedited Deprecation: Use of <code class="docutils literal notranslate"><span class="pre">__file__</span></code> in <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-a-loop-on-a-package-module-via-squash-actions">Using a loop on a package module via squash_actions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modules-removed">Modules removed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deprecation-notices">Deprecation notices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#noteworthy-module-changes">Noteworthy module changes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-custom-scripts">Porting custom scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#networking">Networking</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.6.html">Ansible 2.6 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.5.html">Ansible 2.5 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.4.html">Ansible 2.4 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.3.html">Ansible 2.3 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.0.html">Ansible 2.0 Porting Guide</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="porting_guides.html">Ansible Porting Guides</a> &raquo;</li>
+      <li>Ansible 2.7 Porting Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/porting_guides/porting_guide_2.7.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="ansible-2-7-porting-guide">
+<span id="porting-2-7-guide"></span><h1><a class="toc-backref" href="#id1">Ansible 2.7 Porting Guide</a><a class="headerlink" href="#ansible-2-7-porting-guide" title="Permalink to this headline"></a></h1>
+<p>This section discusses the behavioral changes between Ansible 2.6 and Ansible 2.7.</p>
+<p>It is intended to assist in updating your playbooks, plugins and other parts of your Ansible infrastructure so they will work with this version of Ansible.</p>
+<p>We suggest you read this page along with <a class="reference external" href="https://github.com/ansible/ansible/blob/stable-2.7/changelogs/CHANGELOG-v2.7.rst">Ansible Changelog for 2.7</a> to understand what updates you may need to make.</p>
+<p>This document is part of a collection on porting. The complete list of porting guides can be found at <a class="reference internal" href="porting_guides.html#porting-guides"><span class="std std-ref">porting guides</span></a>.</p>
+<div class="contents topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ansible-2-7-porting-guide" id="id1">Ansible 2.7 Porting Guide</a></p>
+<ul>
+<li><p><a class="reference internal" href="#command-line" id="id2">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#python-compatibility" id="id3">Python Compatibility</a></p></li>
+<li><p><a class="reference internal" href="#playbook" id="id4">Playbook</a></p>
+<ul>
+<li><p><a class="reference internal" href="#role-precedence-fix-during-role-loading" id="id5">Role Precedence Fix during Role Loading</a></p></li>
+<li><p><a class="reference internal" href="#include-role-and-import-role-variable-exposure" id="id6">include_role and import_role variable exposure</a></p></li>
+<li><p><a class="reference internal" href="#include-tasks-import-tasks-inline-variables" id="id7">include_tasks/import_tasks inline variables</a></p></li>
+<li><p><a class="reference internal" href="#vars-prompt-with-unknown-algorithms" id="id8">vars_prompt with unknown algorithms</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#deprecated" id="id9">Deprecated</a></p>
+<ul>
+<li><p><a class="reference internal" href="#expedited-deprecation-use-of-file-in-ansiblemodule" id="id10">Expedited Deprecation: Use of <code class="docutils literal notranslate"><span class="pre">__file__</span></code> in <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code></a></p></li>
+<li><p><a class="reference internal" href="#using-a-loop-on-a-package-module-via-squash-actions" id="id11">Using a loop on a package module via squash_actions</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#modules" id="id12">Modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#modules-removed" id="id13">Modules removed</a></p></li>
+<li><p><a class="reference internal" href="#deprecation-notices" id="id14">Deprecation notices</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id15">Noteworthy module changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#plugins" id="id16">Plugins</a></p></li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id17">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id18">Networking</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="command-line">
+<h2><a class="toc-backref" href="#id2">Command Line</a><a class="headerlink" href="#command-line" title="Permalink to this headline"></a></h2>
+<p>If you specify <code class="docutils literal notranslate"><span class="pre">--tags</span></code> or <code class="docutils literal notranslate"><span class="pre">--skip-tags</span></code> multiple times on the command line, Ansible will merge the specified
+tags together.  In previous versions of Ansible, you could set <code class="docutils literal notranslate"><span class="pre">merge_multiple_cli_tags</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>
+if you wanted to keep only the last-specified <code class="docutils literal notranslate"><span class="pre">--tags</span></code>.  This config
+option existed for backwards compatibility. The overwriting behavior was deprecated in 2.3 and
+the default behavior was changed in 2.4.  Ansible-2.7 removes the config option; multiple
+<code class="docutils literal notranslate"><span class="pre">--tags</span></code> are now always merged.</p>
+<p>If you have a shell script that depends on setting <code class="docutils literal notranslate"><span class="pre">merge_multiple_cli_tags</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>, please upgrade your script
+so it only adds the <code class="docutils literal notranslate"><span class="pre">--tags</span></code> you actually want before upgrading to Ansible-2.7.</p>
+</section>
+<section id="python-compatibility">
+<h2><a class="toc-backref" href="#id3">Python Compatibility</a><a class="headerlink" href="#python-compatibility" title="Permalink to this headline"></a></h2>
+<p>Ansible has dropped compatibility with Python-2.6 on the controller (The host where <strong class="command">/usr/bin/ansible</strong>
+or <strong class="command">/usr/bin/ansible-playbook</strong> is run).  Modules shipped with Ansible can still be used to
+manage hosts which only have Python-2.6.  You just need to have a host with Python-2.7 or Python-3.5
+or greater to manage those hosts from.</p>
+<p>One thing that this does affect is the ability to use <strong class="command">/usr/bin/ansible-pull</strong> to manage
+a host which has Python-2.6.  <code class="docutils literal notranslate"><span class="pre">ansible-pull</span></code> runs on the host being managed but it is a controller
+script, not a module so it will need an updated Python.  Actively developed Linux distros which ship
+with Python-2.6 have some means to install newer Python versions (For instance, you can install
+Python-2.7 via an SCL on RHEL-6) but you may need to also install Python bindings for many common
+modules to work (For RHEL-6, for instance, selinux bindings and yum would have to be installed for
+the updated Python install).</p>
+<p>The decision to drop Python-2.6 support on the controller was made because many dependent libraries
+are becoming unavailable there.  In particular, python-cryptography is no longer available for Python-2.6
+and the last release of pycrypto (the alternative to python-cryptography) has known security bugs
+which will never be fixed.</p>
+</section>
+<section id="playbook">
+<h2><a class="toc-backref" href="#id4">Playbook</a><a class="headerlink" href="#playbook" title="Permalink to this headline"></a></h2>
+<section id="role-precedence-fix-during-role-loading">
+<h3><a class="toc-backref" href="#id5">Role Precedence Fix during Role Loading</a><a class="headerlink" href="#role-precedence-fix-during-role-loading" title="Permalink to this headline"></a></h3>
+<p>Ansible 2.7 makes a small change to variable precedence when loading roles, resolving a bug, ensuring that role loading matches <a class="reference internal" href="../user_guide/playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">variable precedence expectations</span></a>.</p>
+<p>Before Ansible 2.7, when loading a role, the variables defined in the role’s <code class="docutils literal notranslate"><span class="pre">vars/main.yml</span></code> and <code class="docutils literal notranslate"><span class="pre">defaults/main.yml</span></code> were not available when parsing the role’s <code class="docutils literal notranslate"><span class="pre">tasks/main.yml</span></code> file. This prevented the role from utilizing these variables when being parsed. The problem manifested when <code class="docutils literal notranslate"><span class="pre">import_tasks</span></code> or <code class="docutils literal notranslate"><span class="pre">import_role</span></code> was used with a variable defined in the role’s vars or defaults.</p>
+<p>In Ansible 2.7, role <code class="docutils literal notranslate"><span class="pre">vars</span></code> and <code class="docutils literal notranslate"><span class="pre">defaults</span></code> are now parsed before <code class="docutils literal notranslate"><span class="pre">tasks/main.yml</span></code>. This can cause a change in behavior if the same variable is defined at the play level and the role level with different values, and used in <code class="docutils literal notranslate"><span class="pre">import_tasks</span></code> or <code class="docutils literal notranslate"><span class="pre">import_role</span></code> to define the role or file to import.</p>
+</section>
+<section id="include-role-and-import-role-variable-exposure">
+<h3><a class="toc-backref" href="#id6">include_role and import_role variable exposure</a><a class="headerlink" href="#include-role-and-import-role-variable-exposure" title="Permalink to this headline"></a></h3>
+<p>In Ansible 2.7 a new module argument named <code class="docutils literal notranslate"><span class="pre">public</span></code> was added to the <code class="docutils literal notranslate"><span class="pre">include_role</span></code> module that dictates whether or not the role’s <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">vars</span></code> will be exposed outside of the role, allowing those variables to be used by later tasks.  This value defaults to <code class="docutils literal notranslate"><span class="pre">public:</span> <span class="pre">False</span></code>, matching current behavior.</p>
+<p><code class="docutils literal notranslate"><span class="pre">import_role</span></code> does not support the <code class="docutils literal notranslate"><span class="pre">public</span></code> argument, and will unconditionally expose the role’s <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">vars</span></code> to the rest of the playbook. This functionality brings <code class="docutils literal notranslate"><span class="pre">import_role</span></code> into closer alignment with roles listed within the <code class="docutils literal notranslate"><span class="pre">roles</span></code> header in a play.</p>
+<p>There is an important difference in the way that <code class="docutils literal notranslate"><span class="pre">include_role</span></code> (dynamic) will expose the role’s variables, as opposed to <code class="docutils literal notranslate"><span class="pre">import_role</span></code> (static). <code class="docutils literal notranslate"><span class="pre">import_role</span></code> is a pre-processor, and the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">vars</span></code> are evaluated at playbook parsing, making the variables available to tasks and roles listed at any point in the play. <code class="docutils literal notranslate"><span class="pre">include_role</span></code> is a conditional task, and the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">vars</span></code> are evaluated at execution time, making the variables available to tasks and roles listed <em>after</em> the <code class="docutils literal notranslate"><span class="pre">include_role</span></code> task.</p>
+</section>
+<section id="include-tasks-import-tasks-inline-variables">
+<h3><a class="toc-backref" href="#id7">include_tasks/import_tasks inline variables</a><a class="headerlink" href="#include-tasks-import-tasks-inline-variables" title="Permalink to this headline"></a></h3>
+<p>As of Ansible 2.7, <cite>include_tasks</cite> and <cite>import_tasks</cite> can no longer accept inline variables. Instead of using inline variables, tasks should supply variables under the <code class="docutils literal notranslate"><span class="pre">vars</span></code> keyword.</p>
+<p><strong>OLD</strong> In Ansible 2.6 (and earlier) the following was valid syntax for specifying variables:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">include_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">include_me.yml variable=value</span>
+</pre></div>
+</div>
+<p><strong>NEW</strong> In Ansible 2.7 the task should be changed to use the <code class="docutils literal notranslate"><span class="pre">vars</span></code> keyword:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">include_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">include_me.yml</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">variable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">value</span>
+</pre></div>
+</div>
+</section>
+<section id="vars-prompt-with-unknown-algorithms">
+<h3><a class="toc-backref" href="#id8">vars_prompt with unknown algorithms</a><a class="headerlink" href="#vars-prompt-with-unknown-algorithms" title="Permalink to this headline"></a></h3>
+<p>vars_prompt now throws an error if the hash algorithm specified in encrypt is not supported by
+the controller.  This increases the safety of vars_prompt as it previously returned None if the
+algorithm was unknown.  Some modules, notably the user module, treated a password of None as
+a request not to set a password.  If your playbook starts erroring because of this, change the
+hashing algorithm being used with this filter.</p>
+</section>
+</section>
+<section id="deprecated">
+<h2><a class="toc-backref" href="#id9">Deprecated</a><a class="headerlink" href="#deprecated" title="Permalink to this headline"></a></h2>
+<section id="expedited-deprecation-use-of-file-in-ansiblemodule">
+<h3><a class="toc-backref" href="#id10">Expedited Deprecation: Use of <code class="docutils literal notranslate"><span class="pre">__file__</span></code> in <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code></a><a class="headerlink" href="#expedited-deprecation-use-of-file-in-ansiblemodule" title="Permalink to this headline"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The use of the <code class="docutils literal notranslate"><span class="pre">__file__</span></code> variable is deprecated in Ansible 2.7 and <strong>will be eliminated in Ansible 2.8</strong>. This is much quicker than our usual 4-release deprecation cycle.</p>
+</div>
+<p>We are deprecating the use of the <code class="docutils literal notranslate"><span class="pre">__file__</span></code> variable to refer to the file containing the currently-running code. This common Python technique for finding a filesystem path does not always work (even in vanilla Python). Sometimes a Python module can be imported from a virtual location (like inside of a zip file). When this happens, the <code class="docutils literal notranslate"><span class="pre">__file__</span></code> variable will reference a virtual location pointing to inside of the zip file. This can cause problems if, for instance, the code was trying to use <code class="docutils literal notranslate"><span class="pre">__file__</span></code> to find the directory containing the python module to write some temporary information.</p>
+<p>Before the introduction of AnsiBallZ in Ansible 2.1, using <code class="docutils literal notranslate"><span class="pre">__file__</span></code> worked in <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> sometimes, but any module that used it would fail when pipelining was turned on (because the module would be piped into the python interpreter’s standard input, so <code class="docutils literal notranslate"><span class="pre">__file__</span></code> wouldn’t contain a file path). AnsiBallZ unintentionally made using <code class="docutils literal notranslate"><span class="pre">__file__</span></code> work, by always creating a temporary file for <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> to reside in.</p>
+<p>Ansible 2.8 will no longer create a temporary file for <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>; instead it will read the file out of a zip file. This change should speed up module execution, but it does mean that starting with Ansible 2.8, referencing <code class="docutils literal notranslate"><span class="pre">__file__</span></code> will always fail in <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>.</p>
+<p>If you are the author of a third-party module which uses <code class="docutils literal notranslate"><span class="pre">__file__</span></code> with <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>, please update your module(s) now, while the use of <code class="docutils literal notranslate"><span class="pre">__file__</span></code> is deprecated but still available. The most common use of <code class="docutils literal notranslate"><span class="pre">__file__</span></code> is to find a directory to write a temporary file. In Ansible 2.5 and above, you can use the <code class="docutils literal notranslate"><span class="pre">tmpdir</span></code> attribute on an <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> instance instead, as shown in this code from the <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/apt_module.html#apt-module" title="(in Ansible v2.7)"><span class="xref std std-ref">apt module</span></a>:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gd">-    tempdir = os.path.dirname(__file__)</span>
+<span class="gd">-    package = os.path.join(tempdir, to_native(deb.rsplit(&#39;/&#39;, 1)[1]))</span>
+<span class="gi">+    package = os.path.join(module.tmpdir, to_native(deb.rsplit(&#39;/&#39;, 1)[1]))</span>
+</pre></div>
+</div>
+</section>
+<section id="using-a-loop-on-a-package-module-via-squash-actions">
+<h3><a class="toc-backref" href="#id11">Using a loop on a package module via squash_actions</a><a class="headerlink" href="#using-a-loop-on-a-package-module-via-squash-actions" title="Permalink to this headline"></a></h3>
+<p>The use of <code class="docutils literal notranslate"><span class="pre">squash_actions</span></code> to invoke a package module, such as “yum”, to only invoke the module once is deprecated, and will be removed in Ansible 2.11.</p>
+<p>Instead of relying on implicit squashing, tasks should instead supply the list directly to the <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">pkg</span></code> or <code class="docutils literal notranslate"><span class="pre">package</span></code> parameter of the module. This functionality has been supported in most modules since Ansible 2.3.</p>
+<p><strong>OLD</strong> In Ansible 2.6 (and earlier) the following task would invoke the “yum” module only 1 time to install multiple packages</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install packages</span>
+  <span class="nt">yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="nt">with_items</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">packages</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<p><strong>NEW</strong> In Ansible 2.7 it should be changed to look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install packages</span>
+  <span class="nt">yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">packages</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="modules">
+<h2><a class="toc-backref" href="#id12">Modules</a><a class="headerlink" href="#modules" title="Permalink to this headline"></a></h2>
+<p>Major changes in popular modules are detailed here</p>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="../reference_appendices/config.html#default-syslog-facility"><span class="std std-ref">DEFAULT_SYSLOG_FACILITY</span></a> configuration option tells Ansible modules to use a specific
+<a class="reference external" href="https://en.wikipedia.org/wiki/Syslog#Facility">syslog facility</a> when logging information on all
+managed machines. Due to a bug with older Ansible versions, this setting did not affect machines
+using journald with the systemd Python bindings installed. On those machines, Ansible log
+messages were sent to <code class="docutils literal notranslate"><span class="pre">/var/log/messages</span></code>, even if you set <a class="reference internal" href="../reference_appendices/config.html#default-syslog-facility"><span class="std std-ref">DEFAULT_SYSLOG_FACILITY</span></a>.
+Ansible 2.7 fixes this bug, routing all Ansible log messages according to the value set for
+<a class="reference internal" href="../reference_appendices/config.html#default-syslog-facility"><span class="std std-ref">DEFAULT_SYSLOG_FACILITY</span></a>. If you have <a class="reference internal" href="../reference_appendices/config.html#default-syslog-facility"><span class="std std-ref">DEFAULT_SYSLOG_FACILITY</span></a> configured, the
+location of remote logs on systems which use journald may change.</p></li>
+</ul>
+<section id="modules-removed">
+<h3><a class="toc-backref" href="#id13">Modules removed</a><a class="headerlink" href="#modules-removed" title="Permalink to this headline"></a></h3>
+<p>The following modules no longer exist:</p>
+</section>
+<section id="deprecation-notices">
+<h3><a class="toc-backref" href="#id14">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Permalink to this headline"></a></h3>
+<p>The following modules will be removed in Ansible 2.11. Please update your playbooks accordingly.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_aggregate</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_aggregate_module.html#na-ontap-aggregate-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_aggregate</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_license</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_license_module.html#na-ontap-license-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_license</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_lun</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_lun_module.html#na-ontap-lun-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_lun</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_qtree</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_qtree_module.html#na-ontap-qtree-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_qtree</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_svm</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_svm_module.html#na-ontap-svm-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_svm</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_user</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_user_module.html#na-ontap-user-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_user</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_user_role</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_user_role_module.html#na-ontap-user-role-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_user_role</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">na_cdot_volume</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_ontap_volume_module.html#na-ontap-volume-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_ontap_volume</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sf_account_manager</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_elementsw_account_module.html#na-elementsw-account-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_elementsw_account</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sf_check_connections</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_elementsw_check_connections_module.html#na-elementsw-check-connections-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_elementsw_check_connections</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sf_snapshot_schedule_manager</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_elementsw_snapshot_schedule_module.html#na-elementsw-snapshot-schedule-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_elementsw_snapshot_schedule</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sf_volume_access_group_manager</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_elementsw_access_group_module.html#na-elementsw-access-group-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_elementsw_access_group</span></a> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sf_volume_manager</span></code> use <a class="reference external" href="https://docs.ansible.com/ansible/2.7/modules/na_elementsw_volume_module.html#na-elementsw-volume-module" title="(in Ansible v2.7)"><span class="xref std std-ref">na_elementsw_volume</span></a> instead.</p></li>
+</ul>
+</section>
+<section id="noteworthy-module-changes">
+<h3><a class="toc-backref" href="#id15">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Permalink to this headline"></a></h3>
+<ul>
+<li><p>Check mode is now supported in the <code class="docutils literal notranslate"><span class="pre">command</span></code> and <code class="docutils literal notranslate"><span class="pre">shell</span></code> modules. However, only when <code class="docutils literal notranslate"><span class="pre">creates</span></code> or <code class="docutils literal notranslate"><span class="pre">removes</span></code> is
+specified. If either of these are specified, the module will check for existence of the file and report the correct
+changed status, if they are not included the module will skip like it had done previously.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">win_chocolatey</span></code> module originally required the <code class="docutils literal notranslate"><span class="pre">proxy_username</span></code> and <code class="docutils literal notranslate"><span class="pre">proxy_password</span></code> to
+escape any double quotes in the value. This is no longer required and the escaping may cause further
+issues.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">win_uri</span></code> module has removed the deprecated option <code class="docutils literal notranslate"><span class="pre">use_basic_parsing</span></code>, since Ansible 2.5 this option did
+nothing</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">win_scheduled_task</span></code> module has removed the following deprecated options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">executable</span></code>, use <code class="docutils literal notranslate"><span class="pre">path</span></code> in an actions entry instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">argument</span></code>, use <code class="docutils literal notranslate"><span class="pre">arguments</span></code> in an actions entry instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">store_password</span></code>, set <code class="docutils literal notranslate"><span class="pre">logon_type:</span> <span class="pre">password</span></code> instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">days_of_week</span></code>, use <code class="docutils literal notranslate"><span class="pre">monthlydow</span></code> in a triggers entry instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frequency</span></code>, use <code class="docutils literal notranslate"><span class="pre">type</span></code>, in a triggers entry instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code>, use <code class="docutils literal notranslate"><span class="pre">start_boundary</span></code> in a triggers entry instead</p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">interface_name</span></code> module option for <code class="docutils literal notranslate"><span class="pre">na_ontap_net_vlan</span></code> has been removed and should be removed from your playbooks</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">win_disk_image</span></code> module has deprecated the return value <code class="docutils literal notranslate"><span class="pre">mount_path</span></code>, use <code class="docutils literal notranslate"><span class="pre">mount_paths[0]</span></code> instead. This will
+be removed in Ansible 2.11.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">include_role</span></code> and <code class="docutils literal notranslate"><span class="pre">include_tasks</span></code> can now be used directly from <code class="docutils literal notranslate"><span class="pre">ansible</span></code> (adhoc) and <code class="docutils literal notranslate"><span class="pre">ansible-console</span></code>:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="c1">#&gt; ansible -m include_role -a &#39;name=myrole&#39; all</span>
+</pre></div>
+</div>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">pip</span></code> module has added a dependency on <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> to support version requirements, this requirement is for
+the Python interpreter that executes the module and not the Python interpreter that the module is managing.</p></li>
+<li><p>Prior to Ansible 2.7.10, the <code class="docutils literal notranslate"><span class="pre">replace</span></code> module did the opposite of what was intended when using the <code class="docutils literal notranslate"><span class="pre">before</span></code> and <code class="docutils literal notranslate"><span class="pre">after</span></code> options together. This now works properly but may require changes to tasks.</p></li>
+</ul>
+</section>
+</section>
+<section id="plugins">
+<h2><a class="toc-backref" href="#id16">Plugins</a><a class="headerlink" href="#plugins" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>The hash_password filter now throws an error if the hash algorithm specified is not supported by
+the controller.  This increases the safety of the filter as it previously returned None if the
+algorithm was unknown.  Some modules, notably the user module, treated a password of None as
+a request not to set a password.  If your playbook starts erroring because of this, change the
+hashing algorithm being used with this filter.</p></li>
+</ul>
+</section>
+<section id="porting-custom-scripts">
+<h2><a class="toc-backref" href="#id17">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Permalink to this headline"></a></h2>
+<p>No notable changes.</p>
+</section>
+<section id="networking">
+<h2><a class="toc-backref" href="#id18">Networking</a><a class="headerlink" href="#networking" title="Permalink to this headline"></a></h2>
+<p>No notable changes.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="porting_guide_2.8.html" class="btn btn-neutral float-left" title="Ansible 2.8 Porting Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="porting_guide_2.6.html" class="btn btn-neutral float-right" title="Ansible 2.6 Porting Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

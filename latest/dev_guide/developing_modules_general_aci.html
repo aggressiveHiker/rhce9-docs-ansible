@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developing Cisco ACI modules &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general_aci.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Guidelines for Ansible Amazon AWS module development" href="platforms/aws_guidelines.html" />
+    <link rel="prev" title="Windows module development walkthrough" href="developing_modules_general_windows.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="developing_locally.html">Adding modules and plugins locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules.html">Should you develop a module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general.html">Developing modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_checklist.html">Contributing your module to an existing Ansible collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_best_practices.html">Conventions, tips, and pitfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_python_3.html">Ansible and Python 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_documenting.html">Module format and documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_windows.html">Windows module development walkthrough</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Developing Cisco ACI modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aci-module-structure">ACI module structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#importing-objects-from-python-libraries">Importing objects from Python libraries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defining-the-argument-spec">Defining the argument spec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-ansiblemodule-object">Using the AnsibleModule object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mapping-variable-definition">Mapping variable definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-acimodule-object">Using the ACIModule object</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-aci-library-functions">Testing ACI library functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#testing-for-sanity-checks">Testing for sanity checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-aci-integration-tests">Testing ACI integration tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-for-test-coverage">Testing for test coverage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/aws_guidelines.html">Guidelines for Ansible Amazon AWS module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/openstack_guidelines.html">OpenStack Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/ovirt_dev_guide.html">oVirt Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/vmware_guidelines.html">Guidelines for VMware module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/vmware_rest_guidelines.html">Guidelines for VMware REST module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_in_groups.html">Creating a new collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_lifecycle.html">The lifecycle of an Ansible module or plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_plugins.html">Developing plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_inventory.html">Developing dynamic inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_core.html">Developing <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_program_flow_modules.html">Ansible module architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections_galaxy_meta.html">Collection Galaxy metadata structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_architecture.html">Ansible architecture</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Developer Guide</a> &raquo;</li>
+      <li>Developing Cisco ACI modules</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/dev_guide/developing_modules_general_aci.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="developing-cisco-aci-modules">
+<span id="aci-dev-guide"></span><h1>Developing Cisco ACI modules<a class="headerlink" href="#developing-cisco-aci-modules" title="Permalink to this headline"></a></h1>
+<p>This is a brief walk-through of how to create new Cisco ACI modules for Ansible.</p>
+<p>For more information about Cisco ACI, look at the <a class="reference internal" href="../scenario_guides/guide_aci.html#aci-guide"><span class="std std-ref">Cisco ACI user guide</span></a>.</p>
+<p>What’s covered in this section:</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id2">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#aci-module-structure" id="id3">ACI module structure</a></p>
+<ul>
+<li><p><a class="reference internal" href="#importing-objects-from-python-libraries" id="id4">Importing objects from Python libraries</a></p></li>
+<li><p><a class="reference internal" href="#defining-the-argument-spec" id="id5">Defining the argument spec</a></p></li>
+<li><p><a class="reference internal" href="#using-the-ansiblemodule-object" id="id6">Using the AnsibleModule object</a></p></li>
+<li><p><a class="reference internal" href="#mapping-variable-definition" id="id7">Mapping variable definition</a></p></li>
+<li><p><a class="reference internal" href="#using-the-acimodule-object" id="id8">Using the ACIModule object</a></p>
+<ul>
+<li><p><a class="reference internal" href="#constructing-urls" id="id9">Constructing URLs</a></p></li>
+<li><p><a class="reference internal" href="#getting-the-existing-configuration" id="id10">Getting the existing configuration</a></p></li>
+<li><p><a class="reference internal" href="#when-state-is-present" id="id11">When state is present</a></p></li>
+<li><p><a class="reference internal" href="#when-state-is-absent" id="id12">When state is absent</a></p></li>
+<li><p><a class="reference internal" href="#exiting-the-module" id="id13">Exiting the module</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#testing-aci-library-functions" id="id14">Testing ACI library functions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#testing-for-sanity-checks" id="id15">Testing for sanity checks</a></p></li>
+<li><p><a class="reference internal" href="#testing-aci-integration-tests" id="id16">Testing ACI integration tests</a></p></li>
+<li><p><a class="reference internal" href="#testing-for-test-coverage" id="id17">Testing for test coverage</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="introduction">
+<span id="aci-dev-guide-intro"></span><h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>The <a class="reference external" href="https://galaxy.ansible.com/cisco/aci">cisco.aci collection</a> already includes a large number of Cisco ACI modules, however the ACI object model is huge and covering all possible functionality would easily cover more than 1500 individual modules.</p>
+<p>If you need specific functionality, you have 2 options:</p>
+<ul class="simple">
+<li><p>Learn the ACI object model and use the low-level APIC REST API using the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/modules/aci_rest_module.html#aci-rest-module" title="(in Ansible v2.9)"><span class="xref std std-ref">aci_rest</span></a> module</p></li>
+<li><p>Write your own dedicated modules, which is actually quite easy</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://github.com/CiscoDevNet/ansible-aci">Ansible ACI collection</a></dt><dd><p>Github repository of the ansible ACI collection</p>
+</dd>
+<dt><a class="reference internal" href="developing_collections_contributing.html#hacking-collections"><span class="std std-ref">Contributing to collections</span></a></dt><dd><p>Information on how to contribute to collections.</p>
+</dd>
+<dt><a class="reference external" href="https://www.cisco.com/c/en/us/td/docs/switches/datacenter/aci/apic/sw/1-x/aci-fundamentals/b_ACI-Fundamentals/b_ACI-Fundamentals_chapter_010001.html">ACI Fundamentals: ACI Policy Model</a></dt><dd><p>A good introduction to the ACI object model.</p>
+</dd>
+<dt><a class="reference external" href="https://developer.cisco.com/docs/apic-mim-ref/">APIC Management Information Model reference</a></dt><dd><p>Complete reference of the APIC object model.</p>
+</dd>
+<dt><a class="reference external" href="https://www.cisco.com/c/en/us/td/docs/switches/datacenter/aci/apic/sw/2-x/rest_cfg/2_1_x/b_Cisco_APIC_REST_API_Configuration_Guide.html">APIC REST API Configuration Guide</a></dt><dd><p>Detailed guide on how the APIC REST API is designed and used, incl. many examples.</p>
+</dd>
+</dl>
+</div>
+<p>So let’s look at how a typical ACI module is built up.</p>
+</section>
+<section id="aci-module-structure">
+<span id="aci-dev-guide-module-structure"></span><h2><a class="toc-backref" href="#id3">ACI module structure</a><a class="headerlink" href="#aci-module-structure" title="Permalink to this headline"></a></h2>
+<section id="importing-objects-from-python-libraries">
+<h3><a class="toc-backref" href="#id4">Importing objects from Python libraries</a><a class="headerlink" href="#importing-objects-from-python-libraries" title="Permalink to this headline"></a></h3>
+<p>The following imports are standard across ACI modules:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.aci</span> <span class="kn">import</span> <span class="n">ACIModule</span><span class="p">,</span> <span class="n">aci_argument_spec</span>
+<span class="kn">from</span> <span class="nn">ansible.module_utils.basic</span> <span class="kn">import</span> <span class="n">AnsibleModule</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-the-argument-spec">
+<h3><a class="toc-backref" href="#id5">Defining the argument spec</a><a class="headerlink" href="#defining-the-argument-spec" title="Permalink to this headline"></a></h3>
+<p>The first line adds the standard connection parameters to the module. After that, the next section will update the <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> dictionary with module-specific parameters. The module-specific parameters should include:</p>
+<ul class="simple">
+<li><p>the object_id (usually the name)</p></li>
+<li><p>the configurable properties of the object</p></li>
+<li><p>the parent object IDs (all parents up to the root)</p></li>
+<li><p>only child classes that are a 1-to-1 relationship (1-to-many/many-to-many require their own module to properly manage)</p></li>
+<li><p>the state</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> to ensure object does not exist</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">present</span></code> to ensure the object and configs exist; this is also the default</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">query</span></code> to retrieve information about objects in the class</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">argument_spec</span> <span class="o">=</span> <span class="n">aci_argument_spec</span><span class="p">()</span>
+    <span class="n">argument_spec</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">object_id</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="n">aliases</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]),</span>
+        <span class="n">object_prop1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;str&#39;</span><span class="p">),</span>
+        <span class="n">object_prop2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;choice1&#39;</span><span class="p">,</span> <span class="s1">&#39;choice2&#39;</span><span class="p">,</span> <span class="s1">&#39;choice3&#39;</span><span class="p">]),</span>
+        <span class="n">object_prop3</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">),</span>
+        <span class="n">parent_id</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;str&#39;</span><span class="p">),</span>
+        <span class="n">child_object_id</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;str&#39;</span><span class="p">),</span>
+        <span class="n">child_object_prop</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;str&#39;</span><span class="p">),</span>
+        <span class="n">state</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;present&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;absent&#39;</span><span class="p">,</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span> <span class="s1">&#39;query&#39;</span><span class="p">]),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Do not provide default values for configuration arguments. Default values could cause unintended changes to the object.</p>
+</div>
+</section>
+<section id="using-the-ansiblemodule-object">
+<h3><a class="toc-backref" href="#id6">Using the AnsibleModule object</a><a class="headerlink" href="#using-the-ansiblemodule-object" title="Permalink to this headline"></a></h3>
+<p>The following section creates an AnsibleModule instance. The module should support check-mode, so we pass the <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> and  <code class="docutils literal notranslate"><span class="pre">supports_check_mode</span></code> arguments. Since these modules support querying the APIC for all objects of the module’s class, the object/parent IDs should only be required if <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> or <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">present</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="o">=</span> <span class="n">AnsibleModule</span><span class="p">(</span>
+    <span class="n">argument_spec</span><span class="o">=</span><span class="n">argument_spec</span><span class="p">,</span>
+    <span class="n">supports_check_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">required_if</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;absent&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;object_id&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id&#39;</span><span class="p">]],</span>
+        <span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;present&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;object_id&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id&#39;</span><span class="p">]],</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="mapping-variable-definition">
+<h3><a class="toc-backref" href="#id7">Mapping variable definition</a><a class="headerlink" href="#mapping-variable-definition" title="Permalink to this headline"></a></h3>
+<p>Once the AnsibleModule object has been initiated, the necessary parameter values should be extracted from <code class="docutils literal notranslate"><span class="pre">params</span></code> and any data validation should be done. Usually the only params that need to be extracted are those related to the ACI object configuration and its child configuration. If you have integer objects that you would like to validate, then the validation should be done here, and the <code class="docutils literal notranslate"><span class="pre">ACIModule.payload()</span></code> method will handle the string conversion.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">object_id</span> <span class="o">=</span> <span class="n">object_id</span>
+<span class="n">object_prop1</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;object_prop1&#39;</span><span class="p">]</span>
+<span class="n">object_prop2</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;object_prop2&#39;</span><span class="p">]</span>
+<span class="n">object_prop3</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;object_prop3&#39;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">object_prop3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">object_prop3</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;Valid object_prop3 values are between x and (y-1)&#39;</span><span class="p">)</span>
+<span class="n">child_object_id</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;child_object_id&#39;</span><span class="p">]</span>
+<span class="n">child_object_prop</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;child_object_prop&#39;</span><span class="p">]</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="using-the-acimodule-object">
+<h3><a class="toc-backref" href="#id8">Using the ACIModule object</a><a class="headerlink" href="#using-the-acimodule-object" title="Permalink to this headline"></a></h3>
+<p>The ACIModule class handles most of the logic for the ACI modules. The ACIModule extends functionality to the AnsibleModule object, so the module instance must be passed into the class instantiation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aci</span> <span class="o">=</span> <span class="n">ACIModule</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The ACIModule has six main methods that are used by the modules:</p>
+<ul class="simple">
+<li><p>construct_url</p></li>
+<li><p>get_existing</p></li>
+<li><p>payload</p></li>
+<li><p>get_diff</p></li>
+<li><p>post_config</p></li>
+<li><p>delete_config</p></li>
+</ul>
+<p>The first two methods are used regardless of what value is passed to the <code class="docutils literal notranslate"><span class="pre">state</span></code> parameter.</p>
+<section id="constructing-urls">
+<h4><a class="toc-backref" href="#id9">Constructing URLs</a><a class="headerlink" href="#constructing-urls" title="Permalink to this headline"></a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">construct_url()</span></code> method is used to dynamically build the appropriate URL to interact with the object, and the appropriate filter string that should be appended to the URL to filter the results.</p>
+<ul class="simple">
+<li><p>When the <code class="docutils literal notranslate"><span class="pre">state</span></code> is not <code class="docutils literal notranslate"><span class="pre">query</span></code>, the URL is the base URL to access the APIC plus the distinguished name to access the object. The filter string will restrict the returned data to just the configuration data.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">state</span></code> is <code class="docutils literal notranslate"><span class="pre">query</span></code>, the URL and filter string used depends on what parameters are passed to the object. This method handles the complexity so that it is easier to add new modules and so that all modules are consistent in what type of data is returned.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Our design goal is to take all ID parameters that have values, and return the most specific data possible. If you do not supply any ID parameters to the task, then all objects of the class will be returned. If your task does consist of ID parameters sed, then the data for the specific object is returned. If a partial set of ID parameters are passed, then the module will use the IDs that are passed to build the URL and filter strings appropriately.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">construct_url()</span></code> method takes 2 required arguments:</p>
+<ul class="simple">
+<li><p><strong>self</strong> - passed automatically with the class instance</p></li>
+<li><p><strong>root_class</strong> - A dictionary consisting of <code class="docutils literal notranslate"><span class="pre">aci_class</span></code>, <code class="docutils literal notranslate"><span class="pre">aci_rn</span></code>, <code class="docutils literal notranslate"><span class="pre">target_filter</span></code>, and <code class="docutils literal notranslate"><span class="pre">module_object</span></code> keys</p>
+<ul>
+<li><p><strong>aci_class</strong>: The name of the class used by the APIC, for example <code class="docutils literal notranslate"><span class="pre">fvTenant</span></code></p></li>
+<li><p><strong>aci_rn</strong>: The relative name of the object, for example <code class="docutils literal notranslate"><span class="pre">tn-ACME</span></code></p></li>
+<li><p><strong>target_filter</strong>: A dictionary with key-value pairs that make up the query string for selecting a subset of entries, for example <code class="docutils literal notranslate"><span class="pre">{'name':</span> <span class="pre">'ACME'}</span></code></p></li>
+<li><p><strong>module_object</strong>: The particular object for this class, for example <code class="docutils literal notranslate"><span class="pre">ACME</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aci</span><span class="o">.</span><span class="n">construct_url</span><span class="p">(</span>
+    <span class="n">root_class</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">aci_class</span><span class="o">=</span><span class="s1">&#39;fvTenant&#39;</span><span class="p">,</span>
+        <span class="n">aci_rn</span><span class="o">=</span><span class="s1">&#39;tn-</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tenant</span><span class="p">),</span>
+        <span class="n">target_filter</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">tenant</span><span class="p">},</span>
+        <span class="n">module_object</span><span class="o">=</span><span class="n">tenant</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Some modules, like <code class="docutils literal notranslate"><span class="pre">aci_tenant</span></code>, are the root class and so they would not need to pass any additional arguments to the method.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">construct_url()</span></code> method takes 4 optional arguments, the first three imitate the root class as described above, but are for child objects:</p>
+<ul class="simple">
+<li><p>subclass_1 - A dictionary consisting of <code class="docutils literal notranslate"><span class="pre">aci_class</span></code>, <code class="docutils literal notranslate"><span class="pre">aci_rn</span></code>, <code class="docutils literal notranslate"><span class="pre">target_filter</span></code>, and <code class="docutils literal notranslate"><span class="pre">module_object</span></code> keys</p>
+<ul>
+<li><p>Example: Application Profile Class (AP)</p></li>
+</ul>
+</li>
+<li><p>subclass_2 - A dictionary consisting of <code class="docutils literal notranslate"><span class="pre">aci_class</span></code>, <code class="docutils literal notranslate"><span class="pre">aci_rn</span></code>, <code class="docutils literal notranslate"><span class="pre">target_filter</span></code>, and <code class="docutils literal notranslate"><span class="pre">module_object</span></code> keys</p>
+<ul>
+<li><p>Example: End Point Group (EPG)</p></li>
+</ul>
+</li>
+<li><p>subclass_3 - A dictionary consisting of <code class="docutils literal notranslate"><span class="pre">aci_class</span></code>, <code class="docutils literal notranslate"><span class="pre">aci_rn</span></code>, <code class="docutils literal notranslate"><span class="pre">target_filter</span></code>, and <code class="docutils literal notranslate"><span class="pre">module_object</span></code> keys</p>
+<ul>
+<li><p>Example: Binding a Contract to an EPG</p></li>
+</ul>
+</li>
+<li><p>child_classes - The list of APIC names for the child classes supported by the modules.</p>
+<ul>
+<li><p>This is a list, even if it is a list of one</p></li>
+<li><p>These are the unfriendly names used by the APIC</p></li>
+<li><p>These are used to limit the returned child_classes when possible</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">child_classes=['fvRsBDSubnetToProfile',</span> <span class="pre">'fvRsNdPfxPol']</span></code></p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sometimes the APIC will require special characters ([, ], and -) or will use object metadata in the name (“vlanns” for VLAN pools); the module should handle adding special characters or joining of multiple parameters in order to keep expected inputs simple.</p>
+</div>
+</section>
+<section id="getting-the-existing-configuration">
+<h4><a class="toc-backref" href="#id10">Getting the existing configuration</a><a class="headerlink" href="#getting-the-existing-configuration" title="Permalink to this headline"></a></h4>
+<p>Once the URL and filter string have been built, the module is ready to retrieve the existing configuration for the object:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">present</span></code> retrieves the configuration to use as a comparison against what was entered in the task. All values that are different than the existing values will be updated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> uses the existing configuration to see if the item exists and needs to be deleted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">query</span></code> uses this to perform the query for the task and report back the existing data.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aci</span><span class="o">.</span><span class="n">get_existing</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="when-state-is-present">
+<h4><a class="toc-backref" href="#id11">When state is present</a><a class="headerlink" href="#when-state-is-present" title="Permalink to this headline"></a></h4>
+<p>When <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">present</span></code>, the module needs to perform a diff against the existing configuration and the task entries. If any value needs to be updated, then the module will make a POST request with only the items that need to be updated. Some modules have children that are in a 1-to-1 relationship with another object; for these cases, the module can be used to manage the child objects.</p>
+<section id="building-the-aci-payload">
+<h5>Building the ACI payload<a class="headerlink" href="#building-the-aci-payload" title="Permalink to this headline"></a></h5>
+<p>The <code class="docutils literal notranslate"><span class="pre">aci.payload()</span></code> method is used to build a dictionary of the proposed object configuration. All parameters that were not provided a value in the task will be removed from the dictionary (both for the object and its children). Any parameter that does have a value will be converted to a string and added to the final dictionary object that will be used for comparison against the existing configuration.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">aci.payload()</span></code> method takes two required arguments and 1 optional argument, depending on if the module manages child objects.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">aci_class</span></code> is the APIC name for the object’s class, for example <code class="docutils literal notranslate"><span class="pre">aci_class='fvBD'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">class_config</span></code> is the appropriate dictionary to be used as the payload for the POST request</p>
+<ul>
+<li><p>The keys should match the names used by the APIC.</p></li>
+<li><p>The values should be the corresponding value in <code class="docutils literal notranslate"><span class="pre">module.params</span></code>; these are the variables defined above</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">child_configs</span></code> is optional, and is a list of child config dictionaries.</p>
+<ul>
+<li><p>The child configs include the full child object dictionary, not just the attributes configuration portion.</p></li>
+<li><p>The configuration portion is built the same way as the object.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aci</span><span class="o">.</span><span class="n">payload</span><span class="p">(</span>
+    <span class="n">aci_class</span><span class="o">=</span><span class="n">aci_class</span><span class="p">,</span>
+    <span class="n">class_config</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">bd</span><span class="p">,</span>
+        <span class="n">descr</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">bd_type</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">child_configs</span><span class="o">=</span><span class="p">[</span>
+        <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">fvRsCtx</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">attributes</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">tnFvCtxName</span><span class="o">=</span><span class="n">vrf</span>
+                <span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="performing-the-request">
+<h5>Performing the request<a class="headerlink" href="#performing-the-request" title="Permalink to this headline"></a></h5>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_diff()</span></code> method is used to perform the diff, and takes only one required argument, <code class="docutils literal notranslate"><span class="pre">aci_class</span></code>.
+Example: <code class="docutils literal notranslate"><span class="pre">aci.get_diff(aci_class='fvBD')</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">post_config()</span></code> method is used to make the POST request to the APIC if needed. This method doesn’t take any arguments and handles check mode.
+Example: <code class="docutils literal notranslate"><span class="pre">aci.post_config()</span></code></p>
+</section>
+<section id="example-code">
+<h5>Example code<a class="headerlink" href="#example-code" title="Permalink to this headline"></a></h5>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>if state == &#39;present&#39;:
+    aci.payload(
+        aci_class=&#39;&lt;object APIC class&gt;&#39;,
+        class_config=dict(
+            name=object_id,
+            prop1=object_prop1,
+            prop2=object_prop2,
+            prop3=object_prop3,
+        ),
+        child_configs=[
+            dict(
+                &#39;&lt;child APIC class&gt;&#39;=dict(
+                    attributes=dict(
+                        child_key=child_object_id,
+                        child_prop=child_object_prop
+                    ),
+                ),
+            ),
+        ],
+    )
+
+    aci.get_diff(aci_class=&#39;&lt;object APIC class&gt;&#39;)
+
+    aci.post_config()
+</pre></div>
+</div>
+</section>
+</section>
+<section id="when-state-is-absent">
+<h4><a class="toc-backref" href="#id12">When state is absent</a><a class="headerlink" href="#when-state-is-absent" title="Permalink to this headline"></a></h4>
+<p>If the task sets the state to absent, then the <code class="docutils literal notranslate"><span class="pre">delete_config()</span></code> method is all that is needed. This method does not take any arguments, and handles check mode.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>elif state == &#39;absent&#39;:
+    aci.delete_config()
+</pre></div>
+</div>
+</section>
+<section id="exiting-the-module">
+<h4><a class="toc-backref" href="#id13">Exiting the module</a><a class="headerlink" href="#exiting-the-module" title="Permalink to this headline"></a></h4>
+<p>To have the module exit, call the ACIModule method <code class="docutils literal notranslate"><span class="pre">exit_json()</span></code>. This method automatically takes care of returning the common return values for you.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>    aci.exit_json()
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="testing-aci-library-functions">
+<span id="aci-dev-guide-testing"></span><h2><a class="toc-backref" href="#id14">Testing ACI library functions</a><a class="headerlink" href="#testing-aci-library-functions" title="Permalink to this headline"></a></h2>
+<p>You can test your <code class="docutils literal notranslate"><span class="pre">construct_url()</span></code> and <code class="docutils literal notranslate"><span class="pre">payload()</span></code> arguments without accessing APIC hardware by using the following python script:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>#!/usr/bin/python
+import json
+from ansible.module_utils.network.aci.aci import ACIModule
+
+# Just another class mimicking a bare AnsibleModule class for construct_url() and payload() methods
+class AltModule():
+    params = dict(
+        host=&#39;dummy&#39;,
+        port=123,
+        protocol=&#39;https&#39;,
+        state=&#39;present&#39;,
+        output_level=&#39;debug&#39;,
+    )
+
+# A sub-class of ACIModule to overload __init__ (we don&#39;t need to log into APIC)
+class AltACIModule(ACIModule):
+    def __init__(self):
+        self.result = dict(changed=False)
+        self.module = AltModule()
+        self.params = self.module.params
+
+# Instantiate our version of the ACI module
+aci = AltACIModule()
+
+# Define the variables you need below
+aep = &#39;AEP&#39;
+aep_domain = &#39;uni/phys-DOMAIN&#39;
+
+# Below test the construct_url() arguments to see if it produced correct results
+aci.construct_url(
+    root_class=dict(
+        aci_class=&#39;infraAttEntityP&#39;,
+        aci_rn=&#39;infra/attentp-{}&#39;.format(aep),
+        target_filter={&#39;name&#39;: aep},
+        module_object=aep,
+    ),
+    subclass_1=dict(
+        aci_class=&#39;infraRsDomP&#39;,
+        aci_rn=&#39;rsdomP-[{}]&#39;.format(aep_domain),
+        target_filter={&#39;tDn&#39;: aep_domain},
+        module_object=aep_domain,
+    ),
+)
+
+# Below test the payload arguments to see if it produced correct results
+aci.payload(
+    aci_class=&#39;infraRsDomP&#39;,
+    class_config=dict(tDn=aep_domain),
+)
+
+# Print the URL and proposed payload
+print &#39;URL:&#39;, json.dumps(aci.url, indent=4)
+print &#39;PAYLOAD:&#39;, json.dumps(aci.proposed, indent=4)
+</pre></div>
+</div>
+<p>This will result in:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">URL</span><span class="p">:</span> <span class="s">&quot;https://dummy/api/mo/uni/infra/attentp-AEP/rsdomP-[phys-DOMAIN].json&quot;</span>
+<span class="nt">PAYLOAD</span><span class="p">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;infraRsDomP&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;attributes&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;tDn&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;phys-DOMAIN&quot;</span>
+        <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<section id="testing-for-sanity-checks">
+<h3><a class="toc-backref" href="#id15">Testing for sanity checks</a><a class="headerlink" href="#testing-for-sanity-checks" title="Permalink to this headline"></a></h3>
+<p>For legacy versions of ansible, you can run from your fork something like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible-test sanity --python <span class="m">2</span>.7 lib/ansible/modules/network/aci/aci_tenant.py
+</pre></div>
+</div>
+<p>Meanwhile, the ACI modules have moved into a collection. Please refer to the links below, which provide detailed guidance
+how to setup your environment and test the collection.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="developing_collections_contributing.html#hacking-collections"><span class="std std-ref">Contributing to collections</span></a></dt><dd><p>Information how to setup your environment to contribute to collections</p>
+</dd>
+<dt><a class="reference internal" href="testing_sanity.html#testing-sanity"><span class="std std-ref">Sanity Tests</span></a></dt><dd><p>Information on how to build sanity tests.</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/CiscoDevNet/ansible-aci">Ansible ACI collection</a></dt><dd><p>Github repository of the ansible ACI collection</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="testing-aci-integration-tests">
+<h3><a class="toc-backref" href="#id16">Testing ACI integration tests</a><a class="headerlink" href="#testing-aci-integration-tests" title="Permalink to this headline"></a></h3>
+<p>You can run this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible-test network-integration --continue-on-error --allow-unsupported --diff -v aci_tenant
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may need to add <code class="docutils literal notranslate"><span class="pre">--python</span> <span class="pre">2.7</span></code> or <code class="docutils literal notranslate"><span class="pre">--python</span> <span class="pre">3.6</span></code> in order to use the correct python version for performing tests.</p>
+</div>
+<p>You may want to edit the used inventory at <em>test/integration/inventory.networking</em> and add something like:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[aci:vars]</span>
+<span class="na">aci_hostname</span><span class="o">=</span><span class="s">my-apic-1</span>
+<span class="na">aci_username</span><span class="o">=</span><span class="s">admin</span>
+<span class="na">aci_password</span><span class="o">=</span><span class="s">my-password</span>
+<span class="na">aci_use_ssl</span><span class="o">=</span><span class="s">yes</span>
+<span class="na">aci_use_proxy</span><span class="o">=</span><span class="s">no</span>
+
+<span class="k">[aci]</span>
+<span class="na">localhost ansible_ssh_host</span><span class="o">=</span><span class="s">127.0.0.1 ansible_connection=local</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="testing_integration.html#testing-integration"><span class="std std-ref">Integration tests</span></a></dt><dd><p>Information on how to build integration tests.</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="testing-for-test-coverage">
+<h3><a class="toc-backref" href="#id17">Testing for test coverage</a><a class="headerlink" href="#testing-for-test-coverage" title="Permalink to this headline"></a></h3>
+<p>You can run this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible-test network-integration --python <span class="m">2</span>.7 --allow-unsupported --coverage aci_tenant
+$ ansible-test coverage report
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="developing_modules_general_windows.html" class="btn btn-neutral float-left" title="Windows module development walkthrough" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="platforms/aws_guidelines.html" class="btn btn-neutral float-right" title="Guidelines for Ansible Amazon AWS module development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

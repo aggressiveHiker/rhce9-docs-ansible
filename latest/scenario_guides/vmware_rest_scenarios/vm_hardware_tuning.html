@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to modify a virtual machine &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/vmware_rest_scenarios/vm_hardware_tuning.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="How to run a virtual machine" href="run_a_vm.html" />
+    <link rel="prev" title="Retrieve information from a specific VM" href="vm_info.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../virt_guides.html">Virtualization and Containerization Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide_docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_vagrant.html">Vagrant Guide</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide_vmware_rest.html">VMware REST Scenarios</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="installation.html">How to install the vmware_rest collection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authentication.html">How to configure the vmware_rest collection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collect_information.html">How to collect information about your environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="create_vm.html">How to create a Virtual Machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vm_info.html">Retrieve information from a specific VM</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">How to modify a virtual machine</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scenario-requirements">Scenario requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-add-a-cdrom-drive-to-a-virtual-machine">How to add a CDROM drive to a virtual machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-attach-a-vm-to-a-network">How to attach a VM to a network</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#increase-the-memory-of-the-vm">Increase the memory of the VM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#upgrade-the-hardware-version-of-the-vm">Upgrade the hardware version of the VM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adjust-the-number-of-cpus-of-the-vm">Adjust the number of CPUs of the VM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#remove-a-sata-controller">Remove a SATA controller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attach-a-floppy-drive">Attach a floppy drive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attach-a-new-disk">Attach a new disk</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="run_a_vm.html">How to run a virtual machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vm_tool_information.html">How to get information from a running virtual machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vm_tool_configuration.html">How to configure the VMware tools of a running virtual machine</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../virt_guides.html">Virtualization and Containerization Guides</a> &raquo;</li>
+          <li><a href="../guide_vmware_rest.html">VMware REST Scenarios</a> &raquo;</li>
+      <li>How to modify a virtual machine</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/scenario_guides/vmware_rest_scenarios/vm_hardware_tuning.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="how-to-modify-a-virtual-machine">
+<span id="vmware-rest-vm-hardware-tuning"></span><h1>How to modify a virtual machine<a class="headerlink" href="#how-to-modify-a-virtual-machine" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id10">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#scenario-requirements" id="id11">Scenario requirements</a></p></li>
+<li><p><a class="reference internal" href="#how-to-add-a-cdrom-drive-to-a-virtual-machine" id="id12">How to add a CDROM drive to a virtual machine</a></p>
+<ul>
+<li><p><a class="reference internal" href="#add-a-new-sata-adapter" id="id13">Add a new SATA adapter</a></p></li>
+<li><p><a class="reference internal" href="#result" id="id14">Result</a></p></li>
+<li><p><a class="reference internal" href="#add-a-cdrom-drive" id="id15">Add a CDROM drive</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id16">Result</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#how-to-attach-a-vm-to-a-network" id="id17">How to attach a VM to a network</a></p>
+<ul>
+<li><p><a class="reference internal" href="#attach-a-new-nic" id="id18">Attach a new NIC</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id19">Result</a></p></li>
+<li><p><a class="reference internal" href="#adjust-the-configuration-of-the-nic" id="id20">Adjust the configuration of the NIC</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id21">Result</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#increase-the-memory-of-the-vm" id="id22">Increase the memory of the VM</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id23">Result</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#upgrade-the-hardware-version-of-the-vm" id="id24">Upgrade the hardware version of the VM</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id5" id="id25">Result</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#adjust-the-number-of-cpus-of-the-vm" id="id26">Adjust the number of CPUs of the VM</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id6" id="id27">Result</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#remove-a-sata-controller" id="id28">Remove a SATA controller</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id7" id="id29">Result</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#attach-a-floppy-drive" id="id30">Attach a floppy drive</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id8" id="id31">Result</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#attach-a-new-disk" id="id32">Attach a new disk</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id9" id="id33">Result</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id10">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>This section shows you how to use Ansible to modify an existing virtual machine.</p>
+</section>
+<section id="scenario-requirements">
+<h2><a class="toc-backref" href="#id11">Scenario requirements</a><a class="headerlink" href="#scenario-requirements" title="Permalink to this headline"></a></h2>
+<p>You’ve already followed <a class="reference internal" href="create_vm.html#vmware-rest-create-vm"><span class="std std-ref">How to create a Virtual Machine</span></a> and created a VM.</p>
+</section>
+<section id="how-to-add-a-cdrom-drive-to-a-virtual-machine">
+<h2><a class="toc-backref" href="#id12">How to add a CDROM drive to a virtual machine</a><a class="headerlink" href="#how-to-add-a-cdrom-drive-to-a-virtual-machine" title="Permalink to this headline"></a></h2>
+<p>In this example, we use the <code class="docutils literal notranslate"><span class="pre">vcenter_vm_hardware_*</span></code> modules to add a new CDROM to an existing VM.</p>
+<section id="add-a-new-sata-adapter">
+<h3><a class="toc-backref" href="#id13">Add a new SATA adapter</a><a class="headerlink" href="#add-a-new-sata-adapter" title="Permalink to this headline"></a></h3>
+<p>First we create a new SATA adapter. We specify the <code class="docutils literal notranslate"><span class="pre">pci_slot_number</span></code>. This way if we run the task again it won’t do anything if there is already an adapter there.</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a SATA adapter at PCI slot 34</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_adapter_sata</span><span class="p">:</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">pci_slot_number</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">34</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_sata_adapter_result_1</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h3><a class="toc-backref" href="#id14">Result</a><a class="headerlink" href="#result" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;bus&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;pci_slot_number&quot;</span><span class="p p-Indicator">:</span> <span class="nv">34</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;label&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SATA</span><span class="nv"> </span><span class="s">controller</span><span class="nv"> </span><span class="s">0&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;AHCI&quot;</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;15000&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+<section id="add-a-cdrom-drive">
+<h3><a class="toc-backref" href="#id15">Add a CDROM drive</a><a class="headerlink" href="#add-a-cdrom-drive" title="Permalink to this headline"></a></h3>
+<p>Now we can create the CDROM drive:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Attach an ISO image to a guest VM</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_cdrom</span><span class="p">:</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SATA</span>
+    <span class="nt">sata</span><span class="p">:</span>
+      <span class="nt">bus</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+      <span class="nt">unit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+    <span class="nt">start_connected</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">backing</span><span class="p">:</span>
+      <span class="nt">iso_file</span><span class="p">:</span> <span class="s">&#39;[ro_datastore]</span><span class="nv"> </span><span class="s">fedora.iso&#39;</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ISO_FILE</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_result</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><a class="toc-backref" href="#id16">Result</a><a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;start_connected&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;backing&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;iso_file&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;[ro_datastore]</span><span class="nv"> </span><span class="s">fedora.iso&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ISO_FILE&quot;</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;allow_guest_control&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;label&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;CD/DVD</span><span class="nv"> </span><span class="s">drive</span><span class="nv"> </span><span class="s">1&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;state&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;NOT_CONNECTED&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SATA&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;sata&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;bus&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;unit&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2</span>
+        <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;16002&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="how-to-attach-a-vm-to-a-network">
+<span id="vmware-rest-attach-a-network"></span><h2><a class="toc-backref" href="#id17">How to attach a VM to a network</a><a class="headerlink" href="#how-to-attach-a-vm-to-a-network" title="Permalink to this headline"></a></h2>
+<section id="attach-a-new-nic">
+<h3><a class="toc-backref" href="#id18">Attach a new NIC</a><a class="headerlink" href="#attach-a-new-nic" title="Permalink to this headline"></a></h3>
+<p>Here we attach the VM to the network (through the portgroup). We specify a <code class="docutils literal notranslate"><span class="pre">pci_slot_number</span></code> for the same reason.</p>
+<p>The second task adjusts the NIC configuration.</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Attach a VM to a dvswitch</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_ethernet</span><span class="p">:</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">pci_slot_number</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+    <span class="nt">backing</span><span class="p">:</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DISTRIBUTED_PORTGROUP</span>
+      <span class="nt">network</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_portgroup_info.dvs_portgroup_info.dvswitch1</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="nv">.key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">start_connected</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vm_hardware_ethernet_1</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3><a class="toc-backref" href="#id19">Result</a><a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;start_connected&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;pci_slot_number&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;backing&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;connection_cookie&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2145337177</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;distributed_switch_uuid&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;50</span><span class="nv"> </span><span class="s">33</span><span class="nv"> </span><span class="s">88</span><span class="nv"> </span><span class="s">3a</span><span class="nv"> </span><span class="s">8c</span><span class="nv"> </span><span class="s">6e</span><span class="nv"> </span><span class="s">f9</span><span class="nv"> </span><span class="s">02-7a</span><span class="nv"> </span><span class="s">fd</span><span class="nv"> </span><span class="s">c2</span><span class="nv"> </span><span class="s">c0</span><span class="nv"> </span><span class="s">2c</span><span class="nv"> </span><span class="s">cf</span><span class="nv"> </span><span class="s">f2</span><span class="nv"> </span><span class="s">ac&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;distributed_port&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;2&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;DISTRIBUTED_PORTGROUP&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;network&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;dvportgroup-1649&quot;</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;mac_address&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;00:50:56:b3:49:5c&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;mac_type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ASSIGNED&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;allow_guest_control&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;wake_on_lan_enabled&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;label&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Network</span><span class="nv"> </span><span class="s">adapter</span><span class="nv"> </span><span class="s">1&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;state&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;NOT_CONNECTED&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;VMXNET3&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;upt_compatibility_enabled&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;4000&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+<section id="adjust-the-configuration-of-the-nic">
+<h3><a class="toc-backref" href="#id20">Adjust the configuration of the NIC</a><a class="headerlink" href="#adjust-the-configuration-of-the-nic" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Turn the NIC&#39;s start_connected flag on</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_ethernet</span><span class="p">:</span>
+    <span class="nt">nic</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">vm_hardware_ethernet_1.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">start_connected</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3><a class="toc-backref" href="#id21">Result</a><a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;4000&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="increase-the-memory-of-the-vm">
+<h2><a class="toc-backref" href="#id22">Increase the memory of the VM</a><a class="headerlink" href="#increase-the-memory-of-the-vm" title="Permalink to this headline"></a></h2>
+<p>We can also adjust the amount of memory that we dedicate to our VM.</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Increase the memory of a VM</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_memory</span><span class="p">:</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">size_MiB</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1080</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_result</span>
+</pre></div>
+</div>
+<section id="id4">
+<h3><a class="toc-backref" href="#id23">Result</a><a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">null</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="upgrade-the-hardware-version-of-the-vm">
+<h2><a class="toc-backref" href="#id24">Upgrade the hardware version of the VM</a><a class="headerlink" href="#upgrade-the-hardware-version-of-the-vm" title="Permalink to this headline"></a></h2>
+<p>Here we use the <code class="docutils literal notranslate"><span class="pre">vcenter_vm_hardware</span></code> module to upgrade the version of the hardware:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Upgrade the VM hardware version</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware</span><span class="p">:</span>
+    <span class="nt">upgrade_policy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AFTER_CLEAN_SHUTDOWN</span>
+    <span class="nt">upgrade_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VMX_13</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_result</span>
+</pre></div>
+</div>
+<section id="id5">
+<h3><a class="toc-backref" href="#id25">Result</a><a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">null</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="adjust-the-number-of-cpus-of-the-vm">
+<h2><a class="toc-backref" href="#id26">Adjust the number of CPUs of the VM</a><a class="headerlink" href="#adjust-the-number-of-cpus-of-the-vm" title="Permalink to this headline"></a></h2>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">vcenter_vm_hardware_cpu</span></code> for that:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Dedicate one core to the VM</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_cpu</span><span class="p">:</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_result</span>
+</pre></div>
+</div>
+<section id="id6">
+<h3><a class="toc-backref" href="#id27">Result</a><a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;hot_remove_enabled&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;count&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;hot_add_enabled&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;cores_per_socket&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">null</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="remove-a-sata-controller">
+<h2><a class="toc-backref" href="#id28">Remove a SATA controller</a><a class="headerlink" href="#remove-a-sata-controller" title="Permalink to this headline"></a></h2>
+<p>In this example, we remove the SATA controller of the PCI slot 34.</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<section id="id7">
+<h3><a class="toc-backref" href="#id29">Result</a><a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="attach-a-floppy-drive">
+<h2><a class="toc-backref" href="#id30">Attach a floppy drive</a><a class="headerlink" href="#attach-a-floppy-drive" title="Permalink to this headline"></a></h2>
+<p>Here we attach a floppy drive to a VM.</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add a floppy disk drive</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_floppy</span><span class="p">:</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">allow_guest_control</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_floppy_drive</span>
+</pre></div>
+</div>
+<section id="id8">
+<h3><a class="toc-backref" href="#id31">Result</a><a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;start_connected&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;backing&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;auto_detect&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;HOST_DEVICE&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;host_device&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;allow_guest_control&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;label&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Floppy</span><span class="nv"> </span><span class="s">drive</span><span class="nv"> </span><span class="s">1&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;state&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;NOT_CONNECTED&quot;</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;8000&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="attach-a-new-disk">
+<h2><a class="toc-backref" href="#id32">Attach a new disk</a><a class="headerlink" href="#attach-a-new-disk" title="Permalink to this headline"></a></h2>
+<p>Here we attach a tiny disk to the VM. The <code class="docutils literal notranslate"><span class="pre">capacity</span></code> is in bytes.</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a new disk</span>
+  <span class="nt">vmware.vmware_rest.vcenter_vm_hardware_disk</span><span class="p">:</span>
+    <span class="nt">vm</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">test_vm1_info.id</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SATA</span>
+    <span class="nt">new_vmdk</span><span class="p">:</span>
+      <span class="nt">capacity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">320000</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_new_disk</span>
+</pre></div>
+</div>
+<section id="id9">
+<h3><a class="toc-backref" href="#id33">Result</a><a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;backing&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;vmdk_file&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;[local]</span><span class="nv"> </span><span class="s">test_vm1_8/test_vm1_1.vmdk&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;VMDK_FILE&quot;</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;label&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Hard</span><span class="nv"> </span><span class="s">disk</span><span class="nv"> </span><span class="s">2&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SATA&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;sata&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;bus&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;unit&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;capacity&quot;</span><span class="p p-Indicator">:</span> <span class="nv">320000</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;16000&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vm_info.html" class="btn btn-neutral float-left" title="Retrieve information from a specific VM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="run_a_vm.html" class="btn btn-neutral float-right" title="How to run a virtual machine" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

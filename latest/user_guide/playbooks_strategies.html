@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controlling playbook execution: strategies and more &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_strategies.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Asynchronous actions and polling" href="playbooks_async.html" />
+    <link rel="prev" title="Debugging tasks" href="playbooks_debugger.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#table-of-contents">Table of contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cheatsheet.html">Ansible CLI cheatsheet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Controlling playbook execution: strategies and more</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#selecting-a-strategy">Selecting a strategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-number-of-forks">Setting the number of forks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-keywords-to-control-execution">Using keywords to control execution</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Controlling playbook execution: strategies and more</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/playbooks_strategies.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="controlling-playbook-execution-strategies-and-more">
+<span id="playbooks-strategies"></span><h1>Controlling playbook execution: strategies and more<a class="headerlink" href="#controlling-playbook-execution-strategies-and-more" title="Permalink to this headline"></a></h1>
+<p>By default, Ansible runs each task on all hosts affected by a play before starting the next task on any host, using 5 forks. If you want to change this default behavior, you can use a different strategy plugin, change the number of forks, or apply one of several keywords like <code class="docutils literal notranslate"><span class="pre">serial</span></code>.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#selecting-a-strategy" id="id1">Selecting a strategy</a></p></li>
+<li><p><a class="reference internal" href="#setting-the-number-of-forks" id="id2">Setting the number of forks</a></p></li>
+<li><p><a class="reference internal" href="#using-keywords-to-control-execution" id="id3">Using keywords to control execution</a></p>
+<ul>
+<li><p><a class="reference internal" href="#setting-the-batch-size-with-serial" id="id4">Setting the batch size with <code class="docutils literal notranslate"><span class="pre">serial</span></code></a></p></li>
+<li><p><a class="reference internal" href="#restricting-execution-with-throttle" id="id5">Restricting execution with <code class="docutils literal notranslate"><span class="pre">throttle</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ordering-execution-based-on-inventory" id="id6">Ordering execution based on inventory</a></p></li>
+<li><p><a class="reference internal" href="#running-on-a-single-machine-with-run-once" id="id7">Running on a single machine with <code class="docutils literal notranslate"><span class="pre">run_once</span></code></a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="selecting-a-strategy">
+<h2><a class="toc-backref" href="#id1">Selecting a strategy</a><a class="headerlink" href="#selecting-a-strategy" title="Permalink to this headline"></a></h2>
+<p>The default behavior described above is the <a class="reference internal" href="../collections/ansible/builtin/linear_strategy.html#linear-strategy"><span class="std std-ref">linear strategy</span></a>. Ansible offers other strategies, including the <a class="reference internal" href="../collections/ansible/builtin/debug_strategy.html#debug-strategy"><span class="std std-ref">debug strategy</span></a> (see also  <a class="reference internal" href="playbooks_debugger.html#playbook-debugger"><span class="std std-ref">Debugging tasks</span></a>) and the <a class="reference internal" href="../collections/ansible/builtin/free_strategy.html#free-strategy"><span class="std std-ref">free strategy</span></a>, which allows each host to run until the end of the play as fast as it can:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+  <span class="nt">strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">free</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+  <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p>You can select a different strategy for each play as shown above, or set your preferred strategy globally in <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code>, under the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> stanza:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[defaults]</span>
+<span class="na">strategy</span> <span class="o">=</span> <span class="s">free</span>
+</pre></div>
+</div>
+<p>All strategies are implemented as <a class="reference internal" href="../plugins/strategy.html#strategy-plugins"><span class="std std-ref">strategy plugins</span></a>. Please review the documentation for each strategy plugin for details on how it works.</p>
+</section>
+<section id="setting-the-number-of-forks">
+<h2><a class="toc-backref" href="#id2">Setting the number of forks</a><a class="headerlink" href="#setting-the-number-of-forks" title="Permalink to this headline"></a></h2>
+<p>If you have the processing power available and want to use more forks, you can set the number in <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[defaults]</span>
+<span class="na">forks</span> <span class="o">=</span> <span class="s">30</span>
+</pre></div>
+</div>
+<p>or pass it on the command line: <cite>ansible-playbook -f 30 my_playbook.yml</cite>.</p>
+</section>
+<section id="using-keywords-to-control-execution">
+<h2><a class="toc-backref" href="#id3">Using keywords to control execution</a><a class="headerlink" href="#using-keywords-to-control-execution" title="Permalink to this headline"></a></h2>
+<p>In addition to strategies, several <a class="reference internal" href="../reference_appendices/playbooks_keywords.html#playbook-keywords"><span class="std std-ref">keywords</span></a> also affect play execution. You can set a number, a percentage, or a list of numbers of hosts you want to manage at a time with <code class="docutils literal notranslate"><span class="pre">serial</span></code>. Ansible completes the play on the specified number or percentage of hosts before starting the next batch of hosts. You can restrict the number of workers allotted to a block or task with <code class="docutils literal notranslate"><span class="pre">throttle</span></code>. You can control how Ansible selects the next host in a group to execute against with <code class="docutils literal notranslate"><span class="pre">order</span></code>. You can run a task on a single host with <code class="docutils literal notranslate"><span class="pre">run_once</span></code>. These keywords are not strategies. They are directives or options applied to a play, block, or task.</p>
+<p>Other keywords that affect play execution include <code class="docutils literal notranslate"><span class="pre">ignore_errors</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore_unreachable</span></code>, and <code class="docutils literal notranslate"><span class="pre">any_errors_fatal</span></code>. These options are documented in <a class="reference internal" href="playbooks_error_handling.html#playbooks-error-handling"><span class="std std-ref">Error handling in playbooks</span></a>.</p>
+<section id="setting-the-batch-size-with-serial">
+<span id="rolling-update-batch-size"></span><h3><a class="toc-backref" href="#id4">Setting the batch size with <code class="docutils literal notranslate"><span class="pre">serial</span></code></a><a class="headerlink" href="#setting-the-batch-size-with-serial" title="Permalink to this headline"></a></h3>
+<p>By default, Ansible runs in parallel against all the hosts in the <a class="reference internal" href="intro_patterns.html#intro-patterns"><span class="std std-ref">pattern</span></a> you set in the <code class="docutils literal notranslate"><span class="pre">hosts:</span></code> field of each play. If you want to manage only a few machines at a time, for example during a rolling update, you can define how many hosts Ansible should manage at a single time using the <code class="docutils literal notranslate"><span class="pre">serial</span></code> keyword:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test play</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">serial</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">first task</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hostname</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">second task</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hostname</span>
+</pre></div>
+</div>
+<p>In the above example, if we had 6 hosts in the group ‘webservers’, Ansible would execute the play completely (both tasks) on 3 of the hosts before moving on to the next 3 hosts:</p>
+<div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">PLAY</span> <span class="p">[</span><span class="l">webservers</span><span class="p">]</span> <span class="nv">****************************************</span>
+
+<span class="k">TASK</span> <span class="p">[</span><span class="l">first task</span><span class="p">]</span> <span class="nv">****************************************</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web3</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web2</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web1</span><span class="p">]</span>
+
+<span class="k">TASK</span> <span class="p">[</span><span class="l">second task</span><span class="p">]</span> <span class="nv">***************************************</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web1</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web2</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web3</span><span class="p">]</span>
+
+<span class="k">PLAY</span> <span class="p">[</span><span class="l">webservers</span><span class="p">]</span> <span class="nv">****************************************</span>
+
+<span class="k">TASK</span> <span class="p">[</span><span class="l">first task</span><span class="p">]</span> <span class="nv">****************************************</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web4</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web5</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web6</span><span class="p">]</span>
+
+<span class="k">TASK</span> <span class="p">[</span><span class="l">second task</span><span class="p">]</span> <span class="nv">***************************************</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web4</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web5</span><span class="p">]</span>
+<span class="k">changed</span><span class="p">:</span> <span class="p">[</span><span class="nv">web6</span><span class="p">]</span>
+
+<span class="k">PLAY RECAP</span> <span class="nv">***********************************************</span>
+<span class="n">web1</span>      <span class="p">:</span> <span class="k">ok</span><span class="p">=</span><span class="mi">2</span>    <span class="k">changed</span><span class="p">=</span><span class="mi">2</span>    <span class="k">unreachable</span><span class="p">=</span><span class="mi">0</span>    <span class="k">failed</span><span class="p">=</span><span class="mi">0</span>
+<span class="n">web2</span>      <span class="p">:</span> <span class="k">ok</span><span class="p">=</span><span class="mi">2</span>    <span class="k">changed</span><span class="p">=</span><span class="mi">2</span>    <span class="k">unreachable</span><span class="p">=</span><span class="mi">0</span>    <span class="k">failed</span><span class="p">=</span><span class="mi">0</span>
+<span class="n">web3</span>      <span class="p">:</span> <span class="k">ok</span><span class="p">=</span><span class="mi">2</span>    <span class="k">changed</span><span class="p">=</span><span class="mi">2</span>    <span class="k">unreachable</span><span class="p">=</span><span class="mi">0</span>    <span class="k">failed</span><span class="p">=</span><span class="mi">0</span>
+<span class="n">web4</span>      <span class="p">:</span> <span class="k">ok</span><span class="p">=</span><span class="mi">2</span>    <span class="k">changed</span><span class="p">=</span><span class="mi">2</span>    <span class="k">unreachable</span><span class="p">=</span><span class="mi">0</span>    <span class="k">failed</span><span class="p">=</span><span class="mi">0</span>
+<span class="n">web5</span>      <span class="p">:</span> <span class="k">ok</span><span class="p">=</span><span class="mi">2</span>    <span class="k">changed</span><span class="p">=</span><span class="mi">2</span>    <span class="k">unreachable</span><span class="p">=</span><span class="mi">0</span>    <span class="k">failed</span><span class="p">=</span><span class="mi">0</span>
+<span class="n">web6</span>      <span class="p">:</span> <span class="k">ok</span><span class="p">=</span><span class="mi">2</span>    <span class="k">changed</span><span class="p">=</span><span class="mi">2</span>    <span class="k">unreachable</span><span class="p">=</span><span class="mi">0</span>    <span class="k">failed</span><span class="p">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting the batch size with <code class="docutils literal notranslate"><span class="pre">serial</span></code> changes the scope of the Ansible failures to the batch size, not the entire host list. You can use  <a class="reference internal" href="playbooks_error_handling.html#ignore-unreachable"><span class="std std-ref">ignore_unreachable</span></a> or <a class="reference internal" href="playbooks_error_handling.html#maximum-failure-percentage"><span class="std std-ref">max_fail_percentage</span></a> to modify this behavior.</p>
+</div>
+<p>You can also specify a percentage with the <code class="docutils literal notranslate"><span class="pre">serial</span></code> keyword. Ansible applies the percentage to the total number of hosts in a play to determine the number of hosts per pass:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test play</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">serial</span><span class="p">:</span> <span class="s">&quot;30%&quot;</span>
+</pre></div>
+</div>
+<p>If the number of hosts does not divide equally into the number of passes, the final pass contains the remainder. In this example, if you had 20 hosts in the webservers group, the first batch would contain 6 hosts, the second batch would contain 6 hosts, the third batch would contain 6 hosts, and the last batch would contain 2 hosts.</p>
+<p>You can also specify batch sizes as a list. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test play</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">serial</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+</pre></div>
+</div>
+<p>In the above example, the first batch would contain a single host, the next would contain 5 hosts, and (if there are any hosts left), every following batch would contain either 10 hosts or all the remaining hosts, if fewer than 10 hosts remained.</p>
+<p>You can list multiple batch sizes as percentages:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test play</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">serial</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;10%&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;20%&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;100%&quot;</span>
+</pre></div>
+</div>
+<p>You can also mix and match the values:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test play</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">serial</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;20%&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>No matter how small the percentage, the number of hosts per pass will always be 1 or greater.</p>
+</div>
+</section>
+<section id="restricting-execution-with-throttle">
+<h3><a class="toc-backref" href="#id5">Restricting execution with <code class="docutils literal notranslate"><span class="pre">throttle</span></code></a><a class="headerlink" href="#restricting-execution-with-throttle" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">throttle</span></code> keyword limits the number of workers for a particular task. It can be set at the block and task level. Use <code class="docutils literal notranslate"><span class="pre">throttle</span></code> to restrict tasks that may be CPU-intensive or interact with a rate-limiting API:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/cpu_intensive_command</span>
+  <span class="nt">throttle</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>If you have already restricted the number of forks or the number of machines to execute against in parallel, you can reduce the number of workers with <code class="docutils literal notranslate"><span class="pre">throttle</span></code>, but you cannot increase it. In other words, to have an effect, your <code class="docutils literal notranslate"><span class="pre">throttle</span></code> setting must be lower than your <code class="docutils literal notranslate"><span class="pre">forks</span></code> or <code class="docutils literal notranslate"><span class="pre">serial</span></code> setting if you are using them together.</p>
+</section>
+<section id="ordering-execution-based-on-inventory">
+<h3><a class="toc-backref" href="#id6">Ordering execution based on inventory</a><a class="headerlink" href="#ordering-execution-based-on-inventory" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">order</span></code> keyword controls the order in which hosts are run. Possible values for order are:</p>
+<dl class="simple">
+<dt>inventory:</dt><dd><p>(default) The order provided by the inventory for the selection requested (see note below)</p>
+</dd>
+<dt>reverse_inventory:</dt><dd><p>The same as above, but reversing the returned list</p>
+</dd>
+<dt>sorted:</dt><dd><p>Sorted alphabetically sorted by name</p>
+</dd>
+<dt>reverse_sorted:</dt><dd><p>Sorted by name in reverse alphabetical order</p>
+</dd>
+<dt>shuffle:</dt><dd><p>Randomly ordered on each run</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>the ‘inventory’ order does not equate to the order in which hosts/groups are defined in the inventory source file, but the ‘order in which a selection is returned from the compiled inventory’. This is a backwards compatible option and while reproducible it is not normally predictable. Due to the nature of inventory, host patterns, limits, inventory plugins and the ability to allow multiple sources it is almost impossible to return such an order. For simple cases this might happen to match the file definition order, but that is not guaranteed.</p>
+</div>
+</section>
+<section id="running-on-a-single-machine-with-run-once">
+<span id="run-once"></span><h3><a class="toc-backref" href="#id7">Running on a single machine with <code class="docutils literal notranslate"><span class="pre">run_once</span></code></a><a class="headerlink" href="#running-on-a-single-machine-with-run-once" title="Permalink to this headline"></a></h3>
+<p>If you want a task to run only on the first host in your batch of hosts, set <code class="docutils literal notranslate"><span class="pre">run_once</span></code> to true on that task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># ...</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+
+    <span class="c1"># ...</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/application/upgrade_db.py</span>
+      <span class="nt">run_once</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p>Ansible executes this task on the first host in the current batch and applies all results and facts to all the hosts in the same batch. This approach is similar to applying a conditional to a task such as:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/application/upgrade_db.py</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">inventory_hostname == webservers[0]</span>
+</pre></div>
+</div>
+<p>However, with <code class="docutils literal notranslate"><span class="pre">run_once</span></code>, the results are applied to all the hosts. To run the task on a specific host, instead of the first host in the batch, delegate the task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/application/upgrade_db.py</span>
+  <span class="nt">run_once</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">web01.example.org</span>
+</pre></div>
+</div>
+<p>As always with <a class="reference internal" href="playbooks_delegation.html#playbooks-delegation"><span class="std std-ref">delegation</span></a>, the action will be executed on the delegated host, but the information is still that of the original host in the task.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When used together with <code class="docutils literal notranslate"><span class="pre">serial</span></code>, tasks marked as <code class="docutils literal notranslate"><span class="pre">run_once</span></code> will be run on one host in <em>each</em> serial batch. If the task must run only once regardless of <code class="docutils literal notranslate"><span class="pre">serial</span></code> mode, use
+<code class="code docutils literal notranslate"><span class="pre">when:</span> <span class="pre">inventory_hostname</span> <span class="pre">==</span> <span class="pre">ansible_play_hosts_all[0]</span></code> construct.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any conditional (in other words, <cite>when:</cite>) will use the variables of the ‘first host’ to decide if the task runs or not, no other hosts will be tested.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to avoid the default behavior of setting the fact for all hosts, set <code class="docutils literal notranslate"><span class="pre">delegate_facts:</span> <span class="pre">True</span></code> for the specific task or block.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="playbooks_intro.html#about-playbooks"><span class="std std-ref">Intro to playbooks</span></a></dt><dd><p>An introduction to playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_delegation.html#playbooks-delegation"><span class="std std-ref">Controlling where tasks run: delegation and local actions</span></a></dt><dd><p>Running tasks on or assigning facts to specific machines</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Roles</span></a></dt><dd><p>Playbook organization by roles</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-devel">User Mailing List</a></dt><dd><p>Have a question?  Stop by the google group!</p>
+</dd>
+<dt><a class="reference internal" href="../community/communication.html#communication-irc"><span class="std std-ref">Real-time chat</span></a></dt><dd><p>How to join Ansible chat channels</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_debugger.html" class="btn btn-neutral float-left" title="Debugging tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_async.html" class="btn btn-neutral float-right" title="Asynchronous actions and polling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

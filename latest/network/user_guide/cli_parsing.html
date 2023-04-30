@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parsing semi-structured text with Ansible &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/network/user_guide/cli_parsing.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Validate data against set criteria with Ansible" href="validate.html" />
+    <link rel="prev" title="Ansible Network Examples" href="network_best_practices_2.5.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Network Advanced Topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="network_resource_modules.html">Network Resource Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_best_practices_2.5.html">Ansible Network Examples</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parsing semi-structured text with Ansible</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#understanding-the-cli-parser">Understanding the CLI parser</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#why-parse-the-text">Why parse the text?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#when-not-to-parse-the-text">When not to parse the text</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parsing-the-cli">Parsing the CLI</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-with-the-native-parsing-engine">Parsing with the native parsing engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-json">Parsing JSON</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-with-ntc-templates">Parsing with ntc_templates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-with-pyats">Parsing with pyATS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-with-textfsm">Parsing with textfsm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-with-ttp">Parsing with TTP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parsing-with-jc">Parsing with JC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#converting-xml">Converting XML</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-use-cases">Advanced use cases</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#provide-a-full-template-path">Provide a full template path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#provide-command-to-parser-different-than-the-command-run">Provide command to parser different than the command run</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#provide-a-custom-os-value">Provide a custom OS value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parse-existing-text">Parse existing text</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="validate.html">Validate data against set criteria with Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_debug_troubleshooting.html">Network Debug and Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_working_with_command_output.html">Working with command output and prompts in network modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">Ansible Network FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platform_index.html">Platform Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Network Advanced Topics</a> &raquo;</li>
+      <li>Parsing semi-structured text with Ansible</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/network/user_guide/cli_parsing.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="parsing-semi-structured-text-with-ansible">
+<span id="cli-parsing"></span><h1>Parsing semi-structured text with Ansible<a class="headerlink" href="#parsing-semi-structured-text-with-ansible" title="Permalink to this headline"></a></h1>
+<p>The <a class="reference internal" href="../../collections/ansible/utils/cli_parse_module.html#ansible-collections-ansible-utils-cli-parse-module"><span class="std std-ref">cli_parse</span></a> module parses semi-structured data such as network configurations into structured data to allow programmatic use of the data from that device. You can pull information from a network device and update a CMDB in one playbook. Use cases include automated troubleshooting, creating dynamic documentation, updating IPAM (IP address management) tools and so on.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#understanding-the-cli-parser" id="id1">Understanding the CLI parser</a></p>
+<ul>
+<li><p><a class="reference internal" href="#why-parse-the-text" id="id2">Why parse the text?</a></p></li>
+<li><p><a class="reference internal" href="#when-not-to-parse-the-text" id="id3">When not to parse the text</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#parsing-the-cli" id="id4">Parsing the CLI</a></p>
+<ul>
+<li><p><a class="reference internal" href="#parsing-with-the-native-parsing-engine" id="id5">Parsing with the native parsing engine</a></p>
+<ul>
+<li><p><a class="reference internal" href="#networking-example" id="id6">Networking example</a></p></li>
+<li><p><a class="reference internal" href="#linux-example" id="id7">Linux example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#parsing-json" id="id8">Parsing JSON</a></p></li>
+<li><p><a class="reference internal" href="#parsing-with-ntc-templates" id="id9">Parsing with ntc_templates</a></p></li>
+<li><p><a class="reference internal" href="#parsing-with-pyats" id="id10">Parsing with pyATS</a></p></li>
+<li><p><a class="reference internal" href="#parsing-with-textfsm" id="id11">Parsing with textfsm</a></p></li>
+<li><p><a class="reference internal" href="#parsing-with-ttp" id="id12">Parsing with TTP</a></p></li>
+<li><p><a class="reference internal" href="#parsing-with-jc" id="id13">Parsing with JC</a></p></li>
+<li><p><a class="reference internal" href="#converting-xml" id="id14">Converting XML</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#advanced-use-cases" id="id15">Advanced use cases</a></p>
+<ul>
+<li><p><a class="reference internal" href="#provide-a-full-template-path" id="id16">Provide a full template path</a></p></li>
+<li><p><a class="reference internal" href="#provide-command-to-parser-different-than-the-command-run" id="id17">Provide command to parser different than the command run</a></p></li>
+<li><p><a class="reference internal" href="#provide-a-custom-os-value" id="id18">Provide a custom OS value</a></p></li>
+<li><p><a class="reference internal" href="#parse-existing-text" id="id19">Parse existing text</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="understanding-the-cli-parser">
+<h2><a class="toc-backref" href="#id1">Understanding the CLI parser</a><a class="headerlink" href="#understanding-the-cli-parser" title="Permalink to this headline"></a></h2>
+<p>The <a class="reference external" href="https://galaxy.ansible.com/ansible/utils">ansible.utils</a> collection version 1.0.0 or later  includes the <a class="reference internal" href="../../collections/ansible/utils/cli_parse_module.html#ansible-collections-ansible-utils-cli-parse-module"><span class="std std-ref">cli_parse</span></a> module that can run CLI commands and parse the semi-structured text output. You can use the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module on a device, host, or platform that only supports a command-line interface and the commands issued return semi-structured text. The <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module can either run a CLI command on a device and return a parsed result or can simply parse any text document. The <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module includes cli_parser plugins to interface with a variety of parsing engines.</p>
+<section id="why-parse-the-text">
+<h3><a class="toc-backref" href="#id2">Why parse the text?</a><a class="headerlink" href="#why-parse-the-text" title="Permalink to this headline"></a></h3>
+<p>Parsing semi-structured data such as network configurations into structured data allows programmatic use of the data from that device. Use cases include automated troubleshooting, creating dynamic documentation, updating IPAM (IP address management) tools and so on. You may prefer to do this with Ansible natively to take advantage of native Ansible constructs such as:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">when</span></code> clause to conditionally run other tasks or roles</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">assert</span></code> module to check configuration and operational state compliance</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">template</span></code> module to generate reports about configuration and operational state information</p></li>
+<li><p>Templates and <code class="docutils literal notranslate"><span class="pre">command</span></code> or <code class="docutils literal notranslate"><span class="pre">config</span></code> modules to generate host, device, or platform commands or configuration</p></li>
+<li><p>The current platform <code class="docutils literal notranslate"><span class="pre">facts</span></code> modules to supplement native facts information</p></li>
+</ul>
+<p>By parsing semi-structured text into Ansible native data structures, you can take full advantage of Ansible’s network modules and plugins.</p>
+</section>
+<section id="when-not-to-parse-the-text">
+<h3><a class="toc-backref" href="#id3">When not to parse the text</a><a class="headerlink" href="#when-not-to-parse-the-text" title="Permalink to this headline"></a></h3>
+<p>You should not parse semi-structured text when:</p>
+<ul class="simple">
+<li><p>The device, host, or platform has a RESTAPI and returns JSON.</p></li>
+<li><p>Existing Ansible facts modules already return the desired data.</p></li>
+<li><p>Ansible network resource modules exist for configuration management of the device and resource.</p></li>
+</ul>
+</section>
+</section>
+<section id="parsing-the-cli">
+<h2><a class="toc-backref" href="#id4">Parsing the CLI</a><a class="headerlink" href="#parsing-the-cli" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module includes the following cli_parsing plugins:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">native</span></code></dt><dd><p>The native parsing engine built into Ansible and requires no addition python libraries</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">xml</span></code></dt><dd><p>Convert XML to an Ansible native data structure</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">textfsm</span></code></dt><dd><p>A python module which implements a template based state machine for parsing semi-formatted text</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ntc_templates</span></code></dt><dd><p>Predefined <code class="docutils literal notranslate"><span class="pre">textfsm</span></code> templates packages supporting a variety of platforms and commands</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ttp</span></code></dt><dd><p>A library for semi-structured text parsing using templates, with added capabilities to simplify the process</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pyats</span></code></dt><dd><p>Uses the parsers included with the Cisco Test Automation &amp; Validation Solution</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">jc</span></code></dt><dd><p>A python module that converts the output of dozens of popular Linux/UNIX/macOS/Windows commands and file types to python dictionaries or lists of dictionaries. Note: this filter plugin can be found in the <code class="docutils literal notranslate"><span class="pre">community.general</span></code> collection.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">json</span></code></dt><dd><p>Converts JSON output at the CLI to an Ansible native data structure</p>
+</dd>
+</dl>
+<p>Although Ansible contains a number of plugins that can convert XML to Ansible native data structures, the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module runs the command on devices that return XML and returns the converted data in a single task.</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> uses a plugin based architecture, it can use additional parsing engines from any Ansible collection.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.native</span></code>  and <code class="docutils literal notranslate"><span class="pre">ansible.utils.json</span></code> parsing engines are fully supported with a Red Hat Ansible Automation Platform subscription. Red Hat Ansible Automation Platform subscription support is limited to the use of the <code class="docutils literal notranslate"><span class="pre">ntc_templates</span></code>, pyATS, <code class="docutils literal notranslate"><span class="pre">textfsm</span></code>, <code class="docutils literal notranslate"><span class="pre">xmltodict</span></code>, public APIs as documented.</p>
+</div>
+<section id="parsing-with-the-native-parsing-engine">
+<h3><a class="toc-backref" href="#id5">Parsing with the native parsing engine</a><a class="headerlink" href="#parsing-with-the-native-parsing-engine" title="Permalink to this headline"></a></h3>
+<p>The native parsing engine is included with the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module. It uses data captured using regular expressions to populate the parsed data structure. The native parsing engine requires a YAML template file to parse the command output.</p>
+<section id="networking-example">
+<h4><a class="toc-backref" href="#id6">Networking example</a><a class="headerlink" href="#networking-example" title="Permalink to this headline"></a></h4>
+<p>This example uses the output of a network device command and applies a native template to produce an output in Ansible structured data format.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">interface</span></code> command output from the network device looks as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Ethernet1/1 is up</span>
+<span class="go">admin state is up, Dedicated Interface</span>
+<span class="go">  Hardware: 100/1000/10000 Ethernet, address: 5254.005a.f8bd (bia 5254.005a.f8bd)</span>
+<span class="go">  MTU 1500 bytes, BW 1000000 Kbit, DLY 10 usec</span>
+<span class="go">  reliability 255/255, txload 1/255, rxload 1/255</span>
+<span class="go">  Encapsulation ARPA, medium is broadcast</span>
+<span class="go">  Port mode is access</span>
+<span class="go">  full-duplex, auto-speed</span>
+<span class="go">  Beacon is turned off</span>
+<span class="go">  Auto-Negotiation is turned on  FEC mode is Auto</span>
+<span class="go">  Input flow-control is off, output flow-control is off</span>
+<span class="go">  Auto-mdix is turned off</span>
+<span class="go">  Switchport monitor is off</span>
+<span class="go">  EtherType is 0x8100</span>
+<span class="go">  EEE (efficient-ethernet) : n/a</span>
+<span class="go">  Last link flapped 4week(s) 6day(s)</span>
+<span class="go">  Last clearing of &quot;show interface&quot; counters never</span>
+<span class="go">&lt;...&gt;</span>
+</pre></div>
+</div>
+<p>Create the native template to match this output and store it as <code class="docutils literal notranslate"><span class="pre">templates/nxos_show_interface.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">example</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Ethernet1/1 is up</span>
+  <span class="nt">getval</span><span class="p">:</span> <span class="s">&#39;(?P&lt;name&gt;\S+)</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(?P&lt;oper_state&gt;\S+)&#39;</span>
+  <span class="nt">result</span><span class="p">:</span>
+    <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="p p-Indicator">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span>
+      <span class="nt">state</span><span class="p">:</span>
+        <span class="nt">operating</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">oper_state</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">shared</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">example</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin state is up, Dedicated Interface</span>
+  <span class="nt">getval</span><span class="p">:</span> <span class="s">&#39;admin</span><span class="nv"> </span><span class="s">state</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(?P&lt;admin_state&gt;\S+),&#39;</span>
+  <span class="nt">result</span><span class="p">:</span>
+    <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="p p-Indicator">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span>
+      <span class="nt">state</span><span class="p">:</span>
+        <span class="nt">admin</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">admin_state</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">example</span><span class="p">:</span> <span class="s">&quot;</span><span class="nv">  </span><span class="s">Hardware:</span><span class="nv"> </span><span class="s">Ethernet,</span><span class="nv"> </span><span class="s">address:</span><span class="nv"> </span><span class="s">5254.005a.f8b5</span><span class="nv"> </span><span class="s">(bia</span><span class="nv"> </span><span class="s">5254.005a.f8b5)&quot;</span>
+  <span class="nt">getval</span><span class="p">:</span> <span class="s">&#39;\s+Hardware:</span><span class="nv"> </span><span class="s">(?P&lt;hardware&gt;.*),</span><span class="nv"> </span><span class="s">address:</span><span class="nv"> </span><span class="s">(?P&lt;mac&gt;\S+)&#39;</span>
+  <span class="nt">result</span><span class="p">:</span>
+    <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="p p-Indicator">:</span>
+      <span class="nt">hardware</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">hardware</span><span class="nv"> </span><span class="s">}}&quot;</span>
+      <span class="nt">mac_address</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mac</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<p>This native parser template is structured as a list of parsers, each containing the following key-value pairs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">example</span></code> - An example line of the text line to be parsed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">getval</span></code> - A regular expression using named capture groups to store the extracted data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">result</span></code> - A data tree, populated as a template, from the parsed data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shared</span></code> - (optional) The shared key makes the parsed values available to the rest of the parser entries until matched again.</p></li>
+</ul>
+<p>The following example task uses <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> with the native parser and the example template above to parse the <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">interface</span></code> command from a Cisco NXOS device:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">native&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+    <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<p>Taking a deeper dive into this task:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">command</span></code> option provides the command you want to run on the device or host. Alternately, you can provide text from a previous command with the <code class="docutils literal notranslate"><span class="pre">text</span></code> option instead.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">parser</span></code> option provides information specific to the parser engine.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">name</span></code> suboption provides the fully qualified collection name (FQCN) of the parsing engine (<code class="docutils literal notranslate"><span class="pre">ansible.netcommon.native</span></code>).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module, by default, looks for the template in the templates directory as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">short_os</span> <span class="pre">}}_{{</span> <span class="pre">command</span> <span class="pre">}}.yaml</span></code>.</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">short_os</span></code> in the template filename is derived from either the host <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible_distribution</span></code>.</p></li>
+<li><p>Spaces in the network or host command are replace with <code class="docutils literal notranslate"><span class="pre">_</span></code> in the <code class="docutils literal notranslate"><span class="pre">command</span></code> portion of the template filename. In this example, the <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">interfaces</span></code> network CLI command becomes <code class="docutils literal notranslate"><span class="pre">show_interfaces</span></code> in the filename.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">ansible.netcommon.native</span></code> parsing engine is fully supported with a Red Hat Ansible Automation Platform subscription.</p>
+</div>
+<p>Lastly in this task, the <code class="docutils literal notranslate"><span class="pre">set_fact</span></code> option sets the following <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the device based on the now-structured data returned from <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Ethernet1/1</span><span class="p">:</span>
+    <span class="nt">hardware</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100/1000/10000 Ethernet</span>
+    <span class="nt">mac_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5254.005a.f8bd</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Ethernet1/1</span>
+    <span class="nt">state</span><span class="p">:</span>
+    <span class="nt">admin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+    <span class="nt">operating</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+<span class="nt">Ethernet1/10</span><span class="p">:</span>
+    <span class="nt">hardware</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100/1000/10000 Ethernet</span>
+    <span class="nt">mac_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5254.005a.f8c6</span>
+<span class="l l-Scalar l-Scalar-Plain">&lt;...&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="linux-example">
+<h4><a class="toc-backref" href="#id7">Linux example</a><a class="headerlink" href="#linux-example" title="Permalink to this headline"></a></h4>
+<p>You can also use the native parser to run commands and parse output from Linux hosts.</p>
+<p>The output of a sample Linux  command (<code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">addr</span> <span class="pre">show</span></code>) looks as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+    link/loopback <span class="m">00</span>:00:00:00:00:00 brd <span class="m">00</span>:00:00:00:00:00
+    inet <span class="m">127</span>.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+<span class="m">2</span>: enp0s31f6: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu <span class="m">1500</span> qdisc fq_codel state DOWN group default qlen <span class="m">1000</span>
+    link/ether x2:6a:64:9d:84:19 brd ff:ff:ff:ff:ff:ff
+<span class="m">3</span>: wlp2s0: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">1500</span> qdisc noop state DOWN group default qlen <span class="m">1000</span>
+    link/ether x6:c2:44:f7:41:e0 brd ff:ff:ff:ff:ff:ff permaddr d8:f2:ca:99:5c:82
+</pre></div>
+</div>
+<p>Create the native template to match this output and store it as <code class="docutils literal notranslate"><span class="pre">templates/fedora_ip_addr_show.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">example</span><span class="p">:</span> <span class="s">&#39;1:</span><span class="nv"> </span><span class="s">lo:</span><span class="nv"> </span><span class="s">&lt;LOOPBACK,UP,LOWER_UP&gt;</span><span class="nv"> </span><span class="s">mtu</span><span class="nv"> </span><span class="s">65536</span><span class="nv"> </span><span class="s">qdisc</span><span class="nv"> </span><span class="s">noqueue</span><span class="nv"> </span><span class="s">state</span><span class="nv"> </span><span class="s">UNKNOWN</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">default</span><span class="nv"> </span><span class="s">qlen</span><span class="nv"> </span><span class="s">1000&#39;</span>
+  <span class="nt">getval</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">(?x)                                                # free-spacing</span>
+    <span class="no">\d+:\s                                              # the interface index</span>
+    <span class="no">(?P&lt;name&gt;\S+):\s                                    # the name</span>
+    <span class="no">&lt;(?P&lt;properties&gt;\S+)&gt;                               # the properties</span>
+    <span class="no">\smtu\s(?P&lt;mtu&gt;\d+)                                 # the mtu</span>
+    <span class="no">.*                                                  # gunk</span>
+    <span class="no">state\s(?P&lt;state&gt;\S+)                               # the state of the interface</span>
+  <span class="nt">result</span><span class="p">:</span>
+    <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="p p-Indicator">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">loopback</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">&#39;LOOPBACK&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">stats.split(&#39;,&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">up</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">&#39;UP&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">properties.split(&#39;,&#39;)</span><span class="nv">  </span><span class="s">}}&quot;</span>
+        <span class="nt">carrier</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">&#39;NO-CARRIER&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">properties.split(&#39;,&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">broadcast</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">&#39;BROADCAST&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">properties.split(&#39;,&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">multicast</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">&#39;MULTICAST&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">properties.split(&#39;,&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">state|lower()</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">mtu</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mtu</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">shared</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">example</span><span class="p">:</span> <span class="s">&#39;inet</span><span class="nv"> </span><span class="s">192.168.122.1/24</span><span class="nv"> </span><span class="s">brd</span><span class="nv"> </span><span class="s">192.168.122.255</span><span class="nv"> </span><span class="s">scope</span><span class="nv"> </span><span class="s">global</span><span class="nv"> </span><span class="s">virbr0&#39;</span>
+  <span class="nt">getval</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+   <span class="no">(?x)                                                 # free-spacing</span>
+   <span class="no">\s+inet\s(?P&lt;inet&gt;([0-9]{1,3}\.){3}[0-9]{1,3})       # the ip address</span>
+   <span class="no">/(?P&lt;bits&gt;\d{1,2})                                   # the mask bits</span>
+  <span class="nt">result</span><span class="p">:</span>
+    <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="p p-Indicator">:</span>
+        <span class="nt">ip_address</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inet</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">mask_bits</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">bits</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">shared</span></code> key in the parser template allows the interface name to be used in subsequent parser entries. The use of examples and free-spacing mode with the regular expressions makes the template easier to read.</p>
+</div>
+<p>The following example task uses <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> with the native parser and the example template above to parse the Linux output:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run command and parse</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ip addr show</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+    <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<p>This task assumes you previously gathered facts to determine the <code class="docutils literal notranslate"><span class="pre">ansible_distribution</span></code> needed to locate the template. Alternately, you could provide the path in the  <code class="docutils literal notranslate"><span class="pre">parser/template_path</span></code> option.</p>
+<p>Lastly in this task, the <code class="docutils literal notranslate"><span class="pre">set_fact</span></code> option sets the following <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the host, based on the now-structured data returned from <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lo</span><span class="p">:</span>
+  <span class="nt">broadcast</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">carrier</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">ip_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+  <span class="nt">mask_bits</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8</span>
+  <span class="nt">mtu</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">65536</span>
+  <span class="nt">multicast</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">lo</span>
+  <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">unknown</span>
+  <span class="nt">up</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">enp64s0u1</span><span class="p">:</span>
+  <span class="nt">broadcast</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">carrier</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">ip_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.86.83</span>
+  <span class="nt">mask_bits</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">24</span>
+  <span class="nt">mtu</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1500</span>
+  <span class="nt">multicast</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">enp64s0u1</span>
+  <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">up</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="l l-Scalar l-Scalar-Plain">&lt;...&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="parsing-json">
+<h3><a class="toc-backref" href="#id8">Parsing JSON</a><a class="headerlink" href="#parsing-json" title="Permalink to this headline"></a></h3>
+<p>Although Ansible will natively convert serialized JSON to Ansible native data when recognized, you can also use the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module for this conversion.</p>
+<p>Example task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">json&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface | json</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.utils.json</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<p>Taking a deeper dive into this task:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">interface</span> <span class="pre">|</span> <span class="pre">json</span></code> command is issued on the device.</p></li>
+<li><p>The output is set as the <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the device.</p></li>
+<li><p>JSON support is provided primarily for playbook consistency.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The use of <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.json</span></code> is fully supported with a Red Hat Ansible Automation Platform subscription</p>
+</div>
+</section>
+<section id="parsing-with-ntc-templates">
+<h3><a class="toc-backref" href="#id9">Parsing with ntc_templates</a><a class="headerlink" href="#parsing-with-ntc-templates" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">ntc_templates</span></code> python library includes pre-defined <code class="docutils literal notranslate"><span class="pre">textfsm</span></code> templates for parsing a variety of network device commands output.</p>
+<p>Example task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">ntc_templates&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.ntc_templates</span>
+    <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<p>Taking a deeper dive into this task:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> of the device is converted to the ntc_template format <code class="docutils literal notranslate"><span class="pre">cisco_nxos</span></code>. Alternately, you can provide the <code class="docutils literal notranslate"><span class="pre">os</span></code> with the <code class="docutils literal notranslate"><span class="pre">parser/os</span></code> option instead.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cisco_nxos_show_interface.textfsm</span></code> template, included with the <code class="docutils literal notranslate"><span class="pre">ntc_templates</span></code> package, parses the output.</p></li>
+<li><p>See <a class="reference external" href="https://github.com/networktocode/ntc-templates/blob/master/README.md">the ntc_templates README</a> for additional information about the <code class="docutils literal notranslate"><span class="pre">ntc_templates</span></code> python library.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Red Hat Ansible Automation Platform subscription support is limited to the use of the <code class="docutils literal notranslate"><span class="pre">ntc_templates</span></code> public APIs as documented.</p>
+</div>
+<p>This task and and the predefined template sets the following fact as the <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the host:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">interfaces</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5254.005a.f8b5</span>
+  <span class="nt">admin_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">bandwidth</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000000 Kbit</span>
+  <span class="nt">bia</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5254.005a.f8b5</span>
+  <span class="nt">delay</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 usec</span>
+  <span class="nt">description</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">duplex</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">full-duplex</span>
+  <span class="nt">encapsulation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ARPA</span>
+  <span class="nt">hardware_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Ethernet</span>
+  <span class="nt">input_errors</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">input_packets</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">interface</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mgmt0</span>
+  <span class="nt">ip_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.101.14/24</span>
+  <span class="nt">last_link_flapped</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">link_status</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">mode</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">mtu</span><span class="p">:</span> <span class="s">&#39;1500&#39;</span>
+  <span class="nt">output_errors</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">output_packets</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">speed</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000 Mb/s</span>
+<span class="p p-Indicator">-</span> <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5254.005a.f8bd</span>
+  <span class="nt">admin_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">bandwidth</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000000 Kbit</span>
+  <span class="nt">bia</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5254.005a.f8bd</span>
+  <span class="nt">delay</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 usec</span>
+</pre></div>
+</div>
+</section>
+<section id="parsing-with-pyats">
+<h3><a class="toc-backref" href="#id10">Parsing with pyATS</a><a class="headerlink" href="#parsing-with-pyats" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pyATS</span></code> is part of the Cisco Test Automation &amp; Validation Solution. It includes many predefined parsers for a number of network platforms and commands. You can use the predefined parsers that are part of the <code class="docutils literal notranslate"><span class="pre">pyATS</span></code> package with the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module.</p>
+<p>Example task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">pyats&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.pyats</span>
+    <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<p>Taking a deeper dive into this task:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> modules converts the <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> automatically (in this example, <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> set to <code class="docutils literal notranslate"><span class="pre">cisco.nxos.nxos</span></code>, converts to <code class="docutils literal notranslate"><span class="pre">nxos</span></code> for pyATS.  Alternately, you can set the OS with the <code class="docutils literal notranslate"><span class="pre">parser/os</span></code> option instead.</p></li>
+<li><p>Using a combination of the command and OS, the pyATS selects the following parser: <a class="reference external" href="https://pubhub.devnetcloud.com/media/genie-feature-browser/docs/#/parsers/show%2520interface">https://pubhub.devnetcloud.com/media/genie-feature-browser/docs/#/parsers/show%2520interface</a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module sets <code class="docutils literal notranslate"><span class="pre">cisco.ios.ios</span></code> to <code class="docutils literal notranslate"><span class="pre">iosxe</span></code> for pyATS. You can override this with the <code class="docutils literal notranslate"><span class="pre">parser/os</span></code> option.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> only uses the predefined parsers in pyATS. See the <a class="reference external" href="https://developer.cisco.com/docs/pyats/">pyATS documentation</a> and the full list of <a class="reference external" href="https://pubhub.devnetcloud.com/media/genie-feature-browser/docs/#/parsers">pyATS included parsers</a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Red Hat Ansible Automation Platform subscription support is limited to the use of the pyATS public APIs as documented.</p>
+</div>
+<p>This task sets the following fact as the <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the host:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">mgmt0</span><span class="p">:</span>
+  <span class="nt">admin_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">auto_mdix</span><span class="p">:</span> <span class="s">&#39;off&#39;</span>
+  <span class="nt">auto_negotiate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">bandwidth</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000000</span>
+  <span class="nt">counters</span><span class="p">:</span>
+    <span class="nt">in_broadcast_pkts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+    <span class="nt">in_multicast_pkts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1652395</span>
+    <span class="nt">in_octets</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">556155103</span>
+    <span class="nt">in_pkts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2236713</span>
+    <span class="nt">in_unicast_pkts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">584259</span>
+    <span class="nt">rate</span><span class="p">:</span>
+      <span class="nt">in_rate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">320</span>
+      <span class="nt">in_rate_pkts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+      <span class="nt">load_interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+      <span class="nt">out_rate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">48</span>
+      <span class="nt">out_rate_pkts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+    <span class="nt">rx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">tx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">delay</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+  <span class="nt">duplex_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">full</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">encapsulations</span><span class="p">:</span>
+    <span class="nt">encapsulation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arpa</span>
+  <span class="nt">ethertype</span><span class="p">:</span> <span class="s">&#39;0x0000&#39;</span>
+  <span class="nt">ipv4</span><span class="p">:</span>
+    <span class="nt">192.168.101.14/24</span><span class="p">:</span>
+      <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.101.14</span>
+      <span class="nt">prefix_length</span><span class="p">:</span> <span class="s">&#39;24&#39;</span>
+  <span class="nt">link_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="l l-Scalar l-Scalar-Plain">&lt;...&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="parsing-with-textfsm">
+<h3><a class="toc-backref" href="#id11">Parsing with textfsm</a><a class="headerlink" href="#parsing-with-textfsm" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">textfsm</span></code> is a Python module which implements a template-based state machine for parsing semi-formatted text.</p>
+<p>The following sample``textfsm`` template is stored as <code class="docutils literal notranslate"><span class="pre">templates/nxos_show_interface.textfsm</span></code></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Value Required INTERFACE (\S+)
+Value LINK_STATUS (.+?)
+Value ADMIN_STATE (.+?)
+Value HARDWARE_TYPE (.\*)
+Value ADDRESS ([a-zA-Z0-9]+.[a-zA-Z0-9]+.[a-zA-Z0-9]+)
+Value BIA ([a-zA-Z0-9]+.[a-zA-Z0-9]+.[a-zA-Z0-9]+)
+Value DESCRIPTION (.\*)
+Value IP_ADDRESS (\d+\.\d+\.\d+\.\d+\/\d+)
+Value MTU (\d+)
+Value MODE (\S+)
+Value DUPLEX (.+duplex?)
+Value SPEED (.+?)
+Value INPUT_PACKETS (\d+)
+Value OUTPUT_PACKETS (\d+)
+Value INPUT_ERRORS (\d+)
+Value OUTPUT_ERRORS (\d+)
+Value BANDWIDTH (\d+\s+\w+)
+Value DELAY (\d+\s+\w+)
+Value ENCAPSULATION (\w+)
+Value LAST_LINK_FLAPPED (.+?)
+
+Start
+  ^\S+\s+is.+ -&gt; Continue.Record
+  ^${INTERFACE}\s+is\s+${LINK_STATUS},\sline\sprotocol\sis\s${ADMIN_STATE}$$
+  ^${INTERFACE}\s+is\s+${LINK_STATUS}$$
+  ^admin\s+state\s+is\s+${ADMIN_STATE},
+  ^\s+Hardware(:|\s+is)\s+${HARDWARE_TYPE},\s+address(:|\s+is)\s+${ADDRESS}(.*bia\s+${BIA})*
+  ^\s+Description:\s+${DESCRIPTION}
+  ^\s+Internet\s+Address\s+is\s+${IP_ADDRESS}
+  ^\s+Port\s+mode\s+is\s+${MODE}
+  ^\s+${DUPLEX}, ${SPEED}(,|$$)
+  ^\s+MTU\s+${MTU}.\*BW\s+${BANDWIDTH}.\*DLY\s+${DELAY}
+  ^\s+Encapsulation\s+${ENCAPSULATION}
+  ^\s+${INPUT_PACKETS}\s+input\s+packets\s+\d+\s+bytes\s\*$$
+  ^\s+${INPUT_ERRORS}\s+input\s+error\s+\d+\s+short\s+frame\s+\d+\s+overrun\s+\d+\s+underrun\s+\d+\s+ignored\s\*$$
+  ^\s+${OUTPUT_PACKETS}\s+output\s+packets\s+\d+\s+bytes\s\*$$
+  ^\s+${OUTPUT_ERRORS}\s+output\s+error\s+\d+\s+collision\s+\d+\s+deferred\s+\d+\s+late\s+collision\s\*$$
+  ^\s+Last\s+link\s+flapped\s+${LAST_LINK_FLAPPED}\s\*$$
+</pre></div>
+</div>
+<p>The following task uses the example template for <code class="docutils literal notranslate"><span class="pre">textfsm</span></code> with the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">textfsm&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.utils.textfsm</span>
+    <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<p>Taking a deeper dive into this task:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> for the device (<code class="docutils literal notranslate"><span class="pre">cisco.nxos.nxos</span></code>) is converted to <code class="docutils literal notranslate"><span class="pre">nxos</span></code>. Alternately you can provide the OS in the <code class="docutils literal notranslate"><span class="pre">parser/os</span></code> option instead.</p></li>
+<li><p>The textfsm template name defaulted to <code class="docutils literal notranslate"><span class="pre">templates/nxos_show_interface.textfsm</span></code> using a combination of the OS and command run. Alternately you can override the generated template path with the <code class="docutils literal notranslate"><span class="pre">parser/template_path</span></code> option.</p></li>
+<li><p>See the <a class="reference external" href="https://github.com/google/textfsm">textfsm README</a> for details.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">textfsm</span></code> was previously made available as a filter plugin. Ansible users should transition to the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Red Hat Ansible Automation Platform subscription support is limited to the use of the <code class="docutils literal notranslate"><span class="pre">textfsm</span></code> public APIs as documented.</p>
+</div>
+<p>This task sets the following fact as the <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the host:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">ADDRESS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">X254.005a.f8b5</span>
+  <span class="nt">ADMIN_STATE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">BANDWIDTH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000000 Kbit</span>
+  <span class="nt">BIA</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">X254.005a.f8b5</span>
+  <span class="nt">DELAY</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 usec</span>
+  <span class="nt">DESCRIPTION</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">DUPLEX</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">full-duplex</span>
+  <span class="nt">ENCAPSULATION</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ARPA</span>
+  <span class="nt">HARDWARE_TYPE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Ethernet</span>
+  <span class="nt">INPUT_ERRORS</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">INPUT_PACKETS</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">INTERFACE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mgmt0</span>
+  <span class="nt">IP_ADDRESS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.101.14/24</span>
+  <span class="nt">LAST_LINK_FLAPPED</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">LINK_STATUS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">MODE</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">MTU</span><span class="p">:</span> <span class="s">&#39;1500&#39;</span>
+  <span class="nt">OUTPUT_ERRORS</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">OUTPUT_PACKETS</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+  <span class="nt">SPEED</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000 Mb/s</span>
+<span class="p p-Indicator">-</span> <span class="nt">ADDRESS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">X254.005a.f8bd</span>
+  <span class="nt">ADMIN_STATE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+  <span class="nt">BANDWIDTH</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000000 Kbit</span>
+  <span class="nt">BIA</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">X254.005a.f8bd</span>
+</pre></div>
+</div>
+</section>
+<section id="parsing-with-ttp">
+<h3><a class="toc-backref" href="#id12">Parsing with TTP</a><a class="headerlink" href="#parsing-with-ttp" title="Permalink to this headline"></a></h3>
+<p>TTP is a Python library for semi-structured text parsing using templates. TTP uses a jinja-like syntax to limit the need for regular expressions. Users familiar with jinja templating may find the TTP template syntax familiar.</p>
+<p>The following is an example TTP template stored as <code class="docutils literal notranslate"><span class="pre">templates/nxos_show_interface.ttp</span></code>:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">interface</span> <span class="cp">}}</span><span class="x"> is </span><span class="cp">{{</span> <span class="nv">state</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">admin state is </span><span class="cp">{{</span> <span class="nv">admin_state</span> <span class="cp">}}{{</span> <span class="nv">ignore</span><span class="o">(</span><span class="s2">&quot;.\*&quot;</span><span class="o">)</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>The following task uses this template to parse the <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">interface</span></code> command output:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">ttp&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.utils.ttp</span>
+    <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<p>Taking a deeper dive in this task:</p>
+<ul class="simple">
+<li><p>The default template path <code class="docutils literal notranslate"><span class="pre">templates/nxos_show_interface.ttp</span></code> was generated using the <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> for the host and <code class="docutils literal notranslate"><span class="pre">command</span></code> provided.</p></li>
+<li><p>TTP supports several additional variables that will be passed to the parser. These include:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">parser/vars/ttp_init</span></code> -  Additional parameter passed when the parser is initialized.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parser/vars/ttp_results</span></code> -  Additional parameters used to influence the parser output.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parser/vars/ttp_vars</span></code> -  Additional variables made available in the template.</p></li>
+</ul>
+</li>
+<li><p>See the <a class="reference external" href="https://ttp.readthedocs.io">TTP documentation</a> for details.</p></li>
+</ul>
+<p>The task sets the follow fact as the <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the host:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">admin_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up,</span>
+  <span class="nt">interface</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mgmt0</span>
+  <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+<span class="p p-Indicator">-</span> <span class="nt">admin_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up,</span>
+  <span class="nt">interface</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Ethernet1/1</span>
+  <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+<span class="p p-Indicator">-</span> <span class="nt">admin_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up,</span>
+  <span class="nt">interface</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Ethernet1/2</span>
+  <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+</pre></div>
+</div>
+</section>
+<section id="parsing-with-jc">
+<h3><a class="toc-backref" href="#id13">Parsing with JC</a><a class="headerlink" href="#parsing-with-jc" title="Permalink to this headline"></a></h3>
+<p>JC is a python library that converts the output of dozens of common Linux/UNIX/macOS/Windows command-line tools and file types to python dictionaries or lists of dictionaries for easier parsing. JC is available as a filter plugin in the <code class="docutils literal notranslate"><span class="pre">community.general</span></code> collection.</p>
+<p>The following is an example using JC to parse the output of the <code class="docutils literal notranslate"><span class="pre">dig</span></code> command:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">dig</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">jc&quot;</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dig example.com</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="p p-Indicator">-</span> <span class="nt">set_fact</span><span class="p">:</span>
+      <span class="nt">myvar</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">result.stdout</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">community.general.jc(&#39;dig&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;The</span><span class="nv"> </span><span class="s">IP</span><span class="nv"> </span><span class="s">is:</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">myvar[0].answer[0].data</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The JC project and documentation can be found <a class="reference external" href="https://github.com/kellyjonbrazil/jc/">here</a>.</p></li>
+<li><p>See this <a class="reference external" href="https://blog.kellybrazil.com/2020/08/30/parsing-command-output-in-ansible-with-jc/">blog entry</a> for more information.</p></li>
+</ul>
+</section>
+<section id="converting-xml">
+<h3><a class="toc-backref" href="#id14">Converting XML</a><a class="headerlink" href="#converting-xml" title="Permalink to this headline"></a></h3>
+<p>Although Ansible contains a number of plugins that can convert XML to Ansible native data structures, the <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module runs the command on devices that return XML and returns the converted data in a single task.</p>
+<p>This example task runs the <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">interface</span></code> command and parses the output as XML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">xml&quot;</span>
+    <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface | xml</span>
+      <span class="nt">parser</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.utils.xml</span>
+  <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Red Hat Ansible Automation Platform subscription support is limited to the use of the <code class="docutils literal notranslate"><span class="pre">xmltodict</span></code> public APIs as documented.</p>
+</div>
+<p>This task sets the <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> fact for the host based on this returned output:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">nf:rpc-reply</span><span class="p p-Indicator">:</span>
+  <span class="s">&#39;@xmlns&#39;</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">http://www.cisco.com/nxos:1.0:if_manager</span>
+  <span class="s">&#39;@xmlns:nf&#39;</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">urn:ietf:params:xml:ns:netconf:base:1.0</span>
+  <span class="l l-Scalar l-Scalar-Plain">nf:data</span><span class="p p-Indicator">:</span>
+    <span class="nt">show</span><span class="p">:</span>
+      <span class="nt">interface</span><span class="p">:</span>
+        <span class="nt">__XML__OPT_Cmd_show_interface_quick</span><span class="p">:</span>
+          <span class="nt">__XML__OPT_Cmd_show_interface___readonly__</span><span class="p">:</span>
+            <span class="nt">__readonly__</span><span class="p">:</span>
+              <span class="nt">TABLE_interface</span><span class="p">:</span>
+                <span class="nt">ROW_interface</span><span class="p">:</span>
+                <span class="p p-Indicator">-</span> <span class="nt">admin_state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">up</span>
+                  <span class="nt">encapsulation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ARPA</span>
+                  <span class="nt">eth_autoneg</span><span class="p">:</span> <span class="s">&#39;on&#39;</span>
+                  <span class="nt">eth_bia_addr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x254.005a.f8b5</span>
+                  <span class="nt">eth_bw</span><span class="p">:</span> <span class="s">&#39;1000000&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-use-cases">
+<h2><a class="toc-backref" href="#id15">Advanced use cases</a><a class="headerlink" href="#advanced-use-cases" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> module supports several features to support more complex uses cases.</p>
+<section id="provide-a-full-template-path">
+<h3><a class="toc-backref" href="#id16">Provide a full template path</a><a class="headerlink" href="#provide-a-full-template-path" title="Permalink to this headline"></a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">template_path</span></code> option to override the default template path in the task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">native&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+      <span class="nt">template_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/home/user/templates/filename.yaml</span>
+</pre></div>
+</div>
+</section>
+<section id="provide-command-to-parser-different-than-the-command-run">
+<h3><a class="toc-backref" href="#id17">Provide command to parser different than the command run</a><a class="headerlink" href="#provide-command-to-parser-different-than-the-command-run" title="Permalink to this headline"></a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">command</span></code> suboption for the <code class="docutils literal notranslate"><span class="pre">parser</span></code> to configure the command the parser expects if it is different from the command <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> runs:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">parse</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">native&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sho int</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show interface</span>
+</pre></div>
+</div>
+</section>
+<section id="provide-a-custom-os-value">
+<h3><a class="toc-backref" href="#id18">Provide a custom OS value</a><a class="headerlink" href="#provide-a-custom-os-value" title="Permalink to this headline"></a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">os</span></code> suboption to the parser to directly set the OS instead of using <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible_distribution</span></code> to generate the template path or with the specified parser engine:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Use ios instead of iosxe for pyats</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show something</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.pyats</span>
+      <span class="nt">os</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ios</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Use linux instead of fedora from ansible_distribution</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ps -ef</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+      <span class="nt">os</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">linux</span>
+</pre></div>
+</div>
+</section>
+<section id="parse-existing-text">
+<h3><a class="toc-backref" href="#id19">Parse existing text</a><a class="headerlink" href="#parse-existing-text" title="Permalink to this headline"></a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">text</span></code> option  instead of <code class="docutils literal notranslate"><span class="pre">command</span></code> to parse text collected earlier in the playbook.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># using /home/user/templates/filename.yaml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Parse</span><span class="nv"> </span><span class="s">text</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">previous</span><span class="nv"> </span><span class="s">task&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">output[&#39;stdout&#39;]</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+      <span class="nt">template_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/home/user/templates/filename.yaml</span>
+
+ <span class="c1"># using /home/user/templates/filename.yaml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Parse</span><span class="nv"> </span><span class="s">text</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">file&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;file&#39;,</span><span class="nv"> </span><span class="s">&#39;path/to/file.txt&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+      <span class="nt">template_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/home/user/templates/filename.yaml</span>
+
+<span class="c1"># using templates/nxos_show_version.yaml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Parse</span><span class="nv"> </span><span class="s">text</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">previous</span><span class="nv"> </span><span class="s">task&quot;</span>
+  <span class="nt">ansible.utils.cli_parse</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">sho_version[&#39;stdout&#39;]</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">parser</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.native</span>
+      <span class="nt">os</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nxos</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show version</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../dev_guide/developing_plugins_network.html#develop-cli-parse-plugins"><span class="std std-ref">Developing cli_parser plugins in a collection</span></a></p></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="network_best_practices_2.5.html" class="btn btn-neutral float-left" title="Ansible Network Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="validate.html" class="btn btn-neutral float-right" title="Validate data against set criteria with Ansible" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

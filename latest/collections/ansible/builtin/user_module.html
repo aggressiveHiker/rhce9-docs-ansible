@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ansible.builtin.user module – Manage user accounts &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ansible.builtin.validate_argument_spec module – Validate role argument specs." href="validate_argument_spec_module.html" />
+    <link rel="prev" title="ansible.builtin.uri module – Interacts with webservices" href="uri_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Ansible.Builtin</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../netcommon/index.html">Ansible.Netcommon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../posix/index.html">Ansible.Posix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/index.html">Ansible.Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../windows/index.html">Ansible.Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../community/index.html">Collections in the Community Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vmware/index.html">Collections in the Vmware Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Collection Index</a> &raquo;</li>
+          <li><a href="../index.html">Collections in the Ansible Namespace</a> &raquo;</li>
+          <li><a href="index.html">Ansible.Builtin</a> &raquo;</li>
+      <li>ansible.builtin.user module – Manage user accounts</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/user.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-ansible-builtin-user-module"></span><span class="target" id="user-module"></span><section id="ansible-builtin-user-module-manage-user-accounts">
+<h1>ansible.builtin.user module – Manage user accounts<a class="headerlink" href="#ansible-builtin-user-module-manage-user-accounts" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module    is part of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> and included in all Ansible
+installations. In most cases, you can use the short
+module name
+<code class="docutils literal notranslate"><span class="pre">user</span></code> even without specifying the <code class="docutils literal notranslate"><span class="pre">collections:</span></code> keyword.
+However, we recommend you use the FQCN for easy linking to the
+module    documentation and to avoid conflicting with other collections that may have
+the same module name.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.2: </span>of ansible.builtin</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#attributes" id="id3">Attributes</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id7">Return Values</a></p></li>
+</ul>
+</div>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Manage user accounts and user attributes.</p></li>
+<li><p>For Windows targets, use the <a class="reference internal" href="../windows/win_user_module.html#ansible-collections-ansible-windows-win-user-module"><span class="std std-ref">ansible.windows.win_user</span></a> module instead.</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id2">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline"></a></h2>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-append"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-append"><strong>append</strong></p>
+<a class="ansibleOptionLink" href="#parameter-append" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If <code class="docutils literal notranslate"><span class="pre">yes</span></code>, add the user to the groups specified in <code class="docutils literal notranslate"><span class="pre">groups</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">no</span></code>, user will only be added to the groups specified in <code class="docutils literal notranslate"><span class="pre">groups</span></code>, removing them from all other groups.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-authorization"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-authorization"><strong>authorization</strong></p>
+<a class="ansibleOptionLink" href="#parameter-authorization" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Sets the authorization of the user.</p>
+<p>Does nothing when used with other platforms.</p>
+<p>Can set multiple authorizations using comma separation.</p>
+<p>To delete all authorizations, use <code class="docutils literal notranslate"><span class="pre">authorization=''</span></code>.</p>
+<p>Currently supported on Illumos/Solaris.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-comment"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-comment"><strong>comment</strong></p>
+<a class="ansibleOptionLink" href="#parameter-comment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally sets the description (aka <em>GECOS</em>) of user account.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-create_home"></div>
+<div class="ansibleOptionAnchor" id="parameter-createhome"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-createhome"><span id="ansible-collections-ansible-builtin-user-module-parameter-create-home"></span><strong>create_home</strong></p>
+<a class="ansibleOptionLink" href="#parameter-create_home" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: createhome</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Unless set to <code class="docutils literal notranslate"><span class="pre">no</span></code>, a home directory will be made for the user when the account is created or if the home directory does not exist.</p>
+<p>Changed from <code class="docutils literal notranslate"><span class="pre">createhome</span></code> to <code class="docutils literal notranslate"><span class="pre">create_home</span></code> in Ansible 2.5.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">no</span></p></li>
+<li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-expires"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-expires"><strong>expires</strong></p>
+<a class="ansibleOptionLink" href="#parameter-expires" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">float</span></p>
+<p><span class="ansible-option-versionadded">added in 1.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>An expiry time for the user in epoch, it will be ignored on platforms that do not support this.</p>
+<p>Currently supported on GNU/Linux, FreeBSD, and DragonFlyBSD.</p>
+<p>Since Ansible 2.6 you can remove the expiry time by specifying a negative value. Currently supported on GNU/Linux and FreeBSD.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-force"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-force"><strong>force</strong></p>
+<a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This only affects <code class="docutils literal notranslate"><span class="pre">state=absent</span></code>, it forces removal of the user and associated directories on supported platforms.</p>
+<p>The behavior is the same as <code class="docutils literal notranslate"><span class="pre">userdel</span> <span class="pre">--force</span></code>, check the man page for <code class="docutils literal notranslate"><span class="pre">userdel</span></code> on your system for details and support.</p>
+<p>When used with <code class="docutils literal notranslate"><span class="pre">generate_ssh_key=yes</span></code> this forces an existing key to be overwritten.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-generate_ssh_key"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-generate-ssh-key"><strong>generate_ssh_key</strong></p>
+<a class="ansibleOptionLink" href="#parameter-generate_ssh_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether to generate a SSH key for the user in question.</p>
+<p>This will <strong>not</strong> overwrite an existing SSH key unless used with <code class="docutils literal notranslate"><span class="pre">force=yes</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-group"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-group"><strong>group</strong></p>
+<a class="ansibleOptionLink" href="#parameter-group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally sets the user’s primary group (takes a group name).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-groups"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-groups"><strong>groups</strong></p>
+<a class="ansibleOptionLink" href="#parameter-groups" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of groups user will be added to.</p>
+<p>By default, the user is removed from all other groups. Configure <code class="docutils literal notranslate"><span class="pre">append</span></code> to modify this.</p>
+<p>When set to an empty string <code class="docutils literal notranslate"><span class="pre">''</span></code>, the user is removed from all groups except the primary group.</p>
+<p>Before Ansible 2.3, the only input format allowed was a comma separated string.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-hidden"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-hidden"><strong>hidden</strong></p>
+<a class="ansibleOptionLink" href="#parameter-hidden" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.6 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>macOS only, optionally hide the user from the login window and system preferences.</p>
+<p>The default will be <code class="docutils literal notranslate"><span class="pre">yes</span></code> if the <em>system</em> option is used.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">no</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-home"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-home"><strong>home</strong></p>
+<a class="ansibleOptionLink" href="#parameter-home" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally set the user’s home directory.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-local"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-local"><strong>local</strong></p>
+<a class="ansibleOptionLink" href="#parameter-local" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.4 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Forces the use of “local” command alternatives on platforms that implement it.</p>
+<p>This is useful in environments that use centralized authentication when you want to manipulate the local users (in other words, it uses <code class="docutils literal notranslate"><span class="pre">luseradd</span></code> instead of <code class="docutils literal notranslate"><span class="pre">useradd</span></code>).</p>
+<p>This will check <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code> for an existing account before invoking commands. If the local account database exists somewhere other than <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code>, this setting will not work properly.</p>
+<p>This requires that the above commands as well as <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code> must exist on the target host, otherwise it will be a fatal error.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-login_class"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-login-class"><strong>login_class</strong></p>
+<a class="ansibleOptionLink" href="#parameter-login_class" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally sets the user’s login class, a feature of most BSD OSs.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-move_home"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-move-home"><strong>move_home</strong></p>
+<a class="ansibleOptionLink" href="#parameter-move_home" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If set to <code class="docutils literal notranslate"><span class="pre">yes</span></code> when used with <code class="docutils literal notranslate"><span class="pre">home:</span> </code>, attempt to move the user’s old home directory to the specified directory if it isn’t there already and the old home exists.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-name"></div>
+<div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-user"><span id="ansible-collections-ansible-builtin-user-module-parameter-name"></span><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: user</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name of the user to create, remove or modify.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-non_unique"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-non-unique"><strong>non_unique</strong></p>
+<a class="ansibleOptionLink" href="#parameter-non_unique" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 1.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally when used with the -u option, this option allows to change the user ID to a non-unique value.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-password"><strong>password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally set the user’s password to this crypted value.</p>
+<p>On macOS systems, this value has to be cleartext. Beware of security issues.</p>
+<p>To create a an account with a locked/disabled password on Linux systems, set this to <code class="docutils literal notranslate"><span class="pre">'!'</span></code> or <code class="docutils literal notranslate"><span class="pre">'*'</span></code>.</p>
+<p>To create a an account with a locked/disabled password on OpenBSD, set this to <code class="docutils literal notranslate"><span class="pre">'*************'</span></code>.</p>
+<p>See <a class="reference external" href="https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module">FAQ entry</a> for details on various ways to generate these password values.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-password_expire_max"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-password-expire-max"><strong>password_expire_max</strong></p>
+<a class="ansibleOptionLink" href="#parameter-password_expire_max" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><span class="ansible-option-versionadded">added in 2.11 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Maximum number of days between password change.</p>
+<p>Supported on Linux only.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-password_expire_min"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-password-expire-min"><strong>password_expire_min</strong></p>
+<a class="ansibleOptionLink" href="#parameter-password_expire_min" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><span class="ansible-option-versionadded">added in 2.11 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Minimum number of days between password change.</p>
+<p>Supported on Linux only.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-password_lock"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-password-lock"><strong>password_lock</strong></p>
+<a class="ansibleOptionLink" href="#parameter-password_lock" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.6 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Lock the password (<code class="docutils literal notranslate"><span class="pre">usermod</span> <span class="pre">-L</span></code>, <code class="docutils literal notranslate"><span class="pre">usermod</span> <span class="pre">-U</span></code>, <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">lock</span></code>).</p>
+<p>Implementation differs by platform. This option does not always mean the user cannot login using other methods.</p>
+<p>This option does not disable the user, only lock the password.</p>
+<p>This must be set to <code class="docutils literal notranslate"><span class="pre">False</span></code> in order to unlock a currently locked password. The absence of this parameter will not unlock a password.</p>
+<p>Currently supported on Linux, FreeBSD, DragonFlyBSD, NetBSD, OpenBSD.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">no</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-profile"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-profile"><strong>profile</strong></p>
+<a class="ansibleOptionLink" href="#parameter-profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Sets the profile of the user.</p>
+<p>Does nothing when used with other platforms.</p>
+<p>Can set multiple profiles using comma separation.</p>
+<p>To delete all the profiles, use <code class="docutils literal notranslate"><span class="pre">profile=''</span></code>.</p>
+<p>Currently supported on Illumos/Solaris.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-remove"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-remove"><strong>remove</strong></p>
+<a class="ansibleOptionLink" href="#parameter-remove" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This only affects <code class="docutils literal notranslate"><span class="pre">state=absent</span></code>, it attempts to remove directories associated with the user.</p>
+<p>The behavior is the same as <code class="docutils literal notranslate"><span class="pre">userdel</span> <span class="pre">--remove</span></code>, check the man page for details and support.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-role"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-role"><strong>role</strong></p>
+<a class="ansibleOptionLink" href="#parameter-role" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Sets the role of the user.</p>
+<p>Does nothing when used with other platforms.</p>
+<p>Can set multiple roles using comma separation.</p>
+<p>To delete all roles, use <code class="docutils literal notranslate"><span class="pre">role=''</span></code>.</p>
+<p>Currently supported on Illumos/Solaris.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-seuser"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-seuser"><strong>seuser</strong></p>
+<a class="ansibleOptionLink" href="#parameter-seuser" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally sets the seuser type (user_u) on selinux enabled systems.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-shell"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-shell"><strong>shell</strong></p>
+<a class="ansibleOptionLink" href="#parameter-shell" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally set the user’s shell.</p>
+<p>On macOS, before Ansible 2.5, the default shell for non-system users was <code class="docutils literal notranslate"><span class="pre">/usr/bin/false</span></code>. Since Ansible 2.5, the default shell for non-system users on macOS is <code class="docutils literal notranslate"><span class="pre">/bin/bash</span></code>.</p>
+<p>See notes for details on how other operating systems determine the default shell by the underlying tool.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-skeleton"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-skeleton"><strong>skeleton</strong></p>
+<a class="ansibleOptionLink" href="#parameter-skeleton" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.0 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally set a home skeleton directory.</p>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">create_home</span></code> option!</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ssh_key_bits"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-ssh-key-bits"><strong>ssh_key_bits</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ssh_key_bits" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally specify number of bits in SSH key to create.</p>
+<p>The default value depends on ssh-keygen.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ssh_key_comment"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-ssh-key-comment"><strong>ssh_key_comment</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ssh_key_comment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally define the comment for the SSH key.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“ansible-generated on $HOSTNAME”</span></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ssh_key_file"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-ssh-key-file"><strong>ssh_key_file</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ssh_key_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally specify the SSH key filename.</p>
+<p>If this is a relative filename then it will be relative to the user’s home directory.</p>
+<p>This parameter defaults to <em>.ssh/id_rsa</em>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ssh_key_passphrase"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-ssh-key-passphrase"><strong>ssh_key_passphrase</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ssh_key_passphrase" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set a passphrase for the SSH key.</p>
+<p>If no passphrase is provided, the SSH key will default to having no passphrase.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ssh_key_type"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-ssh-key-type"><strong>ssh_key_type</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ssh_key_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally specify the type of SSH key to generate.</p>
+<p>Available SSH key types will depend on implementation present on target host.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“rsa”</span></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-state"><strong>state</strong></p>
+<a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether the account should exist or not, taking action if the state is different from what is stated.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
+<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-system"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-system"><strong>system</strong></p>
+<a class="ansibleOptionLink" href="#parameter-system" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When creating an account <code class="docutils literal notranslate"><span class="pre">state=present</span></code>, setting this to <code class="docutils literal notranslate"><span class="pre">yes</span></code> makes the user a system account.</p>
+<p>This setting cannot be changed on existing users.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-uid"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-uid"><strong>uid</strong></p>
+<a class="ansibleOptionLink" href="#parameter-uid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Optionally sets the <em>UID</em> of the user.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-umask"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-umask"><strong>umask</strong></p>
+<a class="ansibleOptionLink" href="#parameter-umask" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.12 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Sets the umask of the user.</p>
+<p>Does nothing when used with other platforms.</p>
+<p>Currently supported on Linux.</p>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">local</span></code> is omitted or False.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-update_password"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-parameter-update-password"><strong>update_password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-update_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 1.3 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p><code class="docutils literal notranslate"><span class="pre">always</span></code> will update passwords if they differ.</p>
+<p><code class="docutils literal notranslate"><span class="pre">on_create</span></code> will only set the password for newly created users.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">always</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">on_create</span></p></li>
+</ul>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h2><a class="toc-backref" href="#id3">Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Support</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-attribute-check-mode"><strong>check_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-full">full</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Can run in check_mode and return changed status prediction without modifying target</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-none">none</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Will return details on what has changed (or possibly needs changing in check_mode), when in diff mode</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-platform"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-attribute-platform"><strong>platform</strong></p>
+<a class="ansibleOptionLink" href="#attribute-platform" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-property">Platform:</span> <span class="ansible-attribute-support-full">posix</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Target OS/families that can be operated against</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id4">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>There are specific requirements per platform on user management utilities. However they generally come pre-installed with the system and Ansible will require they are present at runtime. If they are not, a descriptive error message will be shown.</p></li>
+<li><p>On SunOS platforms, the shadow file is backed up automatically since this module edits it directly. On other platforms, the shadow file is backed up by the underlying tools used by this module.</p></li>
+<li><p>On macOS, this module uses <code class="docutils literal notranslate"><span class="pre">dscl</span></code> to create, modify, and delete accounts. <code class="docutils literal notranslate"><span class="pre">dseditgroup</span></code> is used to modify group membership. Accounts are hidden from the login window by modifying <code class="docutils literal notranslate"><span class="pre">/Library/Preferences/com.apple.loginwindow.plist</span></code>.</p></li>
+<li><p>On FreeBSD, this module uses <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">useradd</span></code> and <code class="docutils literal notranslate"><span class="pre">chpass</span></code> to create, <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">usermod</span></code> and <code class="docutils literal notranslate"><span class="pre">chpass</span></code> to modify, <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">userdel</span></code> remove, <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">lock</span></code> to lock, and <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">unlock</span></code> to unlock accounts.</p></li>
+<li><p>On all other platforms, this module uses <code class="docutils literal notranslate"><span class="pre">useradd</span></code> to create, <code class="docutils literal notranslate"><span class="pre">usermod</span></code> to modify, and <code class="docutils literal notranslate"><span class="pre">userdel</span></code> to remove accounts.</p></li>
+</ul>
+</div>
+</section>
+<section id="see-also">
+<h2><a class="toc-backref" href="#id5">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../posix/authorized_key_module.html#ansible-collections-ansible-posix-authorized-key-module"><span class="std std-ref">ansible.posix.authorized_key</span></a></dt><dd><p>The official documentation on the <strong>ansible.posix.authorized_key</strong> module.</p>
+</dd>
+<dt><a class="reference internal" href="group_module.html#ansible-collections-ansible-builtin-group-module"><span class="std std-ref">ansible.builtin.group</span></a></dt><dd><p>The official documentation on the <strong>ansible.builtin.group</strong> module.</p>
+</dd>
+<dt><a class="reference internal" href="../windows/win_user_module.html#ansible-collections-ansible-windows-win-user-module"><span class="std std-ref">ansible.windows.win_user</span></a></dt><dd><p>The official documentation on the <strong>ansible.windows.win_user</strong> module.</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id6">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add the user &#39;johnd&#39; with a specific uid and a primary group of &#39;admin&#39;</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">johnd</span>
+    <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">John Doe</span>
+    <span class="nt">uid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1040</span>
+    <span class="nt">group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add the user &#39;james&#39; with a bash shell, appending the group &#39;admins&#39; and &#39;developers&#39; to the user&#39;s groups</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">james</span>
+    <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/bash</span>
+    <span class="nt">groups</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admins,developers</span>
+    <span class="nt">append</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Remove the user &#39;johnd&#39;</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">johnd</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+    <span class="nt">remove</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a 2048-bit SSH key for user jsmith in ~jsmith/.ssh/id_rsa</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jsmith</span>
+    <span class="nt">generate_ssh_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">ssh_key_bits</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2048</span>
+    <span class="nt">ssh_key_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.ssh/id_rsa</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Added a consultant whose account you want to expire</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">james18</span>
+    <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/zsh</span>
+    <span class="nt">groups</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">developers</span>
+    <span class="nt">expires</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1422403387</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Starting at Ansible 2.6, modify user, remove expiry time</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">james18</span>
+    <span class="nt">expires</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-1</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set maximum expiration date for password</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ram19</span>
+    <span class="nt">password_expire_max</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set minimum expiration date for password</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pushkar15</span>
+    <span class="nt">password_expire_min</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+</pre></div>
+</div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id7">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline"></a></h2>
+<p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-append"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-append"><strong>append</strong></p>
+<a class="ansibleOptionLink" href="#return-append" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether or not to append the user to groups.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When state is <code class="docutils literal notranslate"><span class="pre">present</span></code> and the user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-comment"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-comment"><strong>comment</strong></p>
+<a class="ansibleOptionLink" href="#return-comment" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Comment section from passwd file, usually the user name.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Agent Smith”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-create_home"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-create-home"><strong>create_home</strong></p>
+<a class="ansibleOptionLink" href="#return-create_home" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether or not to create the home directory.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When user does not exist and not check mode</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-force"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-force"><strong>force</strong></p>
+<a class="ansibleOptionLink" href="#return-force" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether or not a user account was forcibly deleted.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>state</em> is <code class="docutils literal notranslate"><span class="pre">absent</span></code> and user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> false</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-group"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-group"><strong>group</strong></p>
+<a class="ansibleOptionLink" href="#return-group" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Primary user group ID</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 1001</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-groups"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-groups"><strong>groups</strong></p>
+<a class="ansibleOptionLink" href="#return-groups" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of groups of which the user is a member.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>groups</em> is not empty and <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “chrony,apache”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-home"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-home"><strong>home</strong></p>
+<a class="ansibleOptionLink" href="#return-home" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Path to user’s home directory.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “/home/asmith”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-move_home"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-move-home"><strong>move_home</strong></p>
+<a class="ansibleOptionLink" href="#return-move_home" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether or not to move an existing home directory.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code> and user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> false</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-name"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#return-name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>User account name.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “asmith”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-password"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-password"><strong>password</strong></p>
+<a class="ansibleOptionLink" href="#return-password" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Masked value of the password.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code> and <em>password</em> is not empty</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “NOT_LOGGING_PASSWORD”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-password_expire_max"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-password-expire-max"><strong>password_expire_max</strong></p>
+<a class="ansibleOptionLink" href="#return-password_expire_max" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Maximum number of days during which a password is valid.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 20</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-password_expire_min"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-password-expire-min"><strong>password_expire_min</strong></p>
+<a class="ansibleOptionLink" href="#return-password_expire_min" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Minimum number of days between password change</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 20</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-remove"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-remove"><strong>remove</strong></p>
+<a class="ansibleOptionLink" href="#return-remove" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether or not to remove the user account.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>state</em> is <code class="docutils literal notranslate"><span class="pre">absent</span></code> and user exists</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-shell"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-shell"><strong>shell</strong></p>
+<a class="ansibleOptionLink" href="#return-shell" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>User login shell.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “/bin/bash”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-ssh_fingerprint"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-ssh-fingerprint"><strong>ssh_fingerprint</strong></p>
+<a class="ansibleOptionLink" href="#return-ssh_fingerprint" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Fingerprint of generated SSH key.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>generate_ssh_key</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2048 SHA256:aYNHYcyVm87Igh0IMEDMbvW0QDlRQfE0aJugp684ko8 ansible-generated on host (RSA)”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-ssh_key_file"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-ssh-key-file"><strong>ssh_key_file</strong></p>
+<a class="ansibleOptionLink" href="#return-ssh_key_file" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Path to generated SSH private key file.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>generate_ssh_key</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “/home/asmith/.ssh/id_rsa”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-ssh_public_key"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-ssh-public-key"><strong>ssh_public_key</strong></p>
+<a class="ansibleOptionLink" href="#return-ssh_public_key" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Generated SSH public key file.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>generate_ssh_key</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “\u0027ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC95opt4SPEC06tOYsJQJIuN23BbLMGmYo8ysVZQc4h2DZE9ugbjWWGS1/pweUGjVstgzMkBEeBCByaEf/RJKNecKRPeGd2Bw9DCj/bn5Z6rGfNENKBmo 618mUJBvdlEgea96QGjOwSB7/gmonduC7gsWDMNcOdSE3wJMTim4lddiBx4RgC9yXsJ6Tkz9BHD73MXPpT5ETnse+A3fw3IGVSjaueVnlUyUmOBf7fzmZbhlFVXf2Zi2rFTXqvbdGHKkzpw1U8eB8xFPP7y d5u1u0e6Acju/8aZ/l17IDFiLke5IzlqIMRTEbDwLNeO84YQKWTm9fODHzhYe0yvxqLiK07 ansible-generated on host\u0027\n”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-stderr"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-stderr"><strong>stderr</strong></p>
+<a class="ansibleOptionLink" href="#return-stderr" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Standard error from running commands.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When stderr is returned by a command that is run</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Group wheels does not exist”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-stdout"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-stdout"><strong>stdout</strong></p>
+<a class="ansibleOptionLink" href="#return-stdout" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Standard output from running commands.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When standard output is returned by the command that is run</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-system"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-system"><strong>system</strong></p>
+<a class="ansibleOptionLink" href="#return-system" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether or not the account is a system account.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>system</em> is passed to the module and the account does not exist</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-uid"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-user-module-return-uid"><strong>uid</strong></p>
+<a class="ansibleOptionLink" href="#return-uid" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>User ID of the user account.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>uid</em> is passed to the module</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 1044</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Stephen Fromm (&#64;sfromm)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Permalink to this headline"></a></h3>
+<p class="ansible-links">
+  <a href="https://github.com/ansible/ansible/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+  <a href="https://github.com/ansible/ansible" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  <a href="./#communication-for-ansible-builtin" aria-role="button" target="_blank">Communication</a>
+</p></section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="uri_module.html" class="btn btn-neutral float-left" title="ansible.builtin.uri module – Interacts with webservices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="validate_argument_spec_module.html" class="btn btn-neutral float-right" title="ansible.builtin.validate_argument_spec module – Validate role argument specs." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jul 06, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

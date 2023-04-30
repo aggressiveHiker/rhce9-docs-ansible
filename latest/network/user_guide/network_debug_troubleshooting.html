@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Debug and Troubleshooting Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/network/user_guide/network_debug_troubleshooting.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Working with command output and prompts in network modules" href="network_working_with_command_output.html" />
+    <link rel="prev" title="Validate data against set criteria with Ansible" href="validate.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Network Advanced Topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="network_resource_modules.html">Network Resource Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_best_practices_2.5.html">Ansible Network Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli_parsing.html">Parsing semi-structured text with Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validate.html">Validate data against set criteria with Ansible</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Network Debug and Troubleshooting Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-troubleshoot">How to troubleshoot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-networking-logging-and-how-to-read-the-logfile">Enabling Networking logging and how to read the logfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-networking-device-interaction-logging">Enabling Networking device interaction logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#isolating-an-error">Isolating an error</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting-socket-path-issues">Troubleshooting socket path issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#category-unable-to-open-shell">Category “Unable to open shell”</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#error-errno-2-name-or-service-not-known">Error: “[Errno -2] Name or service not known”</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#error-authentication-failed">Error: “Authentication failed”</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#error-connecting-to-host-hostname-returned-an-error-or-bad-address">Error: “connecting to host &lt;hostname&gt; returned an error” or “Bad address”</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#error-no-authentication-methods-available">Error: “No authentication methods available”</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#clearing-out-persistent-connections">Clearing Out Persistent Connections</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#timeout-issues">Timeout issues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#persistent-connection-idle-timeout">Persistent connection idle timeout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#command-timeout">Command timeout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#persistent-connection-retry-timeout">Persistent connection retry timeout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#timeout-issue-due-to-platform-specific-login-menu-with-network-cli-connection-type">Timeout issue due to platform specific login menu with <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> connection type</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#playbook-issues">Playbook issues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#error-unable-to-enter-configuration-mode">Error: “Unable to enter configuration mode”</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#proxy-issues">Proxy Issues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#delegate-to-vs-proxycommand">delegate_to vs ProxyCommand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-bastion-jump-host-with-netconf-connection">Using bastion/jump host with netconf connection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-jump-host-setting">Enabling jump host setting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-ssh-config-file-ssh-config">Example ssh config file (~/.ssh/config)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#miscellaneous-issues">Miscellaneous Issues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type">Intermittent failure while using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#task-failure-due-to-mismatched-error-regex-within-command-response-using-ansible-netcommon-network-cli-connection-type">Task failure due to mismatched error regex within command response using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type-due-to-slower-network-or-remote-target-host">Intermittent failure while using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type due to slower network or remote target host</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="network_working_with_command_output.html">Working with command output and prompts in network modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">Ansible Network FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platform_index.html">Platform Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Network Advanced Topics</a> &raquo;</li>
+      <li>Network Debug and Troubleshooting Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/network/user_guide/network_debug_troubleshooting.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="network-debug-and-troubleshooting-guide">
+<span id="network-debug-troubleshooting"></span><h1>Network Debug and Troubleshooting Guide<a class="headerlink" href="#network-debug-and-troubleshooting-guide" title="Permalink to this headline"></a></h1>
+<p>This section discusses how to debug and troubleshoot network modules in Ansible.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#how-to-troubleshoot" id="id2">How to troubleshoot</a></p>
+<ul>
+<li><p><a class="reference internal" href="#enabling-networking-logging-and-how-to-read-the-logfile" id="id3">Enabling Networking logging and how to read the logfile</a></p></li>
+<li><p><a class="reference internal" href="#enabling-networking-device-interaction-logging" id="id4">Enabling Networking device interaction logging</a></p></li>
+<li><p><a class="reference internal" href="#isolating-an-error" id="id5">Isolating an error</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#troubleshooting-socket-path-issues" id="id6">Troubleshooting socket path issues</a></p></li>
+<li><p><a class="reference internal" href="#category-unable-to-open-shell" id="id7">Category “Unable to open shell”</a></p>
+<ul>
+<li><p><a class="reference internal" href="#error-errno-2-name-or-service-not-known" id="id8">Error: “[Errno -2] Name or service not known”</a></p></li>
+<li><p><a class="reference internal" href="#error-authentication-failed" id="id9">Error: “Authentication failed”</a></p></li>
+<li><p><a class="reference internal" href="#error-connecting-to-host-hostname-returned-an-error-or-bad-address" id="id10">Error: “connecting to host &lt;hostname&gt; returned an error” or “Bad address”</a></p></li>
+<li><p><a class="reference internal" href="#error-no-authentication-methods-available" id="id11">Error: “No authentication methods available”</a></p></li>
+<li><p><a class="reference internal" href="#clearing-out-persistent-connections" id="id12">Clearing Out Persistent Connections</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#timeout-issues" id="id13">Timeout issues</a></p>
+<ul>
+<li><p><a class="reference internal" href="#persistent-connection-idle-timeout" id="id14">Persistent connection idle timeout</a></p></li>
+<li><p><a class="reference internal" href="#command-timeout" id="id15">Command timeout</a></p></li>
+<li><p><a class="reference internal" href="#persistent-connection-retry-timeout" id="id16">Persistent connection retry timeout</a></p></li>
+<li><p><a class="reference internal" href="#timeout-issue-due-to-platform-specific-login-menu-with-network-cli-connection-type" id="id17">Timeout issue due to platform specific login menu with <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> connection type</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#playbook-issues" id="id18">Playbook issues</a></p>
+<ul>
+<li><p><a class="reference internal" href="#error-unable-to-enter-configuration-mode" id="id19">Error: “Unable to enter configuration mode”</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#proxy-issues" id="id20">Proxy Issues</a></p>
+<ul>
+<li><p><a class="reference internal" href="#delegate-to-vs-proxycommand" id="id21">delegate_to vs ProxyCommand</a></p></li>
+<li><p><a class="reference internal" href="#using-bastion-jump-host-with-netconf-connection" id="id22">Using bastion/jump host with netconf connection</a></p></li>
+<li><p><a class="reference internal" href="#enabling-jump-host-setting" id="id23">Enabling jump host setting</a></p></li>
+<li><p><a class="reference internal" href="#example-ssh-config-file-ssh-config" id="id24">Example ssh config file (~/.ssh/config)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#miscellaneous-issues" id="id25">Miscellaneous Issues</a></p>
+<ul>
+<li><p><a class="reference internal" href="#intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type" id="id26">Intermittent failure while using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type</a></p></li>
+<li><p><a class="reference internal" href="#task-failure-due-to-mismatched-error-regex-within-command-response-using-ansible-netcommon-network-cli-connection-type" id="id27">Task failure due to mismatched error regex within command response using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type</a></p></li>
+<li><p><a class="reference internal" href="#intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type-due-to-slower-network-or-remote-target-host" id="id28">Intermittent failure while using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type due to slower network or remote target host</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="how-to-troubleshoot">
+<h2><a class="toc-backref" href="#id2">How to troubleshoot</a><a class="headerlink" href="#how-to-troubleshoot" title="Permalink to this headline"></a></h2>
+<p>Ansible network automation errors generally fall into one of the following categories:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Authentication issues</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Not correctly specifying credentials</p></li>
+<li><p>Remote device (network switch/router) not falling back to other other authentication methods</p></li>
+<li><p>SSH key issues</p></li>
+</ul>
+</dd>
+<dt class="field-even">Timeout issues</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>Can occur when trying to pull a large amount of data</p></li>
+<li><p>May actually be masking a authentication issue</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Playbook issues</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Use of <code class="docutils literal notranslate"><span class="pre">delegate_to</span></code>, instead of <code class="docutils literal notranslate"><span class="pre">ProxyCommand</span></code>. See <a class="reference internal" href="#network-delegate-to-vs-proxycommand"><span class="std std-ref">network proxy guide</span></a> for more information.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">unable</span> <span class="pre">to</span> <span class="pre">open</span> <span class="pre">shell</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">unable</span> <span class="pre">to</span> <span class="pre">open</span> <span class="pre">shell</span></code> message means that the <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> daemon has not been able to successfully
+talk to the remote network device. This generally means that there is an authentication issue. See the “Authentication and connection issues” section
+in this document for more information.</p>
+</div>
+<section id="enabling-networking-logging-and-how-to-read-the-logfile">
+<span id="enable-network-logging"></span><h3><a class="toc-backref" href="#id3">Enabling Networking logging and how to read the logfile</a><a class="headerlink" href="#enabling-networking-logging-and-how-to-read-the-logfile" title="Permalink to this headline"></a></h3>
+<p><strong>Platforms:</strong> Any</p>
+<p>Ansible includes logging to help diagnose and troubleshoot issues regarding Ansible Networking modules.</p>
+<p>Because logging is very verbose, it is disabled by default. It can be enabled with the <span class="target" id="index-0"></span><a class="reference internal" href="../../reference_appendices/config.html#envvar-ANSIBLE_LOG_PATH"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_LOG_PATH</span></code></a> and <span class="target" id="index-1"></span><a class="reference internal" href="../../reference_appendices/config.html#envvar-ANSIBLE_DEBUG"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_DEBUG</span></code></a> options on the ansible-controller, that is the machine running <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>.</p>
+<p>Before running <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>, run the following commands to enable logging:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specify the location for the log file</span>
+<span class="nb">export</span> <span class="nv">ANSIBLE_LOG_PATH</span><span class="o">=</span>~/ansible.log
+<span class="c1"># Enable Debug</span>
+<span class="nb">export</span> <span class="nv">ANSIBLE_DEBUG</span><span class="o">=</span>True
+
+<span class="c1"># Run with 4*v for connection level verbosity</span>
+ansible-playbook -vvvv ...
+</pre></div>
+</div>
+<p>After Ansible has finished running you can inspect the log file which has been created on the ansible-controller:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">less $ANSIBLE_LOG_PATH</span>
+
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:19:52,740 p=28990 u=fred |  creating new control socket for host veos01:22 as user admin</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:19:52,741 p=28990 u=fred |  control socket path is /home/fred/.ansible/pc/ca5960d27a</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:19:52,741 p=28990 u=fred |  current working directory is /home/fred/ansible/test/integration</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:19:52,741 p=28990 u=fred |  using connection plugin network_cli</span>
+<span class="nn">...</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:20:14,771 paramiko.transport userauth is OK</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:20:15,283 paramiko.transport Authentication (keyboard-interactive) successful!</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:20:15,302 p=28990 u=fred |  ssh connection done, setting terminal</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:20:15,321 p=28990 u=fred |  ssh connection has completed successfully</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-03-30 13:20:15,322 p=28990 u=fred |  connection established to veos01 in 0:00:22.580626</span>
+</pre></div>
+</div>
+<p>From the log notice:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p=28990</span></code> Is the PID (Process ID) of the <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> process</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u=fred</span></code> Is the user <cite>running</cite> ansible, not the remote-user you are attempting to connect as</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">creating</span> <span class="pre">new</span> <span class="pre">control</span> <span class="pre">socket</span> <span class="pre">for</span> <span class="pre">host</span> <span class="pre">veos01:22</span> <span class="pre">as</span> <span class="pre">user</span> <span class="pre">admin</span></code> host:port as user</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">control</span> <span class="pre">socket</span> <span class="pre">path</span> <span class="pre">is</span></code> location on disk where the persistent connection socket is created</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">connection</span> <span class="pre">plugin</span> <span class="pre">network_cli</span></code> Informs you that persistent connection is being used</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">connection</span> <span class="pre">established</span> <span class="pre">to</span> <span class="pre">veos01</span> <span class="pre">in</span> <span class="pre">0:00:22.580626</span></code> Time taken to obtain a shell on the remote device</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Port None <code class="docutils literal notranslate"><span class="pre">creating</span> <span class="pre">new</span> <span class="pre">control</span> <span class="pre">socket</span> <span class="pre">for</span> <span class="pre">host</span> <span class="pre">veos01:None</span></code></p>
+<p>If the log reports the port as <code class="docutils literal notranslate"><span class="pre">None</span></code> this means that the default port is being used.
+A future Ansible release will improve this message so that the port is always logged.</p>
+</div>
+<p>Because the log files are verbose, you can use grep to look for specific information. For example, once you have identified the <code class="docutils literal notranslate"><span class="pre">pid</span></code> from the <code class="docutils literal notranslate"><span class="pre">creating</span> <span class="pre">new</span> <span class="pre">control</span> <span class="pre">socket</span> <span class="pre">for</span> <span class="pre">host</span></code> line you can search for other connection log entries:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">grep &quot;p=28990&quot; $ANSIBLE_LOG_PATH</span>
+</pre></div>
+</div>
+</section>
+<section id="enabling-networking-device-interaction-logging">
+<h3><a class="toc-backref" href="#id4">Enabling Networking device interaction logging</a><a class="headerlink" href="#enabling-networking-device-interaction-logging" title="Permalink to this headline"></a></h3>
+<p><strong>Platforms:</strong> Any</p>
+<p>Ansible includes logging of device interaction in the log file to help diagnose and troubleshoot
+issues regarding Ansible Networking modules. The messages are logged in the file pointed to by the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> configuration
+option in the Ansible configuration file or by setting the  <span class="target" id="index-2"></span><a class="reference internal" href="../../reference_appendices/config.html#envvar-ANSIBLE_LOG_PATH"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_LOG_PATH</span></code></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The device interaction messages consist of command executed on the target device and the returned response. Since this
+log data can contain sensitive information including passwords in plain text it is disabled by default.
+Additionally, in order to prevent accidental leakage of data, a warning will be shown on every task with this
+setting enabled, specifying which host has it enabled and where the data is being logged.</p>
+</div>
+<p>Be sure to fully understand the security implications of enabling this option. The device interaction logging can be enabled either globally by setting in configuration file or by setting environment or enabled on per task basis by passing a special variable to the task.</p>
+<p>Before running <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> run the following commands to enable logging:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Specify the location for the log file
+export ANSIBLE_LOG_PATH=~/ansible.log
+</pre></div>
+</div>
+<p>Enable device interaction logging for a given task</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get version information</span>
+  <span class="nt">cisco.ios.ios_command</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">show version</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">ansible_persistent_log_messages</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>To make this a global setting, add the following to your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[persistent_connection]</span>
+<span class="na">log_messages</span> <span class="o">=</span> <span class="s">True</span>
+</pre></div>
+</div>
+<p>or enable the environment variable <cite>ANSIBLE_PERSISTENT_LOG_MESSAGES</cite>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Enable device interaction logging
+export ANSIBLE_PERSISTENT_LOG_MESSAGES=True
+</pre></div>
+</div>
+<p>If the task is failing on connection initialization itself, you should enable this option
+globally. If an individual task is failing intermittently this option can be enabled for that task itself to find the root cause.</p>
+<p>After Ansible has finished running you can inspect the log file which has been created on the ansible-controller</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Be sure to fully understand the security implications of enabling this option as it can log sensitive
+information in log file thus creating security vulnerability.</p>
+</div>
+</section>
+<section id="isolating-an-error">
+<h3><a class="toc-backref" href="#id5">Isolating an error</a><a class="headerlink" href="#isolating-an-error" title="Permalink to this headline"></a></h3>
+<p><strong>Platforms:</strong> Any</p>
+<p>As with any effort to troubleshoot it’s important to simplify the test case as much as possible.</p>
+<p>For Ansible this can be done by ensuring you are only running against one remote device:</p>
+<ul class="simple">
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span> <span class="pre">--limit</span> <span class="pre">switch1.example.net...</span></code></p></li>
+<li><p>Using an ad hoc <code class="docutils literal notranslate"><span class="pre">ansible</span></code> command</p></li>
+</ul>
+<p><cite>ad hoc</cite> refers to running Ansible to perform some quick command using <code class="docutils literal notranslate"><span class="pre">/usr/bin/ansible</span></code>, rather than the orchestration language, which is <code class="docutils literal notranslate"><span class="pre">/usr/bin/ansible-playbook</span></code>. In this case we can ensure connectivity by attempting to execute a single command on the remote device:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ansible -m arista.eos.eos_command -a &#39;commands=?&#39; -i inventory switch1.example.net -e &#39;ansible_connection=ansible.netcommon.network_cli&#39; -u admin -k</span>
+</pre></div>
+</div>
+<p>In the above example, we:</p>
+<ul class="simple">
+<li><p>connect to <code class="docutils literal notranslate"><span class="pre">switch1.example.net</span></code> specified in the inventory file <code class="docutils literal notranslate"><span class="pre">inventory</span></code></p></li>
+<li><p>use the module <code class="docutils literal notranslate"><span class="pre">arista.eos.eos_command</span></code></p></li>
+<li><p>run the command <code class="docutils literal notranslate"><span class="pre">?</span></code></p></li>
+<li><p>connect using the username <code class="docutils literal notranslate"><span class="pre">admin</span></code></p></li>
+<li><p>inform the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> command to prompt for the SSH password by specifying <code class="docutils literal notranslate"><span class="pre">-k</span></code></p></li>
+</ul>
+<p>If you have SSH keys configured correctly, you don’t need to specify the <code class="docutils literal notranslate"><span class="pre">-k</span></code> parameter.</p>
+<p>If the connection still fails you can combine it with the enable_network_logging parameter. For example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Specify the location for the log file
+export ANSIBLE_LOG_PATH=~/ansible.log
+# Enable Debug
+export ANSIBLE_DEBUG=True
+# Run with ``-vvvv`` for connection level verbosity
+ansible -m arista.eos.eos_command -a &#39;commands=?&#39; -i inventory switch1.example.net -e &#39;ansible_connection=ansible.netcommon.network_cli&#39; -u admin -k
+</pre></div>
+</div>
+<p>Then review the log file and find the relevant error message in the rest of this document.</p>
+</section>
+</section>
+<section id="troubleshooting-socket-path-issues">
+<span id="socket-path-issue"></span><h2><a class="toc-backref" href="#id6">Troubleshooting socket path issues</a><a class="headerlink" href="#troubleshooting-socket-path-issues" title="Permalink to this headline"></a></h2>
+<p><strong>Platforms:</strong> Any</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Socket</span> <span class="pre">path</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">exist</span> <span class="pre">or</span> <span class="pre">cannot</span> <span class="pre">be</span> <span class="pre">found</span></code>  and <code class="docutils literal notranslate"><span class="pre">Unable</span> <span class="pre">to</span> <span class="pre">connect</span> <span class="pre">to</span> <span class="pre">socket</span></code> messages indicate that the socket used to communicate with the remote network device is unavailable or does not exist.</p>
+<p>For example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fatal: [spine02]: FAILED! =&gt; {
+    &quot;changed&quot;: false,
+    &quot;failed&quot;: true,
+    &quot;module_stderr&quot;: &quot;Traceback (most recent call last):\n  File \&quot;/tmp/ansible_TSqk5J/ansible_modlib.zip/ansible/module_utils/connection.py\&quot;, line 115, in _exec_jsonrpc\nansible.module_utils.connection.ConnectionError: Socket path XX does not exist or cannot be found. See Troubleshooting socket path issues in the Network Debug and Troubleshooting Guide\n&quot;,
+    &quot;module_stdout&quot;: &quot;&quot;,
+    &quot;msg&quot;: &quot;MODULE FAILURE&quot;,
+    &quot;rc&quot;: 1
+}
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fatal: [spine02]: FAILED! =&gt; {
+    &quot;changed&quot;: false,
+    &quot;failed&quot;: true,
+    &quot;module_stderr&quot;: &quot;Traceback (most recent call last):\n  File \&quot;/tmp/ansible_TSqk5J/ansible_modlib.zip/ansible/module_utils/connection.py\&quot;, line 123, in _exec_jsonrpc\nansible.module_utils.connection.ConnectionError: Unable to connect to socket XX. See Troubleshooting socket path issues in Network Debug and Troubleshooting Guide\n&quot;,
+    &quot;module_stdout&quot;: &quot;&quot;,
+    &quot;msg&quot;: &quot;MODULE FAILURE&quot;,
+    &quot;rc&quot;: 1
+}
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<ol class="arabic simple">
+<li><p>Verify that you have write access to the socket path described in the error message.</p></li>
+<li><p>Follow the steps detailed in <a class="reference internal" href="#enable-network-logging"><span class="std std-ref">enable network logging</span></a>.</p></li>
+</ol>
+<p>If the identified error message from the log file is:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  command timeout triggered, timeout value is 30 secs</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  persistent connection idle timeout triggered, timeout value is 30 secs</span>
+</pre></div>
+</div>
+<p>Follow the steps detailed in <a class="reference internal" href="#timeout-issues"><span class="std std-ref">timeout issues</span></a></p>
+</section>
+<section id="category-unable-to-open-shell">
+<span id="unable-to-open-shell"></span><h2><a class="toc-backref" href="#id7">Category “Unable to open shell”</a><a class="headerlink" href="#category-unable-to-open-shell" title="Permalink to this headline"></a></h2>
+<p><strong>Platforms:</strong> Any</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">unable</span> <span class="pre">to</span> <span class="pre">open</span> <span class="pre">shell</span></code> message means that the <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> daemon has not been able to successfully talk to the remote network device. This generally means that there is an authentication issue. It is a “catch all” message, meaning you need to enable <a class="reference external" href="https://docs.ansible.com/ansible/2.8/user_guide/intro_getting_started.html#a-note-about-logging" title="(in Ansible v2.8)"><span class="xref std std-ref">logging</span></a> to find the underlying issues.</p>
+<p>For example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TASK [prepare_eos_tests : enable cli on remote device] **************************************************
+fatal: [veos01]: FAILED! =&gt; {&quot;changed&quot;: false, &quot;failed&quot;: true, &quot;msg&quot;: &quot;unable to open shell&quot;}
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TASK [ios_system : configure name_servers] *************************************************************
+task path:
+fatal: [ios-csr1000v]: FAILED! =&gt; {
+    &quot;changed&quot;: false,
+    &quot;failed&quot;: true,
+    &quot;msg&quot;: &quot;unable to open shell&quot;,
+}
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<p>Follow the steps detailed in <a class="reference internal" href="#enable-network-logging">enable_network_logging</a>.</p>
+<p>Once you’ve identified the error message from the log file, the specific solution can be found in the rest of this document.</p>
+<section id="error-errno-2-name-or-service-not-known">
+<h3><a class="toc-backref" href="#id8">Error: “[Errno -2] Name or service not known”</a><a class="headerlink" href="#error-errno-2-name-or-service-not-known" title="Permalink to this headline"></a></h3>
+<p><strong>Platforms:</strong> Any</p>
+<p>Indicates that the remote host you are trying to connect to can not be reached</p>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 11:39:48,147 p=15299 u=fred |  control socket path is /home/fred/.ansible/pc/ca5960d27a</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 11:39:48,147 p=15299 u=fred |  current working directory is /home/fred/git/ansible-inc/stable-2.3/test/integration</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 11:39:48,147 p=15299 u=fred |  using connection plugin network_cli</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 11:39:48,340 p=15299 u=fred |  connecting to host veos01 returned an error</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 11:39:48,340 p=15299 u=fred |  [Errno -2] Name or service not known</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<ul class="simple">
+<li><p>If you are using the <code class="docutils literal notranslate"><span class="pre">provider:</span></code> options ensure that its suboption <code class="docutils literal notranslate"><span class="pre">host:</span></code> is set correctly.</p></li>
+<li><p>If you are not using <code class="docutils literal notranslate"><span class="pre">provider:</span></code> nor top-level arguments ensure your inventory file is correct.</p></li>
+</ul>
+</section>
+<section id="error-authentication-failed">
+<h3><a class="toc-backref" href="#id9">Error: “Authentication failed”</a><a class="headerlink" href="#error-authentication-failed" title="Permalink to this headline"></a></h3>
+<p><strong>Platforms:</strong> Any</p>
+<p>Occurs if the credentials (username, passwords, or ssh keys) passed to <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> (via <code class="docutils literal notranslate"><span class="pre">ansible</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>) can not be used to connect to the remote device.</p>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;ios01&gt; ESTABLISH CONNECTION FOR USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cisco on PORT 22 TO ios01</span>
+<span class="l l-Scalar l-Scalar-Plain">&lt;ios01&gt; Authentication failed.</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<p>If you are specifying credentials via <code class="docutils literal notranslate"><span class="pre">password:</span></code> (either directly or via <code class="docutils literal notranslate"><span class="pre">provider:</span></code>) or the environment variable <cite>ANSIBLE_NET_PASSWORD</cite> it is possible that <code class="docutils literal notranslate"><span class="pre">paramiko</span></code> (the Python SSH library that Ansible uses) is using ssh keys, and therefore the credentials you are specifying are being ignored. To find out if this is the case, disable “look for keys”. This can be done like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">export ANSIBLE_PARAMIKO_LOOK_FOR_KEYS=False</span>
+</pre></div>
+</div>
+<p>To make this a permanent change, add the following to your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[paramiko_connection]</span>
+<span class="na">look_for_keys</span> <span class="o">=</span> <span class="s">False</span>
+</pre></div>
+</div>
+</section>
+<section id="error-connecting-to-host-hostname-returned-an-error-or-bad-address">
+<h3><a class="toc-backref" href="#id10">Error: “connecting to host &lt;hostname&gt; returned an error” or “Bad address”</a><a class="headerlink" href="#error-connecting-to-host-hostname-returned-an-error-or-bad-address" title="Permalink to this headline"></a></h3>
+<p>This may occur if the SSH fingerprint hasn’t been added to Paramiko’s (the Python SSH library) know hosts file.</p>
+<p>When using persistent connections with Paramiko, the connection runs in a background process.  If the host doesn’t already have a valid SSH key, by default Ansible will prompt to add the host key.  This will cause connections running in background processes to fail.</p>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:06:03,486 p=17981 u=fred |  using connection plugin network_cli</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:06:04,680 p=17981 u=fred |  connecting to host veos01 returned an error</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:06:04,682 p=17981 u=fred |  (14, &#39;Bad address&#39;)</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:06:33,519 p=17981 u=fred |  number of connection attempts exceeded, unable to connect to control socket</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:06:33,520 p=17981 u=fred |  persistent_connect_interval=1, persistent_connect_retries=30</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">ssh-keyscan</span></code> to pre-populate the known_hosts. You need to ensure the keys are correct.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ssh-keyscan veos01
+</pre></div>
+</div>
+<p>or</p>
+<p>You can tell Ansible to automatically accept the keys</p>
+<p>Environment variable method:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD</span><span class="o">=</span>True
+ansible-playbook ...
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> method:</p>
+<p>ansible.cfg</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[paramiko_connection]</span>
+<span class="na">host_key_auto_add</span> <span class="o">=</span> <span class="s">True</span>
+</pre></div>
+</div>
+</section>
+<section id="error-no-authentication-methods-available">
+<h3><a class="toc-backref" href="#id11">Error: “No authentication methods available”</a><a class="headerlink" href="#error-no-authentication-methods-available" title="Permalink to this headline"></a></h3>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  creating new control socket for host veos01:None as user admin</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  control socket path is /home/fred/.ansible/pc/ca5960d27a</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  current working directory is /home/fred/git/ansible-inc/ansible-workspace-2/test/integration</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  using connection plugin network_cli</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:06,606 p=18591 u=fred |  connecting to host veos01 returned an error</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:06,606 p=18591 u=fred |  No authentication methods available</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:35,708 p=18591 u=fred |  connect retry timeout expired, unable to connect to control socket</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:35,709 p=18591 u=fred |  persistent_connect_retry_timeout is 15 secs</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<p>No password or SSH key supplied</p>
+</section>
+<section id="clearing-out-persistent-connections">
+<h3><a class="toc-backref" href="#id12">Clearing Out Persistent Connections</a><a class="headerlink" href="#clearing-out-persistent-connections" title="Permalink to this headline"></a></h3>
+<p><strong>Platforms:</strong> Any</p>
+<p>In Ansible 2.3, persistent connection sockets are stored in <code class="docutils literal notranslate"><span class="pre">~/.ansible/pc</span></code> for all network devices.  When an Ansible playbook runs, the persistent socket connection is displayed when verbose output is specified.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;switch&gt;</span> <span class="pre">socket_path:</span> <span class="pre">/home/fred/.ansible/pc/f64ddfa760</span></code></p>
+<p>To clear out a persistent connection before it times out (the default timeout is 30 seconds
+of inactivity), simple delete the socket file.</p>
+</section>
+</section>
+<section id="timeout-issues">
+<span id="id1"></span><h2><a class="toc-backref" href="#id13">Timeout issues</a><a class="headerlink" href="#timeout-issues" title="Permalink to this headline"></a></h2>
+<section id="persistent-connection-idle-timeout">
+<h3><a class="toc-backref" href="#id14">Persistent connection idle timeout</a><a class="headerlink" href="#persistent-connection-idle-timeout" title="Permalink to this headline"></a></h3>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONNECT_TIMEOUT</span></code> is set to 30 (seconds). You may see the following error if this value is too low:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  persistent connection idle timeout triggered, timeout value is 30 secs</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<p>Increase value of persistent connection idle timeout:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">ANSIBLE_PERSISTENT_CONNECT_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
+</pre></div>
+</div>
+<p>To make this a permanent change, add the following to your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[persistent_connection]</span>
+<span class="na">connect_timeout</span> <span class="o">=</span> <span class="s">60</span>
+</pre></div>
+</div>
+</section>
+<section id="command-timeout">
+<h3><a class="toc-backref" href="#id15">Command timeout</a><a class="headerlink" href="#command-timeout" title="Permalink to this headline"></a></h3>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_COMMAND_TIMEOUT</span></code> is set to 30 (seconds). Prior versions of Ansible had this value set to 10 seconds by default.
+You may see the following error if this value is too low:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:05,670 p=18591 u=fred |  command timeout triggered, timeout value is 30 secs</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<ul>
+<li><p>Option 1 (Global command timeout setting):
+Increase value of command timeout in configuration file or by setting environment variable.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">export ANSIBLE_PERSISTENT_COMMAND_TIMEOUT=60</span>
+</pre></div>
+</div>
+<p>To make this a permanent change, add the following to your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[persistent_connection]</span>
+<span class="na">command_timeout</span> <span class="o">=</span> <span class="s">60</span>
+</pre></div>
+</div>
+</li>
+<li><p>Option 2 (Per task command timeout setting):
+Increase command timeout per task basis. All network modules support a
+timeout value that can be set on a per task basis.
+The timeout value controls the amount of time in seconds before the
+task will fail if the command has not returned.</p>
+<p>For local connection type:</p>
+<p>Suggestions to resolve:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">save running-config</span>
+  <span class="nt">cisco.ios.ios_command</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">copy running-config startup-config</span>
+    <span class="nt">provider</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">cli</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">save running-config</span>
+  <span class="nt">cisco.ios.ios_command</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">copy running-config startup-config</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">ansible_command_timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Some operations take longer than the default 30 seconds to complete.  One good
+example is saving the current running config on IOS devices to startup config.
+In this case, changing the timeout value from the default 30 seconds to 60
+seconds will prevent the task from failing before the command completes
+successfully.</p>
+</section>
+<section id="persistent-connection-retry-timeout">
+<h3><a class="toc-backref" href="#id16">Persistent connection retry timeout</a><a class="headerlink" href="#persistent-connection-retry-timeout" title="Permalink to this headline"></a></h3>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONNECT_RETRY_TIMEOUT</span></code> is set to 15 (seconds). You may see the following error if this value is too low:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:35,708 p=18591 u=fred |  connect retry timeout expired, unable to connect to control socket</span>
+<span class="l l-Scalar l-Scalar-Plain">2017-04-04 12:19:35,709 p=18591 u=fred |  persistent_connect_retry_timeout is 15 secs</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<p>Increase the value of the persistent connection idle timeout.
+Note: This value should be greater than the SSH timeout value (the timeout value under the defaults
+section in the configuration file) and less than the value of the persistent
+connection idle timeout (connect_timeout).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">export ANSIBLE_PERSISTENT_CONNECT_RETRY_TIMEOUT=30</span>
+</pre></div>
+</div>
+<p>To make this a permanent change, add the following to your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[persistent_connection]</span>
+<span class="na">connect_retry_timeout</span> <span class="o">=</span> <span class="s">30</span>
+</pre></div>
+</div>
+</section>
+<section id="timeout-issue-due-to-platform-specific-login-menu-with-network-cli-connection-type">
+<h3><a class="toc-backref" href="#id17">Timeout issue due to platform specific login menu with <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> connection type</a><a class="headerlink" href="#timeout-issue-due-to-platform-specific-login-menu-with-network-cli-connection-type" title="Permalink to this headline"></a></h3>
+<p>In Ansible 2.9 and later, the network_cli connection plugin configuration options are added
+to handle the platform specific login menu. These options can be set as group/host or tasks
+variables.</p>
+<p>Example: Handle single login menu prompts with host variables</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span>cat host_vars/&lt;hostname&gt;.yaml
+<span class="go">---</span>
+<span class="go">ansible_terminal_initial_prompt:</span>
+<span class="go">  - &quot;Connect to a host&quot;</span>
+<span class="go">ansible_terminal_initial_answer:</span>
+<span class="go">  - &quot;3&quot;</span>
+</pre></div>
+</div>
+<p>Example: Handle remote host multiple login menu prompts with host variables</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span>cat host_vars/&lt;inventory-hostname&gt;.yaml
+<span class="go">---</span>
+<span class="go">ansible_terminal_initial_prompt:</span>
+<span class="go">  - &quot;Press any key to enter main menu&quot;</span>
+<span class="go">  - &quot;Connect to a host&quot;</span>
+<span class="go">ansible_terminal_initial_answer:</span>
+<span class="go">  - &quot;\\r&quot;</span>
+<span class="go">  - &quot;3&quot;</span>
+<span class="go">ansible_terminal_initial_prompt_checkall: True</span>
+</pre></div>
+</div>
+<p>To handle multiple login menu prompts:</p>
+<ul class="simple">
+<li><p>The values of <code class="docutils literal notranslate"><span class="pre">ansible_terminal_initial_prompt</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible_terminal_initial_answer</span></code> should be a list.</p></li>
+<li><p>The prompt sequence should match the answer sequence.</p></li>
+<li><p>The value of <code class="docutils literal notranslate"><span class="pre">ansible_terminal_initial_prompt_checkall</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If all the prompts in sequence are not received from remote host at the time connection initialization it will result in a timeout.</p>
+</div>
+</section>
+</section>
+<section id="playbook-issues">
+<h2><a class="toc-backref" href="#id18">Playbook issues</a><a class="headerlink" href="#playbook-issues" title="Permalink to this headline"></a></h2>
+<p>This section details issues are caused by issues with the Playbook itself.</p>
+<section id="error-unable-to-enter-configuration-mode">
+<h3><a class="toc-backref" href="#id19">Error: “Unable to enter configuration mode”</a><a class="headerlink" href="#error-unable-to-enter-configuration-mode" title="Permalink to this headline"></a></h3>
+<p><strong>Platforms:</strong> Arista EOS and Cisco IOS</p>
+<p>This occurs when you attempt to run a task that requires privileged mode in a user mode shell.</p>
+<p>For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">TASK [ios_system : configure name_servers] *****************************************************************************</span>
+<span class="go">task path:</span>
+<span class="go">fatal: [ios-csr1000v]: FAILED! =&gt; {</span>
+<span class="go">    &quot;changed&quot;: false,</span>
+<span class="go">    &quot;failed&quot;: true,</span>
+<span class="go">   &quot;msg&quot;: &quot;unable to enter configuration mode&quot;,</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<blockquote>
+<div><p>Use <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">ansible.netcommon.network_cli</span></code> and <code class="docutils literal notranslate"><span class="pre">become:</span> <span class="pre">yes</span></code></p>
+</div></blockquote>
+</section>
+</section>
+<section id="proxy-issues">
+<h2><a class="toc-backref" href="#id20">Proxy Issues</a><a class="headerlink" href="#proxy-issues" title="Permalink to this headline"></a></h2>
+<blockquote>
+<div></div></blockquote>
+<section id="delegate-to-vs-proxycommand">
+<span id="network-delegate-to-vs-proxycommand"></span><h3><a class="toc-backref" href="#id21">delegate_to vs ProxyCommand</a><a class="headerlink" href="#delegate-to-vs-proxycommand" title="Permalink to this headline"></a></h3>
+<p>In order to use a bastion or intermediate jump host to connect to network devices over <code class="docutils literal notranslate"><span class="pre">cli</span></code>
+transport, network modules support the use of <code class="docutils literal notranslate"><span class="pre">ProxyCommand</span></code>.</p>
+<p>To use <code class="docutils literal notranslate"><span class="pre">ProxyCommand</span></code>, configure the proxy settings in the Ansible inventory
+file to specify the proxy host.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[nxos]</span>
+<span class="na">nxos01</span>
+<span class="na">nxos02</span>
+
+<span class="k">[nxos:vars]</span>
+<span class="na">ansible_ssh_common_args</span><span class="o">=</span><span class="s">&#39;-o ProxyCommand=&quot;ssh -W %h:%p -q bastion01&quot;&#39;</span>
+</pre></div>
+</div>
+<p>With the configuration above, simply build and run the playbook as normal with
+no additional changes necessary.  The network module will now connect to the
+network device by first connecting to the host specified in
+<code class="docutils literal notranslate"><span class="pre">ansible_ssh_common_args</span></code>, which is <code class="docutils literal notranslate"><span class="pre">bastion01</span></code> in the above example.</p>
+<p>You can also set the proxy target for all hosts by using environment variables.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">ANSIBLE_SSH_ARGS</span><span class="o">=</span><span class="s1">&#39;-o ProxyCommand=&quot;ssh -W %h:%p -q bastion01&quot;&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="using-bastion-jump-host-with-netconf-connection">
+<h3><a class="toc-backref" href="#id22">Using bastion/jump host with netconf connection</a><a class="headerlink" href="#using-bastion-jump-host-with-netconf-connection" title="Permalink to this headline"></a></h3>
+</section>
+<section id="enabling-jump-host-setting">
+<h3><a class="toc-backref" href="#id23">Enabling jump host setting</a><a class="headerlink" href="#enabling-jump-host-setting" title="Permalink to this headline"></a></h3>
+<dl class="simple">
+<dt>Bastion/jump host with netconf connection can be enabled by:</dt><dd><ul class="simple">
+<li><p>Setting Ansible variable <code class="docutils literal notranslate"><span class="pre">ansible_netconf_ssh_config</span></code> either to <code class="docutils literal notranslate"><span class="pre">True</span></code> or custom ssh config file path</p></li>
+<li><p>Setting environment variable <code class="docutils literal notranslate"><span class="pre">ANSIBLE_NETCONF_SSH_CONFIG</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code> or custom ssh config file path</p></li>
+<li><p>Setting <code class="docutils literal notranslate"><span class="pre">ssh_config</span> <span class="pre">=</span> <span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">ssh_config</span> <span class="pre">=</span> <span class="pre">&lt;ssh-file-path&gt;</span></code> under <code class="docutils literal notranslate"><span class="pre">netconf_connection</span></code> section</p></li>
+</ul>
+</dd>
+</dl>
+<p>If the configuration variable is set to 1 the proxycommand and other ssh variables are read from
+default ssh config file (~/.ssh/config).</p>
+<p>If the configuration variable is set to file path the proxycommand and other ssh variables are read
+from the given custom ssh file path</p>
+</section>
+<section id="example-ssh-config-file-ssh-config">
+<h3><a class="toc-backref" href="#id24">Example ssh config file (~/.ssh/config)</a><a class="headerlink" href="#example-ssh-config-file-ssh-config" title="Permalink to this headline"></a></h3>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">Host jumphost</span>
+  <span class="na">HostName jumphost.domain.name.com</span>
+  <span class="na">User jumphost-user</span>
+  <span class="na">IdentityFile &quot;/path/to/ssh-key.pem&quot;</span>
+  <span class="na">Port 22</span>
+
+<span class="c1"># Note: Due to the way that Paramiko reads the SSH Config file,</span>
+<span class="c1"># you need to specify the NETCONF port that the host uses.</span>
+<span class="c1"># In other words, it does not automatically use ansible_port</span>
+<span class="c1"># As a result you need either:</span>
+
+<span class="na">Host junos01</span>
+  <span class="na">HostName junos01</span>
+  <span class="na">ProxyCommand ssh -W %h:22 jumphost</span>
+
+<span class="c1"># OR</span>
+
+<span class="na">Host junos01</span>
+  <span class="na">HostName junos01</span>
+  <span class="na">ProxyCommand ssh -W %h:830 jumphost</span>
+
+<span class="c1"># Depending on the netconf port used.</span>
+</pre></div>
+</div>
+<p>Example Ansible inventory file</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[junos]</span>
+<span class="na">junos01</span>
+
+<span class="k">[junos:vars]</span>
+<span class="na">ansible_connection</span><span class="o">=</span><span class="s">ansible.netcommon.netconf</span>
+<span class="na">ansible_network_os</span><span class="o">=</span><span class="s">junipernetworks.junos.junos</span>
+<span class="na">ansible_user</span><span class="o">=</span><span class="s">myuser</span>
+<span class="na">ansible_password</span><span class="o">=</span><span class="s">!vault...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">ProxyCommand</span></code> with passwords via variables</p>
+<p>By design, SSH doesn’t support providing passwords via environment variables.
+This is done to prevent secrets from leaking out, for example in <code class="docutils literal notranslate"><span class="pre">ps</span></code> output.</p>
+<p>We recommend using SSH Keys, and if needed an ssh-agent, rather than passwords, where ever possible.</p>
+</div>
+</section>
+</section>
+<section id="miscellaneous-issues">
+<h2><a class="toc-backref" href="#id25">Miscellaneous Issues</a><a class="headerlink" href="#miscellaneous-issues" title="Permalink to this headline"></a></h2>
+<section id="intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type">
+<h3><a class="toc-backref" href="#id26">Intermittent failure while using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type</a><a class="headerlink" href="#intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type" title="Permalink to this headline"></a></h3>
+<p>If the command prompt received in response is not matched correctly within
+the <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection plugin the task might fail intermittently with truncated
+response or with the error message <code class="docutils literal notranslate"><span class="pre">operation</span> <span class="pre">requires</span> <span class="pre">privilege</span> <span class="pre">escalation</span></code>.
+Starting in 2.7.1 a new buffer read timer is added to ensure prompts are matched properly
+and a complete response is send in output. The timer default value is 0.2 seconds and
+can be adjusted on a per task basis or can be set globally in seconds.</p>
+<p>Example Per task timer setting</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gather ios facts</span>
+  <span class="nt">cisco.ios.ios_facts</span><span class="p">:</span>
+    <span class="nt">gather_subset</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">ansible_buffer_read_timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+</div>
+<p>To make this a global setting, add the following to your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[persistent_connection]</span>
+<span class="na">buffer_read_timeout</span> <span class="o">=</span> <span class="s">2</span>
+</pre></div>
+</div>
+<p>This timer delay per command executed on remote host can be disabled by setting the value to zero.</p>
+</section>
+<section id="task-failure-due-to-mismatched-error-regex-within-command-response-using-ansible-netcommon-network-cli-connection-type">
+<h3><a class="toc-backref" href="#id27">Task failure due to mismatched error regex within command response using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type</a><a class="headerlink" href="#task-failure-due-to-mismatched-error-regex-within-command-response-using-ansible-netcommon-network-cli-connection-type" title="Permalink to this headline"></a></h3>
+<p>In Ansible 2.9 and later, the <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection plugin configuration options are added
+to handle the stdout and stderr regex to identify if the command execution response consist
+of a normal response or an error response. These options can be set group/host variables or as
+tasks variables.</p>
+<p>Example: For mismatched error response</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fetch logs from remote host</span>
+  <span class="nt">cisco.ios.ios_command</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">show logging</span>
+</pre></div>
+</div>
+<p>Playbook run output:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">TASK [first fetch logs] ********************************************************</span>
+<span class="go">fatal: [ios01]: FAILED! =&gt; {</span>
+<span class="go">    &quot;changed&quot;: false,</span>
+<span class="go">    &quot;msg&quot;: &quot;RF Name:\r\n\r\n &lt;--nsip--&gt;</span>
+<span class="go">           \&quot;IPSEC-3-REPLAY_ERROR: Test log\&quot;\r\n*Aug  1 08:36:18.483: %SYS-7-USERLOG_DEBUG:</span>
+<span class="go">            Message from tty578(user id: ansible): test\r\nan-ios-02#&quot;}</span>
+</pre></div>
+</div>
+<p>Suggestions to resolve:</p>
+<p>Modify the error regex for individual task.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fetch logs from remote host</span>
+  <span class="nt">cisco.ios.ios_command</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">show logging</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">ansible_terminal_stderr_re</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">pattern</span><span class="p">:</span> <span class="s">&#39;connection</span><span class="nv"> </span><span class="s">timed</span><span class="nv"> </span><span class="s">out&#39;</span>
+        <span class="nt">flags</span><span class="p">:</span> <span class="s">&#39;re.I&#39;</span>
+</pre></div>
+</div>
+<p>The terminal plugin regex options <code class="docutils literal notranslate"><span class="pre">ansible_terminal_stderr_re</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible_terminal_stdout_re</span></code> have
+<code class="docutils literal notranslate"><span class="pre">pattern</span></code> and <code class="docutils literal notranslate"><span class="pre">flags</span></code> as keys. The value of the <code class="docutils literal notranslate"><span class="pre">flags</span></code> key should be a value that is accepted by
+the <code class="docutils literal notranslate"><span class="pre">re.compile</span></code> python method.</p>
+</section>
+<section id="intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type-due-to-slower-network-or-remote-target-host">
+<h3><a class="toc-backref" href="#id28">Intermittent failure while using <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection type due to slower network or remote target host</a><a class="headerlink" href="#intermittent-failure-while-using-ansible-netcommon-network-cli-connection-type-due-to-slower-network-or-remote-target-host" title="Permalink to this headline"></a></h3>
+<p>In Ansible 2.9 and later, the <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code> connection plugin configuration option is added to control
+the number of attempts to connect to a remote host. The default number of attempts is three.
+After every retry attempt the delay between retries is increased by power of 2 in seconds until either the
+maximum attempts are exhausted or either the <code class="docutils literal notranslate"><span class="pre">persistent_command_timeout</span></code> or <code class="docutils literal notranslate"><span class="pre">persistent_connect_timeout</span></code> timers are triggered.</p>
+<p>To make this a global setting, add the following to your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[persistent_connection]</span>
+<span class="na">network_cli_retries</span> <span class="o">=</span> <span class="s">5</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="validate.html" class="btn btn-neutral float-left" title="Validate data against set criteria with Ansible" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="network_working_with_command_output.html" class="btn btn-neutral float-right" title="Working with command output and prompts in network modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developing network resource modules &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/network/dev_guide/developing_resource_modules_network.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Developing network plugins" href="developing_plugins_network.html" />
+    <link rel="prev" title="Network Developer Guide" href="index.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Network Developer Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Developing network resource modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#understanding-network-and-security-resource-modules">Understanding network and security resource modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#developing-network-and-security-resource-modules">Developing network and security resource modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#understanding-the-model-and-resource-module-builder">Understanding the model and resource module builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accessing-the-resource-module-builder">Accessing the resource module builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-model">Creating a model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-collection-scaffold-from-a-resource-model">Creating a collection scaffold from a resource model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#collection-directory-layout">Collection directory layout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#role-directory-layout">Role directory layout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-collection">Using the collection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-role">Using the role</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#resource-module-structure-and-workflow">Resource module structure and workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-ansible-test-sanity-and-tox-on-resource-modules">Running  <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">sanity</span></code> and <code class="docutils literal notranslate"><span class="pre">tox</span></code> on resource modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-resource-modules">Testing resource modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#resource-module-integration-tests">Resource module integration tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unit-test-requirements">Unit test requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#example-unit-testing-ansible-network-resource-modules">Example: Unit testing Ansible network resource modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-mock-objects-to-unit-test-ansible-network-resource-modules">Using mock objects to unit test Ansible network resource modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mocking-device-data">Mocking device data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="developing_plugins_network.html">Developing network plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documenting_modules_network.html">Documenting new network platforms</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Network Developer Guide</a> &raquo;</li>
+      <li>Developing network resource modules</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/network/dev_guide/developing_resource_modules_network.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="developing-network-resource-modules">
+<span id="developing-resource-modules"></span><h1>Developing network resource modules<a class="headerlink" href="#developing-network-resource-modules" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#understanding-network-and-security-resource-modules" id="id4">Understanding network and security resource modules</a></p></li>
+<li><p><a class="reference internal" href="#developing-network-and-security-resource-modules" id="id5">Developing network and security resource modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#understanding-the-model-and-resource-module-builder" id="id6">Understanding the model and resource module builder</a></p></li>
+<li><p><a class="reference internal" href="#accessing-the-resource-module-builder" id="id7">Accessing the resource module builder</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-model" id="id8">Creating a model</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-collection-scaffold-from-a-resource-model" id="id9">Creating a collection scaffold from a resource model</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#examples" id="id10">Examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#collection-directory-layout" id="id11">Collection directory layout</a></p></li>
+<li><p><a class="reference internal" href="#role-directory-layout" id="id12">Role directory layout</a></p></li>
+<li><p><a class="reference internal" href="#using-the-collection" id="id13">Using the collection</a></p></li>
+<li><p><a class="reference internal" href="#using-the-role" id="id14">Using the role</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#resource-module-structure-and-workflow" id="id15">Resource module structure and workflow</a></p></li>
+<li><p><a class="reference internal" href="#running-ansible-test-sanity-and-tox-on-resource-modules" id="id16">Running  <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">sanity</span></code> and <code class="docutils literal notranslate"><span class="pre">tox</span></code> on resource modules</a></p></li>
+<li><p><a class="reference internal" href="#testing-resource-modules" id="id17">Testing resource modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#resource-module-integration-tests" id="id18">Resource module integration tests</a></p></li>
+<li><p><a class="reference internal" href="#unit-test-requirements" id="id19">Unit test requirements</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#example-unit-testing-ansible-network-resource-modules" id="id20">Example: Unit testing Ansible network resource modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#using-mock-objects-to-unit-test-ansible-network-resource-modules" id="id21">Using mock objects to unit test Ansible network resource modules</a></p></li>
+<li><p><a class="reference internal" href="#mocking-device-data" id="id22">Mocking device data</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="understanding-network-and-security-resource-modules">
+<h2><a class="toc-backref" href="#id4">Understanding network and security resource modules</a><a class="headerlink" href="#understanding-network-and-security-resource-modules" title="Permalink to this headline"></a></h2>
+<p>Network and security devices separate configuration into sections (such as interfaces, VLANs, and so on) that apply to a network or security service. Ansible resource modules take advantage of this to allow users to configure subsections or resources within the device configuration. Resource modules provide a consistent experience across different network and security devices. For example, a network resource module may only update the configuration for a specific portion of the network interfaces, VLANs, ACLs, and so on for a network device. The resource module:</p>
+<ol class="arabic simple">
+<li><p>Fetches a piece of the configuration (fact gathering), for example, the interfaces configuration.</p></li>
+<li><p>Converts the returned configuration into key-value pairs.</p></li>
+<li><p>Places those key-value pairs into an internal independent structured data format.</p></li>
+</ol>
+<p>Now that the configuration data is normalized, the user can update and modify the data and then use the resource module to send the configuration data back to the device. This results in a full round-trip configuration update without the need for manual parsing, data manipulation, and data model management.</p>
+<p>The resource module has two top-level keys - <code class="docutils literal notranslate"><span class="pre">config</span></code> and <code class="docutils literal notranslate"><span class="pre">state</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config</span></code> defines the resource configuration data model as key-value pairs.  The type of the <code class="docutils literal notranslate"><span class="pre">config</span></code> option can be <code class="docutils literal notranslate"><span class="pre">dict</span></code> or <code class="docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">dict</span></code> based on the resource managed.  That is, if the device has a single global configuration, it should be a <code class="docutils literal notranslate"><span class="pre">dict</span></code> (for example, a global LLDP configuration). If the device has multiple instances of configuration, it should be of type <code class="docutils literal notranslate"><span class="pre">list</span></code> with each element in the list of type <code class="docutils literal notranslate"><span class="pre">dict</span></code> (for example, interfaces configuration).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> defines the action the resource module takes on the end device.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">state</span></code> for a new resource module should support the following values (as applicable for the devices that support them):</p>
+<dl class="simple">
+<dt>merged</dt><dd><p>Ansible merges the on-device configuration with the provided configuration in the task.</p>
+</dd>
+<dt>replaced</dt><dd><p>Ansible replaces the on-device configuration subsection with the provided configuration subsection in the task.</p>
+</dd>
+<dt>overridden</dt><dd><p>Ansible overrides the on-device configuration for the resource with the provided configuration in the task. Use caution with this state as you could remove your access to the device (for example, by overriding the management interface configuration).</p>
+</dd>
+<dt>deleted</dt><dd><p>Ansible deletes the on-device configuration subsection and restores any default settings.</p>
+</dd>
+<dt>gathered</dt><dd><p>Ansible displays the resource details gathered from the network device and accessed with the <code class="docutils literal notranslate"><span class="pre">gathered</span></code> key in the result.</p>
+</dd>
+<dt>rendered</dt><dd><p>Ansible renders the provided configuration in the task in the device-native format (for example, Cisco IOS CLI). Ansible returns this rendered configuration in the <code class="docutils literal notranslate"><span class="pre">rendered</span></code> key in the result. Note this state does not communicate with the network device and can be used offline.</p>
+</dd>
+<dt>parsed</dt><dd><p>Ansible parses the configuration from the <code class="docutils literal notranslate"><span class="pre">running_configuration</span></code> option into Ansible structured data in the <code class="docutils literal notranslate"><span class="pre">parsed</span></code> key in the result. Note this does not gather the configuration from the network device so this state can be used offline.</p>
+</dd>
+</dl>
+<p>Modules in Ansible-maintained collections must support these state values. If you develop a module with only “present” and “absent” for state, you may submit it to a community collection.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The states <code class="docutils literal notranslate"><span class="pre">rendered</span></code>, <code class="docutils literal notranslate"><span class="pre">gathered</span></code>, and <code class="docutils literal notranslate"><span class="pre">parsed</span></code> do not perform any change on the device.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://www.ansible.com/blog/deep-dive-on-vlans-resource-modules-for-network-automation">Deep Dive on VLANs Resource Modules for Network Automation</a></dt><dd><p>Walkthrough of how state values are implemented for VLANs.</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="developing-network-and-security-resource-modules">
+<h2><a class="toc-backref" href="#id5">Developing network and security resource modules</a><a class="headerlink" href="#developing-network-and-security-resource-modules" title="Permalink to this headline"></a></h2>
+<p>The Ansible Engineering team ensures the module design and code pattern  within Ansible-maintained collections is uniform across resources and across platforms to give a vendor-independent feel and deliver good quality code. We recommend you use the <a class="reference external" href="https://github.com/ansible-network/resource_module_builder">resource module builder</a> to  develop a resource module.</p>
+<p>The highlevel process for developing a resource module is:</p>
+<ol class="arabic simple">
+<li><p>Create and share a resource model design in the <a class="reference external" href="https://github.com/ansible-network/resource_module_models">resource module models repository</a> as a PR for review.</p></li>
+<li><p>Download the latest version of the <a class="reference external" href="https://github.com/ansible-network/resource_module_builder">resource module builder</a>.</p></li>
+<li><p>Run the <code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">module</span> <span class="pre">builder</span></code> to create a collection scaffold from your approved resource model.</p></li>
+<li><p>Write the code to implement your resource module.</p></li>
+<li><p>Develop integration and unit tests to verify your resource module.</p></li>
+<li><p>Create a PR to the appropriate collection that you want to add your new resource module to. See <a class="reference internal" href="../../community/contributing_maintained_collections.html#contributing-maintained-collections"><span class="std std-ref">Contributing to Ansible-maintained Collections</span></a> for details on determining the correct collection for your module.</p></li>
+</ol>
+<section id="understanding-the-model-and-resource-module-builder">
+<h3><a class="toc-backref" href="#id6">Understanding the model and resource module builder</a><a class="headerlink" href="#understanding-the-model-and-resource-module-builder" title="Permalink to this headline"></a></h3>
+<p>The resource module builder is an Ansible Playbook that helps developers scaffold and maintain an Ansible resource module. It uses a model as the single source of truth for the module. This model is a <code class="docutils literal notranslate"><span class="pre">yaml</span></code> file that is used for the module DOCUMENTATION section and the argument spec.</p>
+<p>The resource module builder has the following capabilities:</p>
+<ul class="simple">
+<li><p>Uses a defined model to scaffold a resource module directory layout and initial class files.</p></li>
+<li><p>Scaffolds either an Ansible role or a collection.</p></li>
+<li><p>Subsequent uses of the resource module builder will only replace the module arspec and file containing the module docstring.</p></li>
+<li><p>Allows you to store complex examples along side the model in the same directory.</p></li>
+<li><p>Maintains the model as the source of truth for the module and use resource module builder to update the source files as needed.</p></li>
+<li><p>Generates working sample modules for both <code class="docutils literal notranslate"><span class="pre">&lt;network_os&gt;_&lt;resource&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;network_os&gt;_facts</span></code>.</p></li>
+</ul>
+</section>
+<section id="accessing-the-resource-module-builder">
+<h3><a class="toc-backref" href="#id7">Accessing the resource module builder</a><a class="headerlink" href="#accessing-the-resource-module-builder" title="Permalink to this headline"></a></h3>
+<p>To access the resource module builder:</p>
+<ol class="arabic simple">
+<li><p>clone the github repository:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/ansible-network/resource_module_builder.git
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Install the requirements:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="creating-a-model">
+<h3><a class="toc-backref" href="#id8">Creating a model</a><a class="headerlink" href="#creating-a-model" title="Permalink to this headline"></a></h3>
+<p>You must create a model for your new resource. The model is the single source of truth for both the argspec and docstring, keeping them in sync. Once your model is approved, you can use the resource module builder to generate three items based on the model:</p>
+<ul class="simple">
+<li><p>The scaffold for a new module</p></li>
+<li><p>The argspec for the new module</p></li>
+<li><p>The docstring for the new module</p></li>
+</ul>
+<p>For any subsequent changes to the functionality, update the model first and use the resource module builder to update the module argspec and docstring.</p>
+<p>For example, the resource model builder includes the <code class="docutils literal notranslate"><span class="pre">myos_interfaces.yml</span></code> sample in the <code class="file docutils literal notranslate"><span class="pre">models</span></code> directory, as seen below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">GENERATOR_VERSION</span><span class="p">:</span> <span class="s">&#39;1.0&#39;</span>
+
+<span class="nt">NETWORK_OS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myos</span>
+<span class="nt">RESOURCE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">interfaces</span>
+<span class="nt">COPYRIGHT</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copyright 2019 Red Hat</span>
+<span class="nt">LICENSE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gpl-3.0.txt</span>
+
+<span class="nt">DOCUMENTATION</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">module: myos_interfaces</span>
+  <span class="no">version_added: 1.0.0</span>
+  <span class="no">short_description: &#39;Manages &lt;xxxx&gt; attributes of &lt;network_os&gt; &lt;resource&gt;&#39;</span>
+  <span class="no">description: &#39;Manages &lt;xxxx&gt; attributes of &lt;network_os&gt; &lt;resource&gt;.&#39;</span>
+  <span class="no">author: Ansible Network Engineer</span>
+ <span class="nt">notes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&#39;Tested</span><span class="nv"> </span><span class="s">against</span><span class="nv"> </span><span class="s">&lt;network_os&gt;</span><span class="nv"> </span><span class="s">&lt;version&gt;&#39;</span>
+ <span class=" -Error"> </span><span class="nt">options</span><span class="p">:</span>
+    <span class="nt">config</span><span class="p">:</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The provided configuration</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">list</span>
+      <span class="nt">elements</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dict</span>
+      <span class="nt">suboptions</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">str</span>
+          <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The name of the &lt;resource&gt;</span>
+        <span class="nt">some_string</span><span class="p">:</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">str</span>
+          <span class="nt">description</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">The some_string_01</span>
+          <span class="nt">choices</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">choice_a</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">choice_b</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">choice_c</span>
+          <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">choice_a</span>
+        <span class="nt">some_bool</span><span class="p">:</span>
+          <span class="nt">description</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">The some_bool.</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bool</span>
+        <span class="nt">some_int</span><span class="p">:</span>
+          <span class="nt">description</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">The some_int.</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int</span>
+          <span class="nt">version_added</span><span class="p">:</span> <span class="s">&#39;1.1.0&#39;</span>
+        <span class="nt">some_dict</span><span class="p">:</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dict</span>
+          <span class="nt">description</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">The some_dict.</span>
+          <span class="nt">suboptions</span><span class="p">:</span>
+            <span class="nt">property_01</span><span class="p">:</span>
+              <span class="nt">description</span><span class="p">:</span>
+              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">The property_01</span>
+              <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">str</span>
+    <span class="nt">state</span><span class="p">:</span>
+      <span class="nt">description</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">The state of the configuration after module completion.</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">str</span>
+      <span class="nt">choices</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">merged</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">replaced</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">overridden</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">deleted</span>
+      <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">merged</span>
+<span class="nt">EXAMPLES</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">deleted_example_01.txt</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">merged_example_01.txt</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">overridden_example_01.txt</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">replaced_example_01.txt</span>
+</pre></div>
+</div>
+<p>Notice that you should include examples for each of the states that the resource supports. The resource module builder also includes these in the sample model.</p>
+<p>Share this model as a PR for review at <a class="reference external" href="https://github.com/ansible-network/resource_module_models">resource module models repository</a>. You can also see more model examples at that location.</p>
+</section>
+<section id="creating-a-collection-scaffold-from-a-resource-model">
+<h3><a class="toc-backref" href="#id9">Creating a collection scaffold from a resource model</a><a class="headerlink" href="#creating-a-collection-scaffold-from-a-resource-model" title="Permalink to this headline"></a></h3>
+<p>To use the resource module builder to create a collection scaffold from your approved resource model:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -e <span class="nv">rm_dest</span><span class="o">=</span>&lt;destination <span class="k">for</span> modules and module utils&gt; <span class="se">\</span>
+                 -e <span class="nv">structure</span><span class="o">=</span>collection <span class="se">\</span>
+                 -e <span class="nv">collection_org</span><span class="o">=</span>&lt;collection_org&gt; <span class="se">\</span>
+                 -e <span class="nv">collection_name</span><span class="o">=</span>&lt;collection_name&gt; <span class="se">\</span>
+                 -e <span class="nv">model</span><span class="o">=</span>&lt;model&gt; <span class="se">\</span>
+                 site.yml
+</pre></div>
+</div>
+<p>Where the parameters are as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rm_dest</span></code>: The directory where the resource module builder places the files and directories for the resource module and facts modules.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">structure</span></code>: The directory layout type (role or collection)</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">role</span></code>: Generate a role directory layout.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">collection</span></code>: Generate a collection directory layout.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">collection_org</span></code>: The organization of the collection, required when <cite>structure=collection</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">collection_name</span></code>: The name of the collection, required when <cite>structure=collection</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model</span></code>: The path to the model file.</p></li>
+</ul>
+<p>To use the resource module builder to create a role scaffold:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -e <span class="nv">rm_dest</span><span class="o">=</span>&lt;destination <span class="k">for</span> modules and module utils&gt; <span class="se">\</span>
+                 -e <span class="nv">structure</span><span class="o">=</span>role <span class="se">\</span>
+                 -e <span class="nv">model</span><span class="o">=</span>&lt;model&gt; <span class="se">\</span>
+                 site.yml
+</pre></div>
+</div>
+</section>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id10">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
+<section id="collection-directory-layout">
+<h3><a class="toc-backref" href="#id11">Collection directory layout</a><a class="headerlink" href="#collection-directory-layout" title="Permalink to this headline"></a></h3>
+<p>This example shows the directory layout for the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">network_os</span></code>: myos</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resource</span></code>: interfaces</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -e <span class="nv">rm_dest</span><span class="o">=</span>~/github/rm_example <span class="se">\</span>
+                 -e <span class="nv">structure</span><span class="o">=</span>collection <span class="se">\</span>
+                 -e <span class="nv">collection_org</span><span class="o">=</span>cidrblock <span class="se">\</span>
+                 -e <span class="nv">collection_name</span><span class="o">=</span>my_collection <span class="se">\</span>
+                 -e <span class="nv">model</span><span class="o">=</span>models/myos/interfaces/myos_interfaces.yml <span class="se">\</span>
+                 site.yml
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>├── docs
+├── LICENSE.txt
+├── playbooks
+├── plugins
+|   ├── action
+|   ├── filter
+|   ├── inventory
+|   ├── modules
+|   |   ├── __init__.py
+|   |   ├── myos_facts.py
+|   |   └──  myos_interfaces.py
+|   └──  module_utils
+|       ├── __init__.py
+|       └──  network
+|           ├── __init__.py
+|           └──  myos
+|               ├── argspec
+|               |   ├── facts
+|               |   |   ├── facts.py
+|               |   |   └──  __init__.py
+|               |   ├── __init__.py
+|               |   └──  interfaces
+|               |       ├── __init__.py
+|               |       └──  interfaces.py
+|               ├── config
+|               |   ├── __init__.py
+|               |   └──  interfaces
+|               |       ├── __init__.py
+|               |       └──  interfaces.py
+|               ├── facts
+|               |   ├── facts.py
+|               |   ├── __init__.py
+|               |   └──  interfaces
+|               |       ├── __init__.py
+|               |       └──  interfaces.py
+|               ├── __init__.py
+|               └──  utils
+|                   ├── __init__.py
+|                   └──  utils.py
+├── README.md
+└──  roles
+</pre></div>
+</div>
+</section>
+<section id="role-directory-layout">
+<h3><a class="toc-backref" href="#id12">Role directory layout</a><a class="headerlink" href="#role-directory-layout" title="Permalink to this headline"></a></h3>
+<p>This example displays the role directory layout for the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">network_os</span></code>: myos</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resource</span></code>: interfaces</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -e <span class="nv">rm_dest</span><span class="o">=</span>~/github/rm_example/roles/my_role <span class="se">\</span>
+                 -e <span class="nv">structure</span><span class="o">=</span>role <span class="se">\</span>
+                 -e <span class="nv">model</span><span class="o">=</span>models/myos/interfaces/myos_interfaces.yml <span class="se">\</span>
+                 site.yml
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>roles
+└── my_role
+    ├── library
+    │   ├── __init__.py
+    │   ├── myos_facts.py
+    │   └── myos_interfaces.py
+    ├── LICENSE.txt
+    ├── module_utils
+    │   ├── __init__.py
+    │   └── network
+    │       ├── __init__.py
+    │       └── myos
+    │           ├── argspec
+    │           │   ├── facts
+    │           │   │   ├── facts.py
+    │           │   │   └── __init__.py
+    │           │   ├── __init__.py
+    │           │   └── interfaces
+    │           │       ├── __init__.py
+    │           │       └── interfaces.py
+    │           ├── config
+    │           │   ├── __init__.py
+    │           │   └── interfaces
+    │           │       ├── __init__.py
+    │           │       └── interfaces.py
+    │           ├── facts
+    │           │   ├── facts.py
+    │           │   ├── __init__.py
+    │           │   └── interfaces
+    │           │       ├── __init__.py
+    │           │       └── interfaces.py
+    │           ├── __init__.py
+    │           └── utils
+    │               ├── __init__.py
+    │               └── utils.py
+    └── README.md
+</pre></div>
+</div>
+</section>
+<section id="using-the-collection">
+<h3><a class="toc-backref" href="#id13">Using the collection</a><a class="headerlink" href="#using-the-collection" title="Permalink to this headline"></a></h3>
+<p>This example shows how to use the generated collection in a playbook:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">----</span>
+<span class="l l-Scalar l-Scalar-Plain">- hosts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">myos101</span>
+  <span class="l l-Scalar l-Scalar-Plain">gather_facts</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+  <span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">cidrblock.my_collection.myos_interfaces</span><span class="p">:</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="p p-Indicator">-</span> <span class="nt">cidrblock.my_collection.myos_facts</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_network_resources</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="using-the-role">
+<h3><a class="toc-backref" href="#id14">Using the role</a><a class="headerlink" href="#using-the-role" title="Permalink to this headline"></a></h3>
+<p>This example shows how to use the generated role in a playbook:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myos101</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+  <span class="nt">roles</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">my_role</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myos101</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">myos_interfaces</span><span class="p">:</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="p p-Indicator">-</span> <span class="nt">myos_facts</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_network_resources</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="resource-module-structure-and-workflow">
+<h2><a class="toc-backref" href="#id15">Resource module structure and workflow</a><a class="headerlink" href="#resource-module-structure-and-workflow" title="Permalink to this headline"></a></h2>
+<p>The resource module structure includes the following components:</p>
+<dl>
+<dt>Module</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">library/&lt;ansible_network_os&gt;_&lt;resource&gt;.py</span></code>.</p></li>
+<li><p>Imports the <code class="docutils literal notranslate"><span class="pre">module_utils</span></code> resource package and calls <code class="docutils literal notranslate"><span class="pre">execute_module</span></code> API:</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>def main():
+    result = &lt;resource_package&gt;(module).execute_module()
+</pre></div>
+</div>
+</dd>
+<dt>Module argspec</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">module_utils/&lt;ansible_network_os&gt;/argspec/&lt;resource&gt;/</span></code>.</p></li>
+<li><p>Argspec for the resource.</p></li>
+</ul>
+</dd>
+<dt>Facts</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">module_utils/&lt;ansible_network_os&gt;/facts/&lt;resource&gt;/</span></code>.</p></li>
+<li><p>Populate facts for the resource.</p></li>
+<li><p>Entry in <code class="docutils literal notranslate"><span class="pre">module_utils/&lt;ansible_network_os&gt;/facts/facts.py</span></code> for <code class="docutils literal notranslate"><span class="pre">get_facts</span></code> API to keep <code class="docutils literal notranslate"><span class="pre">&lt;ansible_network_os&gt;_facts</span></code> module and facts gathered for the resource module in sync for every subset.</p></li>
+<li><p>Entry of Resource subset in FACTS_RESOURCE_SUBSETS list in <code class="docutils literal notranslate"><span class="pre">module_utils/&lt;ansible_network_os&gt;/facts/facts.py</span></code> to make facts collection work.</p></li>
+</ul>
+</dd>
+<dt>Module package in module_utils</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">module_utils/&lt;ansible_network_os&gt;/&lt;config&gt;/&lt;resource&gt;/</span></code>.</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">execute_module</span></code> API that loads the configuration to device and generates the result with <code class="docutils literal notranslate"><span class="pre">changed</span></code>, <code class="docutils literal notranslate"><span class="pre">commands</span></code>, <code class="docutils literal notranslate"><span class="pre">before</span></code> and <code class="docutils literal notranslate"><span class="pre">after</span></code> keys.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">get_facts</span></code> API that returns the <code class="docutils literal notranslate"><span class="pre">&lt;resource&gt;</span></code> configuration facts or return the difference if the device has onbox diff support.</p></li>
+<li><p>Compare facts gathered and given key-values if diff is not supported.</p></li>
+<li><p>Generate final configuration.</p></li>
+</ul>
+</dd>
+<dt>Utils</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">module_utils/&lt;ansible_network_os&gt;/utils</span></code>.</p></li>
+<li><p>Utilities for the <code class="docutils literal notranslate"><span class="pre">&lt;ansible_network_os&gt;</span></code> platform.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="running-ansible-test-sanity-and-tox-on-resource-modules">
+<span id="tox-resource-modules"></span><h2><a class="toc-backref" href="#id16">Running  <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">sanity</span></code> and <code class="docutils literal notranslate"><span class="pre">tox</span></code> on resource modules</a><a class="headerlink" href="#running-ansible-test-sanity-and-tox-on-resource-modules" title="Permalink to this headline"></a></h2>
+<p>You should run <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">sanity</span></code> and <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-elinters</span></code> from the collection root directory before pushing your PR to an Ansible-maintained collection. The CI runs both and will fail if these tests fail. See <a class="reference internal" href="../../dev_guide/testing.html#developing-testing"><span class="std std-ref">Testing Ansible</span></a> for details on <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">sanity</span></code>.</p>
+<p>To install the necessary packages:</p>
+<ol class="arabic simple">
+<li><p>Ensure you have a valid Ansible development environment configured. See <a class="reference internal" href="../../dev_guide/developing_modules_general.html#environment-setup"><span class="std std-ref">Preparing an environment for developing Ansible modules</span></a> for details.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> from the collection root directory.</p></li>
+</ol>
+<blockquote>
+<div><p>Running <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-elinters</span></code>:</p>
+<ul class="simple">
+<li><p>Reads <code class="file docutils literal notranslate"><span class="pre">tox.ini</span></code> from the collection root directory and installs required dependencies (such as <code class="docutils literal notranslate"><span class="pre">black</span></code> and <code class="docutils literal notranslate"><span class="pre">flake8</span></code>).</p></li>
+<li><p>Runs these with preconfigured options (such as line-length and ignores.)</p></li>
+<li><p>Runs  <code class="docutils literal notranslate"><span class="pre">black</span></code> in check mode to show  which files will be formatted without actually formatting them.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="testing-resource-modules">
+<h2><a class="toc-backref" href="#id17">Testing resource modules</a><a class="headerlink" href="#testing-resource-modules" title="Permalink to this headline"></a></h2>
+<p>The tests rely on a role generated by the resource module builder. After changes to the resource module builder, the role should be regenerated and the tests modified and run as needed. To generate the role after changes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm -rf rmb_tests/roles/my_role
+ansible-playbook -e <span class="nv">rm_dest</span><span class="o">=</span>./rmb_tests/roles/my_role <span class="se">\</span>
+                 -e <span class="nv">structure</span><span class="o">=</span>role <span class="se">\</span>
+                 -e <span class="nv">model</span><span class="o">=</span>models/myos/interfaces/myos_interfaces.yml <span class="se">\</span>
+                 site.yml
+</pre></div>
+</div>
+<section id="resource-module-integration-tests">
+<span id="id3"></span><h3><a class="toc-backref" href="#id18">Resource module integration tests</a><a class="headerlink" href="#resource-module-integration-tests" title="Permalink to this headline"></a></h3>
+<p>High-level integration test requirements for new resource modules are as follows:</p>
+<ol class="arabic simple">
+<li><p>Write a test case for every state.</p></li>
+<li><p>Write additional test cases to test the behavior of the module when an empty <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> is given.</p></li>
+<li><p>Add a round trip test case. This involves a <code class="docutils literal notranslate"><span class="pre">merge</span></code> operation, followed by <code class="docutils literal notranslate"><span class="pre">gather_facts</span></code>, a <code class="docutils literal notranslate"><span class="pre">merge</span></code> update with additional configuration, and then reverting back to the base configuration using the previously gathered facts with the <code class="docutils literal notranslate"><span class="pre">state</span></code> set to  <code class="docutils literal notranslate"><span class="pre">overridden</span></code>.</p></li>
+<li><p>Wherever applicable, assertions should check after and before <code class="docutils literal notranslate"><span class="pre">dicts</span></code> against a hard coded Source of Truth.</p></li>
+</ol>
+<p id="using-zuul-resource-modules">We use Zuul as the CI to run the integration test.</p>
+<ul class="simple">
+<li><p>To view the report, click <span class="guilabel">Details</span> on the CI comment in the PR</p></li>
+<li><p>To view a failure report,  click <span class="guilabel">ansible/check</span> and select the failed test.</p></li>
+<li><p>To view logs while the test is running, check for your PR number in the <a class="reference external" href="https://dashboard.zuul.ansible.com/t/ansible/status">Zuul status board</a>.</p></li>
+<li><p>To fix static test failure locally, run the  <strong class="command">tox -e black</strong> <strong>inside the root folder of collection</strong>.</p></li>
+</ul>
+<p>To view The Ansible run logs and debug test failures:</p>
+<ol class="arabic simple">
+<li><p>Click the failed job to get the summary, and click <span class="guilabel">Logs</span> for the log.</p></li>
+<li><p>Click <span class="guilabel">console</span> and scroll down to find the failed test.</p></li>
+<li><p>Click <span class="guilabel">&gt;</span> next to the failed test for complete details.</p></li>
+</ol>
+<section id="integration-test-structure">
+<h4>Integration test structure<a class="headerlink" href="#integration-test-structure" title="Permalink to this headline"></a></h4>
+<p>Each test case should generally follow this pattern:</p>
+<ul class="simple">
+<li><p>setup —&gt; test —&gt; assert —&gt; test again (for idempotency) —&gt; assert —&gt; tear down (if needed) -&gt; done. This keeps test playbooks from becoming monolithic and difficult to troubleshoot.</p></li>
+<li><p>Include a name for each task that is not an assertion. You can add names to assertions as well, but it is easier to identify the broken task within a failed test if you add a name for each task.</p></li>
+<li><p>Files containing test cases must end in <code class="docutils literal notranslate"><span class="pre">.yaml</span></code></p></li>
+</ul>
+</section>
+<section id="implementation">
+<h4>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline"></a></h4>
+<p>For platforms that support <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">local</span></code> <em>and</em> <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">network_cli</span></code>  use the following guidance:</p>
+<ul class="simple">
+<li><p>Name the <code class="file docutils literal notranslate"><span class="pre">targets/</span></code> directories after the module name.</p></li>
+<li><p>The <code class="file docutils literal notranslate"><span class="pre">main.yaml</span></code> file should just reference the transport.</p></li>
+</ul>
+<p>The following example walks through the integration tests for the <code class="docutils literal notranslate"><span class="pre">vyos.vyos.vyos_l3_interfaces</span></code> module in the <a class="reference external" href="https://github.com/ansible-collections/vyos.vyos/tree/master/tests/integration">vyos.vyos</a> collection:</p>
+<p><code class="docutils literal notranslate"><span class="pre">test/integration/targets/vyos_l3_interfaces/tasks/main.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cli.yaml</span>
+  <span class="nt">tags</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cli</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">test/integration/targets/vyos_l3_interfaces/tasks/cli.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">collect all cli test cases</span>
+  <span class="nt">find</span><span class="p">:</span>
+    <span class="nt">paths</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">role_path</span><span class="nv"> </span><span class="s">}}/tests/cli&quot;</span>
+    <span class="nt">patterns</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">testcase</span><span class="nv"> </span><span class="s">}}.yaml&quot;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_cases</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">set test_items</span>
+  <span class="nt">set_fact</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_items=&quot;{{ test_cases.files | map(attribute=&#39;path&#39;) | list }}&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">run test cases (connection=network_cli)</span>
+  <span class="nt">include_tasks</span><span class="p">:</span>
+     <span class="nt">file</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">test_case_to_run</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+     <span class="nt">ansible_connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">network_cli</span>
+  <span class="nt">with_items</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">test_items</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">loop_var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_case_to_run</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">run test case (connection=local)</span>
+  <span class="nt">include_tasks</span><span class="p">:</span>
+     <span class="nt">file</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">test_case_to_run</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+     <span class="nt">ansible_connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+     <span class="nt">ansible_become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+  <span class="nt">with_first_found</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">test_items</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">loop_var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_case_to_run</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">test/integration/targets/vyos_l3_interfaces/tests/cli/overridden.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+<span class=" -Error"> </span><span class="nt">msg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">START vyos_l3_interfaces merged integration tests on connection={{ ansible_connection</span>
+   <span class="l l-Scalar l-Scalar-Plain">}}</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_remove_config.yaml</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">block</span><span class="p">:</span>
+
+<span class=" -Error"> </span><span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_populate.yaml</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Overrides all device configuration with provided configuration</span>
+   <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+   <span class="nt">vyos.vyos.vyos_l3_interfaces</span><span class="p">:</span> <span class="nl">&amp;id001</span>
+     <span class="nt">config</span><span class="p">:</span>
+
+       <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eth0</span>
+         <span class="nt">ipv4</span><span class="p">:</span>
+
+           <span class="p p-Indicator">-</span> <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dhcp</span>
+
+       <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eth1</span>
+         <span class="nt">ipv4</span><span class="p">:</span>
+
+           <span class="p p-Indicator">-</span> <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.0.2.15/24</span>
+     <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">overridden</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Assert that before dicts were correctly generated</span>
+   <span class="nt">assert</span><span class="p">:</span>
+     <span class="nt">that</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">populate</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">symmetric_difference(result[&#39;before&#39;])</span><span class="nv"> </span><span class="s">|length</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Assert that correct commands were generated</span>
+   <span class="nt">assert</span><span class="p">:</span>
+     <span class="nt">that</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">overridden[&#39;commands&#39;]</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">symmetric_difference(result[&#39;commands&#39;])\</span>
+         <span class="s">\ |length</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Assert that after dicts were correctly generated</span>
+   <span class="nt">assert</span><span class="p">:</span>
+     <span class="nt">that</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">overridden[&#39;after&#39;]</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">symmetric_difference(result[&#39;after&#39;])</span><span class="nv"> </span><span class="s">|length\</span>
+         <span class="s">\ ==</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Overrides all device configuration with provided configurations (IDEMPOTENT)</span>
+   <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+   <span class="nt">vyos.vyos.vyos_l3_interfaces</span><span class="p">:</span> <span class="nv">*id001</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Assert that the previous task was idempotent</span>
+   <span class="nt">assert</span><span class="p">:</span>
+     <span class="nt">that</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result[&#39;changed&#39;] == false</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Assert that before dicts were correctly generated</span>
+   <span class="nt">assert</span><span class="p">:</span>
+     <span class="nt">that</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">overridden[&#39;after&#39;]</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">symmetric_difference(result[&#39;before&#39;])</span><span class="nv"> </span><span class="s">|length\</span>
+         <span class="s">\ ==</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="nt">always</span><span class="p">:</span>
+
+ <span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">_remove_config.yaml</span>
+</pre></div>
+</div>
+</section>
+<section id="detecting-test-resources-at-runtime">
+<h4>Detecting test resources at runtime<a class="headerlink" href="#detecting-test-resources-at-runtime" title="Permalink to this headline"></a></h4>
+<p>Your tests should detect resources (such as interfaces) at runtime rather than hard-coding them into the test. This allows the test to run on a variety of systems.</p>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Collect interface list</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.network_cli</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">intout</span>
+  <span class="nt">cisco.nxos.nxos_command</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">show interface brief | json</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">set_fact</span><span class="p">:</span>
+    <span class="nt">intdataraw</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">intout.stdout_lines[0][&#39;TABLE_interface&#39;][&#39;ROW_interface&#39;]</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">set_fact</span><span class="p">:</span>
+    <span class="nt">nxos_int1</span><span class="p">:</span> <span class="s">&#39;{{</span><span class="nv"> </span><span class="s">intdataraw[1].interface</span><span class="nv"> </span><span class="s">}}&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">set_fact</span><span class="p">:</span>
+    <span class="nt">nxos_int2</span><span class="p">:</span> <span class="s">&#39;{{</span><span class="nv"> </span><span class="s">intdataraw[2].interface</span><span class="nv"> </span><span class="s">}}&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">set_fact</span><span class="p">:</span>
+    <span class="nt">nxos_int3</span><span class="p">:</span> <span class="s">&#39;{{</span><span class="nv"> </span><span class="s">intdataraw[3].interface</span><span class="nv"> </span><span class="s">}}&#39;</span>
+</pre></div>
+</div>
+<p>See the complete test example of this at <a class="reference external" href="https://github.com/ansible-collections/cisco.nxos/blob/master/tests/integration/targets/prepare_nxos_tests/tasks/main.yml">https://github.com/ansible-collections/cisco.nxos/blob/master/tests/integration/targets/prepare_nxos_tests/tasks/main.yml</a>.</p>
+</section>
+<section id="running-network-integration-tests">
+<h4>Running network integration tests<a class="headerlink" href="#running-network-integration-tests" title="Permalink to this headline"></a></h4>
+<p>Ansible uses Zuul to run an integration test suite on every PR, including new tests introduced by that PR. To find and fix problems in network modules, run the network integration test locally before you submit a PR.</p>
+<p>First, create an inventory file that points to your test machines. The inventory group should match the platform name (for example, <code class="docutils literal notranslate"><span class="pre">eos</span></code>, <code class="docutils literal notranslate"><span class="pre">ios</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> test/integration
+cp inventory.network.template inventory.networking
+<span class="si">${</span><span class="nv">EDITOR</span><span class="k">:-</span><span class="nv">vi</span><span class="si">}</span> inventory.networking
+<span class="c1"># Add in machines for the platform(s) you wish to test</span>
+</pre></div>
+</div>
+<p>To run these network integration tests, use <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">network-integration</span> <span class="pre">--inventory</span> <span class="pre">&lt;/path/to/inventory&gt;</span> <span class="pre">&lt;tests_to_run&gt;</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ansible-test network-integration  --inventory ~/myinventory -vvv vyos_facts</span>
+<span class="go">ansible-test network-integration  --inventory ~/myinventory -vvv vyos_.*</span>
+</pre></div>
+</div>
+<p>To run all network tests for a particular platform:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-test network-integration --inventory  /path/to-collection-module/test/integration/inventory.networking vyos_.*
+</pre></div>
+</div>
+<p>This example will run against all <code class="docutils literal notranslate"><span class="pre">vyos</span></code> modules. Note that <code class="docutils literal notranslate"><span class="pre">vyos_.*</span></code> is a regex match, not a bash wildcard - include the <cite>.</cite> if you modify this example.</p>
+<p>To run integration tests for a specific module:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-test network-integration --inventory  /path/to-collection-module/test/integration/inventory.networking vyos_l3_interfaces
+</pre></div>
+</div>
+<p>To run a single test case on a specific module:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Only run vyos_l3_interfaces/tests/cli/gathered.yaml</span>
+ansible-test network-integration --inventory  /path/to-collection-module/test/integration/inventory.networking vyos_l3_interfaces --testcase gathered
+</pre></div>
+</div>
+<p>To run integration tests for a specific transport:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Only run nxapi test</span>
+ansible-test network-integration --inventory  /path/to-collection-module/test/integration/inventory.networking  --tags<span class="o">=</span><span class="s2">&quot;nxapi&quot;</span> nxos_.*
+
+<span class="c1"># Skip any cli tests</span>
+ ansible-test network-integration --inventory  /path/to-collection-module/test/integration/inventory.networking  --skip-tags<span class="o">=</span><span class="s2">&quot;cli&quot;</span> nxos_.*
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://github.com/ansible-collections/cisco.nxos/blob/master/tests/integration/targets/nxos_bgp/tasks/main.yaml">test/integration/targets/nxos_bgp/tasks/main.yaml</a> for how this is implemented in the tests.</p>
+<p>For more options:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-test network-integration --help
+</pre></div>
+</div>
+<p>If you need additional help or feedback, reach out in the <code class="docutils literal notranslate"><span class="pre">#ansible-network</span></code> chat channel (using Matrix at ansible.im or using IRC at <a class="reference external" href="https://libera.chat/">irc.libera.chat</a>).</p>
+</section>
+</section>
+<section id="unit-test-requirements">
+<h3><a class="toc-backref" href="#id19">Unit test requirements</a><a class="headerlink" href="#unit-test-requirements" title="Permalink to this headline"></a></h3>
+<p>High-level unit test requirements that new resource modules should follow:</p>
+<ol class="arabic simple">
+<li><p>Write test cases for all the states with all possible combinations of config values.</p></li>
+<li><p>Write test cases to test the error conditions ( negative scenarios).</p></li>
+<li><p>Check the  value of <code class="docutils literal notranslate"><span class="pre">changed</span></code> and <code class="docutils literal notranslate"><span class="pre">commands</span></code> keys in every test case.</p></li>
+</ol>
+<p>We run all unit test cases on our Zuul test suite, on the latest python version supported by our CI setup.</p>
+<p>Use the <a class="reference internal" href="#using-zuul-resource-modules"><span class="std std-ref">same procedure</span></a> as the integration tests to view Zuul unit tests reports and logs.</p>
+<p>See  <a class="reference internal" href="../../dev_guide/testing_units_modules.html#testing-units-modules"><span class="std std-ref">unit module testing</span></a> for general unit test details.</p>
+</section>
+</section>
+<section id="example-unit-testing-ansible-network-resource-modules">
+<h2><a class="toc-backref" href="#id20">Example: Unit testing Ansible network resource modules</a><a class="headerlink" href="#example-unit-testing-ansible-network-resource-modules" title="Permalink to this headline"></a></h2>
+<p>This section walks through an example of how to develop unit tests for Ansible resource
+modules.</p>
+<p>See <a class="reference internal" href="../../dev_guide/testing_units.html#testing-units"><span class="std std-ref">Unit Tests</span></a> and <a class="reference internal" href="../../dev_guide/testing_units_modules.html#testing-units-modules"><span class="std std-ref">Unit Testing Ansible Modules</span></a> for general documentation on Ansible unit tests for modules.
+Please read those pages first to understand unit tests and why and when you should use them.</p>
+<section id="using-mock-objects-to-unit-test-ansible-network-resource-modules">
+<h3><a class="toc-backref" href="#id21">Using mock objects to unit test Ansible network resource modules</a><a class="headerlink" href="#using-mock-objects-to-unit-test-ansible-network-resource-modules" title="Permalink to this headline"></a></h3>
+<p><a class="reference external" href="https://docs.python.org/3/library/unittest.mock.html">Mock objects</a> can be very
+useful in building unit tests for special or difficult cases, but they can also
+lead to complex and confusing coding situations.  One good use for mocks would be to
+simulate an API. The <code class="docutils literal notranslate"><span class="pre">mock</span></code> Python package is bundled with Ansible (use
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">units.compat.mock</span></code>).</p>
+<p>You can mock the device connection and output from the device as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">mock_get_config</span> <span class="o">=</span> <span class="n">patch</span><span class="p">(</span> <span class="s2">&quot;ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config&quot;</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">get_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mock_get_config</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">mock_load_config</span> <span class="o">=</span> <span class="n">patch</span><span class="p">(</span>
+<span class="s2">&quot;ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config&quot;</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">load_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mock_load_config</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">mock_get_resource_connection_config</span> <span class="o">=</span> <span class="n">patch</span><span class="p">(</span>
+<span class="s2">&quot;ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection&quot;</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">get_resource_connection_config</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mock_get_resource_connection_config</span><span class="o">.</span><span class="n">start</span><span class="p">())</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">mock_get_resource_connection_facts</span> <span class="o">=</span> <span class="n">patch</span><span class="p">(</span>
+<span class="s2">&quot;ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection&quot;</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">get_resource_connection_facts</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mock_get_resource_connection_facts</span><span class="o">.</span><span class="n">start</span><span class="p">())</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">mock_edit_config</span> <span class="o">=</span> <span class="n">patch</span><span class="p">(</span>
+<span class="s2">&quot;ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config&quot;</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">edit_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mock_edit_config</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">mock_execute_show_command</span> <span class="o">=</span> <span class="n">patch</span><span class="p">(</span>
+<span class="s2">&quot;ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.l2_interfaces.l2_interfaces.L2_interfacesFacts.get_device_data&quot;</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">execute_show_command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mock_execute_show_command</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The facts file of the module now includes a new method, <code class="docutils literal notranslate"><span class="pre">get_device_data</span></code>. Call <code class="docutils literal notranslate"><span class="pre">get_device_data</span></code> here to emulate the device output.</p>
+</section>
+<section id="mocking-device-data">
+<h3><a class="toc-backref" href="#id22">Mocking device data</a><a class="headerlink" href="#mocking-device-data" title="Permalink to this headline"></a></h3>
+<p>To mock fetching results from devices or provide other complex data structures that
+come from external libraries, you can use <code class="docutils literal notranslate"><span class="pre">fixtures</span></code> to read in pre-generated data. The text files for this pre-generated data live in <code class="docutils literal notranslate"><span class="pre">test/units/modules/network/PLATFORM/fixtures/</span></code>. See for example the <a class="reference external" href="https://github.com/ansible-collections/arista.eos/blob/master/tests/unit/modules/network/eos/fixtures/eos_l2_interfaces_config.cfg">eos_l2_interfaces.cfg file</a>.</p>
+<p>Load data using the <code class="docutils literal notranslate"><span class="pre">load_fixture</span></code> method and set this data as the return value of the
+<code class="docutils literal notranslate"><span class="pre">get_device_data</span></code> method in the facts file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load_fixtures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transport</span><span class="o">=</span><span class="s1">&#39;cli&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_from_file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">load_fixture</span><span class="p">(</span><span class="s1">&#39;eos_l2_interfaces_config.cfg&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">execute_show_command</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">load_from_file</span>
+</pre></div>
+</div>
+<p>See the unit test file <a class="reference external" href="https://github.com/ansible-collections/arista.eos/blob/master/tests/unit/modules/network/eos/test_eos_l2_interfaces.py">test_eos_l2_interfaces</a>
+for a practical example.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../../dev_guide/testing_units.html#testing-units"><span class="std std-ref">Unit Tests</span></a></dt><dd><p>Deep dive into developing unit tests for Ansible modules</p>
+</dd>
+<dt><a class="reference internal" href="../../dev_guide/testing_running_locally.html#testing-running-locally"><span class="std std-ref">Testing Ansible</span></a></dt><dd><p>Running tests locally including gathering and reporting coverage data</p>
+</dd>
+<dt><a class="reference internal" href="../../dev_guide/developing_modules_general.html#developing-modules-general"><span class="std std-ref">Developing modules</span></a></dt><dd><p>Get started developing a module</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Network Developer Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="developing_plugins_network.html" class="btn btn-neutral float-right" title="Developing network plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

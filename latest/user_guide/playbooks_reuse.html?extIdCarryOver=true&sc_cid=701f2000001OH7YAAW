@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Re-using Ansible artifacts &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Roles" href="playbooks_reuse_roles.html" />
+    <link rel="prev" title="Setting the remote environment" href="playbooks_environment.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#table-of-contents">Table of contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cheatsheet.html">Ansible CLI cheatsheet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Re-using Ansible artifacts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creating-re-usable-files-and-roles">Creating re-usable files and roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#re-using-playbooks">Re-using playbooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#when-to-turn-a-playbook-into-a-role">When to turn a playbook into a role</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#re-using-files-and-roles">Re-using files and roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#re-using-tasks-as-handlers">Re-using tasks as handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Re-using Ansible artifacts</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/playbooks_reuse.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="re-using-ansible-artifacts">
+<span id="playbooks-reuse"></span><h1>Re-using Ansible artifacts<a class="headerlink" href="#re-using-ansible-artifacts" title="Permalink to this headline"></a></h1>
+<p>You can write a simple playbook in one very large file, and most users learn the one-file approach first. However, breaking your automation work up into smaller files is an excellent way to organize complex sets of tasks and reuse them. Smaller, more distributed artifacts let you re-use the same variables, tasks, and plays in multiple playbooks to address different use cases. You can use distributed artifacts across multiple parent playbooks or even multiple times within one playbook. For example, you might want to update your customer database as part of several different playbooks. If you put all the tasks related to updating your database in a tasks file or a role, you can re-use them in many playbooks while only maintaining them in one place.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#creating-re-usable-files-and-roles" id="id1">Creating re-usable files and roles</a></p></li>
+<li><p><a class="reference internal" href="#re-using-playbooks" id="id2">Re-using playbooks</a></p></li>
+<li><p><a class="reference internal" href="#when-to-turn-a-playbook-into-a-role" id="id3">When to turn a playbook into a role</a></p></li>
+<li><p><a class="reference internal" href="#re-using-files-and-roles" id="id4">Re-using files and roles</a></p>
+<ul>
+<li><p><a class="reference internal" href="#includes-dynamic-re-use" id="id5">Includes: dynamic re-use</a></p></li>
+<li><p><a class="reference internal" href="#imports-static-re-use" id="id6">Imports: static re-use</a></p></li>
+<li><p><a class="reference internal" href="#comparing-includes-and-imports-dynamic-and-static-re-use" id="id7">Comparing includes and imports: dynamic and static re-use</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#re-using-tasks-as-handlers" id="id8">Re-using tasks as handlers</a></p>
+<ul>
+<li><p><a class="reference internal" href="#triggering-included-dynamic-handlers" id="id9">Triggering included (dynamic) handlers</a></p></li>
+<li><p><a class="reference internal" href="#triggering-imported-static-handlers" id="id10">Triggering imported (static) handlers</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="creating-re-usable-files-and-roles">
+<h2><a class="toc-backref" href="#id1">Creating re-usable files and roles</a><a class="headerlink" href="#creating-re-usable-files-and-roles" title="Permalink to this headline"></a></h2>
+<p>Ansible offers four distributed, re-usable artifacts: variables files, task files, playbooks, and roles.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A variables file contains only variables.</p></li>
+<li><p>A task file contains only tasks.</p></li>
+<li><p>A playbook contains at least one play, and may contain variables, tasks, and other content. You can re-use tightly focused playbooks, but you can only re-use them statically, not dynamically.</p></li>
+<li><p>A role contains a set of related tasks, variables, defaults, handlers, and even modules or other plugins in a defined file-tree. Unlike variables files, task files, or playbooks, roles can be easily uploaded and shared via Ansible Galaxy. See <a class="reference internal" href="playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Roles</span></a> for details about creating and using roles.</p></li>
+</ul>
+</div></blockquote>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+</section>
+<section id="re-using-playbooks">
+<h2><a class="toc-backref" href="#id2">Re-using playbooks</a><a class="headerlink" href="#re-using-playbooks" title="Permalink to this headline"></a></h2>
+<p>You can incorporate multiple playbooks into a main playbook. However, you can only use imports to re-use playbooks. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">import_playbook</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">import_playbook</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">databases.yml</span>
+</pre></div>
+</div>
+<p>Importing incorporates playbooks in other playbooks statically. Ansible runs the plays and tasks in each imported playbook in the order they are listed, just as if they had been defined directly in the main playbook.</p>
+<p>You can select which playbook you want to import at runtime by defining your imported playbook filename with a variable, then passing the variable with either <code class="docutils literal notranslate"><span class="pre">--extra-vars</span></code> or the <code class="docutils literal notranslate"><span class="pre">vars</span></code> keyword. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">import_playbook</span><span class="p">:</span> <span class="s">&quot;/path/to/{{</span><span class="nv"> </span><span class="s">import_from_extra_var</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="p p-Indicator">-</span> <span class="nt">import_playbook</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">import_from_vars</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">import_from_vars</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/one_playbook.yml</span>
+</pre></div>
+</div>
+<p>If you run this playbook with <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span> <span class="pre">my_playbook</span> <span class="pre">-e</span> <span class="pre">import_from_extra_var=other_playbook.yml</span></code>, Ansible imports both one_playbook.yml and other_playbook.yml.</p>
+</section>
+<section id="when-to-turn-a-playbook-into-a-role">
+<h2><a class="toc-backref" href="#id3">When to turn a playbook into a role</a><a class="headerlink" href="#when-to-turn-a-playbook-into-a-role" title="Permalink to this headline"></a></h2>
+<p>For some use cases, simple playbooks work well. However, starting at a certain level of complexity, roles work better than playbooks. A role lets you store your defaults, handlers, variables, and tasks in separate directories, instead of in a single long document. Roles are easy to share on Ansible Galaxy. For complex use cases, most users find roles easier to read, understand, and maintain than all-in-one playbooks.</p>
+</section>
+<section id="re-using-files-and-roles">
+<h2><a class="toc-backref" href="#id4">Re-using files and roles</a><a class="headerlink" href="#re-using-files-and-roles" title="Permalink to this headline"></a></h2>
+<p>Ansible offers two ways to re-use files and roles in a playbook: dynamic and static.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For dynamic re-use, add an <code class="docutils literal notranslate"><span class="pre">include_*</span></code> task in the tasks section of a play:</p>
+<ul>
+<li><p><a class="reference internal" href="../collections/ansible/builtin/include_role_module.html#include-role-module"><span class="std std-ref">include_role</span></a></p></li>
+<li><p><a class="reference internal" href="../collections/ansible/builtin/include_tasks_module.html#include-tasks-module"><span class="std std-ref">include_tasks</span></a></p></li>
+<li><p><a class="reference internal" href="../collections/ansible/builtin/include_vars_module.html#include-vars-module"><span class="std std-ref">include_vars</span></a></p></li>
+</ul>
+</li>
+<li><p>For static re-use, add an <code class="docutils literal notranslate"><span class="pre">import_*</span></code> task in the tasks section of a play:</p>
+<ul>
+<li><p><a class="reference internal" href="../collections/ansible/builtin/import_role_module.html#import-role-module"><span class="std std-ref">import_role</span></a></p></li>
+<li><p><a class="reference internal" href="../collections/ansible/builtin/import_tasks_module.html#import-tasks-module"><span class="std std-ref">import_tasks</span></a></p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>Task include and import statements can be used at arbitrary depth.</p>
+<p>You can still use the bare <a class="reference internal" href="playbooks_reuse_roles.html#roles-keyword"><span class="std std-ref">roles</span></a> keyword at the play level to incorporate a role in a playbook statically. However, the bare <a class="reference internal" href="../collections/ansible/builtin/include_module.html#include-module"><span class="std std-ref">include</span></a> keyword, once used for both task files and playbook-level includes, is now deprecated.</p>
+<section id="includes-dynamic-re-use">
+<h3><a class="toc-backref" href="#id5">Includes: dynamic re-use</a><a class="headerlink" href="#includes-dynamic-re-use" title="Permalink to this headline"></a></h3>
+<p>Including roles, tasks, or variables adds them to a playbook dynamically. Ansible processes included files and roles as they come up in a playbook, so included tasks can be affected by the results of earlier tasks within the top-level playbook. Included roles and tasks are similar to handlers - they may or may not run, depending on the results of other tasks in the top-level playbook.</p>
+<p>The primary advantage of using <code class="docutils literal notranslate"><span class="pre">include_*</span></code> statements is looping. When a loop is used with an include, the included tasks or role will be executed once for each item in the loop.</p>
+<p>The filenames for included roles, tasks, and vars are templated before inclusion.</p>
+<p>You can pass variables into includes. See <a class="reference internal" href="playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: Where should I put a variable?</span></a> for more details on variable inheritance and precedence.</p>
+</section>
+<section id="imports-static-re-use">
+<h3><a class="toc-backref" href="#id6">Imports: static re-use</a><a class="headerlink" href="#imports-static-re-use" title="Permalink to this headline"></a></h3>
+<p>Importing roles, tasks, or playbooks adds them to a playbook statically. Ansible pre-processes imported files and roles before it runs any tasks in a playbook, so imported content is never affected by other tasks within the top-level playbook.</p>
+<p>The filenames for imported roles and tasks support templating, but the variables must be available when Ansible is pre-processing the imports. This can be done with the <code class="docutils literal notranslate"><span class="pre">vars</span></code> keyword or by using <code class="docutils literal notranslate"><span class="pre">--extra-vars</span></code>.</p>
+<p>You can pass variables to imports. You must pass variables if you want to run an imported file more than once in a playbook. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wordpress.yml</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">wp_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">timmy</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wordpress.yml</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">wp_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">alice</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wordpress.yml</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">wp_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bob</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: Where should I put a variable?</span></a> for more details on variable inheritance and precedence.</p>
+</section>
+<section id="comparing-includes-and-imports-dynamic-and-static-re-use">
+<span id="dynamic-vs-static"></span><h3><a class="toc-backref" href="#id7">Comparing includes and imports: dynamic and static re-use</a><a class="headerlink" href="#comparing-includes-and-imports-dynamic-and-static-re-use" title="Permalink to this headline"></a></h3>
+<p>Each approach to re-using distributed Ansible artifacts has advantages and limitations. You may choose dynamic re-use for some playbooks and static re-use for others. Although you can use both dynamic and static re-use in a single playbook, it is best to select one approach per playbook. Mixing static and dynamic re-use can introduce difficult-to-diagnose bugs into your playbooks. This table summarizes the main differences so you can choose the best approach for each playbook you create.</p>
+<table class="documentation-table docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Include_*</p></th>
+<th class="head"><p>Import_*</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Type of re-use</p></td>
+<td><p>Dynamic</p></td>
+<td><p>Static</p></td>
+</tr>
+<tr class="row-odd"><td><p>When processed</p></td>
+<td><p>At runtime, when encountered</p></td>
+<td><p>Pre-processed during playbook parsing</p></td>
+</tr>
+<tr class="row-even"><td><p>Task or play</p></td>
+<td><p>All includes are tasks</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">import_playbook</span></code> cannot be a task</p></td>
+</tr>
+<tr class="row-odd"><td><p>Task options</p></td>
+<td><p>Apply only to include task itself</p></td>
+<td><p>Apply to all child tasks in import</p></td>
+</tr>
+<tr class="row-even"><td><p>Calling from loops</p></td>
+<td><p>Executed once for each loop item</p></td>
+<td><p>Cannot be used in a loop</p></td>
+</tr>
+<tr class="row-odd"><td><p>Using <code class="docutils literal notranslate"><span class="pre">--list-tags</span></code></p></td>
+<td><p>Tags within includes not listed</p></td>
+<td><p>All tags appear with <code class="docutils literal notranslate"><span class="pre">--list-tags</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Using <code class="docutils literal notranslate"><span class="pre">--list-tasks</span></code></p></td>
+<td><p>Tasks within includes not listed</p></td>
+<td><p>All tasks appear with <code class="docutils literal notranslate"><span class="pre">--list-tasks</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Notifying handlers</p></td>
+<td><p>Cannot trigger handlers within includes</p></td>
+<td><p>Can trigger individual imported handlers</p></td>
+</tr>
+<tr class="row-even"><td><p>Using <code class="docutils literal notranslate"><span class="pre">--start-at-task</span></code></p></td>
+<td><p>Cannot start at tasks within includes</p></td>
+<td><p>Can start at imported tasks</p></td>
+</tr>
+<tr class="row-odd"><td><p>Using inventory variables</p></td>
+<td><p>Can <code class="docutils literal notranslate"><span class="pre">include_*:</span> <span class="pre">{{</span> <span class="pre">inventory_var</span> <span class="pre">}}</span></code></p></td>
+<td><p>Cannot <code class="docutils literal notranslate"><span class="pre">import_*:</span> <span class="pre">{{</span> <span class="pre">inventory_var</span> <span class="pre">}}</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>With playbooks</p></td>
+<td><p>No <code class="docutils literal notranslate"><span class="pre">include_playbook</span></code></p></td>
+<td><p>Can import full playbooks</p></td>
+</tr>
+<tr class="row-odd"><td><p>With variables files</p></td>
+<td><p>Can include variables files</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">vars_files:</span></code> to import variables</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>There are also big differences in resource consumption and performance, imports are quite lean and fast, while includes require a lot of management
+and accounting.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="re-using-tasks-as-handlers">
+<h2><a class="toc-backref" href="#id8">Re-using tasks as handlers</a><a class="headerlink" href="#re-using-tasks-as-handlers" title="Permalink to this headline"></a></h2>
+<p>You can also use includes and imports in the <a class="reference internal" href="playbooks_handlers.html#handlers"><span class="std std-ref">Handlers: running operations on change</span></a> section of a playbook. For instance, if you want to define how to restart Apache, you only have to do that once for all of your playbooks. You might make a <code class="docutils literal notranslate"><span class="pre">restarts.yml</span></code> file that looks like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># restarts.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart apache</span>
+  <span class="nt">ansible.builtin.service</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">apache</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restarted</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart mysql</span>
+  <span class="nt">ansible.builtin.service</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mysql</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restarted</span>
+</pre></div>
+</div>
+<p>You can trigger handlers from either an import or an include, but the procedure is different for each method of re-use. If you include the file, you must notify the include itself, which triggers all the tasks in <code class="docutils literal notranslate"><span class="pre">restarts.yml</span></code>. If you import the file, you must notify the individual task(s) within <code class="docutils literal notranslate"><span class="pre">restarts.yml</span></code>. You can mix direct tasks and handlers with included or imported tasks and handlers.</p>
+<section id="triggering-included-dynamic-handlers">
+<h3><a class="toc-backref" href="#id9">Triggering included (dynamic) handlers</a><a class="headerlink" href="#triggering-included-dynamic-handlers" title="Permalink to this headline"></a></h3>
+<p>Includes are executed at run-time, so the name of the include exists during play execution, but the included tasks do not exist until the include itself is triggered. To use the <code class="docutils literal notranslate"><span class="pre">Restart</span> <span class="pre">apache</span></code> task with dynamic re-use, refer to the name of the include itself. This approach triggers all tasks in the included file as handlers. For example, with the task file shown above:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Trigger an included (dynamic) handler</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">handlers</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart services</span>
+      <span class="nt">include_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restarts.yml</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>
+      <span class="nt">notify</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart services</span>
+</pre></div>
+</div>
+</section>
+<section id="triggering-imported-static-handlers">
+<h3><a class="toc-backref" href="#id10">Triggering imported (static) handlers</a><a class="headerlink" href="#triggering-imported-static-handlers" title="Permalink to this headline"></a></h3>
+<p>Imports are processed before the play begins, so the name of the import no longer exists during play execution, but the names of the individual imported tasks do exist. To use the <code class="docutils literal notranslate"><span class="pre">Restart</span> <span class="pre">apache</span></code> task with static re-use, refer to the name of each task or tasks within the imported file. For example, with the task file shown above:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Trigger an imported (static) handler</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">handlers</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart services</span>
+      <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restarts.yml</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>
+      <span class="nt">notify</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart apache</span>
+    <span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>
+      <span class="nt">notify</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart mysql</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/2.9/modules/list_of_utilities_modules.html#utilities-modules" title="(in Ansible v2.9)"><span>Utilities modules</span></a></dt><dd><p>Documentation of the <code class="docutils literal notranslate"><span class="pre">include*</span></code> and <code class="docutils literal notranslate"><span class="pre">import*</span></code> modules discussed here.</p>
+</dd>
+<dt><a class="reference internal" href="playbooks.html#working-with-playbooks"><span class="std std-ref">Working with playbooks</span></a></dt><dd><p>Review the basic Playbook language features</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a></dt><dd><p>All about variables in playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_conditionals.html#playbooks-conditionals"><span class="std std-ref">Conditionals</span></a></dt><dd><p>Conditionals in playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_loops.html#playbooks-loops"><span class="std std-ref">Loops</span></a></dt><dd><p>Loops in playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_best_practices.html#playbooks-best-practices"><span class="std std-ref">Tips and tricks</span></a></dt><dd><p>Tips and tricks for playbooks</p>
+</dd>
+<dt><a class="reference internal" href="../galaxy/user_guide.html#ansible-galaxy"><span class="std std-ref">Galaxy User Guide</span></a></dt><dd><p>How to share roles on galaxy, role management</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/ansible/ansible-examples">GitHub Ansible examples</a></dt><dd><p>Complete playbook files from the GitHub project source</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-project">Mailing List</a></dt><dd><p>Questions? Help? Ideas?  Stop by the list on Google Groups</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_environment.html" class="btn btn-neutral float-left" title="Setting the remote environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_reuse_roles.html" class="btn btn-neutral float-right" title="Roles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

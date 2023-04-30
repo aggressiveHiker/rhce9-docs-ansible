@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use Ansible network roles &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/network/getting_started/network_roles.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Beyond the basics" href="intermediate_concepts.html" />
+    <link rel="prev" title="Build Your Inventory" href="first_inventory.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Network Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_differences.html">How Network Automation is Different</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_playbook.html">Run Your First Command and Playbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_inventory.html">Build Your Inventory</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Use Ansible network roles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#understanding-roles">Understanding roles</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-sample-dns-playbook">A sample DNS playbook</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#convert-the-playbook-into-a-role">Convert the playbook into a role</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#variable-precedence">Variable precedence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#update-an-installed-role">Update an installed role</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intermediate_concepts.html">Beyond the basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_connection_options.html">Working with network connection options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network_resources.html">Resources and next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Network Getting Started</a> &raquo;</li>
+      <li>Use Ansible network roles</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/network/getting_started/network_roles.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="use-ansible-network-roles">
+<span id="using-network-roles"></span><h1>Use Ansible network roles<a class="headerlink" href="#use-ansible-network-roles" title="Permalink to this headline"></a></h1>
+<p>Roles are sets of Ansible defaults, files, tasks, templates, variables, and other Ansible components that work together. As you saw on <a class="reference internal" href="first_playbook.html#first-network-playbook"><span class="std std-ref">Run Your First Command and Playbook</span></a>, moving from a command to a playbook makes it easy to run multiple tasks and repeat the same tasks in the same order. Moving from a playbook to a role makes it even easier to reuse and share your ordered tasks. You can look at <a class="reference internal" href="../../galaxy/user_guide.html#ansible-galaxy"><span class="std std-ref">Ansible Galaxy</span></a>, which lets you share your roles and use others’ roles, either directly or as inspiration.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#understanding-roles" id="id1">Understanding roles</a></p>
+<ul>
+<li><p><a class="reference internal" href="#a-sample-dns-playbook" id="id2">A sample DNS playbook</a></p></li>
+<li><p><a class="reference internal" href="#convert-the-playbook-into-a-role" id="id3">Convert the playbook into a role</a></p></li>
+<li><p><a class="reference internal" href="#variable-precedence" id="id4">Variable precedence</a></p>
+<ul>
+<li><p><a class="reference internal" href="#lowest-precedence" id="id5">Lowest precedence</a></p></li>
+<li><p><a class="reference internal" href="#highest-precedence" id="id6">Highest precedence</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#update-an-installed-role" id="id7">Update an installed role</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="understanding-roles">
+<h2><a class="toc-backref" href="#id1">Understanding roles</a><a class="headerlink" href="#understanding-roles" title="Permalink to this headline"></a></h2>
+<p>So what exactly is a role, and why should you care? Ansible roles are basically playbooks broken up into a known file structure. Moving to roles from a playbook makes sharing, reading, and updating your Ansible workflow easier. Users can write their own roles. So for example, you don’t have to write your own DNS playbook. Instead, you specify a DNS server and a role to configure it for you.</p>
+<p>To simplify your workflow even further, the Ansible Network team has written a series of roles for common network use cases. Using these roles means you don’t have to reinvent the wheel. Instead of writing and maintaining your own <code class="docutils literal notranslate"><span class="pre">create_vlan</span></code> playbooks or roles, you can concentrate on designing, codifying and maintaining the parser templates that describe your network topologies and inventory, and let Ansible’s network roles do the work. See the <a class="reference external" href="https://galaxy.ansible.com/ansible-network">network-related roles</a> on Ansible Galaxy.</p>
+<section id="a-sample-dns-playbook">
+<h3><a class="toc-backref" href="#id2">A sample DNS playbook</a><a class="headerlink" href="#a-sample-dns-playbook" title="Permalink to this headline"></a></h3>
+<p>To demonstrate the concept of what a role is, the example <code class="docutils literal notranslate"><span class="pre">playbook.yml</span></code> below is a single YAML file containing a two-task playbook.  This Ansible Playbook configures the hostname on a Cisco IOS XE device, then it configures the DNS (domain name system) servers.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">configure cisco routers</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">routers</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.network_cli</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">dns</span><span class="p">:</span> <span class="s">&quot;8.8.8.8</span><span class="nv"> </span><span class="s">8.8.4.4&quot;</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">configure hostname</span>
+     <span class="nt">cisco.ios.ios_config</span><span class="p">:</span>
+       <span class="nt">lines</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hostname {{ inventory_hostname }}</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">configure DNS</span>
+     <span class="nt">cisco.ios.ios_config</span><span class="p">:</span>
+       <span class="nt">lines</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ip name-server {{dns}}</span>
+</pre></div>
+</div>
+<p>If you run this playbook using the <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> command, you’ll see the output below.  This example used <code class="docutils literal notranslate"><span class="pre">-l</span></code> option to limit the playbook to only executing on the <strong>rtr1</strong> node.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6c191f091e2c0d021f050e0009">[email&#160;protected]</a> ~<span class="o">]</span>$ ansible-playbook playbook.yml -l rtr1
+
+PLAY <span class="o">[</span>configure cisco routers<span class="o">]</span> *************************************************
+
+TASK <span class="o">[</span>configure hostname<span class="o">]</span> ******************************************************
+changed: <span class="o">[</span>rtr1<span class="o">]</span>
+
+TASK <span class="o">[</span>configure DNS<span class="o">]</span> ***********************************************************
+changed: <span class="o">[</span>rtr1<span class="o">]</span>
+
+PLAY RECAP *********************************************************************
+rtr1                       : <span class="nv">ok</span><span class="o">=</span><span class="m">2</span>    <span class="nv">changed</span><span class="o">=</span><span class="m">2</span>    <span class="nv">unreachable</span><span class="o">=</span><span class="m">0</span>    <span class="nv">failed</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<p>This playbook configured the hostname and DNS servers.  You can verify that configuration on the Cisco IOS XE <strong>rtr1</strong> router:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rtr1#sh run <span class="p">|</span> i name
+hostname rtr1
+ip name-server <span class="m">8</span>.8.8.8 <span class="m">8</span>.8.4.4
+</pre></div>
+</div>
+</section>
+<section id="convert-the-playbook-into-a-role">
+<h3><a class="toc-backref" href="#id3">Convert the playbook into a role</a><a class="headerlink" href="#convert-the-playbook-into-a-role" title="Permalink to this headline"></a></h3>
+<p>The next step is to convert this playbook into a reusable role. You can create the directory structure manually, or you can use <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">init</span></code> to create the standard framework for a role.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abded8ced9ebcac5d8c2c9c7ce">[email&#160;protected]</a> ~<span class="o">]</span>$ ansible-galaxy init system-demo
+<span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d282e382f1d3c332e343f3138">[email&#160;protected]</a> ~<span class="o">]</span>$ <span class="nb">cd</span> system-demo/
+<span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d686e786f5d7c736e747f7178">[email&#160;protected]</a> system-demo<span class="o">]</span>$ tree
+.
+├── defaults
+│   └── main.yml
+├── files
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── README.md
+├── tasks
+│   └── main.yml
+├── templates
+├── tests
+│   ├── inventory
+│   └── test.yml
+└── vars
+  └── main.yml
+</pre></div>
+</div>
+<p>This first demonstration uses only the <strong>tasks</strong> and <strong>vars</strong> directories.  The directory structure would look as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3a6a0b6a193b2bda0bab1bfb6">[email&#160;protected]</a> system-demo<span class="o">]</span>$ tree
+.
+├── tasks
+│   └── main.yml
+└── vars
+    └── main.yml
+</pre></div>
+</div>
+<p>Next, move the content of the <code class="docutils literal notranslate"><span class="pre">vars</span></code> and <code class="docutils literal notranslate"><span class="pre">tasks</span></code> sections from the original Ansible Playbook into the role. First, move the two tasks into the <code class="docutils literal notranslate"><span class="pre">tasks/main.yml</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5623253324163738253f343a33">[email&#160;protected]</a> system-demo<span class="o">]</span>$ cat tasks/main.yml
+---
+- name: configure hostname
+  cisco.ios.ios_config:
+    lines: hostname <span class="o">{{</span> inventory_hostname <span class="o">}}</span>
+
+- name: configure DNS
+  cisco.ios.ios_config:
+    lines: ip name-server <span class="o">{{</span>dns<span class="o">}}</span>
+</pre></div>
+</div>
+<p>Next, move the variables into the <code class="docutils literal notranslate"><span class="pre">vars/main.yml</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="453036203705242b362c272920">[email&#160;protected]</a> system-demo<span class="o">]</span>$ cat vars/main.yml
+---
+dns: <span class="s2">&quot;8.8.8.8 8.8.4.4&quot;</span>
+</pre></div>
+</div>
+<p>Finally, modify the original Ansible Playbook to remove the <code class="docutils literal notranslate"><span class="pre">tasks</span></code> and <code class="docutils literal notranslate"><span class="pre">vars</span></code> sections and add the keyword <code class="docutils literal notranslate"><span class="pre">roles</span></code>  with the name of the role, in this case <code class="docutils literal notranslate"><span class="pre">system-demo</span></code>.  You’ll have this playbook:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">configure cisco routers</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">routers</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.network_cli</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+
+  <span class="nt">roles</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">system-demo</span>
+</pre></div>
+</div>
+<p>To summarize, this demonstration now has a total of three directories and three YAML files.  There is the <code class="docutils literal notranslate"><span class="pre">system-demo</span></code> folder, which represents the role.  This <code class="docutils literal notranslate"><span class="pre">system-demo</span></code> contains two folders, <code class="docutils literal notranslate"><span class="pre">tasks</span></code> and <code class="docutils literal notranslate"><span class="pre">vars</span></code>.  There is a <code class="docutils literal notranslate"><span class="pre">main.yml</span></code> is each respective folder.  The <code class="docutils literal notranslate"><span class="pre">vars/main.yml</span></code> contains the variables from <code class="docutils literal notranslate"><span class="pre">playbook.yml</span></code>.  The <code class="docutils literal notranslate"><span class="pre">tasks/main.yml</span></code> contains the tasks from <code class="docutils literal notranslate"><span class="pre">playbook.yml</span></code>.  The <code class="docutils literal notranslate"><span class="pre">playbook.yml</span></code> file has been modified to call the role rather than specifying vars and tasks directly.  Here is a tree of the current working directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="87f2f4e2f5c7e6e9f4eee5ebe2">[email&#160;protected]</a> ~<span class="o">]</span>$ tree
+.
+├── playbook.yml
+└── system-demo
+    ├── tasks
+    │   └── main.yml
+    └── vars
+        └── main.yml
+</pre></div>
+</div>
+<p>Running the playbook results in identical behavior with slightly different output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="790c0a1c0b3918170a101b151c">[email&#160;protected]</a> ~<span class="o">]</span>$ ansible-playbook playbook.yml -l rtr1
+
+PLAY <span class="o">[</span>configure cisco routers<span class="o">]</span> *************************************************
+
+TASK <span class="o">[</span>system-demo : configure hostname<span class="o">]</span> ****************************************
+ok: <span class="o">[</span>rtr1<span class="o">]</span>
+
+TASK <span class="o">[</span>system-demo : configure DNS<span class="o">]</span> *********************************************
+ok: <span class="o">[</span>rtr1<span class="o">]</span>
+
+PLAY RECAP *********************************************************************
+rtr1             : <span class="nv">ok</span><span class="o">=</span><span class="m">2</span>    <span class="nv">changed</span><span class="o">=</span><span class="m">0</span>    <span class="nv">unreachable</span><span class="o">=</span><span class="m">0</span>    <span class="nv">failed</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<p>As seen above each task is now prepended with the role name, in this case <code class="docutils literal notranslate"><span class="pre">system-demo</span></code>.  When running a playbook that contains several roles, this will help pinpoint where a task is being called from.  This playbook returned <code class="docutils literal notranslate"><span class="pre">ok</span></code> instead of <code class="docutils literal notranslate"><span class="pre">changed</span></code> because it has identical behavior for the single file playbook we started from.</p>
+<p>As before, the playbook will generate the following configuration on a Cisco IOS-XE router:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rtr1#sh run <span class="p">|</span> i name
+hostname rtr1
+ip name-server <span class="m">8</span>.8.8.8 <span class="m">8</span>.8.4.4
+</pre></div>
+</div>
+<p>This is why Ansible roles can be simply thought of as deconstructed playbooks. They are simple, effective and reusable.  Now another user can simply include the <code class="docutils literal notranslate"><span class="pre">system-demo</span></code> role instead of having to create a custom “hard coded” playbook.</p>
+</section>
+<section id="variable-precedence">
+<h3><a class="toc-backref" href="#id4">Variable precedence</a><a class="headerlink" href="#variable-precedence" title="Permalink to this headline"></a></h3>
+<p>What if you want to change the DNS servers?  You aren’t expected to change the <code class="docutils literal notranslate"><span class="pre">vars/main.yml</span></code> within the role structure. Ansible has many places where you can specify variables for a given play. See <a class="reference internal" href="../../user_guide/playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a> for details on variables and precedence. There are actually 21 places to put variables.  While this list can seem overwhelming at first glance, the vast majority of use cases only involve knowing the spot for variables of least precedence and how to pass variables with most precedence. See <a class="reference internal" href="../../user_guide/playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: Where should I put a variable?</span></a> for more guidance on where you should put variables.</p>
+<section id="lowest-precedence">
+<h4><a class="toc-backref" href="#id5">Lowest precedence</a><a class="headerlink" href="#lowest-precedence" title="Permalink to this headline"></a></h4>
+<p>The lowest precedence is the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> directory within a role.  This means all the other 20 locations you could potentially specify the variable will all take higher precedence than <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, no matter what.  To immediately give the vars from the <code class="docutils literal notranslate"><span class="pre">system-demo</span></code> role the least precedence, rename the <code class="docutils literal notranslate"><span class="pre">vars</span></code> directory to <code class="docutils literal notranslate"><span class="pre">defaults</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bcc9cfd9cefcddd2cfd5ded0d9">[email&#160;protected]</a> system-demo<span class="o">]</span>$ mv vars defaults
+<span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b0c5c3d5c2f0d1dec3d9d2dcd5">[email&#160;protected]</a> system-demo<span class="o">]</span>$ tree
+.
+├── defaults
+│   └── main.yml
+├── tasks
+│   └── main.yml
+</pre></div>
+</div>
+<p>Add a new <code class="docutils literal notranslate"><span class="pre">vars</span></code> section to the playbook to override the default behavior (where the variable <code class="docutils literal notranslate"><span class="pre">dns</span></code> is set to 8.8.8.8 and 8.8.4.4).  For this demonstration, set <code class="docutils literal notranslate"><span class="pre">dns</span></code> to 1.1.1.1, so <code class="docutils literal notranslate"><span class="pre">playbook.yml</span></code> becomes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">configure cisco routers</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">routers</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.network_cli</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">dns</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.1.1.1</span>
+  <span class="nt">roles</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">system-demo</span>
+</pre></div>
+</div>
+<p>Run this updated playbook on <strong>rtr2</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="334640564173525d405a515f56">[email&#160;protected]</a> ~<span class="o">]</span>$ ansible-playbook playbook.yml -l rtr2
+</pre></div>
+</div>
+<p>The configuration on the <strong>rtr2</strong> Cisco router will look as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rtr2#sh run <span class="p">|</span> i name-server
+ip name-server <span class="m">1</span>.1.1.1
+</pre></div>
+</div>
+<p>The variable configured in the playbook now has precedence over the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> directory.  In fact, any other spot you configure variables would win over the values in the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> directory.</p>
+</section>
+<section id="highest-precedence">
+<h4><a class="toc-backref" href="#id6">Highest precedence</a><a class="headerlink" href="#highest-precedence" title="Permalink to this headline"></a></h4>
+<p>Specifying variables in the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> directory within a role will always take the lowest precedence, while specifying <code class="docutils literal notranslate"><span class="pre">vars</span></code> as extra vars with the <code class="docutils literal notranslate"><span class="pre">-e</span></code> or <code class="docutils literal notranslate"><span class="pre">--extra-vars=</span></code> will always take the highest precedence, no matter what.  Re-running the playbook with the <code class="docutils literal notranslate"><span class="pre">-e</span></code> option overrides both the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> directory (8.8.4.4 and 8.8.8.8) as well as the newly created <code class="docutils literal notranslate"><span class="pre">vars</span></code> within the playbook that contains the 1.1.1.1 dns server.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5722243225173639243e353b32">[email&#160;protected]</a> ~<span class="o">]</span>$ ansible-playbook playbook.yml -e <span class="s2">&quot;dns=192.168.1.1&quot;</span> -l rtr3
+</pre></div>
+</div>
+<p>The result on the Cisco IOS XE router will only contain the highest precedence setting of 192.168.1.1:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rtr3#sh run <span class="p">|</span> i name-server
+ip name-server <span class="m">192</span>.168.1.1
+</pre></div>
+</div>
+<p>How is this useful?  Why should you care?  Extra vars are commonly used by network operators to override defaults.  A powerful example of this is with the Job Template Survey feature on AWX or the <a class="reference internal" href="../../reference_appendices/tower.html#ansible-platform"><span class="std std-ref">Red Hat Ansible Automation Platform</span></a>.  It is possible through the web UI to prompt a network operator to fill out parameters with a Web form.  This can be really simple for non-technical playbook writers to execute a playbook using their Web browser.</p>
+</section>
+</section>
+<section id="update-an-installed-role">
+<h3><a class="toc-backref" href="#id7">Update an installed role</a><a class="headerlink" href="#update-an-installed-role" title="Permalink to this headline"></a></h3>
+<p>The Ansible Galaxy page for a role lists all available versions. To update a locally installed role to a new or different version, use the <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">install</span></code> command with the version and <code class="docutils literal notranslate"><span class="pre">--force</span></code> option. You may also need to manually update any dependent roles to support this version. See the role <strong>Read Me</strong> tab in Galaxy for dependent role minimum version requirements.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d7a2a4b2a597b6b9a4beb5bbb2">[email&#160;protected]</a><span class="o">]</span>$ ansible-galaxy install mynamespace.my_role,v2.7.1 --force
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://galaxy.ansible.com/docs/">Ansible Galaxy documentation</a></dt><dd><p>Ansible Galaxy user guide</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="first_inventory.html" class="btn btn-neutral float-left" title="Build Your Inventory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="intermediate_concepts.html" class="btn btn-neutral float-right" title="Beyond the basics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

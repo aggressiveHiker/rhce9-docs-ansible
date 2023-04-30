@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to connect to RouterOS devices with the RouterOS API &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/community/routeros/docsite/api-guide.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="How to connect to RouterOS devices with SSH" href="ssh-guide.html" />
+    <link rel="prev" title="Community.Routeros" href="../index.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ansible/index.html">Collections in the Ansible Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">Collections in the Community Namespace</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../aws/index.html">Community.Aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../azure/index.html">Community.Azure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ciscosmb/index.html">Community.Ciscosmb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../crypto/index.html">Community.Crypto</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../digitalocean/index.html">Community.Digitalocean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dns/index.html">Community.Dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docker/index.html">Community.Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../fortios/index.html">Community.Fortios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../general/index.html">Community.General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../google/index.html">Community.Google</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../grafana/index.html">Community.Grafana</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../hashi_vault/index.html">Community.Hashi_Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../hrobot/index.html">Community.Hrobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libvirt/index.html">Community.Libvirt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../mongodb/index.html">Community.Mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../mysql/index.html">Community.Mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../network/index.html">Community.Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../okd/index.html">Community.Okd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../proxysql/index.html">Community.Proxysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../rabbitmq/index.html">Community.Rabbitmq</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html">Community.Routeros</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../index.html#communication">Communication</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html#guides">Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../sap/index.html">Community.Sap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../sap_libs/index.html">Community.Sap_Libs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../skydive/index.html">Community.Skydive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../sops/index.html">Community.Sops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../vmware/index.html">Community.Vmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../windows/index.html">Community.Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zabbix/index.html">Community.Zabbix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../vmware/index.html">Collections in the Vmware Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Collection Index</a> &raquo;</li>
+          <li><a href="../../index.html">Collections in the Community Namespace</a> &raquo;</li>
+          <li><a href="../index.html">Community.Routeros</a> &raquo;</li>
+      <li>How to connect to RouterOS devices with the RouterOS API</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <br>
+
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="how-to-connect-to-routeros-devices-with-the-routeros-api">
+<span id="ansible-collections-community-routeros-docsite-api-guide"></span><h1>How to connect to RouterOS devices with the RouterOS API<a class="headerlink" href="#how-to-connect-to-routeros-devices-with-the-routeros-api" title="Permalink to this headline"></a></h1>
+<p>You can use the <a class="reference internal" href="../api_module.html#ansible-collections-community-routeros-api-module"><span class="std std-ref">community.routeros.api module</span></a> to connect to a RouterOS device with the RouterOS API. A more specific module to modify certain entries is the <a class="reference internal" href="../api_find_and_modify_module.html#ansible-collections-community-routeros-api-find-and-modify-module"><span class="std std-ref">community.routeros.api_find_and_modify module</span></a>. The <a class="reference internal" href="../api_facts_module.html#ansible-collections-community-routeros-api-facts-module"><span class="std std-ref">community.routeros.api_facts module</span></a> allows to retrieve Ansible facts using the RouterOS API.</p>
+<p>No special setup is needed; the module needs to be run on a host that can connect to the device’s API. The most common case is that the module is run on <code class="docutils literal notranslate"><span class="pre">localhost</span></code>, either by using <code class="docutils literal notranslate"><span class="pre">hosts:</span> <span class="pre">localhost</span></code> in the playbook, or by using <code class="docutils literal notranslate"><span class="pre">delegate_to:</span> <span class="pre">localhost</span></code> for the task. The following example shows how to run the equivalent of <code class="docutils literal notranslate"><span class="pre">/ip</span> <span class="pre">address</span> <span class="pre">print</span></code>:</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RouterOS test with API</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test1234</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Get &quot;ip address print&quot;</span>
+      <span class="nt">community.routeros.api</span><span class="p">:</span>
+        <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+        <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+        <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+        <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;ip</span><span class="nv"> </span><span class="s">address&quot;</span>
+        <span class="c1"># The following options configure TLS/SSL.</span>
+        <span class="c1"># Depending on your setup, these options need different values:</span>
+        <span class="nt">tls</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+        <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+        <span class="nt">validate_cert_hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+        <span class="c1"># If you are using your own PKI, specify the path to your CA certificate here:</span>
+        <span class="c1"># ca_path: /path/to/ca-certificate.pem</span>
+      <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">print_path</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show IP address of first interface</span>
+      <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">print_path.msg</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="nv">.address</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>This results in the following output:</p>
+<div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">PLAY</span> <span class="p">[</span><span class="l">RouterOS test</span><span class="p">]</span> <span class="nv">*********************************************************************************************</span>
+
+<span class="k">TASK</span> <span class="p">[</span><span class="l">Get &quot;ip address print&quot;</span><span class="p">]</span> <span class="nv">************************************************************************************</span>
+<span class="k">ok</span><span class="p">:</span> <span class="p">[</span><span class="nv">localhost</span><span class="p">]</span>
+
+<span class="k">TASK</span> <span class="p">[</span><span class="l">Show IP address of first interface</span><span class="p">]</span> <span class="nv">************************************************************************</span>
+<span class="k">ok</span><span class="p">:</span> <span class="p">[</span><span class="nv">localhost</span><span class="p">]</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s">&quot;192.168.2.1/24&quot;</span>
+<span class="p">}</span>
+
+<span class="k">PLAY RECAP</span> <span class="nv">*******************************************************************************************************</span>
+<span class="n">localhost</span>                  <span class="p">:</span> <span class="k">ok</span><span class="p">=</span><span class="mi">2</span>    <span class="k">changed</span><span class="p">=</span><span class="mi">0</span>    <span class="k">unreachable</span><span class="p">=</span><span class="mi">0</span>    <span class="k">failed</span><span class="p">=</span><span class="mi">0</span>    <span class="k">skipped</span><span class="p">=</span><span class="mi">0</span>    <span class="k">rescued</span><span class="p">=</span><span class="mi">0</span>    <span class="k">ignored</span><span class="p">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>Check out the documenation of the <a class="reference internal" href="../api_module.html#ansible-collections-community-routeros-api-module"><span class="std std-ref">community.routeros.api module</span></a> for details on the options.</p>
+<section id="using-the-community-routeros-api-module-defaults-group">
+<h2>Using the <code class="docutils literal notranslate"><span class="pre">community.routeros.api</span></code> module defaults group<a class="headerlink" href="#using-the-community-routeros-api-module-defaults-group" title="Permalink to this headline"></a></h2>
+<p>To avoid having to specify common parameters for all the API based modules in every task, you can use the <code class="docutils literal notranslate"><span class="pre">community.routeros.api</span></code> module defaults group:</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RouterOS test with API</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+  <span class="nt">module_defaults</span><span class="p">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">group/community.routeros.api</span>
+      <span class="l l-Scalar l-Scalar-Plain">hostname</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+      <span class="l l-Scalar l-Scalar-Plain">password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+      <span class="l l-Scalar l-Scalar-Plain">username</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">test1234</span>
+      <span class="l l-Scalar l-Scalar-Plain"># The following options configure TLS/SSL.</span>
+      <span class="l l-Scalar l-Scalar-Plain"># Depending on your setup, these options need different values</span><span class="p p-Indicator">:</span>
+      <span class="nt">tls</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">validate_cert_hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="c1"># If you are using your own PKI, specify the path to your CA certificate here:</span>
+      <span class="c1"># ca_path: /path/to/ca-certificate.pem</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Gather facts&quot;</span>
+      <span class="nt">community.routeros.api_facts</span><span class="p">:</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Get &quot;ip address print&quot;</span>
+      <span class="nt">community.routeros.api</span><span class="p">:</span>
+        <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;ip</span><span class="nv"> </span><span class="s">address&quot;</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Change IP address to 192.168.1.1 for interface bridge</span>
+      <span class="nt">community.routeros.api_find_and_modify</span><span class="p">:</span>
+        <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ip address</span>
+        <span class="nt">find</span><span class="p">:</span>
+          <span class="nt">interface</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bridge</span>
+        <span class="nt">values</span><span class="p">:</span>
+          <span class="nt">address</span><span class="p">:</span> <span class="s">&quot;192.168.1.1/24&quot;</span>
+</pre></div>
+</div>
+<p>Here all three tasks will use the options set for the module defaults group.</p>
+</section>
+<section id="setting-up-encryption">
+<h2>Setting up encryption<a class="headerlink" href="#setting-up-encryption" title="Permalink to this headline"></a></h2>
+<p>It is recommended to always use <code class="docutils literal notranslate"><span class="pre">tls:</span> <span class="pre">true</span></code> when connecting with the API, even if you are only connecting to the device through a trusted network. The following options control how TLS/SSL is used:</p>
+<dl class="field-list simple">
+<dt class="field-odd">validate_certs</dt>
+<dd class="field-odd"><p>Setting to <code class="docutils literal notranslate"><span class="pre">false</span></code> disables any certificate validation. <strong>This is discouraged to use in production</strong>, but is needed when setting the device up. The default value is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</dd>
+<dt class="field-even">validate_cert_hostname</dt>
+<dd class="field-even"><p>Setting to <code class="docutils literal notranslate"><span class="pre">false</span></code> (default) disables hostname verification during certificate validation. This is needed if the hostnames specified in the certificate do not match the hostname used for connecting (usually the device’s IP). It is recommended to set up the certificate correctly and set this to <code class="docutils literal notranslate"><span class="pre">true</span></code>; the default <code class="docutils literal notranslate"><span class="pre">false</span></code> is chosen for backwards compatibility to an older version of the module.</p>
+</dd>
+<dt class="field-odd">ca_path</dt>
+<dd class="field-odd"><p>If you are not using a commerically trusted CA certificate to sign your device’s certificate, or have not included your CA certificate in Python’s truststore, you need to point this option to the CA certificate.</p>
+</dd>
+</dl>
+<p>We recommend to create a CA certificate that is used to sign the certificates for your RouterOS devices, and have the certificates include the correct hostname(s), including the IP of the device. That way, you can fully enable TLS and be sure that you always talk to the correct device.</p>
+<section id="setting-up-a-pki">
+<h3>Setting up a PKI<a class="headerlink" href="#setting-up-a-pki" title="Permalink to this headline"></a></h3>
+<p>Please follow the instructions in the <code class="docutils literal notranslate"><span class="pre">community.crypto</span></code> <a class="reference internal" href="../../crypto/docsite/guide_ownca.html#ansible-collections-community-crypto-docsite-guide-ownca"><span class="std std-ref">How to create a small CA</span></a> guide to set up a CA certificate and sign a certificate for your router. You should add a Subject Alternative Name for the IP address (for example <code class="docutils literal notranslate"><span class="pre">IP:192.168.1.1</span></code>) and - if available - for the DNS name (for example <code class="docutils literal notranslate"><span class="pre">DNS:router.local</span></code>) to the certificate.</p>
+</section>
+<section id="installing-a-certificate-on-a-mikrotik-router">
+<h3>Installing a certificate on a MikroTik router<a class="headerlink" href="#installing-a-certificate-on-a-mikrotik-router" title="Permalink to this headline"></a></h3>
+<p>Installing the certificate is best done with the SSH connection. (See the <a class="reference internal" href="ssh-guide.html#ansible-collections-community-routeros-docsite-ssh-guide"><span class="std std-ref">How to connect to RouterOS devices with SSH</span></a> guide for more information.) Once the certificate has been installed, and the HTTPS API enabled, it’s easier to work with the API, since it has a quite a few less problems, and returns data as JSON objects instead of text you first have to parse.</p>
+<p>First you have to convert the certificate and its private key to a <a class="reference external" href="https://en.wikipedia.org/wiki/PKCS_12">PKCS #12 bundle</a>. This can be done with the <a class="reference internal" href="../../crypto/openssl_pkcs12_module.html#ansible-collections-community-crypto-openssl-pkcs12-module"><span class="std std-ref">community.crypto.openssl_pkcs12</span></a>. The following playbook assumes that the certificate is available as <code class="docutils literal notranslate"><span class="pre">keys/{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}.pem</span></code>, and its private key is available as <code class="docutils literal notranslate"><span class="pre">keys/{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}.key</span></code>. It generates a random passphrase to protect the PKCS#12 file.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install certificates on devices</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">routers</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">block</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">set_fact</span><span class="p">:</span>
+            <span class="nt">random_password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;community.general.random_string&#39;</span><span class="o">,</span> <span class="nv">length</span><span class="o">=</span><span class="m">32</span><span class="o">,</span> <span class="nv">override_all</span><span class="o">=</span><span class="s1">&#39;0123456789abcdefghijklmnopqrstuvwxyz&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create PKCS#12 bundle</span>
+          <span class="nt">openssl_pkcs12</span><span class="p">:</span>
+            <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keys/</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">.p12</span>
+            <span class="nt">certificate_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keys/</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">.pem</span>
+            <span class="nt">privatekey_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keys/</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">.key</span>
+            <span class="nt">friendly_name</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&#39;</span>
+            <span class="nt">passphrase</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">random_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+            <span class="nt">mode</span><span class="p">:</span> <span class="s">&quot;0600&quot;</span>
+          <span class="nt">changed_when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy router certificate onto router</span>
+          <span class="nt">ansible.netcommon.net_put</span><span class="p">:</span>
+            <span class="nt">src</span><span class="p">:</span> <span class="s">&#39;keys/</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">.p12&#39;</span>
+            <span class="nt">dest</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">.p12&#39;</span>
+
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install router certificate and clean up</span>
+          <span class="nt">community.routeros.command</span><span class="p">:</span>
+            <span class="nt">commands</span><span class="p">:</span>
+              <span class="c1"># Import certificate:</span>
+              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/certificate import name=</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> file-name=</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">.p12 passphrase=&quot;</span><span class="cp">{{</span> <span class="nv">random_password</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">&quot;</span>
+              <span class="c1"># Remove PKCS12 bundle:</span>
+              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/file remove </span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">.p12</span>
+              <span class="c1"># Show certificates</span>
+              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/certificate print</span>
+          <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">output</span>
+
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show result of certificate import</span>
+          <span class="nt">debug</span><span class="p">:</span>
+            <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">output.stdout_lines[0]</span>
+
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show certificates</span>
+          <span class="nt">debug</span><span class="p">:</span>
+            <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">output.stdout_lines[2]</span>
+
+      <span class="nt">always</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Wipe PKCS12 bundle</span>
+          <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wipe keys/</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">.p12</span>
+          <span class="nt">changed_when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Use certificate</span>
+      <span class="nt">community.routeros.command</span><span class="p">:</span>
+        <span class="nt">commands</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/ip service set www-ssl address=</span><span class="cp">{{</span> <span class="nv">admin_network</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> certificate=</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> disabled=no tls-version=only-1.2</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/ip service set api-ssl address=</span><span class="cp">{{</span> <span class="nv">admin_network</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> certificate=</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> tls-version=only-1.2</span>
+</pre></div>
+</div>
+<p>The playbook also assumes that <code class="docutils literal notranslate"><span class="pre">admin_network</span></code> describes the network from which the HTTPS and API interface can be accessed. This can be for example <code class="docutils literal notranslate"><span class="pre">192.168.1.0/24</span></code>.</p>
+<p>When this playbook completed successfully, you should be able to use the HTTPS admin interface (reachable in a browser from <code class="docutils literal notranslate"><span class="pre">https://192.168.1.1/</span></code>, with the correct IP inserted), as well as the <a class="reference internal" href="../api_module.html#ansible-collections-community-routeros-api-module"><span class="std std-ref">community.routeros.api module</span></a> module with TLS and certificate validation enabled:</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">community.routeros.api</span><span class="p">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">...</span>
+    <span class="l l-Scalar l-Scalar-Plain">tls</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">validate_cert_hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">ca_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/ca-certificate.pem</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Community.Routeros" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ssh-guide.html" class="btn btn-neutral float-right" title="How to connect to RouterOS devices with SSH" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 21, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

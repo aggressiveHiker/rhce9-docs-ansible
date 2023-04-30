@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing Ansible &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/testing.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The lifecycle of an Ansible module or plugin" href="module_lifecycle.html" />
+    <link rel="prev" title="Creating a new collection" href="developing_modules_in_groups.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="developing_locally.html">Adding modules and plugins locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules.html">Should you develop a module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general.html">Developing modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_checklist.html">Contributing your module to an existing Ansible collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_best_practices.html">Conventions, tips, and pitfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_python_3.html">Ansible and Python 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_documenting.html">Module format and documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_windows.html">Windows module development walkthrough</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_aci.html">Developing Cisco ACI modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/aws_guidelines.html">Guidelines for Ansible Amazon AWS module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/openstack_guidelines.html">OpenStack Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/ovirt_dev_guide.html">oVirt Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/vmware_guidelines.html">Guidelines for VMware module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/vmware_rest_guidelines.html">Guidelines for VMware REST module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_in_groups.html">Creating a new collection</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Testing Ansible</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#why-test-your-ansible-contributions">Why test your Ansible contributions?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#types-of-tests">Types of tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-within-github-azure-pipelines">Testing within GitHub &amp; Azure Pipelines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#organization">Organization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rerunning-a-failing-ci-job">Rerunning a failing CI job</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-test-a-pr">How to test a PR</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#setup-checking-out-a-pull-request">Setup: Checking out a Pull Request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-the-pull-request">Testing the Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#want-to-know-more-about-testing">Want to know more about testing?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="module_lifecycle.html">The lifecycle of an Ansible module or plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_plugins.html">Developing plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_inventory.html">Developing dynamic inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_core.html">Developing <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_program_flow_modules.html">Ansible module architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections_galaxy_meta.html">Collection Galaxy metadata structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_architecture.html">Ansible architecture</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Developer Guide</a> &raquo;</li>
+      <li>Testing Ansible</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/dev_guide/testing.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="testing-ansible">
+<span id="developing-testing"></span><h1>Testing Ansible<a class="headerlink" href="#testing-ansible" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#why-test-your-ansible-contributions" id="id1">Why test your Ansible contributions?</a></p></li>
+<li><p><a class="reference internal" href="#types-of-tests" id="id2">Types of tests</a></p></li>
+<li><p><a class="reference internal" href="#testing-within-github-azure-pipelines" id="id3">Testing within GitHub &amp; Azure Pipelines</a></p>
+<ul>
+<li><p><a class="reference internal" href="#organization" id="id4">Organization</a></p></li>
+<li><p><a class="reference internal" href="#rerunning-a-failing-ci-job" id="id5">Rerunning a failing CI job</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#how-to-test-a-pr" id="id6">How to test a PR</a></p>
+<ul>
+<li><p><a class="reference internal" href="#setup-checking-out-a-pull-request" id="id7">Setup: Checking out a Pull Request</a></p></li>
+<li><p><a class="reference internal" href="#testing-the-pull-request" id="id8">Testing the Pull Request</a></p>
+<ul>
+<li><p><a class="reference internal" href="#run-sanity-tests" id="id9">Run sanity tests</a></p></li>
+<li><p><a class="reference internal" href="#run-unit-tests" id="id10">Run unit tests</a></p></li>
+<li><p><a class="reference internal" href="#run-integration-tests" id="id11">Run integration tests</a></p></li>
+<li><p><a class="reference internal" href="#code-coverage-online" id="id12">Code Coverage Online</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#want-to-know-more-about-testing" id="id13">Want to know more about testing?</a></p></li>
+</ul>
+</div>
+<section id="why-test-your-ansible-contributions">
+<h2><a class="toc-backref" href="#id1">Why test your Ansible contributions?</a><a class="headerlink" href="#why-test-your-ansible-contributions" title="Permalink to this headline"></a></h2>
+<p>If you’re a developer, one of the most valuable things you can do is to look at GitHub issues and help fix bugs, since bug-fixing is almost always prioritized over feature development.  Even for non-developers, helping to test pull requests for bug fixes and features is still immensely valuable.</p>
+<p>Ansible users who understand how to write playbooks and roles should be able to test their work.  GitHub pull requests will automatically run a variety of tests (for example, Azure Pipelines) that show bugs in action.  However, contributors must also test their work outside of the automated GitHub checks and show evidence of these tests in the PR to ensure that their work will be more likely to be reviewed and merged.</p>
+<p>Read on to learn how Ansible is tested, how to test your contributions locally, and how to extend testing capabilities.</p>
+<p>If you want to learn about testing collections, read <a class="reference internal" href="developing_collections_testing.html#testing-collections"><span class="std std-ref">Testing collections</span></a></p>
+</section>
+<section id="types-of-tests">
+<h2><a class="toc-backref" href="#id2">Types of tests</a><a class="headerlink" href="#types-of-tests" title="Permalink to this headline"></a></h2>
+<p>At a high level we have the following classifications of tests:</p>
+<dl class="field-list simple">
+<dt class="field-odd">compile</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="testing_compile.html#testing-compile"><span class="std std-ref">Compile Tests</span></a></p></li>
+<li><p>Test python code against a variety of Python versions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">sanity</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="testing_sanity.html#testing-sanity"><span class="std std-ref">Sanity Tests</span></a></p></li>
+<li><p>Sanity tests are made up of scripts and tools used to perform static code analysis.</p></li>
+<li><p>The primary purpose of these tests is to enforce Ansible coding standards and requirements.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">integration</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="testing_integration.html#testing-integration"><span class="std std-ref">Integration tests</span></a></p></li>
+<li><p>Functional tests of modules and Ansible core functionality.</p></li>
+</ul>
+</dd>
+<dt class="field-even">units</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="testing_units.html#testing-units"><span class="std std-ref">Unit Tests</span></a></p></li>
+<li><p>Tests directly against individual parts of the code base.</p></li>
+</ul>
+</dd>
+</dl>
+<p>If you’re a developer, one of the most valuable things you can do is look at the GitHub
+issues list and help fix bugs.  We almost always prioritize bug fixing over feature
+development.</p>
+<p>Even for non developers, helping to test pull requests for bug fixes and features is still
+immensely valuable.  Ansible users who understand writing playbooks and roles should be
+able to add integration tests and so GitHub pull requests with integration tests that show
+bugs in action will also be a great way to help.</p>
+</section>
+<section id="testing-within-github-azure-pipelines">
+<h2><a class="toc-backref" href="#id3">Testing within GitHub &amp; Azure Pipelines</a><a class="headerlink" href="#testing-within-github-azure-pipelines" title="Permalink to this headline"></a></h2>
+<section id="organization">
+<h3><a class="toc-backref" href="#id4">Organization</a><a class="headerlink" href="#organization" title="Permalink to this headline"></a></h3>
+<p>When Pull Requests (PRs) are created they are tested using Azure Pipelines, a Continuous Integration (CI) tool. Results are shown at the end of every PR.</p>
+<p>When Azure Pipelines detects an error and it can be linked back to a file that has been modified in the PR then the relevant lines will be added as a GitHub comment. For example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The test `ansible-test sanity --test pep8` failed with the following errors:
+
+lib/ansible/modules/network/foo/bar.py:509:17: E265 block comment should start with &#39;# &#39;
+
+The test `ansible-test sanity --test validate-modules` failed with the following error:
+lib/ansible/modules/network/foo/bar.py:0:0: E307 version_added should be 2.4. Currently 2.3
+</pre></div>
+</div>
+<p>From the above example we can see that <code class="docutils literal notranslate"><span class="pre">--test</span> <span class="pre">pep8</span></code> and <code class="docutils literal notranslate"><span class="pre">--test</span> <span class="pre">validate-modules</span></code> have identified an issue. The commands given allow you to run the same tests locally to ensure you’ve fixed all issues without having to push your changes to GitHub and wait for Azure Pipelines, for example:</p>
+<p>If you haven’t already got Ansible available, use the local checkout by running:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">source hacking/env-setup</span>
+</pre></div>
+</div>
+<p>Then run the tests detailed in the GitHub comment:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">ansible-test sanity --test pep8</span>
+<span class="go">ansible-test sanity --test validate-modules</span>
+</pre></div>
+</div>
+<p>If there isn’t a GitHub comment stating what’s failed you can inspect the results by clicking on the “Details” button under the “checks have failed” message at the end of the PR.</p>
+</section>
+<section id="rerunning-a-failing-ci-job">
+<h3><a class="toc-backref" href="#id5">Rerunning a failing CI job</a><a class="headerlink" href="#rerunning-a-failing-ci-job" title="Permalink to this headline"></a></h3>
+<p>Occasionally you may find your PR fails due to a reason unrelated to your change. This could happen for several reasons, including:</p>
+<ul class="simple">
+<li><p>a temporary issue accessing an external resource, such as a yum or git repo</p></li>
+<li><p>a timeout creating a virtual machine to run the tests on</p></li>
+</ul>
+<p>If either of these issues appear to be the case, you can rerun the Azure Pipelines test by:</p>
+<ul class="simple">
+<li><p>adding a comment with <code class="docutils literal notranslate"><span class="pre">/rebuild</span></code> (full rebuild) or <code class="docutils literal notranslate"><span class="pre">/rebuild_failed</span></code> (rebuild only failed CI nodes) to the PR</p></li>
+<li><p>closing and re-opening the PR (full rebuild)</p></li>
+<li><p>making another change to the PR and pushing to GitHub</p></li>
+</ul>
+<p>If the issue persists, please contact us in the <code class="docutils literal notranslate"><span class="pre">#ansible-devel</span></code> chat channel (using Matrix at ansible.im or using IRC at <a class="reference external" href="https://libera.chat/">irc.libera.chat</a>).</p>
+</section>
+</section>
+<section id="how-to-test-a-pr">
+<h2><a class="toc-backref" href="#id6">How to test a PR</a><a class="headerlink" href="#how-to-test-a-pr" title="Permalink to this headline"></a></h2>
+<p>Ideally, code should add tests that prove that the code works. That’s not always possible and tests are not always comprehensive, especially when a user doesn’t have access to a wide variety of platforms, or is using an API or web service. In these cases, live testing against real equipment can be more valuable than automation that runs against simulated interfaces. In any case, things should always be tested manually the first time as well.</p>
+<p>Thankfully, helping to test Ansible is pretty straightforward, assuming you are familiar with how Ansible works.</p>
+<section id="setup-checking-out-a-pull-request">
+<h3><a class="toc-backref" href="#id7">Setup: Checking out a Pull Request</a><a class="headerlink" href="#setup-checking-out-a-pull-request" title="Permalink to this headline"></a></h3>
+<p>You can do this by:</p>
+<ul class="simple">
+<li><p>checking out Ansible</p></li>
+<li><p>fetching the proposed changes into a test branch</p></li>
+<li><p>testing</p></li>
+<li><p>commenting on that particular issue on GitHub</p></li>
+</ul>
+<p>Here’s how:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Testing source code from GitHub pull requests sent to us does have some inherent risk, as the source code
+sent may have mistakes or malicious code that could have a negative impact on your system. We recommend
+doing all testing on a virtual machine, whether a cloud instance, or locally.  Some users like Vagrant
+or Docker for this, but they are optional. It is also useful to have virtual machines of different Linux or
+other flavors, since some features (for example, package managers such as apt or yum) are specific to those OS versions.</p>
+</div>
+<p>Create a fresh area to work:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/ansible/ansible.git ansible-pr-testing</span>
+<span class="go">cd ansible-pr-testing</span>
+</pre></div>
+</div>
+<p>Next, find the pull request you’d like to test and make note of its number. It will look something like this:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Use os.path.sep instead of hardcoding /</span> <span class="c1">#65381</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only test <code class="docutils literal notranslate"><span class="pre">ansible:devel</span></code></p>
+<p>It is important that the PR request target be <code class="docutils literal notranslate"><span class="pre">ansible:devel</span></code>, as we do not accept pull requests into any other branch. Dot releases are cherry-picked manually by Ansible staff.</p>
+</div>
+<p>Use the pull request number when you fetch the proposed changes and create your branch for testing:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">git fetch origin refs/pull/XXXX/head:testing_PRXXXX</span>
+<span class="go">git checkout testing_PRXXXX</span>
+</pre></div>
+</div>
+<p>The first command fetches the proposed changes from the pull request and creates a new branch named <code class="docutils literal notranslate"><span class="pre">testing_PRXXXX</span></code>, where the XXXX is the actual number associated with the pull request (for example, 65381). The second command checks out the newly created branch.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the GitHub user interface shows that the pull request will not merge cleanly, we do not recommend proceeding if you are not somewhat familiar with git and coding, as you will have to resolve a merge conflict. This is the responsibility of the original pull request contributor.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some users do not create feature branches, which can cause problems when they have multiple, unrelated commits in their version of <code class="docutils literal notranslate"><span class="pre">devel</span></code>. If the source looks like <code class="docutils literal notranslate"><span class="pre">someuser:devel</span></code>, make sure there is only one commit listed on the pull request.</p>
+</div>
+<p>The Ansible source includes a script that allows you to use Ansible directly from source without requiring a
+full installation that is frequently used by developers on Ansible.</p>
+<p>Simply source it (to use the Linux/Unix terminology) to begin using it immediately:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="go">source ./hacking/env-setup</span>
+</pre></div>
+</div>
+<p>This script modifies the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variables (along with a few other things), which will be temporarily
+set as long as your shell session is open.</p>
+</section>
+<section id="testing-the-pull-request">
+<h3><a class="toc-backref" href="#id8">Testing the Pull Request</a><a class="headerlink" href="#testing-the-pull-request" title="Permalink to this headline"></a></h3>
+<p>At this point, you should be ready to begin testing!</p>
+<p>Some ideas of what to test are:</p>
+<ul class="simple">
+<li><p>Create a test Playbook with the examples in and check if they function correctly</p></li>
+<li><p>Test to see if any Python backtraces returned (that’s a bug)</p></li>
+<li><p>Test on different operating systems, or against different library versions</p></li>
+</ul>
+<section id="run-sanity-tests">
+<h4><a class="toc-backref" href="#id9">Run sanity tests</a><a class="headerlink" href="#run-sanity-tests" title="Permalink to this headline"></a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible-test sanity
+</pre></div>
+</div>
+<p>More information: <a class="reference internal" href="testing_sanity.html#testing-sanity"><span class="std std-ref">Sanity Tests</span></a></p>
+</section>
+<section id="run-unit-tests">
+<h4><a class="toc-backref" href="#id10">Run unit tests</a><a class="headerlink" href="#run-unit-tests" title="Permalink to this headline"></a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible-test units
+</pre></div>
+</div>
+<p>More information: <a class="reference internal" href="testing_units.html#testing-units"><span class="std std-ref">Unit Tests</span></a></p>
+</section>
+<section id="run-integration-tests">
+<h4><a class="toc-backref" href="#id11">Run integration tests</a><a class="headerlink" href="#run-integration-tests" title="Permalink to this headline"></a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible-test integration -v ping
+</pre></div>
+</div>
+<p>More information: <a class="reference internal" href="testing_integration.html#testing-integration"><span class="std std-ref">Integration tests</span></a></p>
+<p>Any potential issues should be added as comments on the pull request (and it’s acceptable to comment if the feature works as well), remembering to include the output of <code class="docutils literal notranslate"><span class="pre">ansible</span> <span class="pre">--version</span></code></p>
+<p>Example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Works for me! Tested on `Ansible 2.3.0`.  I verified this on CentOS 6.5 and also Ubuntu 14.04.</span>
+</pre></div>
+</div>
+<p>If the PR does not resolve the issue, or if you see any failures from the unit/integration tests, just include that output instead:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">This change causes errors for me.</div>
+<div class="line"><br /></div>
+<div class="line">When I ran this Ubuntu 16.04 it failed with the following:</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">```</div>
+<div class="line">some output</div>
+<div class="line">StackTrace</div>
+<div class="line">some other output</div>
+<div class="line">```</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="code-coverage-online">
+<h4><a class="toc-backref" href="#id12">Code Coverage Online</a><a class="headerlink" href="#code-coverage-online" title="Permalink to this headline"></a></h4>
+<p><a class="reference external" href="https://codecov.io/gh/ansible/ansible">The online code coverage reports</a> are a good way
+to identify areas for testing improvement in Ansible.  By following red colors you can
+drill down through the reports to find files which have no tests at all.  Adding both
+integration and unit tests which show clearly how code should work, verify important
+Ansible functions and increase testing coverage in areas where there is none is a valuable
+way to help improve Ansible.</p>
+<p>The code coverage reports only cover the <code class="docutils literal notranslate"><span class="pre">devel</span></code> branch of Ansible where new feature
+development takes place.  Pull requests and new code will be missing from the codecov.io
+coverage reports so local reporting is needed.  Most <code class="docutils literal notranslate"><span class="pre">ansible-test</span></code> commands allow you
+to collect code coverage, this is particularly useful to indicate where to extend
+testing. See <a class="reference internal" href="testing_running_locally.html#testing-running-locally"><span class="std std-ref">Testing Ansible</span></a> for more information.</p>
+</section>
+</section>
+</section>
+<section id="want-to-know-more-about-testing">
+<h2><a class="toc-backref" href="#id13">Want to know more about testing?</a><a class="headerlink" href="#want-to-know-more-about-testing" title="Permalink to this headline"></a></h2>
+<p>If you’d like to know more about the plans for improving testing Ansible then why not join the
+<a class="reference external" href="https://github.com/ansible/community/blob/master/meetings/README.md">Testing Working Group</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="developing_modules_in_groups.html" class="btn btn-neutral float-left" title="Creating a new collection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="module_lifecycle.html" class="btn btn-neutral float-right" title="The lifecycle of an Ansible module or plugin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

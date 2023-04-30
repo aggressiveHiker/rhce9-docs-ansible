@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ansible.builtin.yum module – Manages packages with the yum package manager &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ansible.builtin.yum_repository module – Add or remove YUM repositories" href="yum_repository_module.html" />
+    <link rel="prev" title="ansible.builtin.wait_for_connection module – Waits until remote system is reachable/usable" href="wait_for_connection_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Ansible.Builtin</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../netcommon/index.html">Ansible.Netcommon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../posix/index.html">Ansible.Posix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/index.html">Ansible.Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../windows/index.html">Ansible.Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../community/index.html">Collections in the Community Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vmware/index.html">Collections in the Vmware Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Collection Index</a> &raquo;</li>
+          <li><a href="../index.html">Collections in the Ansible Namespace</a> &raquo;</li>
+          <li><a href="index.html">Ansible.Builtin</a> &raquo;</li>
+      <li>ansible.builtin.yum module – Manages packages with the <em>yum</em> package manager</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/yum.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-ansible-builtin-yum-module"></span><span class="target" id="yum-module"></span><section id="ansible-builtin-yum-module-manages-packages-with-the-yum-package-manager">
+<h1>ansible.builtin.yum module – Manages packages with the <em>yum</em> package manager<a class="headerlink" href="#ansible-builtin-yum-module-manages-packages-with-the-yum-package-manager" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module    is part of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> and included in all Ansible
+installations. In most cases, you can use the short
+module name
+<code class="docutils literal notranslate"><span class="pre">yum</span></code> even without specifying the <code class="docutils literal notranslate"><span class="pre">collections:</span></code> keyword.
+However, we recommend you use the FQCN for easy linking to the
+module    documentation and to avoid conflicting with other collections that may have
+the same module name.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#attributes" id="id4">Attributes</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id5">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+</ul>
+</div>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Installs, upgrade, downgrades, removes, and lists packages and groups with the <em>yum</em> package manager.</p></li>
+<li><p>This module only works on Python 2. If you require Python 3 support see the <a class="reference internal" href="dnf_module.html#ansible-collections-ansible-builtin-dnf-module"><span class="std std-ref">ansible.builtin.dnf</span></a> module.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module has a corresponding <a class="reference internal" href="../../../plugins/action.html#action-plugins"><span class="std std-ref">action plugin</span></a>.</p>
+</div>
+</section>
+<section id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li><p>yum</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline"></a></h2>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-allow_downgrade"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-allow-downgrade"><strong>allow_downgrade</strong></p>
+<a class="ansibleOptionLink" href="#parameter-allow_downgrade" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.4 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specify if the named package and version is allowed to downgrade a maybe already installed higher version of that package. Note that setting allow_downgrade=True can make this module behave in a non-idempotent way. The task could end up with a set of packages that does not match the complete list of specified packages to install (because dependencies between the downgraded package and others can cause changes to the packages which were in the earlier transaction).</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-autoremove"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-autoremove"><strong>autoremove</strong></p>
+<a class="ansibleOptionLink" href="#parameter-autoremove" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.7 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If <code class="docutils literal notranslate"><span class="pre">yes</span></code>, removes all “leaf” packages from the system that were originally installed as dependencies of user-installed packages but which are no longer required by any such package. Should be used alone or when state is <em>absent</em></p>
+<p>NOTE: This feature requires yum &gt;= 3.4.3 (RHEL/CentOS 7+)</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-bugfix"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-bugfix"><strong>bugfix</strong></p>
+<a class="ansibleOptionLink" href="#parameter-bugfix" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.6 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>, and <code class="docutils literal notranslate"><span class="pre">state=latest</span></code> then only installs updates that have been marked bugfix related.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-cacheonly"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-cacheonly"><strong>cacheonly</strong></p>
+<a class="ansibleOptionLink" href="#parameter-cacheonly" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.12 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Tells yum to run entirely from system cache; does not download or update metadata.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-conf_file"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-conf-file"><strong>conf_file</strong></p>
+<a class="ansibleOptionLink" href="#parameter-conf_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 0.6 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The remote yum configuration file to use for the transaction.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-disable_excludes"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-disable-excludes"><strong>disable_excludes</strong></p>
+<a class="ansibleOptionLink" href="#parameter-disable_excludes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.7 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Disable the excludes defined in YUM config files.</p>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">all</span></code>, disables all excludes.</p>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">main</span></code>, disable excludes defined in [main] in yum.conf.</p>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">repoid</span></code>, disable excludes defined for given repo id.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-disable_gpg_check"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-disable-gpg-check"><strong>disable_gpg_check</strong></p>
+<a class="ansibleOptionLink" href="#parameter-disable_gpg_check" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 1.2 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether to disable the GPG checking of signatures of packages being installed. Has an effect only if state is <em>present</em> or <em>latest</em>.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-disable_plugin"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-disable-plugin"><strong>disable_plugin</strong></p>
+<a class="ansibleOptionLink" href="#parameter-disable_plugin" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.5 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p><em>Plugin</em> name to disable for the install/update operation. The disabled plugins will not persist beyond the transaction.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-disablerepo"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-disablerepo"><strong>disablerepo</strong></p>
+<a class="ansibleOptionLink" href="#parameter-disablerepo" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p><em>Repoid</em> of repositories to disable for the install/update operation. These repos will not persist beyond the transaction. When specifying multiple repos, separate them with a <code class="docutils literal notranslate"><span class="pre">&quot;,&quot;</span></code>.</p>
+<p>As of Ansible 2.7, this can alternatively be a list instead of <code class="docutils literal notranslate"><span class="pre">&quot;,&quot;</span></code> separated string</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-download_dir"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-download-dir"><strong>download_dir</strong></p>
+<a class="ansibleOptionLink" href="#parameter-download_dir" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies an alternate directory to store packages.</p>
+<p>Has an effect only if <em>download_only</em> is specified.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-download_only"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-download-only"><strong>download_only</strong></p>
+<a class="ansibleOptionLink" href="#parameter-download_only" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.7 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Only download the packages, do not install them.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-enable_plugin"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-enable-plugin"><strong>enable_plugin</strong></p>
+<a class="ansibleOptionLink" href="#parameter-enable_plugin" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.5 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p><em>Plugin</em> name to enable for the install/update operation. The enabled plugin will not persist beyond the transaction.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-enablerepo"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-enablerepo"><strong>enablerepo</strong></p>
+<a class="ansibleOptionLink" href="#parameter-enablerepo" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><span class="ansible-option-versionadded">added in 0.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p><em>Repoid</em> of repositories to enable for the install/update operation. These repos will not persist beyond the transaction. When specifying multiple repos, separate them with a <code class="docutils literal notranslate"><span class="pre">&quot;,&quot;</span></code>.</p>
+<p>As of Ansible 2.7, this can alternatively be a list instead of <code class="docutils literal notranslate"><span class="pre">&quot;,&quot;</span></code> separated string</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-exclude"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-exclude"><strong>exclude</strong></p>
+<a class="ansibleOptionLink" href="#parameter-exclude" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.0 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Package name(s) to exclude when state=present, or latest</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-install_repoquery"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-install-repoquery"><strong>install_repoquery</strong></p>
+<a class="ansibleOptionLink" href="#parameter-install_repoquery" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 1.5 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If repoquery is not available, install yum-utils. If the system is registered to RHN or an RHN Satellite, repoquery allows for querying all channels assigned to the system. It is also required to use the ‘list’ parameter.</p>
+<p>NOTE: This will run and be logged as a separate yum transation which takes place before any other installation or removal.</p>
+<p>NOTE: This will use the system’s default enabled repositories without regard for disablerepo/enablerepo given to the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">no</span></p></li>
+<li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-install_weak_deps"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-install-weak-deps"><strong>install_weak_deps</strong></p>
+<a class="ansibleOptionLink" href="#parameter-install_weak_deps" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Will also install all packages linked by a weak dependency relation.</p>
+<p>NOTE: This feature requires yum &gt;= 4 (RHEL/CentOS 8+)</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">no</span></p></li>
+<li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-installroot"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-installroot"><strong>installroot</strong></p>
+<a class="ansibleOptionLink" href="#parameter-installroot" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.3 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies an alternative installroot, relative to which all packages will be installed.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“/”</span></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-list"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-list"><strong>list</strong></p>
+<a class="ansibleOptionLink" href="#parameter-list" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Package name to run the equivalent of yum list <code class="docutils literal notranslate"><span class="pre">--show-duplicates</span> <span class="pre">&lt;package&gt;</span></code> against. In addition to listing packages, use can also list the following: <code class="docutils literal notranslate"><span class="pre">installed</span></code>, <code class="docutils literal notranslate"><span class="pre">updates</span></code>, <code class="docutils literal notranslate"><span class="pre">available</span></code> and <code class="docutils literal notranslate"><span class="pre">repos</span></code>.</p>
+<p>This parameter is mutually exclusive with <em>name</em>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-lock_timeout"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-lock-timeout"><strong>lock_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-lock_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Amount of time to wait for the yum lockfile to be freed.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">30</span></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-name"></div>
+<div class="ansibleOptionAnchor" id="parameter-pkg"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-pkg"><span id="ansible-collections-ansible-builtin-yum-module-parameter-name"></span><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: pkg</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A package name or package specifier with version, like <code class="docutils literal notranslate"><span class="pre">name-1.0</span></code>.</p>
+<p>Comparison operators for package version are valid here <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>. Example - <code class="docutils literal notranslate"><span class="pre">name&gt;=1.0</span></code></p>
+<p>If a previous version is specified, the task also needs to turn <code class="docutils literal notranslate"><span class="pre">allow_downgrade</span></code> on. See the <code class="docutils literal notranslate"><span class="pre">allow_downgrade</span></code> documentation for caveats with downgrading packages.</p>
+<p>When using state=latest, this can be <code class="docutils literal notranslate"><span class="pre">'*'</span></code> which means run <code class="docutils literal notranslate"><span class="pre">yum</span> <span class="pre">-y</span> <span class="pre">update</span></code>.</p>
+<p>You can also pass a url or a local path to a rpm file (using state=present). To operate on several packages this can accept a comma separated string of packages or (as of 2.0) a list of packages.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-releasever"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-releasever"><strong>releasever</strong></p>
+<a class="ansibleOptionLink" href="#parameter-releasever" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.7 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies an alternative release from which all packages will be installed.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-security"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-security"><strong>security</strong></p>
+<a class="ansibleOptionLink" href="#parameter-security" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.4 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>, and <code class="docutils literal notranslate"><span class="pre">state=latest</span></code> then only installs updates that have been marked security related.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-skip_broken"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-skip-broken"><strong>skip_broken</strong></p>
+<a class="ansibleOptionLink" href="#parameter-skip_broken" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.3 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Skip all unavailable packages or packages with broken dependencies without raising an error. Equivalent to passing the –skip-broken option.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sslverify"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-sslverify"><strong>sslverify</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sslverify" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.13 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Disables SSL validation of the repository server for this transaction.</p>
+<p>This should be set to <code class="docutils literal notranslate"><span class="pre">no</span></code> if one of the configured repositories is using an untrusted or self-signed certificate.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">no</span></p></li>
+<li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-state"><strong>state</strong></p>
+<a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether to install (<code class="docutils literal notranslate"><span class="pre">present</span></code> or <code class="docutils literal notranslate"><span class="pre">installed</span></code>, <code class="docutils literal notranslate"><span class="pre">latest</span></code>), or remove (<code class="docutils literal notranslate"><span class="pre">absent</span></code> or <code class="docutils literal notranslate"><span class="pre">removed</span></code>) a package.</p>
+<p><code class="docutils literal notranslate"><span class="pre">present</span></code> and <code class="docutils literal notranslate"><span class="pre">installed</span></code> will simply ensure that a desired package is installed.</p>
+<p><code class="docutils literal notranslate"><span class="pre">latest</span></code> will update the specified package if it’s not of the latest available version.</p>
+<p><code class="docutils literal notranslate"><span class="pre">absent</span></code> and <code class="docutils literal notranslate"><span class="pre">removed</span></code> will remove the specified package.</p>
+<p>Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>, however in effect the default action is <code class="docutils literal notranslate"><span class="pre">present</span></code> unless the <code class="docutils literal notranslate"><span class="pre">autoremove</span></code> option is enabled for this module, then <code class="docutils literal notranslate"><span class="pre">absent</span></code> is inferred.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
+<li><p><span class="ansible-option-choices-entry">installed</span></p></li>
+<li><p><span class="ansible-option-choices-entry">latest</span></p></li>
+<li><p><span class="ansible-option-choices-entry">present</span></p></li>
+<li><p><span class="ansible-option-choices-entry">removed</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-update_cache"></div>
+<div class="ansibleOptionAnchor" id="parameter-expire-cache"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-expire-cache"><span id="ansible-collections-ansible-builtin-yum-module-parameter-update-cache"></span><strong>update_cache</strong></p>
+<a class="ansibleOptionLink" href="#parameter-update_cache" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: expire-cache</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 1.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Force yum to check if cache is out of date and redownload if needed. Has an effect only if state is <em>present</em> or <em>latest</em>.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-update_only"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-update-only"><strong>update_only</strong></p>
+<a class="ansibleOptionLink" href="#parameter-update_only" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.5 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When using latest, only update installed packages. Do not install packages.</p>
+<p>Has an effect only if state is <em>latest</em></p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-use_backend"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-use-backend"><strong>use_backend</strong></p>
+<a class="ansibleOptionLink" href="#parameter-use_backend" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.7 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This module supports <code class="docutils literal notranslate"><span class="pre">yum</span></code> (as it always has), this is known as <code class="docutils literal notranslate"><span class="pre">yum3</span></code>/<code class="docutils literal notranslate"><span class="pre">YUM3</span></code>/<code class="docutils literal notranslate"><span class="pre">yum-deprecated</span></code> by upstream yum developers. As of Ansible 2.7+, this module also supports <code class="docutils literal notranslate"><span class="pre">YUM4</span></code>, which is the “new yum” and it has an <code class="docutils literal notranslate"><span class="pre">dnf</span></code> backend.</p>
+<p>By default, this module will select the backend based on the <code class="docutils literal notranslate"><span class="pre">ansible_pkg_mgr</span></code> fact.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">auto</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yum</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yum4</span></p></li>
+<li><p><span class="ansible-option-choices-entry">dnf</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-parameter-validate-certs"><strong>validate_certs</strong></p>
+<a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This only applies if using a https url as the source of the rpm. e.g. for localinstall. If set to <code class="docutils literal notranslate"><span class="pre">no</span></code>, the SSL certificates will not be validated.</p>
+<p>This should only set to <code class="docutils literal notranslate"><span class="pre">no</span></code> used on personally controlled sites using self-signed certificates as it avoids verifying the source site.</p>
+<p>Prior to 2.1 the code worked as if this was set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">no</span></p></li>
+<li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h2><a class="toc-backref" href="#id4">Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Support</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-action"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-attribute-action"><strong>action</strong></p>
+<a class="ansibleOptionLink" href="#attribute-action" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-partial">partial</span></p>
+<p>In the case of yum, it has 2 action plugins that use it under the hood, <a class="reference internal" href="#ansible-collections-ansible-builtin-yum-module"><span class="std std-ref">ansible.builtin.yum</span></a> and <a class="reference internal" href="package_module.html#ansible-collections-ansible-builtin-package-module"><span class="std std-ref">ansible.builtin.package</span></a>.</p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Indicates this has a corresponding action plugin so some parts of the options can be executed on the controller</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-async"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-attribute-async"><strong>async</strong></p>
+<a class="ansibleOptionLink" href="#attribute-async" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-none">none</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Supports being used with the <code class="docutils literal notranslate"><span class="pre">async</span></code> keyword</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-bypass_host_loop"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-attribute-bypass-host-loop"><strong>bypass_host_loop</strong></p>
+<a class="ansibleOptionLink" href="#attribute-bypass_host_loop" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-none">none</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Forces a ‘global’ task that does not execute per host, this bypasses per host templating and serial, throttle and other loop considerations</p>
+<p>Conditionals will work as if <code class="docutils literal notranslate"><span class="pre">run_once</span></code> is being used, variables used will be from the first available host</p>
+<p>This action will not work normally outside of lockstep strategies</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-attribute-check-mode"><strong>check_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-full">full</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Can run in check_mode and return changed status prediction without modifying target</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-full">full</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Will return details on what has changed (or possibly needs changing in check_mode), when in diff mode</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-platform"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-yum-module-attribute-platform"><strong>platform</strong></p>
+<a class="ansibleOptionLink" href="#attribute-platform" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-property">Platform:</span> <span class="ansible-attribute-support-full">rhel</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Target OS/families that can be operated against</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id5">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>When used with a <code class="docutils literal notranslate"><span class="pre">loop:</span></code> each package will be processed individually, it is much more efficient to pass the list directly to the <em>name</em> option.</p></li>
+<li><p>In versions prior to 1.9.2 this module installed and removed each package given to the yum module separately. This caused problems when packages specified by filename or url had to be installed or removed together. In 1.9.2 this was fixed so that packages are installed in one yum transaction. However, if one of the packages adds a new yum repository that the other packages come from (such as epel-release) then that package needs to be installed in a separate task. This mimics yum’s command line behaviour.</p></li>
+<li><p>Yum itself has two types of groups.  “Package groups” are specified in the rpm itself while “environment groups” are specified in a separate file (usually by the distribution).  Unfortunately, this division becomes apparent to ansible users because ansible needs to operate on the group of packages in a single transaction and yum requires groups to be specified in different ways when used in that way.  Package groups are specified as “&#64;development-tools” and environment groups are “&#64;^gnome-desktop-environment”. Use the “yum group list hidden ids” command to see which category of group the group you want to install falls into.</p></li>
+<li><p>The yum module does not support clearing yum cache in an idempotent way, so it was decided not to implement it, the only method is to use command and call the yum command directly, namely “command: yum clean all” <a class="reference external" href="https://github.com/ansible/ansible/pull/31450#issuecomment-352889579">https://github.com/ansible/ansible/pull/31450#issuecomment-352889579</a></p></li>
+</ul>
+</div>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id6">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install the latest version of Apache</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httpd</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install Apache &gt;= 2.4</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httpd&gt;=2.4</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install a list of packages (suitable replacement for 2.11 loop deprecation warning)</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">nginx</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">postgresql</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">postgresql-server</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install a list of packages with a list variable</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">packages</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">packages</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">httpd</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">httpd-tools</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Remove the Apache package</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httpd</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install the latest version of Apache from the testing repo</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httpd</span>
+    <span class="nt">enablerepo</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testing</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install one specific version of Apache</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httpd-2.2.29-1.4.amzn1</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Upgrade all packages</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&#39;*&#39;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Upgrade all packages, excluding kernel &amp; foo related packages</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&#39;*&#39;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+    <span class="nt">exclude</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kernel*,foo*</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install the nginx rpm from a remote repo</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install nginx rpm from a local file</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/local/src/nginx-release-centos-6-0.el6.ngx.noarch.rpm</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install the &#39;Development tools&#39; package group</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;@Development</span><span class="nv"> </span><span class="s">tools&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install the &#39;Gnome desktop&#39; environment group</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;@^gnome-desktop-environment&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">List ansible packages and register result to print with debug later</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">list</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install package with multiple repos enabled</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sos</span>
+    <span class="nt">enablerepo</span><span class="p">:</span> <span class="s">&quot;epel,ol7_latest&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install package with multiple repos disabled</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sos</span>
+    <span class="nt">disablerepo</span><span class="p">:</span> <span class="s">&quot;epel,ol7_latest&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Download the nginx package but do not install it</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">nginx</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+    <span class="nt">download_only</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Ansible Core Team</p></li>
+<li><p>Seth Vidal (&#64;skvidal)</p></li>
+<li><p>Eduard Snesarev (&#64;verm666)</p></li>
+<li><p>Berend De Schouwer (&#64;berenddeschouwer)</p></li>
+<li><p>Abhijeet Kasurde (&#64;Akasurde)</p></li>
+<li><p>Adam Miller (&#64;maxamillion)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Permalink to this headline"></a></h3>
+<p class="ansible-links">
+  <a href="https://github.com/ansible/ansible/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+  <a href="https://github.com/ansible/ansible" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  <a href="./#communication-for-ansible-builtin" aria-role="button" target="_blank">Communication</a>
+</p></section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="wait_for_connection_module.html" class="btn btn-neutral float-left" title="ansible.builtin.wait_for_connection module – Waits until remote system is reachable/usable" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yum_repository_module.html" class="btn btn-neutral float-right" title="ansible.builtin.yum_repository module – Add or remove YUM repositories" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 21, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

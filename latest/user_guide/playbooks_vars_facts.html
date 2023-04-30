@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discovering variables: facts and magic variables &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_vars_facts.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Encrypting content with Ansible Vault" href="vault.html" />
+    <link rel="prev" title="Using Variables" href="playbooks_variables.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#table-of-contents">Table of contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cheatsheet.html">Ansible CLI cheatsheet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Discovering variables: facts and magic variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ansible-facts">Ansible facts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#information-about-ansible-magic-variables">Information about Ansible: magic variables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Discovering variables: facts and magic variables</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/playbooks_vars_facts.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="discovering-variables-facts-and-magic-variables">
+<span id="vars-and-facts"></span><h1>Discovering variables: facts and magic variables<a class="headerlink" href="#discovering-variables-facts-and-magic-variables" title="Permalink to this headline"></a></h1>
+<p>With Ansible you can retrieve or discover certain variables containing information about your remote systems or about Ansible itself. Variables related to remote systems are called facts. With facts, you can use the behavior or state of one system as configuration on other systems. For example, you can use the IP address of one system as a configuration value on another system. Variables related to Ansible are called magic variables.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#ansible-facts" id="id3">Ansible facts</a></p>
+<ul>
+<li><p><a class="reference internal" href="#package-requirements-for-fact-gathering" id="id4">Package requirements for fact gathering</a></p></li>
+<li><p><a class="reference internal" href="#caching-facts" id="id5">Caching facts</a></p></li>
+<li><p><a class="reference internal" href="#disabling-facts" id="id6">Disabling facts</a></p></li>
+<li><p><a class="reference internal" href="#adding-custom-facts" id="id7">Adding custom facts</a></p>
+<ul>
+<li><p><a class="reference internal" href="#facts-d-or-local-facts" id="id8">facts.d or local facts</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#information-about-ansible-magic-variables" id="id9">Information about Ansible: magic variables</a></p>
+<ul>
+<li><p><a class="reference internal" href="#ansible-version" id="id10">Ansible version</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="ansible-facts">
+<h2><a class="toc-backref" href="#id3">Ansible facts</a><a class="headerlink" href="#ansible-facts" title="Permalink to this headline"></a></h2>
+<p>Ansible facts are data related to your remote systems, including operating systems, IP addresses, attached filesystems, and more. You can access this data in the <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> variable. By default, you can also access some Ansible facts as top-level variables with the <code class="docutils literal notranslate"><span class="pre">ansible_</span></code> prefix. You can disable this behavior using the <a class="reference internal" href="../reference_appendices/config.html#inject-facts-as-vars"><span class="std std-ref">INJECT_FACTS_AS_VARS</span></a> setting. To see all available facts, add this task to a play:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Print all available facts</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts</span>
+</pre></div>
+</div>
+<p>To see the ‘raw’ information as gathered, run this command at the command line:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible &lt;hostname&gt; -m ansible.builtin.setup
+</pre></div>
+</div>
+<p>Facts include a large amount of variable data, which may look like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;ansible_all_ipv4_addresses&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;REDACTED IP ADDRESS&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;ansible_all_ipv6_addresses&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;REDACTED IPV6 ADDRESS&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;ansible_apparmor&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;disabled&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_architecture&quot;</span><span class="p">:</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_bios_date&quot;</span><span class="p">:</span> <span class="s2">&quot;11/28/2013&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_bios_version&quot;</span><span class="p">:</span> <span class="s2">&quot;4.1.5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_cmdline&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;BOOT_IMAGE&quot;</span><span class="p">:</span> <span class="s2">&quot;/boot/vmlinuz-3.10.0-862.14.4.el7.x86_64&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;console&quot;</span><span class="p">:</span> <span class="s2">&quot;ttyS0,115200&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;no_timer_check&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;nofb&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;nomodeset&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;ro&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;root&quot;</span><span class="p">:</span> <span class="s2">&quot;LABEL=cloudimg-rootfs&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;vga&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_date_time&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;2018-10-25&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;day&quot;</span><span class="p">:</span> <span class="s2">&quot;25&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;epoch&quot;</span><span class="p">:</span> <span class="s2">&quot;1540469324&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;hour&quot;</span><span class="p">:</span> <span class="s2">&quot;12&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;iso8601&quot;</span><span class="p">:</span> <span class="s2">&quot;2018-10-25T12:08:44Z&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;iso8601_basic&quot;</span><span class="p">:</span> <span class="s2">&quot;20181025T120844109754&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;iso8601_basic_short&quot;</span><span class="p">:</span> <span class="s2">&quot;20181025T120844&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;iso8601_micro&quot;</span><span class="p">:</span> <span class="s2">&quot;2018-10-25T12:08:44.109968Z&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;minute&quot;</span><span class="p">:</span> <span class="s2">&quot;08&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;month&quot;</span><span class="p">:</span> <span class="s2">&quot;10&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;second&quot;</span><span class="p">:</span> <span class="s2">&quot;44&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;12:08:44&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;tz&quot;</span><span class="p">:</span> <span class="s2">&quot;UTC&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;tz_offset&quot;</span><span class="p">:</span> <span class="s2">&quot;+0000&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;weekday&quot;</span><span class="p">:</span> <span class="s2">&quot;Thursday&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;weekday_number&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;weeknumber&quot;</span><span class="p">:</span> <span class="s2">&quot;43&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;2018&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_default_ipv4&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;eth0&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;broadcast&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;gateway&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;eth0&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;macaddress&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;mtu&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+        <span class="nt">&quot;netmask&quot;</span><span class="p">:</span> <span class="s2">&quot;255.255.255.0&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ether&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_default_ipv6&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="nt">&quot;ansible_device_links&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;ids&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="nt">&quot;labels&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;xvda1&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;cloudimg-rootfs&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;xvdd&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;config-2&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;masters&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="nt">&quot;uuids&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;xvda1&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;cac81d61-d0f8-4b47-84aa-b48798239164&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;xvdd&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;2018-10-25-12-05-57-00&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_devices&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;xvda&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;holders&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;links&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;ids&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;labels&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;masters&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;uuids&quot;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;model&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;partitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;xvda1&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;holders&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="nt">&quot;links&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;ids&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="nt">&quot;labels&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;cloudimg-rootfs&quot;</span>
+                        <span class="p">],</span>
+                        <span class="nt">&quot;masters&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="nt">&quot;uuids&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;cac81d61-d0f8-4b47-84aa-b48798239164&quot;</span>
+                        <span class="p">]</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;sectors&quot;</span><span class="p">:</span> <span class="s2">&quot;83883999&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;sectorsize&quot;</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+                    <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;40.00 GB&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;2048&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;cac81d61-d0f8-4b47-84aa-b48798239164&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;removable&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;rotational&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sas_address&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;sas_device_handle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;scheduler_mode&quot;</span><span class="p">:</span> <span class="s2">&quot;deadline&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sectors&quot;</span><span class="p">:</span> <span class="s2">&quot;83886080&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sectorsize&quot;</span><span class="p">:</span> <span class="s2">&quot;512&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;40.00 GB&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;support_discard&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;vendor&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;virtual&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;xvdd&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;holders&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;links&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;ids&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;labels&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;config-2&quot;</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;masters&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;uuids&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;2018-10-25-12-05-57-00&quot;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;model&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;partitions&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="nt">&quot;removable&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;rotational&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sas_address&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;sas_device_handle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;scheduler_mode&quot;</span><span class="p">:</span> <span class="s2">&quot;deadline&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sectors&quot;</span><span class="p">:</span> <span class="s2">&quot;131072&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sectorsize&quot;</span><span class="p">:</span> <span class="s2">&quot;512&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;64.00 MB&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;support_discard&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;vendor&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;virtual&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;xvde&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;holders&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;links&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;ids&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;labels&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;masters&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="nt">&quot;uuids&quot;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;model&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;partitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;xvde1&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;holders&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="nt">&quot;links&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;ids&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="nt">&quot;labels&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="nt">&quot;masters&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="nt">&quot;uuids&quot;</span><span class="p">:</span> <span class="p">[]</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;sectors&quot;</span><span class="p">:</span> <span class="s2">&quot;167770112&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;sectorsize&quot;</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+                    <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;80.00 GB&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;2048&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;uuid&quot;</span><span class="p">:</span> <span class="kc">null</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;removable&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;rotational&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sas_address&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;sas_device_handle&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;scheduler_mode&quot;</span><span class="p">:</span> <span class="s2">&quot;deadline&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sectors&quot;</span><span class="p">:</span> <span class="s2">&quot;167772160&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sectorsize&quot;</span><span class="p">:</span> <span class="s2">&quot;512&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;80.00 GB&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;support_discard&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;vendor&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;virtual&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;CentOS&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_distribution_file_parsed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_distribution_file_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/etc/redhat-release&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_distribution_file_variety&quot;</span><span class="p">:</span> <span class="s2">&quot;RedHat&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_distribution_major_version&quot;</span><span class="p">:</span> <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_distribution_release&quot;</span><span class="p">:</span> <span class="s2">&quot;Core&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_distribution_version&quot;</span><span class="p">:</span> <span class="s2">&quot;7.5.1804&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_dns&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;nameservers&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;127.0.0.1&quot;</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_domain&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_effective_group_id&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_effective_user_id&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_env&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;HOME&quot;</span><span class="p">:</span> <span class="s2">&quot;/home/zuul&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;LANG&quot;</span><span class="p">:</span> <span class="s2">&quot;en_US.UTF-8&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;LESSOPEN&quot;</span><span class="p">:</span> <span class="s2">&quot;||/usr/bin/lesspipe.sh %s&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;LOGNAME&quot;</span><span class="p">:</span> <span class="s2">&quot;zuul&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;MAIL&quot;</span><span class="p">:</span> <span class="s2">&quot;/var/mail/zuul&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;PATH&quot;</span><span class="p">:</span> <span class="s2">&quot;/usr/local/bin:/usr/bin&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;PWD&quot;</span><span class="p">:</span> <span class="s2">&quot;/home/zuul&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SELINUX_LEVEL_REQUESTED&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SELINUX_ROLE_REQUESTED&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SELINUX_USE_CURRENT_RANGE&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SHELL&quot;</span><span class="p">:</span> <span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SHLVL&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SSH_CLIENT&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED 55672 22&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SSH_CONNECTION&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED 55672 REDACTED 22&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;USER&quot;</span><span class="p">:</span> <span class="s2">&quot;zuul&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;XDG_RUNTIME_DIR&quot;</span><span class="p">:</span> <span class="s2">&quot;/run/user/1000&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;XDG_SESSION_ID&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;_&quot;</span><span class="p">:</span> <span class="s2">&quot;/usr/bin/python2&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_eth0&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;device&quot;</span><span class="p">:</span> <span class="s2">&quot;eth0&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;ipv4&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;broadcast&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;netmask&quot;</span><span class="p">:</span> <span class="s2">&quot;255.255.255.0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;ipv6&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;64&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;link&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;macaddress&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;module&quot;</span><span class="p">:</span> <span class="s2">&quot;xen_netfront&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;mtu&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+        <span class="nt">&quot;pciid&quot;</span><span class="p">:</span> <span class="s2">&quot;vif-0&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;promisc&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ether&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_eth1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;device&quot;</span><span class="p">:</span> <span class="s2">&quot;eth1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;ipv4&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;broadcast&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;netmask&quot;</span><span class="p">:</span> <span class="s2">&quot;255.255.224.0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;ipv6&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;64&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;link&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;macaddress&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;module&quot;</span><span class="p">:</span> <span class="s2">&quot;xen_netfront&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;mtu&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+        <span class="nt">&quot;pciid&quot;</span><span class="p">:</span> <span class="s2">&quot;vif-1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;promisc&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ether&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_fips&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_form_factor&quot;</span><span class="p">:</span> <span class="s2">&quot;Other&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_fqdn&quot;</span><span class="p">:</span> <span class="s2">&quot;centos-7-rax-dfw-0003427354&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_hostname&quot;</span><span class="p">:</span> <span class="s2">&quot;centos-7-rax-dfw-0003427354&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_interfaces&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;lo&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;eth1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;eth0&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;ansible_is_chroot&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_kernel&quot;</span><span class="p">:</span> <span class="s2">&quot;3.10.0-862.14.4.el7.x86_64&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_lo&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;device&quot;</span><span class="p">:</span> <span class="s2">&quot;lo&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;ipv4&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;broadcast&quot;</span><span class="p">:</span> <span class="s2">&quot;host&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;netmask&quot;</span><span class="p">:</span> <span class="s2">&quot;255.0.0.0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.0&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;ipv6&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="s2">&quot;::1&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;128&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;host&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;mtu&quot;</span><span class="p">:</span> <span class="mi">65536</span><span class="p">,</span>
+        <span class="nt">&quot;promisc&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;loopback&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_local&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="nt">&quot;ansible_lsb&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;codename&quot;</span><span class="p">:</span> <span class="s2">&quot;Core&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;CentOS Linux release 7.5.1804 (Core)&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;CentOS&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;major_release&quot;</span><span class="p">:</span> <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;release&quot;</span><span class="p">:</span> <span class="s2">&quot;7.5.1804&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_machine&quot;</span><span class="p">:</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_machine_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2db133253c984c82aef2fafcce6f2bed&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_memfree_mb&quot;</span><span class="p">:</span> <span class="mi">7709</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_memory_mb&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;nocache&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;free&quot;</span><span class="p">:</span> <span class="mi">7804</span><span class="p">,</span>
+            <span class="nt">&quot;used&quot;</span><span class="p">:</span> <span class="mi">173</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;real&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;free&quot;</span><span class="p">:</span> <span class="mi">7709</span><span class="p">,</span>
+            <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">7977</span><span class="p">,</span>
+            <span class="nt">&quot;used&quot;</span><span class="p">:</span> <span class="mi">268</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;swap&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;cached&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;free&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;used&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_memtotal_mb&quot;</span><span class="p">:</span> <span class="mi">7977</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_mounts&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;block_available&quot;</span><span class="p">:</span> <span class="mi">7220998</span><span class="p">,</span>
+            <span class="nt">&quot;block_size&quot;</span><span class="p">:</span> <span class="mi">4096</span><span class="p">,</span>
+            <span class="nt">&quot;block_total&quot;</span><span class="p">:</span> <span class="mi">9817227</span><span class="p">,</span>
+            <span class="nt">&quot;block_used&quot;</span><span class="p">:</span> <span class="mi">2596229</span><span class="p">,</span>
+            <span class="nt">&quot;device&quot;</span><span class="p">:</span> <span class="s2">&quot;/dev/xvda1&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;fstype&quot;</span><span class="p">:</span> <span class="s2">&quot;ext4&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;inode_available&quot;</span><span class="p">:</span> <span class="mi">10052341</span><span class="p">,</span>
+            <span class="nt">&quot;inode_total&quot;</span><span class="p">:</span> <span class="mi">10419200</span><span class="p">,</span>
+            <span class="nt">&quot;inode_used&quot;</span><span class="p">:</span> <span class="mi">366859</span><span class="p">,</span>
+            <span class="nt">&quot;mount&quot;</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;options&quot;</span><span class="p">:</span> <span class="s2">&quot;rw,seclabel,relatime,data=ordered&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;size_available&quot;</span><span class="p">:</span> <span class="mi">29577207808</span><span class="p">,</span>
+            <span class="nt">&quot;size_total&quot;</span><span class="p">:</span> <span class="mi">40211361792</span><span class="p">,</span>
+            <span class="nt">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;cac81d61-d0f8-4b47-84aa-b48798239164&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;block_available&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;block_size&quot;</span><span class="p">:</span> <span class="mi">2048</span><span class="p">,</span>
+            <span class="nt">&quot;block_total&quot;</span><span class="p">:</span> <span class="mi">252</span><span class="p">,</span>
+            <span class="nt">&quot;block_used&quot;</span><span class="p">:</span> <span class="mi">252</span><span class="p">,</span>
+            <span class="nt">&quot;device&quot;</span><span class="p">:</span> <span class="s2">&quot;/dev/xvdd&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;fstype&quot;</span><span class="p">:</span> <span class="s2">&quot;iso9660&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;inode_available&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;inode_total&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;inode_used&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;mount&quot;</span><span class="p">:</span> <span class="s2">&quot;/mnt/config&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;options&quot;</span><span class="p">:</span> <span class="s2">&quot;ro,relatime,mode=0700&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;size_available&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;size_total&quot;</span><span class="p">:</span> <span class="mi">516096</span><span class="p">,</span>
+            <span class="nt">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;2018-10-25-12-05-57-00&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;ansible_nodename&quot;</span><span class="p">:</span> <span class="s2">&quot;centos-7-rax-dfw-0003427354&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_os_family&quot;</span><span class="p">:</span> <span class="s2">&quot;RedHat&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_pkg_mgr&quot;</span><span class="p">:</span> <span class="s2">&quot;yum&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_processor&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GenuineIntel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;ansible_processor_cores&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_processor_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_processor_nproc&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_processor_threads_per_core&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_processor_vcpus&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_product_name&quot;</span><span class="p">:</span> <span class="s2">&quot;HVM domU&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_product_serial&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_product_uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_product_version&quot;</span><span class="p">:</span> <span class="s2">&quot;4.1.5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_python&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;executable&quot;</span><span class="p">:</span> <span class="s2">&quot;/usr/bin/python2&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;has_sslcontext&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;CPython&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;major&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;micro&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="nt">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+            <span class="nt">&quot;releaselevel&quot;</span><span class="p">:</span> <span class="s2">&quot;final&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;serial&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;version_info&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="mi">2</span><span class="p">,</span>
+            <span class="mi">7</span><span class="p">,</span>
+            <span class="mi">5</span><span class="p">,</span>
+            <span class="s2">&quot;final&quot;</span><span class="p">,</span>
+            <span class="mi">0</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_python_version&quot;</span><span class="p">:</span> <span class="s2">&quot;2.7.5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_real_group_id&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_real_user_id&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_selinux&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;config_mode&quot;</span><span class="p">:</span> <span class="s2">&quot;enforcing&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;enforcing&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;policyvers&quot;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span>
+        <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;enabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;targeted&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ansible_selinux_python_present&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_service_mgr&quot;</span><span class="p">:</span> <span class="s2">&quot;systemd&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_ssh_host_key_ecdsa_public&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED KEY VALUE&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_ssh_host_key_ed25519_public&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED KEY VALUE&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_ssh_host_key_rsa_public&quot;</span><span class="p">:</span> <span class="s2">&quot;REDACTED KEY VALUE&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_swapfree_mb&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_swaptotal_mb&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_system&quot;</span><span class="p">:</span> <span class="s2">&quot;Linux&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_system_capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;ansible_system_capabilities_enforced&quot;</span><span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_system_vendor&quot;</span><span class="p">:</span> <span class="s2">&quot;Xen&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_uptime_seconds&quot;</span><span class="p">:</span> <span class="mi">151</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_user_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;/home/zuul&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_user_gecos&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_user_gid&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;zuul&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_user_shell&quot;</span><span class="p">:</span> <span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_user_uid&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_userspace_architecture&quot;</span><span class="p">:</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_userspace_bits&quot;</span><span class="p">:</span> <span class="s2">&quot;64&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_virtualization_role&quot;</span><span class="p">:</span> <span class="s2">&quot;guest&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ansible_virtualization_type&quot;</span><span class="p">:</span> <span class="s2">&quot;xen&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gather_subset&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;all&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;module_setup&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can reference the model of the first disk in the facts shown above in a template or playbook as:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">ansible_facts</span><span class="o">[</span><span class="s1">&#39;devices&#39;</span><span class="o">][</span><span class="s1">&#39;xvda&#39;</span><span class="o">][</span><span class="s1">&#39;model&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>To reference the system hostname:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">ansible_facts</span><span class="o">[</span><span class="s1">&#39;nodename&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>You can use facts in conditionals (see <a class="reference internal" href="playbooks_conditionals.html#playbooks-conditionals"><span class="std std-ref">Conditionals</span></a>) and also in templates. You can also use facts to create dynamic groups of hosts that match particular criteria, see the <a class="reference internal" href="../collections/ansible/builtin/group_by_module.html#group-by-module"><span class="std std-ref">group_by module</span></a> documentation for details.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">ansible_date_time</span></code> is created and cached when Ansible gathers facts before each playbook run, it can get stale with long-running playbooks. If your playbook takes a long time to run, use the <code class="docutils literal notranslate"><span class="pre">pipe</span></code> filter (for example, <code class="docutils literal notranslate"><span class="pre">lookup('pipe',</span> <span class="pre">'date</span> <span class="pre">+%Y-%m-%d.%H:%M:%S')</span></code>) or <a class="reference internal" href="playbooks_templating.html#templating-now"><span class="std std-ref">now()</span></a> with a Jinja 2 template instead of <code class="docutils literal notranslate"><span class="pre">ansible_date_time</span></code>.</p>
+</div>
+<section id="package-requirements-for-fact-gathering">
+<span id="fact-requirements"></span><h3><a class="toc-backref" href="#id4">Package requirements for fact gathering</a><a class="headerlink" href="#package-requirements-for-fact-gathering" title="Permalink to this headline"></a></h3>
+<p>On some distros, you may see missing fact values or facts set to default values because the packages that support gathering those facts are not installed by default. You can install the necessary packages on your remote hosts using the OS package manager. Known dependencies include:</p>
+<ul class="simple">
+<li><p>Linux Network fact gathering -  Depends on  the <code class="docutils literal notranslate"><span class="pre">ip</span></code> binary, commonly included in the <code class="docutils literal notranslate"><span class="pre">iproute2</span></code> package.</p></li>
+</ul>
+</section>
+<section id="caching-facts">
+<span id="fact-caching"></span><h3><a class="toc-backref" href="#id5">Caching facts</a><a class="headerlink" href="#caching-facts" title="Permalink to this headline"></a></h3>
+<p>Like registered variables, facts are stored in memory by default. However, unlike registered variables, facts can be gathered independently and cached for repeated use. With cached facts, you can refer to facts from one system when configuring a second system, even if Ansible executes the current play on the second system first. For example:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="s1">&#39;asdf.example.com&#39;</span><span class="o">][</span><span class="s1">&#39;ansible_facts&#39;</span><span class="o">][</span><span class="s1">&#39;os_family&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Caching is controlled by the cache plugins. By default, Ansible uses the memory cache plugin, which stores facts in memory for the duration of the current playbook run. To retain Ansible facts for repeated use, select a different cache plugin. See <a class="reference internal" href="../plugins/cache.html#cache-plugins"><span class="std std-ref">Cache plugins</span></a> for details.</p>
+<p>Fact caching can improve performance. If you manage thousands of hosts, you can configure fact caching to run nightly, then manage configuration on a smaller set of servers periodically throughout the day. With cached facts, you have access to variables and information about all hosts even when you are only managing a small number of servers.</p>
+</section>
+<section id="disabling-facts">
+<span id="id1"></span><h3><a class="toc-backref" href="#id6">Disabling facts</a><a class="headerlink" href="#disabling-facts" title="Permalink to this headline"></a></h3>
+<p>By default, Ansible gathers facts at the beginning of each play. If you do not need to gather facts (for example, if you know everything about your systems centrally), you can turn off fact gathering at the play level to improve scalability. Disabling facts may particularly improve performance in push mode with very large numbers of systems, or if you are using Ansible on experimental platforms. To disable fact gathering:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">whatever</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-custom-facts">
+<h3><a class="toc-backref" href="#id7">Adding custom facts</a><a class="headerlink" href="#adding-custom-facts" title="Permalink to this headline"></a></h3>
+<p>The setup module in Ansible automatically discovers a standard set of facts about each host. If you want to add custom values to your facts, you can write a custom facts module, set temporary facts with a <code class="docutils literal notranslate"><span class="pre">ansible.builtin.set_fact</span></code> task, or provide permanent custom facts using the facts.d directory.</p>
+<section id="facts-d-or-local-facts">
+<span id="local-facts"></span><h4><a class="toc-backref" href="#id8">facts.d or local facts</a><a class="headerlink" href="#facts-d-or-local-facts" title="Permalink to this headline"></a></h4>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.</span></p>
+</div>
+<p>You can add static custom facts by adding static files to facts.d, or add dynamic facts by adding executable scripts to facts.d. For example, you can add a list of all users on a host to your facts by creating and running a script in facts.d.</p>
+<p>To use facts.d, create an <code class="docutils literal notranslate"><span class="pre">/etc/ansible/facts.d</span></code> directory on the remote host or hosts. If you prefer a different directory, create it and specify it using the <code class="docutils literal notranslate"><span class="pre">fact_path</span></code> play keyword. Add files to the directory to supply your custom facts. All file names must end with <code class="docutils literal notranslate"><span class="pre">.fact</span></code>. The files can be JSON, INI, or executable files returning JSON.</p>
+<p>To add static facts, simply add a file with the <code class="docutils literal notranslate"><span class="pre">.fact</span></code> extension. For example, create <code class="docutils literal notranslate"><span class="pre">/etc/ansible/facts.d/preferences.fact</span></code> with this content:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[general]</span>
+<span class="na">asdf</span><span class="o">=</span><span class="s">1</span>
+<span class="na">bar</span><span class="o">=</span><span class="s">2</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure the file is not executable as this will break the <code class="docutils literal notranslate"><span class="pre">ansible.builtin.setup</span></code> module.</p>
+</div>
+<p>The next time fact gathering runs, your facts will include a hash variable fact named <code class="docutils literal notranslate"><span class="pre">general</span></code> with <code class="docutils literal notranslate"><span class="pre">asdf</span></code> and <code class="docutils literal notranslate"><span class="pre">bar</span></code> as members. To validate this, run the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible &lt;hostname&gt; -m ansible.builtin.setup -a <span class="s2">&quot;filter=ansible_local&quot;</span>
+</pre></div>
+</div>
+<p>And you will see your custom fact added:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;ansible_local&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;preferences&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;general&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;asdf&quot;</span> <span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;bar&quot;</span>  <span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The ansible_local namespace separates custom facts created by facts.d from system facts or variables defined elsewhere in the playbook, so variables will not override each other. You can access this custom fact in a template or playbook as:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">ansible_local</span><span class="o">[</span><span class="s1">&#39;preferences&#39;</span><span class="o">][</span><span class="s1">&#39;general&#39;</span><span class="o">][</span><span class="s1">&#39;asdf&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The key part in the key=value pairs will be converted into lowercase inside the ansible_local variable. Using the example above, if the ini file contained <code class="docutils literal notranslate"><span class="pre">XYZ=3</span></code> in the <code class="docutils literal notranslate"><span class="pre">[general]</span></code> section, then you should expect to access it as: <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">ansible_local['preferences']['general']['xyz']</span> <span class="pre">}}</span></code> and not <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">ansible_local['preferences']['general']['XYZ']</span> <span class="pre">}}</span></code>. This is because Ansible uses Python’s <a class="reference external" href="https://docs.python.org/3/library/configparser.html">ConfigParser</a> which passes all option names through the <a class="reference external" href="https://docs.python.org/3/library/configparser.html#ConfigParser.RawConfigParser.optionxform">optionxform</a> method and this method’s default implementation converts option names to lower case.</p>
+</div>
+<p>You can also use facts.d to execute a script on the remote host, generating dynamic custom facts to the ansible_local namespace. For example, you can generate a list of all users that exist on a remote host as a fact about that host. To generate dynamic custom facts using facts.d:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Write and test a script to generate the JSON data you want.</p></li>
+<li><p>Save the script in your facts.d directory.</p></li>
+<li><p>Make sure your script has the <code class="docutils literal notranslate"><span class="pre">.fact</span></code> file extension.</p></li>
+<li><p>Make sure your script is executable by the Ansible connection user.</p></li>
+<li><p>Gather facts to execute the script and add the JSON output to ansible_local.</p></li>
+</ol>
+</div></blockquote>
+<p>By default, fact gathering runs once at the beginning of each play. If you create a custom fact using facts.d in a playbook, it will be available in the next play that gathers facts. If you want to use it in the same play where you created it, you must explicitly re-run the setup module. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create directory for ansible custom facts</span>
+      <span class="nt">ansible.builtin.file</span><span class="p">:</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">directory</span>
+        <span class="nt">recurse</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+        <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/ansible/facts.d</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install custom ipmi fact</span>
+      <span class="nt">ansible.builtin.copy</span><span class="p">:</span>
+        <span class="nt">src</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ipmi.fact</span>
+        <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/ansible/facts.d</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Re-read facts after adding custom fact</span>
+      <span class="nt">ansible.builtin.setup</span><span class="p">:</span>
+        <span class="nt">filter</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_local</span>
+</pre></div>
+</div>
+<p>If you use this pattern frequently, a custom facts module would be more efficient than facts.d.</p>
+</section>
+</section>
+</section>
+<section id="information-about-ansible-magic-variables">
+<span id="magic-variables-and-hostvars"></span><h2><a class="toc-backref" href="#id9">Information about Ansible: magic variables</a><a class="headerlink" href="#information-about-ansible-magic-variables" title="Permalink to this headline"></a></h2>
+<p>You can access information about Ansible operations, including the python version being used, the hosts and groups in inventory, and the directories for playbooks and roles, using “magic” variables. Like connection variables, magic variables are <a class="reference internal" href="../reference_appendices/special_variables.html#special-variables"><span class="std std-ref">Special Variables</span></a>. Magic variable names are reserved - do not set variables with these names. The variable <code class="docutils literal notranslate"><span class="pre">environment</span></code> is also reserved.</p>
+<p>The most commonly used magic variables are <code class="docutils literal notranslate"><span class="pre">hostvars</span></code>, <code class="docutils literal notranslate"><span class="pre">groups</span></code>, <code class="docutils literal notranslate"><span class="pre">group_names</span></code>, and <code class="docutils literal notranslate"><span class="pre">inventory_hostname</span></code>. With <code class="docutils literal notranslate"><span class="pre">hostvars</span></code>, you can access variables defined for any host in the play, at any point in a playbook. You can access Ansible facts using the <code class="docutils literal notranslate"><span class="pre">hostvars</span></code> variable too, but only after you have gathered (or cached) facts.  Note that variables defined at play objects are not defined for specific hosts and therefore are not mapped to hostvars.</p>
+<p>If you want to configure your database server using the value of a ‘fact’ from another node, or the value of an inventory variable assigned to another node, you can use <code class="docutils literal notranslate"><span class="pre">hostvars</span></code> in a template or on an action line:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="s1">&#39;test.example.com&#39;</span><span class="o">][</span><span class="s1">&#39;ansible_facts&#39;</span><span class="o">][</span><span class="s1">&#39;distribution&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">groups</span></code>, a list of all the groups (and hosts) in the inventory, you can enumerate all hosts within a group. For example:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">host</span> <span class="k">in</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;app_servers&#39;</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">   # something that applies to all app servers.</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">groups</span></code> and <code class="docutils literal notranslate"><span class="pre">hostvars</span></code> together to find all the IP addresses in a group.</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">host</span> <span class="k">in</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;app_servers&#39;</span><span class="o">]</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">   </span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">host</span><span class="o">][</span><span class="s1">&#39;ansible_facts&#39;</span><span class="o">][</span><span class="s1">&#39;eth0&#39;</span><span class="o">][</span><span class="s1">&#39;ipv4&#39;</span><span class="o">][</span><span class="s1">&#39;address&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>You can use this approach to point a frontend proxy server to all the hosts in your app servers group, to set up the correct firewall rules between servers, and so on. You must either cache facts or gather facts for those hosts before the task that fills out the template.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">group_names</span></code>, a list (array) of all the groups the current host is in, you can create templated files that vary based on the group membership (or role) of the host:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="s1">&#39;webserver&#39;</span> <span class="k">in</span> <span class="nv">group_names</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">   # some part of a configuration file that only applies to webservers</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>You can use the magic variable <code class="docutils literal notranslate"><span class="pre">inventory_hostname</span></code>, the name of the host as configured in your inventory, as an alternative to <code class="docutils literal notranslate"><span class="pre">ansible_hostname</span></code> when fact-gathering is disabled. If you have a long FQDN, you can use <code class="docutils literal notranslate"><span class="pre">inventory_hostname_short</span></code>, which contains the part up to the first period, without the rest of the domain.</p>
+<p>Other useful magic variables refer to the current play or playbook. These vars may be useful for filling out templates with multiple hostnames or for injecting the list into the rules for a load balancer.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ansible_play_hosts</span></code> is the list of all hosts still active in the current play.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ansible_play_batch</span></code> is a list of hostnames that are in scope for the current ‘batch’ of the play.</p>
+<p>The batch size is defined by <code class="docutils literal notranslate"><span class="pre">serial</span></code>, when not set it is equivalent to the whole play (making it the same as <code class="docutils literal notranslate"><span class="pre">ansible_play_hosts</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">ansible_playbook_python</span></code> is the path to the python executable used to invoke the Ansible command line tool.</p>
+<p><code class="docutils literal notranslate"><span class="pre">inventory_dir</span></code> is the pathname of the directory holding Ansible’s inventory host file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">inventory_file</span></code> is the pathname and the filename pointing to the Ansible’s inventory host file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">playbook_dir</span></code> contains the playbook base directory.</p>
+<p><code class="docutils literal notranslate"><span class="pre">role_path</span></code> contains the current role’s pathname and only works inside a role.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ansible_check_mode</span></code> is a boolean, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if you run Ansible with <code class="docutils literal notranslate"><span class="pre">--check</span></code>.</p>
+<section id="ansible-version">
+<span id="id2"></span><h3><a class="toc-backref" href="#id10">Ansible version</a><a class="headerlink" href="#ansible-version" title="Permalink to this headline"></a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.8.</span></p>
+</div>
+<p>To adapt playbook behavior to different versions of Ansible, you can use the variable <code class="docutils literal notranslate"><span class="pre">ansible_version</span></code>, which has the following structure:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;ansible_version&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;full&quot;</span><span class="p">:</span> <span class="s2">&quot;2.10.1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;major&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nt">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="nt">&quot;revision&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nt">&quot;string&quot;</span><span class="p">:</span> <span class="s2">&quot;2.10.1&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_variables.html" class="btn btn-neutral float-left" title="Using Variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vault.html" class="btn btn-neutral float-right" title="Encrypting content with Ansible Vault" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

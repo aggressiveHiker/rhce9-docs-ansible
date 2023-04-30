@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ansible.builtin.iptables module – Modify iptables rules &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/iptables_module.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ansible.builtin.known_hosts module – Add or remove a host from the known_hosts file" href="known_hosts_module.html" />
+    <link rel="prev" title="ansible.builtin.include_vars module – Load variables from files, dynamically within a task" href="include_vars_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Ansible.Builtin</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../netcommon/index.html">Ansible.Netcommon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../posix/index.html">Ansible.Posix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/index.html">Ansible.Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../windows/index.html">Ansible.Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../community/index.html">Collections in the Community Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vmware/index.html">Collections in the Vmware Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Collection Index</a> &raquo;</li>
+          <li><a href="../index.html">Collections in the Ansible Namespace</a> &raquo;</li>
+          <li><a href="index.html">Ansible.Builtin</a> &raquo;</li>
+      <li>ansible.builtin.iptables module – Modify iptables rules</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/iptables.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-ansible-builtin-iptables-module"></span><span class="target" id="iptables-module"></span><section id="ansible-builtin-iptables-module-modify-iptables-rules">
+<h1>ansible.builtin.iptables module – Modify iptables rules<a class="headerlink" href="#ansible-builtin-iptables-module-modify-iptables-rules" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module    is part of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> and included in all Ansible
+installations. In most cases, you can use the short
+module name
+<code class="docutils literal notranslate"><span class="pre">iptables</span></code> even without specifying the <code class="docutils literal notranslate"><span class="pre">collections:</span></code> keyword.
+However, we recommend you use the FQCN for easy linking to the
+module    documentation and to avoid conflicting with other collections that may have
+the same module name.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0: </span>of ansible.builtin</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#attributes" id="id3">Attributes</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
+</ul>
+</div>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">iptables</span></code> is used to set up, maintain, and inspect the tables of IP packet filter rules in the Linux kernel.</p></li>
+<li><p>This module does not handle the saving and/or loading of rules, but rather only manipulates the current rules that are present in memory. This is the same as the behaviour of the <code class="docutils literal notranslate"><span class="pre">iptables</span></code> and <code class="docutils literal notranslate"><span class="pre">ip6tables</span></code> command which this module uses internally.</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id2">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline"></a></h2>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-action"><strong>action</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.2 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether the rule should be appended at the bottom or inserted at the top.</p>
+<p>If the rule already exists the chain will not be modified.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">append</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">insert</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chain"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-chain"><strong>chain</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chain" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specify the iptables chain to modify.</p>
+<p>This could be a user-defined chain or one of the standard iptables chains, like <code class="docutils literal notranslate"><span class="pre">INPUT</span></code>, <code class="docutils literal notranslate"><span class="pre">FORWARD</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTPUT</span></code>, <code class="docutils literal notranslate"><span class="pre">PREROUTING</span></code>, <code class="docutils literal notranslate"><span class="pre">POSTROUTING</span></code>, <code class="docutils literal notranslate"><span class="pre">SECMARK</span></code> or <code class="docutils literal notranslate"><span class="pre">CONNSECMARK</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chain_management"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-chain-management"><strong>chain_management</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chain_management" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.13 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">state</span></code> is <code class="docutils literal notranslate"><span class="pre">present</span></code>, the chain will be created if needed.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">state</span></code> is <code class="docutils literal notranslate"><span class="pre">absent</span></code>, the chain will be deleted if the only other parameter passed are <code class="docutils literal notranslate"><span class="pre">chain</span></code> and optionally <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-comment"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-comment"><strong>comment</strong></p>
+<a class="ansibleOptionLink" href="#parameter-comment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies a comment that will be added to the rule.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ctstate"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-ctstate"><strong>ctstate</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ctstate" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A list of the connection states to match in the conntrack module.</p>
+<p>Possible values are <code class="docutils literal notranslate"><span class="pre">INVALID</span></code>, <code class="docutils literal notranslate"><span class="pre">NEW</span></code>, <code class="docutils literal notranslate"><span class="pre">ESTABLISHED</span></code>, <code class="docutils literal notranslate"><span class="pre">RELATED</span></code>, <code class="docutils literal notranslate"><span class="pre">UNTRACKED</span></code>, <code class="docutils literal notranslate"><span class="pre">SNAT</span></code>, <code class="docutils literal notranslate"><span class="pre">DNAT</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[]</span></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-destination"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-destination"><strong>destination</strong></p>
+<a class="ansibleOptionLink" href="#parameter-destination" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Destination specification.</p>
+<p>Address can be either a network name, a hostname, a network IP address (with /mask), or a plain IP address.</p>
+<p>Hostnames will be resolved once only, before the rule is submitted to the kernel. Please note that specifying any name to be resolved with a remote query such as DNS is a really bad idea.</p>
+<p>The mask can be either a network mask or a plain number, specifying the number of 1’s at the left side of the network mask. Thus, a mask of 24 is equivalent to 255.255.255.0. A <code class="docutils literal notranslate"><span class="pre">!</span></code> argument before the address specification inverts the sense of the address.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-destination_port"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-destination-port"><strong>destination_port</strong></p>
+<a class="ansibleOptionLink" href="#parameter-destination_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Destination port or port range specification. This can either be a service name or a port number. An inclusive range can also be specified, using the format first:last. If the first port is omitted, ‘0’ is assumed; if the last is omitted, ‘65535’ is assumed. If the first port is greater than the second one they will be swapped. This is only valid if the rule also specifies one of the following protocols: tcp, udp, dccp or sctp.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-destination_ports"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-destination-ports"><strong>destination_ports</strong></p>
+<a class="ansibleOptionLink" href="#parameter-destination_ports" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.11 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies multiple destination port numbers or port ranges to match in the multiport module.</p>
+<p>It can only be used in conjunction with the protocols tcp, udp, udplite, dccp and sctp.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-dst_range"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-dst-range"><strong>dst_range</strong></p>
+<a class="ansibleOptionLink" href="#parameter-dst_range" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the destination IP range to match in the iprange module.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-flush"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-flush"><strong>flush</strong></p>
+<a class="ansibleOptionLink" href="#parameter-flush" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 2.2 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Flushes the specified table and chain of all rules.</p>
+<p>If no chain is specified then the entire table is purged.</p>
+<p>Ignores all other parameters.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-fragment"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-fragment"><strong>fragment</strong></p>
+<a class="ansibleOptionLink" href="#parameter-fragment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This means that the rule only refers to second and further fragments of fragmented packets.</p>
+<p>Since there is no way to tell the source or destination ports of such a packet (or ICMP type), such a packet will not match any rules which specify them.</p>
+<p>When the “!” argument precedes fragment argument, the rule will only match head fragments, or unfragmented packets.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-gateway"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-gateway"><strong>gateway</strong></p>
+<a class="ansibleOptionLink" href="#parameter-gateway" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies the IP address of host to send the cloned packets.</p>
+<p>This option is only valid when <code class="docutils literal notranslate"><span class="pre">jump</span></code> is set to <code class="docutils literal notranslate"><span class="pre">TEE</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-gid_owner"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-gid-owner"><strong>gid_owner</strong></p>
+<a class="ansibleOptionLink" href="#parameter-gid_owner" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.9 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the GID or group to use in match by owner rule.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-goto"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-goto"><strong>goto</strong></p>
+<a class="ansibleOptionLink" href="#parameter-goto" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies that the processing should continue in a user specified chain.</p>
+<p>Unlike the jump argument return will not continue processing in this chain but instead in the chain that called us via jump.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-icmp_type"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-icmp-type"><strong>icmp_type</strong></p>
+<a class="ansibleOptionLink" href="#parameter-icmp_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.2 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This allows specification of the ICMP type, which can be a numeric ICMP type, type/code pair, or one of the ICMP type names shown by the command ‘iptables -p icmp -h’</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-in_interface"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-in-interface"><strong>in_interface</strong></p>
+<a class="ansibleOptionLink" href="#parameter-in_interface" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name of an interface via which a packet was received (only for packets entering the <code class="docutils literal notranslate"><span class="pre">INPUT</span></code>, <code class="docutils literal notranslate"><span class="pre">FORWARD</span></code> and <code class="docutils literal notranslate"><span class="pre">PREROUTING</span></code> chains).</p>
+<p>When the <code class="docutils literal notranslate"><span class="pre">!</span></code> argument is used before the interface name, the sense is inverted.</p>
+<p>If the interface name ends in a <code class="docutils literal notranslate"><span class="pre">+</span></code>, then any interface which begins with this name will match.</p>
+<p>If this option is omitted, any interface name will match.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ip_version"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-ip-version"><strong>ip_version</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ip_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Which version of the IP protocol this rule should apply to.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">ipv4</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">ipv6</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-jump"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-jump"><strong>jump</strong></p>
+<a class="ansibleOptionLink" href="#parameter-jump" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies the target of the rule; i.e., what to do if the packet matches it.</p>
+<p>The target can be a user-defined chain (other than the one this rule is in), one of the special builtin targets which decide the fate of the packet immediately, or an extension (see EXTENSIONS below).</p>
+<p>If this option is omitted in a rule (and the goto parameter is not used), then matching the rule will have no effect on the packet’s fate, but the counters on the rule will be incremented.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-limit"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-limit"><strong>limit</strong></p>
+<a class="ansibleOptionLink" href="#parameter-limit" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the maximum average number of matches to allow per second.</p>
+<p>The number can specify units explicitly, using <code class="docutils literal notranslate"><span class="pre">/second</span></code>, <code class="docutils literal notranslate"><span class="pre">/minute</span></code>, <code class="docutils literal notranslate"><span class="pre">/hour</span></code> or <code class="docutils literal notranslate"><span class="pre">/day</span></code>, or parts of them (so <code class="docutils literal notranslate"><span class="pre">5/second</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">5/s</span></code>).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-limit_burst"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-limit-burst"><strong>limit_burst</strong></p>
+<a class="ansibleOptionLink" href="#parameter-limit_burst" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the maximum burst before the above limit kicks in.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-log_level"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-log-level"><strong>log_level</strong></p>
+<a class="ansibleOptionLink" href="#parameter-log_level" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Logging level according to the syslogd-defined priorities.</p>
+<p>The value can be strings or numbers from 1-8.</p>
+<p>This parameter is only applicable if <code class="docutils literal notranslate"><span class="pre">jump</span></code> is set to <code class="docutils literal notranslate"><span class="pre">LOG</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">0</span></p></li>
+<li><p><span class="ansible-option-choices-entry">1</span></p></li>
+<li><p><span class="ansible-option-choices-entry">2</span></p></li>
+<li><p><span class="ansible-option-choices-entry">3</span></p></li>
+<li><p><span class="ansible-option-choices-entry">4</span></p></li>
+<li><p><span class="ansible-option-choices-entry">5</span></p></li>
+<li><p><span class="ansible-option-choices-entry">6</span></p></li>
+<li><p><span class="ansible-option-choices-entry">7</span></p></li>
+<li><p><span class="ansible-option-choices-entry">emerg</span></p></li>
+<li><p><span class="ansible-option-choices-entry">alert</span></p></li>
+<li><p><span class="ansible-option-choices-entry">crit</span></p></li>
+<li><p><span class="ansible-option-choices-entry">error</span></p></li>
+<li><p><span class="ansible-option-choices-entry">warning</span></p></li>
+<li><p><span class="ansible-option-choices-entry">notice</span></p></li>
+<li><p><span class="ansible-option-choices-entry">info</span></p></li>
+<li><p><span class="ansible-option-choices-entry">debug</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-log_prefix"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-log-prefix"><strong>log_prefix</strong></p>
+<a class="ansibleOptionLink" href="#parameter-log_prefix" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.5 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies a log text for the rule. Only make sense with a LOG jump.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-match"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-match"><strong>match</strong></p>
+<a class="ansibleOptionLink" href="#parameter-match" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies a match to use, that is, an extension module that tests for a specific property.</p>
+<p>The set of matches make up the condition under which a target is invoked.</p>
+<p>Matches are evaluated first to last if specified as an array and work in short-circuit fashion, i.e. if one extension yields false, evaluation will stop.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[]</span></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-match_set"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-match-set"><strong>match_set</strong></p>
+<a class="ansibleOptionLink" href="#parameter-match_set" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.11 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies a set name which can be defined by ipset.</p>
+<p>Must be used together with the match_set_flags parameter.</p>
+<p>When the <code class="docutils literal notranslate"><span class="pre">!</span></code> argument is prepended then it inverts the rule.</p>
+<p>Uses the iptables set extension.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-match_set_flags"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-match-set-flags"><strong>match_set_flags</strong></p>
+<a class="ansibleOptionLink" href="#parameter-match_set_flags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.11 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the necessary flags for the match_set parameter.</p>
+<p>Must be used together with the match_set parameter.</p>
+<p>Uses the iptables set extension.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">src</span></p></li>
+<li><p><span class="ansible-option-choices-entry">dst</span></p></li>
+<li><p><span class="ansible-option-choices-entry">src,dst</span></p></li>
+<li><p><span class="ansible-option-choices-entry">dst,src</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-out_interface"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-out-interface"><strong>out_interface</strong></p>
+<a class="ansibleOptionLink" href="#parameter-out_interface" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name of an interface via which a packet is going to be sent (for packets entering the <code class="docutils literal notranslate"><span class="pre">FORWARD</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTPUT</span></code> and <code class="docutils literal notranslate"><span class="pre">POSTROUTING</span></code> chains).</p>
+<p>When the <code class="docutils literal notranslate"><span class="pre">!</span></code> argument is used before the interface name, the sense is inverted.</p>
+<p>If the interface name ends in a <code class="docutils literal notranslate"><span class="pre">+</span></code>, then any interface which begins with this name will match.</p>
+<p>If this option is omitted, any interface name will match.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-policy"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-policy"><strong>policy</strong></p>
+<a class="ansibleOptionLink" href="#parameter-policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.2 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the policy for the chain to the given target.</p>
+<p>Only built-in chains can have policies.</p>
+<p>This parameter requires the <code class="docutils literal notranslate"><span class="pre">chain</span></code> parameter.</p>
+<p>If you specify this parameter, all other parameters will be ignored.</p>
+<p>This parameter is used to set default policy for the given <code class="docutils literal notranslate"><span class="pre">chain</span></code>. Do not confuse this with <code class="docutils literal notranslate"><span class="pre">jump</span></code> parameter.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">ACCEPT</span></p></li>
+<li><p><span class="ansible-option-choices-entry">DROP</span></p></li>
+<li><p><span class="ansible-option-choices-entry">QUEUE</span></p></li>
+<li><p><span class="ansible-option-choices-entry">RETURN</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-protocol"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-protocol"><strong>protocol</strong></p>
+<a class="ansibleOptionLink" href="#parameter-protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The protocol of the rule or of the packet to check.</p>
+<p>The specified protocol can be one of <code class="docutils literal notranslate"><span class="pre">tcp</span></code>, <code class="docutils literal notranslate"><span class="pre">udp</span></code>, <code class="docutils literal notranslate"><span class="pre">udplite</span></code>, <code class="docutils literal notranslate"><span class="pre">icmp</span></code>, <code class="docutils literal notranslate"><span class="pre">ipv6-icmp</span></code> or <code class="docutils literal notranslate"><span class="pre">icmpv6</span></code>, <code class="docutils literal notranslate"><span class="pre">esp</span></code>, <code class="docutils literal notranslate"><span class="pre">ah</span></code>, <code class="docutils literal notranslate"><span class="pre">sctp</span></code> or the special keyword <code class="docutils literal notranslate"><span class="pre">all</span></code>, or it can be a numeric value, representing one of these protocols or a different one.</p>
+<p>A protocol name from <em>/etc/protocols</em> is also allowed.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">!</span></code> argument before the protocol inverts the test.</p>
+<p>The number zero is equivalent to all.</p>
+<p><code class="docutils literal notranslate"><span class="pre">all</span></code> will match with all protocols and is taken as default when this option is omitted.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-reject_with"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-reject-with"><strong>reject_with</strong></p>
+<a class="ansibleOptionLink" href="#parameter-reject_with" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the error packet type to return while rejecting. It implies “jump: REJECT”.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-rule_num"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-rule-num"><strong>rule_num</strong></p>
+<a class="ansibleOptionLink" href="#parameter-rule_num" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.5 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Insert the rule as the given rule number.</p>
+<p>This works only with <code class="docutils literal notranslate"><span class="pre">action=insert</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-set_counters"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-set-counters"><strong>set_counters</strong></p>
+<a class="ansibleOptionLink" href="#parameter-set_counters" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This enables the administrator to initialize the packet and byte counters of a rule (during <code class="docutils literal notranslate"><span class="pre">INSERT</span></code>, <code class="docutils literal notranslate"><span class="pre">APPEND</span></code>, <code class="docutils literal notranslate"><span class="pre">REPLACE</span></code> operations).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-set_dscp_mark"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-set-dscp-mark"><strong>set_dscp_mark</strong></p>
+<a class="ansibleOptionLink" href="#parameter-set_dscp_mark" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This allows specifying a DSCP mark to be added to packets. It takes either an integer or hex value.</p>
+<p>Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">set_dscp_mark_class</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-set_dscp_mark_class"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-set-dscp-mark-class"><strong>set_dscp_mark_class</strong></p>
+<a class="ansibleOptionLink" href="#parameter-set_dscp_mark_class" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This allows specifying a predefined DiffServ class which will be translated to the corresponding DSCP mark.</p>
+<p>Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">set_dscp_mark</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-source"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-source"><strong>source</strong></p>
+<a class="ansibleOptionLink" href="#parameter-source" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Source specification.</p>
+<p>Address can be either a network name, a hostname, a network IP address (with /mask), or a plain IP address.</p>
+<p>Hostnames will be resolved once only, before the rule is submitted to the kernel. Please note that specifying any name to be resolved with a remote query such as DNS is a really bad idea.</p>
+<p>The mask can be either a network mask or a plain number, specifying the number of 1’s at the left side of the network mask. Thus, a mask of 24 is equivalent to 255.255.255.0. A <code class="docutils literal notranslate"><span class="pre">!</span></code> argument before the address specification inverts the sense of the address.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-source_port"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-source-port"><strong>source_port</strong></p>
+<a class="ansibleOptionLink" href="#parameter-source_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Source port or port range specification.</p>
+<p>This can either be a service name or a port number.</p>
+<p>An inclusive range can also be specified, using the format <code class="docutils literal notranslate"><span class="pre">first:last</span></code>.</p>
+<p>If the first port is omitted, <code class="docutils literal notranslate"><span class="pre">0</span></code> is assumed; if the last is omitted, <code class="docutils literal notranslate"><span class="pre">65535</span></code> is assumed.</p>
+<p>If the first port is greater than the second one they will be swapped.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-src_range"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-src-range"><strong>src_range</strong></p>
+<a class="ansibleOptionLink" href="#parameter-src_range" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.8 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the source IP range to match in the iprange module.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-state"><strong>state</strong></p>
+<a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether the rule should be absent or present.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
+<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-syn"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-syn"><strong>syn</strong></p>
+<a class="ansibleOptionLink" href="#parameter-syn" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.5 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This allows matching packets that have the SYN bit set and the ACK and RST bits unset.</p>
+<p>When negated, this matches all packets with the RST or the ACK bits set.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">ignore</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">match</span></p></li>
+<li><p><span class="ansible-option-choices-entry">negate</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-table"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-table"><strong>table</strong></p>
+<a class="ansibleOptionLink" href="#parameter-table" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This option specifies the packet matching table which the command should operate on.</p>
+<p>If the kernel is configured with automatic module loading, an attempt will be made to load the appropriate module for that table if it is not already there.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">filter</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">nat</span></p></li>
+<li><p><span class="ansible-option-choices-entry">mangle</span></p></li>
+<li><p><span class="ansible-option-choices-entry">raw</span></p></li>
+<li><p><span class="ansible-option-choices-entry">security</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-tcp_flags"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-tcp-flags"><strong>tcp_flags</strong></p>
+<a class="ansibleOptionLink" href="#parameter-tcp_flags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+<p><span class="ansible-option-versionadded">added in 2.4 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>TCP flags specification.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tcp_flags</span></code> expects a dict with the two keys <code class="docutils literal notranslate"><span class="pre">flags</span></code> and <code class="docutils literal notranslate"><span class="pre">flags_set</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">{}</span></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-tcp_flags/flags"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-tcp-flags-flags"><strong>flags</strong></p>
+<a class="ansibleOptionLink" href="#parameter-tcp_flags/flags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>List of flags you want to examine.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-tcp_flags/flags_set"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-tcp-flags-flags-set"><strong>flags_set</strong></p>
+<a class="ansibleOptionLink" href="#parameter-tcp_flags/flags_set" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Flags to be set.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-to_destination"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-to-destination"><strong>to_destination</strong></p>
+<a class="ansibleOptionLink" href="#parameter-to_destination" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies a destination address to use with <code class="docutils literal notranslate"><span class="pre">DNAT</span></code>.</p>
+<p>Without this, the destination address is never altered.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-to_ports"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-to-ports"><strong>to_ports</strong></p>
+<a class="ansibleOptionLink" href="#parameter-to_ports" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies a destination port or range of ports to use, without this, the destination port is never altered.</p>
+<p>This is only valid if the rule also specifies one of the protocol <code class="docutils literal notranslate"><span class="pre">tcp</span></code>, <code class="docutils literal notranslate"><span class="pre">udp</span></code>, <code class="docutils literal notranslate"><span class="pre">dccp</span></code> or <code class="docutils literal notranslate"><span class="pre">sctp</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-to_source"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-to-source"><strong>to_source</strong></p>
+<a class="ansibleOptionLink" href="#parameter-to_source" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.2 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This specifies a source address to use with <code class="docutils literal notranslate"><span class="pre">SNAT</span></code>.</p>
+<p>Without this, the source address is never altered.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-uid_owner"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-uid-owner"><strong>uid_owner</strong></p>
+<a class="ansibleOptionLink" href="#parameter-uid_owner" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.1 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the UID or username to use in match by owner rule.</p>
+<p>From Ansible 2.6 when the <code class="docutils literal notranslate"><span class="pre">!</span></code> argument is prepended then the it inverts the rule to apply instead to all users except that one specified.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-wait"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-parameter-wait"><strong>wait</strong></p>
+<a class="ansibleOptionLink" href="#parameter-wait" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in 2.10 of ansible.builtin</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Wait N seconds for the xtables lock to prevent multiple instances of the program from running concurrently.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h2><a class="toc-backref" href="#id3">Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Support</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-attribute-check-mode"><strong>check_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-full">full</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Can run in check_mode and return changed status prediction without modifying target</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-label">Support: </span><span class="ansible-attribute-support-none">none</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Will return details on what has changed (or possibly needs changing in check_mode), when in diff mode</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-platform"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-iptables-module-attribute-platform"><strong>platform</strong></p>
+<a class="ansibleOptionLink" href="#attribute-platform" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><span class="ansible-attribute-support-property">Platform:</span> <span class="ansible-attribute-support-full">linux</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Target OS/families that can be operated against</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id4">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This module just deals with individual rules. If you need advanced chaining of rules the recommended way is to template the iptables restore file.</p></li>
+</ul>
+</div>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Block specific IP</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8.8.8.8</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DROP</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Forward port 80 to 8600</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nat</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PREROUTING</span>
+    <span class="nt">in_interface</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eth0</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+    <span class="nt">match</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+    <span class="nt">destination_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">REDIRECT</span>
+    <span class="nt">to_ports</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8600</span>
+    <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Redirect web traffic to port 8600</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Allow related and established connections</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">ctstate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ESTABLISHED,RELATED</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ACCEPT</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Allow new incoming SYN packets on TCP port 22 (SSH)</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+    <span class="nt">destination_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+    <span class="nt">ctstate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">NEW</span>
+    <span class="nt">syn</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">match</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ACCEPT</span>
+    <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Accept new SSH connections.</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Match on IP ranges</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">FORWARD</span>
+    <span class="nt">src_range</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.100-192.168.1.199</span>
+    <span class="nt">dst_range</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.0.0.1-10.0.0.50</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ACCEPT</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Allow source IPs defined in ipset &quot;admin_hosts&quot; on port 22</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">match_set</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin_hosts</span>
+    <span class="nt">match_set_flags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">src</span>
+    <span class="nt">destination_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ALLOW</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Tag all outbound tcp packets with DSCP mark 8</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OUTPUT</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DSCP</span>
+    <span class="nt">table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mangle</span>
+    <span class="nt">set_dscp_mark</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Tag all outbound tcp packets with DSCP DiffServ class CS1</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OUTPUT</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DSCP</span>
+    <span class="nt">table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mangle</span>
+    <span class="nt">set_dscp_mark_class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CS1</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+
+<span class="c1"># Create the user-defined chain ALLOWLIST</span>
+<span class="p p-Indicator">-</span> <span class="nt">iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ALLOWLIST</span>
+    <span class="nt">chain_management</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="c1"># Delete the user-defined chain ALLOWLIST</span>
+<span class="p p-Indicator">-</span> <span class="nt">iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ALLOWLIST</span>
+    <span class="nt">chain_management</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Insert a rule on line 5</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+    <span class="nt">destination_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8080</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ACCEPT</span>
+    <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">insert</span>
+    <span class="nt">rule_num</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="c1"># Think twice before running following task as this may lock target system</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set the policy for the INPUT chain to DROP</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">policy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DROP</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Reject tcp with tcp-reset</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+    <span class="nt">reject_with</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp-reset</span>
+    <span class="nt">ip_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ipv4</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set tcp flags</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OUTPUT</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DROP</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+    <span class="nt">tcp_flags</span><span class="p">:</span>
+      <span class="nt">flags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ALL</span>
+      <span class="nt">flags_set</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ACK</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">RST</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SYN</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FIN</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Iptables flush filter</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">flush</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">with_items</span><span class="p">:</span>  <span class="p p-Indicator">[</span> <span class="s">&#39;INPUT&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;FORWARD&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;OUTPUT&#39;</span> <span class="p p-Indicator">]</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Iptables flush nat</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nat</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&#39;</span>
+    <span class="nt">flush</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">with_items</span><span class="p">:</span> <span class="p p-Indicator">[</span> <span class="s">&#39;INPUT&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;OUTPUT&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;PREROUTING&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;POSTROUTING&#39;</span> <span class="p p-Indicator">]</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Log packets arriving into an user-defined chain</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LOGGING</span>
+    <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">append</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">limit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2/second</span>
+    <span class="nt">limit_burst</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
+    <span class="nt">log_prefix</span><span class="p">:</span> <span class="s">&quot;IPTABLES:INFO:</span><span class="nv"> </span><span class="s">&quot;</span>
+    <span class="nt">log_level</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">info</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Allow connections on multiple ports</span>
+  <span class="nt">ansible.builtin.iptables</span><span class="p">:</span>
+    <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+    <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tcp</span>
+    <span class="nt">destination_ports</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;80&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;443&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;8081:8083&quot;</span>
+    <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ACCEPT</span>
+</pre></div>
+</div>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Linus Unnebäck (&#64;LinusU)</p></li>
+<li><p>Sébastien DA ROCHA (&#64;sebastiendarocha)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Permalink to this headline"></a></h3>
+<p class="ansible-links">
+  <a href="https://github.com/ansible/ansible/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+  <a href="https://github.com/ansible/ansible" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  <a href="./#communication-for-ansible-builtin" aria-role="button" target="_blank">Communication</a>
+</p></section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="include_vars_module.html" class="btn btn-neutral float-left" title="ansible.builtin.include_vars module – Load variables from files, dynamically within a task" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="known_hosts_module.html" class="btn btn-neutral float-right" title="ansible.builtin.known_hosts module – Add or remove a host from the known_hosts file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

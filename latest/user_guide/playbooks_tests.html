@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tests &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lookups" href="playbooks_lookups.html" />
+    <link rel="prev" title="Using filters to manipulate data" href="playbooks_filters.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#table-of-contents">Table of contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cheatsheet.html">Ansible CLI cheatsheet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test-syntax">Test syntax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-strings">Testing strings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vault">Vault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-truthiness">Testing truthiness</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comparing-versions">Comparing versions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#set-theory-tests">Set theory tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-if-a-list-contains-a-value">Testing if a list contains a value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-if-a-list-value-is-true">Testing if a list value is True</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-paths">Testing paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-size-formats">Testing size formats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-task-results">Testing task results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#type-tests">Type Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+          <li><a href="playbooks.html">Working with playbooks</a> &raquo;</li>
+          <li><a href="playbooks_templating.html">Templating (Jinja2)</a> &raquo;</li>
+      <li>Tests</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/playbooks_tests.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="tests">
+<span id="playbooks-tests"></span><h1>Tests<a class="headerlink" href="#tests" title="Permalink to this headline"></a></h1>
+<p><a class="reference external" href="https://jinja.palletsprojects.com/en/latest/templates/#tests">Tests</a> in Jinja are a way of evaluating template expressions and returning True or False. Jinja ships with many of these. See <a class="reference external" href="https://jinja.palletsprojects.com/en/latest/templates/#builtin-tests">builtin tests</a> in the official Jinja template documentation.</p>
+<p>The main difference between tests and filters are that Jinja tests are used for comparisons, whereas filters are used for data manipulation, and have different applications in jinja. Tests can also be used in list processing filters, like <code class="docutils literal notranslate"><span class="pre">map()</span></code> and <code class="docutils literal notranslate"><span class="pre">select()</span></code> to choose items in the list.</p>
+<p>Like all templating, tests always execute on the Ansible controller, <strong>not</strong> on the target of a task, as they test local data.</p>
+<p>In addition to those Jinja2 tests, Ansible supplies a few more and users can easily create their own.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#test-syntax" id="id7">Test syntax</a></p></li>
+<li><p><a class="reference internal" href="#testing-strings" id="id8">Testing strings</a></p></li>
+<li><p><a class="reference internal" href="#vault" id="id9">Vault</a></p></li>
+<li><p><a class="reference internal" href="#testing-truthiness" id="id10">Testing truthiness</a></p></li>
+<li><p><a class="reference internal" href="#comparing-versions" id="id11">Comparing versions</a></p></li>
+<li><p><a class="reference internal" href="#set-theory-tests" id="id12">Set theory tests</a></p></li>
+<li><p><a class="reference internal" href="#testing-if-a-list-contains-a-value" id="id13">Testing if a list contains a value</a></p></li>
+<li><p><a class="reference internal" href="#testing-if-a-list-value-is-true" id="id14">Testing if a list value is True</a></p></li>
+<li><p><a class="reference internal" href="#testing-paths" id="id15">Testing paths</a></p></li>
+<li><p><a class="reference internal" href="#testing-size-formats" id="id16">Testing size formats</a></p>
+<ul>
+<li><p><a class="reference internal" href="#human-readable" id="id17">Human readable</a></p></li>
+<li><p><a class="reference internal" href="#human-to-bytes" id="id18">Human to bytes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#testing-task-results" id="id19">Testing task results</a></p></li>
+<li><p><a class="reference internal" href="#type-tests" id="id20">Type Tests</a></p></li>
+</ul>
+</div>
+<section id="test-syntax">
+<span id="id2"></span><h2><a class="toc-backref" href="#id7">Test syntax</a><a class="headerlink" href="#test-syntax" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="https://jinja.palletsprojects.com/en/latest/templates/#tests">Test syntax</a> varies from <a class="reference external" href="https://jinja.palletsprojects.com/en/latest/templates/#filters">filter syntax</a> (<code class="docutils literal notranslate"><span class="pre">variable</span> <span class="pre">|</span> <span class="pre">filter</span></code>). Historically Ansible has registered tests as both jinja tests and jinja filters, allowing for them to be referenced using filter syntax.</p>
+<p>As of Ansible 2.5, using a jinja test as a filter will generate a deprecation warning. As of Ansible 2.9+ using jinja test syntax is required.</p>
+<p>The syntax for using a jinja test is as follows</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">variable is test_name</span>
+</pre></div>
+</div>
+<p>Such as</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">result is failed</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-strings">
+<span id="id4"></span><h2><a class="toc-backref" href="#id8">Testing strings</a><a class="headerlink" href="#testing-strings" title="Permalink to this headline"></a></h2>
+<p>To match strings against a substring or a regular expression, use the <code class="docutils literal notranslate"><span class="pre">match</span></code>, <code class="docutils literal notranslate"><span class="pre">search</span></code> or <code class="docutils literal notranslate"><span class="pre">regex</span></code> tests</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+  <span class="nt">url</span><span class="p">:</span> <span class="s">&quot;https://example.com/users/foo/resources/bar&quot;</span>
+
+<span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;matched</span><span class="nv"> </span><span class="s">pattern</span><span class="nv"> </span><span class="s">1&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">url is match(&quot;https://example.com/users/.*/resources&quot;)</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;matched</span><span class="nv"> </span><span class="s">pattern</span><span class="nv"> </span><span class="s">2&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">url is search(&quot;users/.*/resources/.*&quot;)</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;matched</span><span class="nv"> </span><span class="s">pattern</span><span class="nv"> </span><span class="s">3&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">url is search(&quot;users&quot;)</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;matched</span><span class="nv"> </span><span class="s">pattern</span><span class="nv"> </span><span class="s">4&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">url is regex(&quot;example\.com/\w+/foo&quot;)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">match</span></code> succeeds if it finds the pattern at the beginning of the string, while <code class="docutils literal notranslate"><span class="pre">search</span></code> succeeds if it finds the pattern anywhere within string. By default, <code class="docutils literal notranslate"><span class="pre">regex</span></code> works like <code class="docutils literal notranslate"><span class="pre">search</span></code>, but <code class="docutils literal notranslate"><span class="pre">regex</span></code> can be configured to perform other tests as well, by passing the <code class="docutils literal notranslate"><span class="pre">match_type</span></code> keyword argument. In particular, <code class="docutils literal notranslate"><span class="pre">match_type</span></code> determines the <code class="docutils literal notranslate"><span class="pre">re</span></code> method that gets used to perform the search. The full list can be found in the relevant Python documentation <a class="reference external" href="https://docs.python.org/3/library/re.html#regular-expression-objects">here</a>.</p>
+<p>All of the string tests also take optional <code class="docutils literal notranslate"><span class="pre">ignorecase</span></code> and <code class="docutils literal notranslate"><span class="pre">multiline</span></code> arguments. These correspond to <code class="docutils literal notranslate"><span class="pre">re.I</span></code> and <code class="docutils literal notranslate"><span class="pre">re.M</span></code> from Python’s <code class="docutils literal notranslate"><span class="pre">re</span></code> library, respectively.</p>
+</section>
+<section id="vault">
+<span id="testing-vault"></span><h2><a class="toc-backref" href="#id9">Vault</a><a class="headerlink" href="#vault" title="Permalink to this headline"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.10.</span></p>
+</div>
+<p>You can test whether a variable is an inline single vault encrypted value using the <code class="docutils literal notranslate"><span class="pre">vault_encrypted</span></code> test.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+  <span class="nt">variable</span><span class="p">:</span> <span class="kt">!vault</span> <span class="p p-Indicator">|</span>
+    <span class="no">$ANSIBLE_VAULT;1.2;AES256;dev</span>
+    <span class="no">61323931353866666336306139373937316366366138656131323863373866376666353364373761</span>
+    <span class="no">3539633234313836346435323766306164626134376564330a373530313635343535343133316133</span>
+    <span class="no">36643666306434616266376434363239346433643238336464643566386135356334303736353136</span>
+    <span class="no">6565633133366366360a326566323363363936613664616364623437336130623133343530333739</span>
+    <span class="no">3039</span>
+
+<span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&#39;{{</span><span class="nv"> </span><span class="s">(variable</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">vault_encrypted)</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">ternary(&quot;Vault</span><span class="nv"> </span><span class="s">encrypted&quot;,</span><span class="nv"> </span><span class="s">&quot;Not</span><span class="nv"> </span><span class="s">vault</span><span class="nv"> </span><span class="s">encrypted&quot;)</span><span class="nv"> </span><span class="s">}}&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-truthiness">
+<span id="id5"></span><h2><a class="toc-backref" href="#id10">Testing truthiness</a><a class="headerlink" href="#testing-truthiness" title="Permalink to this headline"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.10.</span></p>
+</div>
+<p>As of Ansible 2.10, you can now perform Python like truthy and falsy checks.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Truthy&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">value is truthy</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;some</span><span class="nv"> </span><span class="s">string&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Falsy&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">value is falsy</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Additionally, the <code class="docutils literal notranslate"><span class="pre">truthy</span></code> and <code class="docutils literal notranslate"><span class="pre">falsy</span></code> tests accept an optional parameter called <code class="docutils literal notranslate"><span class="pre">convert_bool</span></code> that will attempt
+to convert boolean indicators to actual booleans.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Truthy&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">value is truthy(convert_bool=True)</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;yes&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Falsy&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">value is falsy(convert_bool=True)</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;off&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="comparing-versions">
+<span id="testing-versions"></span><h2><a class="toc-backref" href="#id11">Comparing versions</a><a class="headerlink" href="#comparing-versions" title="Permalink to this headline"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.6.</span></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In 2.5 <code class="docutils literal notranslate"><span class="pre">version_compare</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">version</span></code></p>
+</div>
+<p>To compare a version number, such as checking if the <code class="docutils literal notranslate"><span class="pre">ansible_facts['distribution_version']</span></code>
+version is greater than or equal to ‘12.04’, you can use the <code class="docutils literal notranslate"><span class="pre">version</span></code> test.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> test can also be used to evaluate the <code class="docutils literal notranslate"><span class="pre">ansible_facts['distribution_version']</span></code></p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">ansible_facts</span><span class="o">[</span><span class="s1">&#39;distribution_version&#39;</span><span class="o">]</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;12.04&#39;</span><span class="o">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">ansible_facts['distribution_version']</span></code> is greater than or equal to 12.04, this test returns True, otherwise False.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> test accepts the following operators</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&lt;, lt, &lt;=, le, &gt;, gt, &gt;=, ge, ==, =, eq, !=, &lt;&gt;, ne</span>
+</pre></div>
+</div>
+<p>This test also accepts a 3rd parameter, <code class="docutils literal notranslate"><span class="pre">strict</span></code> which defines if strict version parsing as defined by <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.compat.version.StrictVersion</span></code> should be used.  The default is <code class="docutils literal notranslate"><span class="pre">False</span></code> (using <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.compat.version.LooseVersion</span></code>), <code class="docutils literal notranslate"><span class="pre">True</span></code> enables strict version parsing</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">sample_version_var</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;1.0&#39;</span><span class="o">,</span> <span class="nv">operator</span><span class="o">=</span><span class="s1">&#39;lt&#39;</span><span class="o">,</span> <span class="nv">strict</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>As of Ansible 2.11 the <code class="docutils literal notranslate"><span class="pre">version</span></code> test accepts a <code class="docutils literal notranslate"><span class="pre">version_type</span></code> parameter which is mutually exclusive with <code class="docutils literal notranslate"><span class="pre">strict</span></code>, and accepts the following values</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">loose, strict, semver, semantic</span>
+</pre></div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">version_type</span></code> to compare a semantic version would be achieved like the following</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">sample_semver_var</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;2.0.0-rc.1+build.123&#39;</span><span class="o">,</span> <span class="s1">&#39;lt&#39;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s1">&#39;semver&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>When using <code class="docutils literal notranslate"><span class="pre">version</span></code> in a playbook or role, don’t use <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code> as described in the <a class="reference external" href="https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#when-should-i-use-also-how-to-interpolate-variables-or-dynamic-variable-names">FAQ</a></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">my_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.2.3</span>
+
+<span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;my_version</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">higher</span><span class="nv"> </span><span class="s">than</span><span class="nv"> </span><span class="s">1.0.0&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_version is version(&#39;1.0.0&#39;, &#39;&gt;&#39;)</span>
+</pre></div>
+</div>
+</section>
+<section id="set-theory-tests">
+<span id="math-tests"></span><h2><a class="toc-backref" href="#id12">Set theory tests</a><a class="headerlink" href="#set-theory-tests" title="Permalink to this headline"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.1.</span></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In 2.5 <code class="docutils literal notranslate"><span class="pre">issubset</span></code> and <code class="docutils literal notranslate"><span class="pre">issuperset</span></code> were renamed to <code class="docutils literal notranslate"><span class="pre">subset</span></code> and <code class="docutils literal notranslate"><span class="pre">superset</span></code></p>
+</div>
+<p>To see if a list includes or is included by another list, you can use ‘subset’ and ‘superset’</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">a</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="nv">5</span><span class="p p-Indicator">]</span>
+    <span class="nt">b</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;A</span><span class="nv"> </span><span class="s">includes</span><span class="nv"> </span><span class="s">B&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">a is superset(b)</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;B</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">included</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">A&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">b is subset(a)</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-if-a-list-contains-a-value">
+<span id="contains-test"></span><h2><a class="toc-backref" href="#id13">Testing if a list contains a value</a><a class="headerlink" href="#testing-if-a-list-contains-a-value" title="Permalink to this headline"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.8.</span></p>
+</div>
+<p>Ansible includes a <code class="docutils literal notranslate"><span class="pre">contains</span></code> test which operates similarly, but in reverse of the Jinja2 provided <code class="docutils literal notranslate"><span class="pre">in</span></code> test.
+The <code class="docutils literal notranslate"><span class="pre">contains</span></code> test is designed to work with the <code class="docutils literal notranslate"><span class="pre">select</span></code>, <code class="docutils literal notranslate"><span class="pre">reject</span></code>, <code class="docutils literal notranslate"><span class="pre">selectattr</span></code>, and <code class="docutils literal notranslate"><span class="pre">rejectattr</span></code> filters</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+  <span class="nt">lacp_groups</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">master</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">lacp0</span>
+      <span class="nt">network</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.100.0/24</span>
+      <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.100.1</span>
+      <span class="nt">dns4</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.65.100.10</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.65.100.11</span>
+      <span class="nt">interfaces</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">em1</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">em2</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">master</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">lacp1</span>
+      <span class="nt">network</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.120.0/24</span>
+      <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.120.1</span>
+      <span class="nt">dns4</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.65.100.10</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.65.100.11</span>
+      <span class="nt">interfaces</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">em3</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">em4</span>
+
+<span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">(lacp_groups|selectattr(&#39;interfaces&#39;,</span><span class="nv"> </span><span class="s">&#39;contains&#39;,</span><span class="nv"> </span><span class="s">&#39;em1&#39;)|first).master</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-if-a-list-value-is-true">
+<h2><a class="toc-backref" href="#id14">Testing if a list value is True</a><a class="headerlink" href="#testing-if-a-list-value-is-true" title="Permalink to this headline"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+<p>You can use <cite>any</cite> and <cite>all</cite> to check if any or all elements in a list are true or not</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+  <span class="nt">mylist</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">3</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">3</span><span class="nv"> </span><span class="s">}}&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+  <span class="nt">myotherlist</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;all</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">true!&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mylist is all</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;at</span><span class="nv"> </span><span class="s">least</span><span class="nv"> </span><span class="s">one</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">true&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myotherlist is any</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-paths">
+<span id="path-tests"></span><h2><a class="toc-backref" href="#id15">Testing paths</a><a class="headerlink" href="#testing-paths" title="Permalink to this headline"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In 2.5 the following tests were renamed to remove the <code class="docutils literal notranslate"><span class="pre">is_</span></code> prefix</p>
+</div>
+<p>The following tests can provide information about a path on the controller</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">directory&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypath is directory</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">file&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypath is file</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">symlink&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypath is link</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">already</span><span class="nv"> </span><span class="s">exists&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypath is exists</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">(mypath</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">abs)|ternary(&#39;absolute&#39;,&#39;relative&#39;)}}&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">same</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">path2&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypath is same_file(path2)</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">mount&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypath is mount</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">directory&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mypath is directory</span>
+  <span class="nt">vars</span><span class="p">:</span>
+     <span class="nt">mypath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/my/patth</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;path</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">file&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="s">&quot;&#39;/my/path&#39;</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">file&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="testing-size-formats">
+<h2><a class="toc-backref" href="#id16">Testing size formats</a><a class="headerlink" href="#testing-size-formats" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">human_readable</span></code> and <code class="docutils literal notranslate"><span class="pre">human_to_bytes</span></code> functions let you test your
+playbooks to make sure you are using the right size format in your tasks, and that
+you provide Byte format to computers and human-readable format to people.</p>
+<section id="human-readable">
+<h3><a class="toc-backref" href="#id17">Human readable</a><a class="headerlink" href="#human-readable" title="Permalink to this headline"></a></h3>
+<p>Asserts whether the given string is human readable or not.</p>
+<p>For example</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Human</span><span class="nv"> </span><span class="s">Readable&quot;</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;&quot;1.00</span><span class="nv"> </span><span class="s">Bytes&quot;</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">1|human_readable&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;&quot;1.00</span><span class="nv"> </span><span class="s">bits&quot;</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">1|human_readable(isbits=True)&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;&quot;10.00</span><span class="nv"> </span><span class="s">KB&quot;</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">10240|human_readable&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;&quot;97.66</span><span class="nv"> </span><span class="s">MB&quot;</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">102400000|human_readable&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;&quot;0.10</span><span class="nv"> </span><span class="s">GB&quot;</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">102400000|human_readable(unit=&quot;G&quot;)&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;&quot;0.10</span><span class="nv"> </span><span class="s">Gb&quot;</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">102400000|human_readable(isbits=True,</span><span class="nv"> </span><span class="s">unit=&quot;G&quot;)&#39;</span>
+</pre></div>
+</div>
+<p>This would result in</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;changed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s2">&quot;All assertions passed&quot;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="human-to-bytes">
+<h3><a class="toc-backref" href="#id18">Human to bytes</a><a class="headerlink" href="#human-to-bytes" title="Permalink to this headline"></a></h3>
+<p>Returns the given string in the Bytes format.</p>
+<p>For example</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Human</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">Bytes&quot;</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="s1">&#39;0&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="cp">}}</span><span class="nv">        </span><span class="s">==</span><span class="nv"> </span><span class="s">0&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="s1">&#39;0.1&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="cp">}}</span><span class="nv">      </span><span class="s">==</span><span class="nv"> </span><span class="s">0&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="s1">&#39;0.9&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="cp">}}</span><span class="nv">      </span><span class="s">==</span><span class="nv"> </span><span class="s">1&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="s1">&#39;1&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="cp">}}</span><span class="nv">        </span><span class="s">==</span><span class="nv"> </span><span class="s">1&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="s1">&#39;10.00 KB&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="cp">}}</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">10240&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span>   <span class="s1">&#39;11 MB&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="cp">}}</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">11534336&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span>  <span class="s1">&#39;1.1 GB&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="cp">}}</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">1181116006&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="s1">&#39;10.00 Kb&#39;</span><span class="o">|</span><span class="nf">human_to_bytes</span><span class="o">(</span><span class="nv">isbits</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span><span class="cp">}}</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">10240&quot;</span>
+</pre></div>
+</div>
+<p>This would result in</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;changed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s2">&quot;All assertions passed&quot;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="testing-task-results">
+<span id="test-task-results"></span><h2><a class="toc-backref" href="#id19">Testing task results</a><a class="headerlink" href="#testing-task-results" title="Permalink to this headline"></a></h2>
+<p>The following tasks are illustrative of the tests meant to check the status of tasks</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/foo</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="nt">ignore_errors</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;it</span><span class="nv"> </span><span class="s">failed&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is failed</span>
+
+  <span class="c1"># in most cases you&#39;ll want a handler, but if you want to do something right now, this is nice</span>
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;it</span><span class="nv"> </span><span class="s">changed&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is changed</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;it</span><span class="nv"> </span><span class="s">succeeded</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">Ansible</span><span class="nv"> </span><span class="s">&gt;=</span><span class="nv"> </span><span class="s">2.1&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is succeeded</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;it</span><span class="nv"> </span><span class="s">succeeded&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is success</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;it</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">skipped&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is skipped</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From 2.1, you can also use success, failure, change, and skip so that the grammar matches, for those who need to be strict about it.</p>
+</div>
+</section>
+<section id="type-tests">
+<span id="id6"></span><h2><a class="toc-backref" href="#id20">Type Tests</a><a class="headerlink" href="#type-tests" title="Permalink to this headline"></a></h2>
+<p>When looking to determine types, it may be tempting to use the <code class="docutils literal notranslate"><span class="pre">type_debug</span></code> filter and compare that to the string name of that type, however, you should instead use type test comparisons, such as:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;String</span><span class="nv"> </span><span class="s">interpretation&quot;</span>
+    <span class="nt">vars</span><span class="p">:</span>
+      <span class="nt">a_string</span><span class="p">:</span> <span class="s">&quot;A</span><span class="nv"> </span><span class="s">string&quot;</span>
+      <span class="nt">a_dictionary</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="s">&quot;a&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;dictionary&quot;</span><span class="p p-Indicator">}</span>
+      <span class="nt">a_list</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;a&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;list&quot;</span><span class="p p-Indicator">]</span>
+    <span class="nt">assert</span><span class="p">:</span>
+      <span class="nt">that</span><span class="p">:</span>
+      <span class="c1"># Note that a string is classed as also being &quot;iterable&quot;, &quot;sequence&quot; and &quot;mapping&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_string is string</span>
+
+      <span class="c1"># Note that a dictionary is classed as not being a &quot;string&quot;, but is &quot;iterable&quot;, &quot;sequence&quot; and &quot;mapping&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_dictionary is not string and a_dictionary is mapping</span>
+
+      <span class="c1"># Note that a list is classed as not being a &quot;string&quot; or &quot;mapping&quot; but is &quot;iterable&quot; and &quot;sequence&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_list is not string and a_list is not mapping and a_list is iterable</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Number</span><span class="nv"> </span><span class="s">interpretation&quot;</span>
+    <span class="nt">vars</span><span class="p">:</span>
+      <span class="nt">a_float</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.01</span>
+      <span class="nt">a_float_as_string</span><span class="p">:</span> <span class="s">&quot;1.01&quot;</span>
+      <span class="nt">an_integer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+      <span class="nt">an_integer_as_string</span><span class="p">:</span> <span class="s">&quot;1&quot;</span>
+    <span class="nt">assert</span><span class="p">:</span>
+      <span class="nt">that</span><span class="p">:</span>
+      <span class="c1"># Both a_float and an_integer are &quot;number&quot;, but each has their own type as well</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_float is number and a_float is float</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">an_integer is number and an_integer is integer</span>
+
+      <span class="c1"># Both a_float_as_string and an_integer_as_string are not numbers</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_float_as_string is not number and a_float_as_string is string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">an_integer_as_string is not number and a_float_as_string is string</span>
+
+      <span class="c1"># a_float or a_float_as_string when cast to a float and then to a string should match the same value cast only to a string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_float | float | string == a_float | string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_float_as_string | float | string == a_float_as_string | string</span>
+
+      <span class="c1"># Likewise an_integer and an_integer_as_string when cast to an integer and then to a string should match the same value cast only to an integer</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">an_integer | int | string == an_integer | string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">an_integer_as_string | int | string == an_integer_as_string | string</span>
+
+      <span class="c1"># However, a_float or a_float_as_string cast as an integer and then a string does not match the same value cast to a string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_float | int | string != a_float | string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a_float_as_string | int | string != a_float_as_string | string</span>
+
+      <span class="c1"># Again, Likewise an_integer and an_integer_as_string cast as a float and then a string does not match the same value cast to a string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">an_integer | float | string != an_integer | string</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">an_integer_as_string | float | string != an_integer_as_string | string</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Native</span><span class="nv"> </span><span class="s">Boolean</span><span class="nv"> </span><span class="s">interpretation&quot;</span>
+    <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TRUE</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">No</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">NO</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FALSE</span>
+    <span class="nt">assert</span><span class="p">:</span>
+      <span class="nt">that</span><span class="p">:</span>
+      <span class="c1"># Note that while other values may be cast to boolean values, these are the only ones which are natively considered boolean</span>
+      <span class="c1"># Note also that `yes` is the only case sensitive variant of these values.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">item is boolean</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="playbooks_intro.html#playbooks-intro"><span class="std std-ref">Intro to playbooks</span></a></dt><dd><p>An introduction to playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_conditionals.html#playbooks-conditionals"><span class="std std-ref">Conditionals</span></a></dt><dd><p>Conditional statements in playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a></dt><dd><p>All about variables</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_loops.html#playbooks-loops"><span class="std std-ref">Loops</span></a></dt><dd><p>Looping in playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Roles</span></a></dt><dd><p>Playbook organization by roles</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_best_practices.html#playbooks-best-practices"><span class="std std-ref">Tips and tricks</span></a></dt><dd><p>Tips and tricks for playbooks</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-devel">User Mailing List</a></dt><dd><p>Have a question?  Stop by the google group!</p>
+</dd>
+<dt><a class="reference internal" href="../community/communication.html#communication-irc"><span class="std std-ref">Real-time chat</span></a></dt><dd><p>How to join Ansible chat channels</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_filters.html" class="btn btn-neutral float-left" title="Using filters to manipulate data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_lookups.html" class="btn btn-neutral float-right" title="Lookups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

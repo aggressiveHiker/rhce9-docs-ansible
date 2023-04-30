@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing Strategies &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/reference_appendices/test_strategies.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sanity Tests" href="../dev_guide/testing/sanity/index.html" />
+    <link rel="prev" title="Releases and maintenance" href="release_and_maintenance.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testing Strategies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#integrating-testing-with-ansible-playbooks">Integrating Testing With Ansible Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-right-level-of-testing">The Right Level of Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#check-mode-as-a-drift-test">Check Mode As A Drift Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modules-that-are-useful-for-testing">Modules That Are Useful for Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-lifecycle">Testing Lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integrating-testing-with-rolling-updates">Integrating Testing With Rolling Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#achieving-continuous-deployment">Achieving Continuous Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Testing Strategies</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/reference_appendices/test_strategies.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="testing-strategies">
+<span id="id1"></span><h1>Testing Strategies<a class="headerlink" href="#testing-strategies" title="Permalink to this headline"></a></h1>
+<section id="integrating-testing-with-ansible-playbooks">
+<span id="testing-intro"></span><h2>Integrating Testing With Ansible Playbooks<a class="headerlink" href="#integrating-testing-with-ansible-playbooks" title="Permalink to this headline"></a></h2>
+<p>Many times, people ask, “how can I best integrate testing with Ansible playbooks?”  There are many options.  Ansible is actually designed
+to be a “fail-fast” and ordered system, therefore it makes it easy to embed testing directly in Ansible playbooks.  In this chapter,
+we’ll go into some patterns for integrating tests of infrastructure and discuss the right level of testing that may be appropriate.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a chapter about testing the application you are deploying, not the chapter on how to test Ansible modules during development.  For that content, please hop over to the Development section.</p>
+</div>
+<p>By incorporating a degree of testing into your deployment workflow, there will be fewer surprises when code hits production and, in many cases,
+tests can be used in production to prevent failed updates from migrating across an entire installation.  Since it’s push-based, it’s
+also very easy to run the steps on the localhost or testing servers. Ansible lets you insert as many checks and balances into your upgrade workflow as you would like to have.</p>
+</section>
+<section id="the-right-level-of-testing">
+<h2>The Right Level of Testing<a class="headerlink" href="#the-right-level-of-testing" title="Permalink to this headline"></a></h2>
+<p>Ansible resources are models of desired-state.  As such, it should not be necessary to test that services are started, packages are
+installed, or other such things. Ansible is the system that will ensure these things are declaratively true.   Instead, assert these
+things in your playbooks.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.service</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+      <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+      <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+</pre></div>
+</div>
+<p>If you think the service may not be started, the best thing to do is request it to be started.  If the service fails to start, Ansible
+will yell appropriately. (This should not be confused with whether the service is doing something functional, which we’ll show more about how to
+do later).</p>
+</section>
+<section id="check-mode-as-a-drift-test">
+<span id="check-mode-drift"></span><h2>Check Mode As A Drift Test<a class="headerlink" href="#check-mode-as-a-drift-test" title="Permalink to this headline"></a></h2>
+<p>In the above setup, <code class="docutils literal notranslate"><span class="pre">--check</span></code> mode in Ansible can be used as a layer of testing as well.  If running a deployment playbook against an
+existing system, using the <code class="docutils literal notranslate"><span class="pre">--check</span></code> flag to the <cite>ansible</cite> command will report if Ansible thinks it would have had to have made any changes to
+bring the system into a desired state.</p>
+<p>This can let you know up front if there is any need to deploy onto the given system.  Ordinarily, scripts and commands don’t run in check mode, so if you
+want certain steps to execute in normal mode even when the <code class="docutils literal notranslate"><span class="pre">--check</span></code> flag is used, such as calls to the script module, disable check mode for those tasks:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">webserver</span>
+
+<span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">verify.sh</span>
+    <span class="nt">check_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+</pre></div>
+</div>
+</section>
+<section id="modules-that-are-useful-for-testing">
+<h2>Modules That Are Useful for Testing<a class="headerlink" href="#modules-that-are-useful-for-testing" title="Permalink to this headline"></a></h2>
+<p>Certain playbook modules are particularly good for testing.  Below is an example that ensures a port is open:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.wait_for</span><span class="p">:</span>
+      <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+      <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+    <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+</pre></div>
+</div>
+<p>Here’s an example of using the URI module to make sure a web service returns:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">uri url=https://www.example.com return_content=yes</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webpage</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">fail</span><span class="p">:</span>
+      <span class="nt">msg</span><span class="p">:</span> <span class="s">&#39;service</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">happy&#39;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="s">&quot;&#39;AWESOME&#39;</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">webpage.content&quot;</span>
+</pre></div>
+</div>
+<p>It’s easy to push an arbitrary script (in any language) on a remote host and the script will automatically fail if it has a non-zero return code:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_script1</span>
+  <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_script2 --parameter value --parameter2 value</span>
+</pre></div>
+</div>
+<p>If using roles (you should be, roles are great!), scripts pushed by the script module can live in the ‘files/’ directory of a role.</p>
+<p>And the assert module makes it very easy to validate various kinds of truth:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/some-command --parameter value</span>
+     <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cmd_result</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.assert</span><span class="p">:</span>
+       <span class="nt">that</span><span class="p">:</span>
+         <span class="p p-Indicator">-</span> <span class="s">&quot;&#39;not</span><span class="nv"> </span><span class="s">ready&#39;</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">cmd_result.stderr&quot;</span>
+         <span class="p p-Indicator">-</span> <span class="s">&quot;&#39;gizmo</span><span class="nv"> </span><span class="s">enabled&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">cmd_result.stdout&quot;</span>
+</pre></div>
+</div>
+<p>Should you feel the need to test for the existence of files that are not declaratively set by your Ansible configuration, the ‘stat’ module is a great choice:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.stat</span><span class="p">:</span>
+       <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/something</span>
+     <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">p</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.assert</span><span class="p">:</span>
+       <span class="nt">that</span><span class="p">:</span>
+         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">p.stat.exists and p.stat.isdir</span>
+</pre></div>
+</div>
+<p>As mentioned above, there’s no need to check things like the return codes of commands.  Ansible is checking them automatically.
+Rather than checking for a user to exist, consider using the user module to make it exist.</p>
+<p>Ansible is a fail-fast system, so when there is an error creating that user, it will stop the playbook run.  You do not have
+to check up behind it.</p>
+</section>
+<section id="testing-lifecycle">
+<h2>Testing Lifecycle<a class="headerlink" href="#testing-lifecycle" title="Permalink to this headline"></a></h2>
+<p>If writing some degree of basic validation of your application into your playbooks, they will run every time you deploy.</p>
+<p>As such, deploying into a local development VM and a staging environment will both validate that things are according to plan
+ahead of your production deploy.</p>
+<p>Your workflow may be something like this:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Use the same playbook all the time with embedded tests in development</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Use the playbook to deploy to a staging environment (with the same playbooks) that simulates production</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Run an integration test battery written by your QA team against staging</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Deploy to production, with the same integrated tests.</span>
+</pre></div>
+</div>
+<p>Something like an integration test battery should be written by your QA team if you are a production webservice.  This would include
+things like Selenium tests or automated API tests and would usually not be something embedded into your Ansible playbooks.</p>
+<p>However, it does make sense to include some basic health checks into your playbooks, and in some cases it may be possible to run
+a subset of the QA battery against remote nodes. This is what the next section covers.</p>
+</section>
+<section id="integrating-testing-with-rolling-updates">
+<h2>Integrating Testing With Rolling Updates<a class="headerlink" href="#integrating-testing-with-rolling-updates" title="Permalink to this headline"></a></h2>
+<p>If you have read into <a class="reference internal" href="../user_guide/playbooks_delegation.html#playbooks-delegation"><span class="std std-ref">Controlling where tasks run: delegation and local actions</span></a> it may quickly become apparent that the rolling update pattern can be extended, and you
+can use the success or failure of the playbook run to decide whether to add a machine into a load balancer or not.</p>
+<p>This is the great culmination of embedded tests:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">serial</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+
+  <span class="nt">pre_tasks</span><span class="p">:</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">take out of load balancer pool</span>
+      <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/take_out_of_pool</span> <span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span>
+      <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+
+  <span class="nt">roles</span><span class="p">:</span>
+
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">common</span>
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">webserver</span>
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">apply_testing_checks</span>
+
+  <span class="nt">post_tasks</span><span class="p">:</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add back to load balancer pool</span>
+      <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/add_back_to_pool</span> <span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span>
+      <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+</pre></div>
+</div>
+<p>Of course in the above, the “take out of the pool” and “add back” steps would be replaced with a call to an Ansible load balancer
+module or appropriate shell command.  You might also have steps that use a monitoring module to start and end an outage window
+for the machine.</p>
+<p>However, what you can see from the above is that tests are used as a gate – if the “apply_testing_checks” step is not performed,
+the machine will not go back into the pool.</p>
+<p>Read the delegation chapter about “max_fail_percentage” and you can also control how many failing tests will stop a rolling update
+from proceeding.</p>
+<p>This above approach can also be modified to run a step from a testing machine remotely against a machine:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">serial</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+
+  <span class="nt">pre_tasks</span><span class="p">:</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">take out of load balancer pool</span>
+      <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/take_out_of_pool</span> <span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span>
+      <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+
+  <span class="nt">roles</span><span class="p">:</span>
+
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">common</span>
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">webserver</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+     <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.script</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/srv/qa_team/app_testing_script.sh --server</span> <span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span>
+       <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testing_server</span>
+
+  <span class="nt">post_tasks</span><span class="p">:</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add back to load balancer pool</span>
+      <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/add_back_to_pool</span> <span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span>
+      <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+</pre></div>
+</div>
+<p>In the above example, a script is run from the testing server against a remote node prior to bringing it back into
+the pool.</p>
+<p>In the event of a problem, fix the few servers that fail using Ansible’s automatically generated
+retry file to repeat the deploy on just those servers.</p>
+</section>
+<section id="achieving-continuous-deployment">
+<h2>Achieving Continuous Deployment<a class="headerlink" href="#achieving-continuous-deployment" title="Permalink to this headline"></a></h2>
+<p>If desired, the above techniques may be extended to enable continuous deployment practices.</p>
+<p>The workflow may look like this:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Write and use automation to deploy local development VMs</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Have a CI system like Jenkins deploy to a staging environment on every code change</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">The deploy job calls testing scripts to pass/fail a build on every deploy</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">If the deploy job succeeds, it runs the same deploy playbook against production inventory</span>
+</pre></div>
+</div>
+<p>Some Ansible users use the above approach to deploy a half-dozen or dozen times an hour without taking all of their infrastructure
+offline.  A culture of automated QA is vital if you wish to get to this level.</p>
+<p>If you are still doing a large amount of manual QA, you should still make the decision on whether to deploy manually as well, but
+it can still help to work in the rolling update patterns of the previous section and incorporate some basic health checks using
+modules like ‘script’, ‘stat’, ‘uri’, and ‘assert’.</p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline"></a></h2>
+<p>Ansible believes you should not need another framework to validate basic things of your infrastructure is true.  This is the case
+because Ansible is an order-based system that will fail immediately on unhandled errors for a host, and prevent further configuration
+of that host.  This forces errors to the top and shows them in a summary at the end of the Ansible run.</p>
+<p>However, as Ansible is designed as a multi-tier orchestration system, it makes it very easy to incorporate tests into the end of
+a playbook run, either using loose tasks or roles.  When used with rolling updates, testing steps can decide whether to put a machine
+back into a load balanced pool or not.</p>
+<p>Finally, because Ansible errors propagate all the way up to the return code of the Ansible program itself, and Ansible by default
+runs in an easy push-based mode, Ansible is a great step to put into a build environment if you wish to use it to roll out systems
+as part of a Continuous Integration/Continuous Delivery pipeline, as is covered in sections above.</p>
+<p>The focus should not be on infrastructure testing, but on application testing, so we strongly encourage getting together with your
+QA team and ask what sort of tests would make sense to run every time you deploy development VMs, and which sort of tests they would like
+to run against the staging environment on every deploy.  Obviously at the development stage, unit tests are great too.  But don’t unit
+test your playbook.  Ansible describes states of resources declaratively, so you don’t have to.  If there are cases where you want
+to be sure of something though, that’s great, and things like stat/assert are great go-to modules for that purpose.</p>
+<p>In all, testing is a very organizational and site-specific thing.  Everybody should be doing it, but what makes the most sense for your
+environment will vary with what you are deploying and who is using it – but everyone benefits from a more robust and reliable deployment
+system.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../collections/index.html#list-of-collections"><span class="std std-ref">Collection Index</span></a></dt><dd><p>Browse existing collections, modules, and plugins</p>
+</dd>
+<dt><a class="reference internal" href="../user_guide/playbooks.html#working-with-playbooks"><span class="std std-ref">Working with playbooks</span></a></dt><dd><p>An introduction to playbooks</p>
+</dd>
+<dt><a class="reference internal" href="../user_guide/playbooks_delegation.html#playbooks-delegation"><span class="std std-ref">Controlling where tasks run: delegation and local actions</span></a></dt><dd><p>Delegation, useful for working with load balancers, clouds, and locally executed steps.</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-project">User Mailing List</a></dt><dd><p>Have a question?  Stop by the google group!</p>
+</dd>
+<dt><a class="reference internal" href="../community/communication.html#communication-irc"><span class="std std-ref">Real-time chat</span></a></dt><dd><p>How to join Ansible chat channels</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="release_and_maintenance.html" class="btn btn-neutral float-left" title="Releases and maintenance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../dev_guide/testing/sanity/index.html" class="btn btn-neutral float-right" title="Sanity Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

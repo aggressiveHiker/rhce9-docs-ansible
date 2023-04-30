@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infoblox Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/guide_infoblox.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Virtualization and Containerization Guides" href="virt_guides.html" />
+    <link rel="prev" title="Cisco Meraki Guide" href="guide_meraki.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="network_guides.html">Network Technology Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide_aci.html">Cisco ACI Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_meraki.html">Cisco Meraki Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Infoblox Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#credentials-and-authenticating">Credentials and authenticating</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nios-lookup-plugins">NIOS lookup plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#retrieving-all-network-views">Retrieving all network views</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#retrieving-a-host-record">Retrieving a host record</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#use-cases-with-modules">Use cases with modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-an-ipv4-network">Configuring an IPv4 network</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-host-record">Creating a host record</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-forward-dns-zone">Creating a forward DNS zone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-reverse-dns-zone">Creating a reverse DNS zone</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dynamic-inventory-script">Dynamic inventory script</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="network_guides.html">Network Technology Guides</a> &raquo;</li>
+      <li>Infoblox Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/scenario_guides/guide_infoblox.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="infoblox-guide">
+<span id="nios-guide"></span><h1><a class="toc-backref" href="#id1">Infoblox Guide</a><a class="headerlink" href="#infoblox-guide" title="Permalink to this headline"></a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#infoblox-guide" id="id1">Infoblox Guide</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prerequisites" id="id2">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#credentials-and-authenticating" id="id3">Credentials and authenticating</a></p></li>
+<li><p><a class="reference internal" href="#nios-lookup-plugins" id="id4">NIOS lookup plugins</a></p>
+<ul>
+<li><p><a class="reference internal" href="#retrieving-all-network-views" id="id5">Retrieving all network views</a></p></li>
+<li><p><a class="reference internal" href="#retrieving-a-host-record" id="id6">Retrieving a host record</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#use-cases-with-modules" id="id7">Use cases with modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configuring-an-ipv4-network" id="id8">Configuring an IPv4 network</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-host-record" id="id9">Creating a host record</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-forward-dns-zone" id="id10">Creating a forward DNS zone</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-reverse-dns-zone" id="id11">Creating a reverse DNS zone</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#dynamic-inventory-script" id="id12">Dynamic inventory script</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This guide describes how to use Ansible with the Infoblox Network Identity Operating System (NIOS). With Ansible integration, you can use Ansible playbooks to automate Infoblox Core Network Services for IP address management (IPAM), DNS, and inventory tracking.</p>
+<p>You can review simple example tasks in the documentation for any of the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/modules/list_of_net_tools_modules.html#nios-net-tools-modules" title="(in Ansible v2.9)"><span class="xref std std-ref">NIOS modules</span></a> or look at the <a class="reference internal" href="#use-cases-with-modules">Use cases with modules</a> section for more elaborate examples. See the <a class="reference external" href="https://www.infoblox.com/">Infoblox</a> website for more information on the Infoblox product.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can retrieve most of the example playbooks used in this guide from the  <a class="reference external" href="https://github.com/network-automation/infoblox_ansible">network-automation/infoblox_ansible</a> GitHub repository.</p>
+</div>
+<section id="prerequisites">
+<h2><a class="toc-backref" href="#id2">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<p>Before using Ansible <code class="docutils literal notranslate"><span class="pre">nios</span></code> modules with Infoblox, you must install the <code class="docutils literal notranslate"><span class="pre">infoblox-client</span></code> on your Ansible control node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo pip install infoblox-client
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need an NIOS account with the WAPI feature enabled to use Ansible with Infoblox.</p>
+</div>
+</section>
+<section id="credentials-and-authenticating">
+<span id="nios-credentials"></span><h2><a class="toc-backref" href="#id3">Credentials and authenticating</a><a class="headerlink" href="#credentials-and-authenticating" title="Permalink to this headline"></a></h2>
+<p>To use Infoblox <code class="docutils literal notranslate"><span class="pre">nios</span></code> modules in playbooks, you need to configure the credentials to access your Infoblox system.  The examples in this guide use credentials stored in <code class="docutils literal notranslate"><span class="pre">&lt;playbookdir&gt;/group_vars/nios.yml</span></code>. Replace these values with your Infoblox credentials:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">nios_provider</span><span class="p">:</span>
+  <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.0.0.2</span>
+  <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+  <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible</span>
+</pre></div>
+</div>
+</section>
+<section id="nios-lookup-plugins">
+<h2><a class="toc-backref" href="#id4">NIOS lookup plugins</a><a class="headerlink" href="#nios-lookup-plugins" title="Permalink to this headline"></a></h2>
+<p>Ansible includes the following lookup plugins for NIOS:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/lookup/nios.html#nios-lookup" title="(in Ansible v2.9)"><span class="xref std std-ref">nios</span></a> Uses the Infoblox WAPI API to fetch NIOS specified objects, for example network views, DNS views, and host records.</p></li>
+<li><p><a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/lookup/nios_next_ip.html#nios-next-ip-lookup" title="(in Ansible v2.9)"><span class="xref std std-ref">nios_next_ip</span></a> Provides the next available IP address from a network. You’ll see an example of this in <a class="reference internal" href="#creating-a-host-record">Creating a host record</a>.</p></li>
+<li><p><a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/lookup/nios_next_network.html#nios-next-network-lookup" title="(in Ansible v2.9)"><span class="xref std std-ref">nios_next_network</span></a> - Returns the next available network range for a network-container.</p></li>
+</ul>
+<p>You must run the NIOS lookup plugins locally by specifying <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">local</span></code>. See <a class="reference internal" href="../plugins/lookup.html#lookup-plugins"><span class="std std-ref">lookup plugins</span></a> for more detail.</p>
+<section id="retrieving-all-network-views">
+<h3><a class="toc-backref" href="#id5">Retrieving all network views</a><a class="headerlink" href="#retrieving-all-network-views" title="Permalink to this headline"></a></h3>
+<p>To retrieve all network views and save them in a variable, use the <a class="reference internal" href="../collections/ansible/builtin/set_fact_module.html#set-fact-module"><span class="std std-ref">set_fact</span></a> module with the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/lookup/nios.html#nios-lookup" title="(in Ansible v2.9)"><span class="xref std std-ref">nios</span></a> lookup plugin:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nios</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fetch all networkview objects</span>
+      <span class="nt">set_fact</span><span class="p">:</span>
+        <span class="nt">networkviews</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;nios&#39;,</span><span class="nv"> </span><span class="s">&#39;networkview&#39;,</span><span class="nv"> </span><span class="s">provider=nios_provider)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">check the networkviews</span>
+      <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">networkviews</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-a-host-record">
+<h3><a class="toc-backref" href="#id6">Retrieving a host record</a><a class="headerlink" href="#retrieving-a-host-record" title="Permalink to this headline"></a></h3>
+<p>To retrieve a set of host records, use the <code class="docutils literal notranslate"><span class="pre">set_fact</span></code> module with the <code class="docutils literal notranslate"><span class="pre">nios</span></code> lookup plugin and include a filter for the specific hosts you want to retrieve:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nios</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fetch host leaf01</span>
+      <span class="nt">set_fact</span><span class="p">:</span>
+         <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;nios&#39;,</span><span class="nv"> </span><span class="s">&#39;record:host&#39;,</span><span class="nv"> </span><span class="s">filter={&#39;name&#39;:</span><span class="nv"> </span><span class="s">&#39;leaf01.ansible.com&#39;},</span><span class="nv"> </span><span class="s">provider=nios_provider)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">check the leaf01 return variable</span>
+      <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">debug specific variable (ipv4 address)</span>
+      <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host.ipv4addrs[0].ipv4addr</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fetch host leaf02</span>
+      <span class="nt">set_fact</span><span class="p">:</span>
+        <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;nios&#39;,</span><span class="nv"> </span><span class="s">&#39;record:host&#39;,</span><span class="nv"> </span><span class="s">filter={&#39;name&#39;:</span><span class="nv"> </span><span class="s">&#39;leaf02.ansible.com&#39;},</span><span class="nv"> </span><span class="s">provider=nios_provider)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">check the leaf02 return variable</span>
+      <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+</pre></div>
+</div>
+<p>If you run this <code class="docutils literal notranslate"><span class="pre">get_host_record.yml</span></code> playbook, you should see results similar to the following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ansible-playbook get_host_record.yml
+
+PLAY [localhost] ***************************************************************************************
+
+TASK [fetch host leaf01] ******************************************************************************
+ok: [localhost]
+
+TASK [check the leaf01 return variable] *************************************************************
+ok: [localhost] =&gt; {
+&lt; ...output shortened...&gt;
+    &quot;host&quot;: {
+        &quot;ipv4addrs&quot;: [
+            {
+                &quot;configure_for_dhcp&quot;: false,
+                &quot;host&quot;: &quot;leaf01.ansible.com&quot;,
+            }
+        ],
+        &quot;name&quot;: &quot;leaf01.ansible.com&quot;,
+        &quot;view&quot;: &quot;default&quot;
+    }
+}
+
+TASK [debug specific variable (ipv4 address)] ******************************************************
+ok: [localhost] =&gt; {
+    &quot;host.ipv4addrs[0].ipv4addr&quot;: &quot;192.168.1.11&quot;
+}
+
+TASK [fetch host leaf02] ******************************************************************************
+ok: [localhost]
+
+TASK [check the leaf02 return variable] *************************************************************
+ok: [localhost] =&gt; {
+&lt; ...output shortened...&gt;
+    &quot;host&quot;: {
+        &quot;ipv4addrs&quot;: [
+            {
+                &quot;configure_for_dhcp&quot;: false,
+                &quot;host&quot;: &quot;leaf02.example.com&quot;,
+                &quot;ipv4addr&quot;: &quot;192.168.1.12&quot;
+            }
+        ],
+    }
+}
+
+PLAY RECAP ******************************************************************************************
+localhost                  : ok=5    changed=0    unreachable=0    failed=0
+</pre></div>
+</div>
+<p>The output above shows the host record for <code class="docutils literal notranslate"><span class="pre">leaf01.ansible.com</span></code> and <code class="docutils literal notranslate"><span class="pre">leaf02.ansible.com</span></code> that were retrieved by the <code class="docutils literal notranslate"><span class="pre">nios</span></code> lookup plugin. This playbook saves the information in variables which you can use in other playbooks. This allows you to use Infoblox as a single source of truth to gather and use information that changes dynamically. See <a class="reference internal" href="../user_guide/playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a> for more information on using Ansible variables. See the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/lookup/nios.html#nios-lookup" title="(in Ansible v2.9)"><span class="xref std std-ref">nios</span></a> examples for more data options that you can retrieve.</p>
+<p>You can access these playbooks at <a class="reference external" href="https://github.com/network-automation/infoblox_ansible/tree/master/lookup_playbooks">Infoblox lookup playbooks</a>.</p>
+</section>
+</section>
+<section id="use-cases-with-modules">
+<h2><a class="toc-backref" href="#id7">Use cases with modules</a><a class="headerlink" href="#use-cases-with-modules" title="Permalink to this headline"></a></h2>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">nios</span></code> modules in tasks to simplify common Infoblox workflows. Be sure to set up your <a class="reference internal" href="#nios-credentials"><span class="std std-ref">NIOS credentials</span></a> before following these examples.</p>
+<section id="configuring-an-ipv4-network">
+<h3><a class="toc-backref" href="#id8">Configuring an IPv4 network</a><a class="headerlink" href="#configuring-an-ipv4-network" title="Permalink to this headline"></a></h3>
+<p>To configure an IPv4 network, use the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/modules/nios_network_module.html#nios-network-module" title="(in Ansible v2.9)"><span class="xref std std-ref">nios_network</span></a> module:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nios</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a network on the default network view</span>
+      <span class="nt">nios_network</span><span class="p">:</span>
+        <span class="nt">network</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.100.0/24</span>
+        <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sets the IPv4 network</span>
+        <span class="nt">options</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">domain-name</span>
+            <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.com</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="s">&quot;{{nios_provider}}&quot;</span>
+</pre></div>
+</div>
+<p>Notice the last parameter, <code class="docutils literal notranslate"><span class="pre">provider</span></code>, uses the variable <code class="docutils literal notranslate"><span class="pre">nios_provider</span></code> defined in the <code class="docutils literal notranslate"><span class="pre">group_vars/</span></code> directory.</p>
+</section>
+<section id="creating-a-host-record">
+<h3><a class="toc-backref" href="#id9">Creating a host record</a><a class="headerlink" href="#creating-a-host-record" title="Permalink to this headline"></a></h3>
+<p>To create a host record named <cite>leaf03.ansible.com</cite> on the newly-created IPv4 network:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nios</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">configure an IPv4 host record</span>
+      <span class="nt">nios_host_record</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">leaf03.ansible.com</span>
+        <span class="nt">ipv4addrs</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="nt">ipv4addr</span><span class="p">:</span>
+              <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;nios_next_ip&#39;,</span><span class="nv"> </span><span class="s">&#39;192.168.100.0/24&#39;,</span><span class="nv"> </span><span class="s">provider=nios_provider)[0]</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="nt">provider</span><span class="p">:</span> <span class="s">&quot;{{nios_provider}}&quot;</span>
+</pre></div>
+</div>
+<p>Notice the IPv4 address in this example uses the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/lookup/nios_next_ip.html#nios-next-ip-lookup" title="(in Ansible v2.9)"><span class="xref std std-ref">nios_next_ip</span></a> lookup plugin to find the next available IPv4 address on the network.</p>
+</section>
+<section id="creating-a-forward-dns-zone">
+<h3><a class="toc-backref" href="#id10">Creating a forward DNS zone</a><a class="headerlink" href="#creating-a-forward-dns-zone" title="Permalink to this headline"></a></h3>
+<p>To configure a forward DNS zone use, the <code class="docutils literal notranslate"><span class="pre">nios_zone</span></code> module:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nios</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a forward DNS zone called ansible-test.com</span>
+      <span class="nt">nios_zone</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible-test.com</span>
+        <span class="nt">comment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local DNS zone</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nios_provider</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-a-reverse-dns-zone">
+<h3><a class="toc-backref" href="#id11">Creating a reverse DNS zone</a><a class="headerlink" href="#creating-a-reverse-dns-zone" title="Permalink to this headline"></a></h3>
+<p>To configure a reverse DNS zone:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nios</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">configure a reverse mapping zone on the system using IPV6 zone format</span>
+      <span class="nt">nios_zone</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100::1/128</span>
+        <span class="nt">zone_format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IPV6</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+        <span class="nt">provider</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nios_provider</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="dynamic-inventory-script">
+<h2><a class="toc-backref" href="#id12">Dynamic inventory script</a><a class="headerlink" href="#dynamic-inventory-script" title="Permalink to this headline"></a></h2>
+<p>You can use the Infoblox dynamic inventory script to import your network node inventory with Infoblox NIOS. To gather the inventory from Infoblox, you need two files:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/infoblox.yaml">infoblox.yaml</a> - A file that specifies the NIOS provider arguments and optional filters.</p></li>
+<li><p><a class="reference external" href="https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/infoblox.py">infoblox.py</a> - The python script that retrieves the NIOS inventory.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that the inventory script only works when Ansible 2.9, 2.10 or 3 have been installed. The inventory script will eventually be removed from <a class="reference external" href="https://galaxy.ansible.com/community/general">community.general</a>, and will not work if <cite>community.general</cite> is only installed with <cite>ansible-galaxy collection install</cite>. Please use the inventory plugin from <a class="reference external" href="https://galaxy.ansible.com/infoblox/nios_modules">infoblox.nios_modules</a> instead.</p>
+</div>
+<p>To use the Infoblox dynamic inventory script:</p>
+<ol class="arabic simple">
+<li><p>Download the <code class="docutils literal notranslate"><span class="pre">infoblox.yaml</span></code> file and save it in the <code class="docutils literal notranslate"><span class="pre">/etc/ansible</span></code> directory.</p></li>
+<li><p>Modify the <code class="docutils literal notranslate"><span class="pre">infoblox.yaml</span></code> file with your NIOS credentials.</p></li>
+<li><p>Download the <code class="docutils literal notranslate"><span class="pre">infoblox.py</span></code> file and save it in the <code class="docutils literal notranslate"><span class="pre">/etc/ansible/hosts</span></code> directory.</p></li>
+<li><p>Change the permissions on the <code class="docutils literal notranslate"><span class="pre">infoblox.py</span></code> file to make the file an executable:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo chmod +x /etc/ansible/hosts/infoblox.py
+</pre></div>
+</div>
+<p>You can optionally use <code class="docutils literal notranslate"><span class="pre">./infoblox.py</span> <span class="pre">--list</span></code> to test the script. After a few minutes, you should see your Infoblox inventory in JSON format. You can explicitly use the Infoblox dynamic inventory script as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible -i infoblox.py all -m ping
+</pre></div>
+</div>
+<p>You can also implicitly use the Infoblox dynamic inventory script by including it in your inventory directory (<code class="docutils literal notranslate"><span class="pre">etc/ansible/hosts</span></code> by default). See <a class="reference internal" href="../user_guide/intro_dynamic_inventory.html#dynamic-inventory"><span class="std std-ref">Working with dynamic inventory</span></a> for more details.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://www.infoblox.com//">Infoblox website</a></dt><dd><p>The Infoblox website</p>
+</dd>
+<dt><a class="reference external" href="https://www.infoblox.com/resources/deployment-guides/infoblox-and-ansible-integration">Infoblox and Ansible Deployment Guide</a></dt><dd><p>The deployment guide for Ansible integration provided by Infoblox.</p>
+</dd>
+<dt><a class="reference external" href="https://www.ansible.com/blog/infoblox-integration-in-ansible-2.5">Infoblox Integration in Ansible 2.5</a></dt><dd><p>Ansible blog post about Infoblox.</p>
+</dd>
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/2.9/modules/list_of_net_tools_modules.html#nios-net-tools-modules" title="(in Ansible v2.9)"><span class="xref std std-ref">Ansible NIOS modules</span></a></dt><dd><p>The list of supported NIOS modules, with examples.</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/network-automation/infoblox_ansible">Infoblox Ansible Examples</a></dt><dd><p>Infoblox example playbooks.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guide_meraki.html" class="btn btn-neutral float-left" title="Cisco Meraki Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="virt_guides.html" class="btn btn-neutral float-right" title="Virtualization and Containerization Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

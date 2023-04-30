@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conventions, tips, and pitfalls &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_best_practices.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ansible and Python 3" href="developing_python_3.html" />
+    <link rel="prev" title="Contributing your module to an existing Ansible collection" href="developing_modules_checklist.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="developing_locally.html">Adding modules and plugins locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules.html">Should you develop a module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general.html">Developing modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_checklist.html">Contributing your module to an existing Ansible collection</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Conventions, tips, and pitfalls</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scoping-your-module-s">Scoping your module(s)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#designing-module-interfaces">Designing module interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#general-guidelines-tips">General guidelines &amp; tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions-and-methods">Functions and Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-tips">Python tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#importing-and-using-shared-code">Importing and using shared code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handling-module-failures">Handling module failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handling-exceptions-bugs-gracefully">Handling exceptions (bugs) gracefully</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-correct-and-informative-module-output">Creating correct and informative module output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#following-ansible-conventions">Following Ansible conventions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-security">Module Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="developing_python_3.html">Ansible and Python 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_documenting.html">Module format and documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_windows.html">Windows module development walkthrough</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_aci.html">Developing Cisco ACI modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/aws_guidelines.html">Guidelines for Ansible Amazon AWS module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/openstack_guidelines.html">OpenStack Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/ovirt_dev_guide.html">oVirt Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/vmware_guidelines.html">Guidelines for VMware module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/vmware_rest_guidelines.html">Guidelines for VMware REST module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_in_groups.html">Creating a new collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_lifecycle.html">The lifecycle of an Ansible module or plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_plugins.html">Developing plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_inventory.html">Developing dynamic inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_core.html">Developing <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_program_flow_modules.html">Ansible module architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections_galaxy_meta.html">Collection Galaxy metadata structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_architecture.html">Ansible architecture</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Developer Guide</a> &raquo;</li>
+      <li>Conventions, tips, and pitfalls</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/dev_guide/developing_modules_best_practices.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="conventions-tips-and-pitfalls">
+<span id="module-dev-conventions"></span><span id="developing-modules-best-practices"></span><h1>Conventions, tips, and pitfalls<a class="headerlink" href="#conventions-tips-and-pitfalls" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#scoping-your-module-s" id="id1">Scoping your module(s)</a></p></li>
+<li><p><a class="reference internal" href="#designing-module-interfaces" id="id2">Designing module interfaces</a></p></li>
+<li><p><a class="reference internal" href="#general-guidelines-tips" id="id3">General guidelines &amp; tips</a></p></li>
+<li><p><a class="reference internal" href="#functions-and-methods" id="id4">Functions and Methods</a></p></li>
+<li><p><a class="reference internal" href="#python-tips" id="id5">Python tips</a></p></li>
+<li><p><a class="reference internal" href="#importing-and-using-shared-code" id="id6">Importing and using shared code</a></p></li>
+<li><p><a class="reference internal" href="#handling-module-failures" id="id7">Handling module failures</a></p></li>
+<li><p><a class="reference internal" href="#handling-exceptions-bugs-gracefully" id="id8">Handling exceptions (bugs) gracefully</a></p></li>
+<li><p><a class="reference internal" href="#creating-correct-and-informative-module-output" id="id9">Creating correct and informative module output</a></p></li>
+<li><p><a class="reference internal" href="#following-ansible-conventions" id="id10">Following Ansible conventions</a></p></li>
+<li><p><a class="reference internal" href="#module-security" id="id11">Module Security</a></p></li>
+</ul>
+</div>
+<p>As you design and develop modules, follow these basic conventions and tips for clean, usable code:</p>
+<section id="scoping-your-module-s">
+<h2><a class="toc-backref" href="#id1">Scoping your module(s)</a><a class="headerlink" href="#scoping-your-module-s" title="Permalink to this headline"></a></h2>
+<p>Especially if you want to contribute your module(s) to an existing Ansible Collection, make sure each module includes enough logic and functionality, but not too much. If these guidelines seem confusing, consider <a class="reference internal" href="developing_modules.html#module-dev-should-you"><span class="std std-ref">whether you really need to write a module</span></a> at all.</p>
+<ul class="simple">
+<li><p>Each module should have a concise and well-defined functionality. Basically, follow the UNIX philosophy of doing one thing well.</p></li>
+<li><p>Do not add <code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">info</span></code> state options to an existing module - create a new <code class="docutils literal notranslate"><span class="pre">_info</span></code> or <code class="docutils literal notranslate"><span class="pre">_facts</span></code> module.</p></li>
+<li><p>Modules should not require that a user know all the underlying options of an API/tool to be used. For instance, if the legal values for a required module option cannot be documented, the module does not belong in Ansible Core.</p></li>
+<li><p>Modules should encompass much of the logic for interacting with a resource. A lightweight wrapper around a complex API forces users to offload too much logic into their playbooks. If you want to connect Ansible to a complex API, <a class="reference internal" href="developing_modules_in_groups.html#developing-modules-in-groups"><span class="std std-ref">create multiple modules</span></a> that interact with smaller individual pieces of the API.</p></li>
+<li><p>Avoid creating a module that does the work of other modules; this leads to code duplication and divergence, and makes things less uniform, unpredictable and harder to maintain. Modules should be the building blocks. If you are asking ‘how can I have a module execute other modules’ … you want to write a role.</p></li>
+</ul>
+</section>
+<section id="designing-module-interfaces">
+<h2><a class="toc-backref" href="#id2">Designing module interfaces</a><a class="headerlink" href="#designing-module-interfaces" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>If your module is addressing an object, the option for that object should be called <code class="docutils literal notranslate"><span class="pre">name</span></code> whenever possible, or accept <code class="docutils literal notranslate"><span class="pre">name</span></code> as an alias.</p></li>
+<li><p>Modules accepting boolean status should accept <code class="docutils literal notranslate"><span class="pre">yes</span></code>, <code class="docutils literal notranslate"><span class="pre">no</span></code>, <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code>, or anything else a user may likely throw at them. The AnsibleModule common code supports this with <code class="docutils literal notranslate"><span class="pre">type='bool'</span></code>.</p></li>
+<li><p>Avoid <code class="docutils literal notranslate"><span class="pre">action</span></code>/<code class="docutils literal notranslate"><span class="pre">command</span></code>, they are imperative and not declarative, there are other ways to express the same thing.</p></li>
+</ul>
+</section>
+<section id="general-guidelines-tips">
+<h2><a class="toc-backref" href="#id3">General guidelines &amp; tips</a><a class="headerlink" href="#general-guidelines-tips" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Each module should be self-contained in one file, so it can be auto-transferred by <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.</p></li>
+<li><p>Module name MUST use underscores instead of hyphens or spaces as a word separator. Using hyphens and spaces will prevent <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> from importing your module.</p></li>
+<li><p>Always use the <code class="docutils literal notranslate"><span class="pre">hacking/test-module.py</span></code> script when developing modules - it will warn you about common pitfalls.</p></li>
+<li><p>If you have a local module that returns information specific to your installations, a good name for this module is <code class="docutils literal notranslate"><span class="pre">site_info</span></code>.</p></li>
+<li><p>Eliminate or minimize dependencies. If your module has dependencies, document them at the top of the module file and raise JSON error messages when dependency import fails.</p></li>
+<li><p>Don’t write to files directly; use a temporary file and then use the <code class="docutils literal notranslate"><span class="pre">atomic_move</span></code> function from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code> to move the updated temporary file into place. This prevents data corruption and ensures that the correct context for the file is kept.</p></li>
+<li><p>Avoid creating caches. Ansible is designed without a central server or authority, so you cannot guarantee it will not run with different permissions, options or locations. If you need a central authority, have it on top of Ansible (for example, using bastion/cm/ci server, AWX, or the Red Hat Ansible Automation Platform); do not try to build it into modules.</p></li>
+<li><p>If you package your module(s) in an RPM, install the modules on the control machine in <code class="docutils literal notranslate"><span class="pre">/usr/share/ansible</span></code>. Packaging modules in RPMs is optional.</p></li>
+</ul>
+</section>
+<section id="functions-and-methods">
+<h2><a class="toc-backref" href="#id4">Functions and Methods</a><a class="headerlink" href="#functions-and-methods" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Each function should be concise and should describe a meaningful amount of work.</p></li>
+<li><p>“Don’t repeat yourself” is generally a good philosophy.</p></li>
+<li><p>Function names should use underscores: <code class="docutils literal notranslate"><span class="pre">my_function_name</span></code>.</p></li>
+<li><p>The name of each function should describe what the function does.</p></li>
+<li><p>Each function should have a docstring.</p></li>
+<li><p>If your code is too nested, that’s usually a sign the loop body could benefit from being a function. Parts of our existing code are not the best examples of this at times.</p></li>
+</ul>
+</section>
+<section id="python-tips">
+<h2><a class="toc-backref" href="#id5">Python tips</a><a class="headerlink" href="#python-tips" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Include a <code class="docutils literal notranslate"><span class="pre">main</span></code> function that wraps the normal execution.</p></li>
+<li><p>Call your <code class="docutils literal notranslate"><span class="pre">main</span></code> function from a conditional so you can import it into unit tests - for example:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="importing-and-using-shared-code">
+<span id="shared-code"></span><h2><a class="toc-backref" href="#id6">Importing and using shared code</a><a class="headerlink" href="#importing-and-using-shared-code" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Use shared code whenever possible - don’t reinvent the wheel. Ansible offers the <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> common Python code, plus <a class="reference internal" href="developing_module_utilities.html#developing-module-utilities"><span class="std std-ref">utilities</span></a> for many common use cases and patterns. You can also create documentation fragments for docs that apply to multiple modules.</p></li>
+<li><p>Import <code class="docutils literal notranslate"><span class="pre">ansible.module_utils</span></code> code in the same place as you import other libraries.</p></li>
+<li><p>Do NOT use wildcards (*) for importing other python modules; instead, list the function(s) you are importing (for example, <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">some.other_python_module.basic</span> <span class="pre">import</span> <span class="pre">otherFunction</span></code>).</p></li>
+<li><p>Import custom packages in <code class="docutils literal notranslate"><span class="pre">try</span></code>/<code class="docutils literal notranslate"><span class="pre">except</span></code>, capture any import errors, and handle them with <code class="docutils literal notranslate"><span class="pre">fail_json()</span></code> in <code class="docutils literal notranslate"><span class="pre">main()</span></code>. For example:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="kn">from</span> <span class="nn">ansible.module_utils.basic</span> <span class="kn">import</span> <span class="n">missing_required_lib</span>
+
+<span class="n">LIB_IMP_ERR</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">foo</span>
+    <span class="n">HAS_LIB</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">HAS_LIB</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">LIB_IMP_ERR</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then in <code class="docutils literal notranslate"><span class="pre">main()</span></code>, just after the argspec, do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">HAS_LIB</span><span class="p">:</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">missing_required_lib</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">),</span>
+                     <span class="n">exception</span><span class="o">=</span><span class="n">LIB_IMP_ERR</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And document the dependency in the <code class="docutils literal notranslate"><span class="pre">requirements</span></code> section of your module’s <a class="reference internal" href="developing_modules_documenting.html#documentation-block"><span class="std std-ref">DOCUMENTATION block</span></a>.</p>
+</section>
+<section id="handling-module-failures">
+<span id="module-failures"></span><h2><a class="toc-backref" href="#id7">Handling module failures</a><a class="headerlink" href="#handling-module-failures" title="Permalink to this headline"></a></h2>
+<p>When your module fails, help users understand what went wrong. If you are using the <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> common Python code, the <code class="docutils literal notranslate"><span class="pre">failed</span></code> element will be included for you automatically when you call <code class="docutils literal notranslate"><span class="pre">fail_json</span></code>. For polite module failure behavior:</p>
+<ul class="simple">
+<li><p>Include a key of <code class="docutils literal notranslate"><span class="pre">failed</span></code> along with a string explanation in <code class="docutils literal notranslate"><span class="pre">msg</span></code>. If you don’t do this, Ansible will use standard return codes: 0=success and non-zero=failure.</p></li>
+<li><p>Don’t raise a traceback (stacktrace). Ansible can deal with stacktraces and automatically converts anything unparsable into a failed result, but raising a stacktrace on module failure is not user-friendly.</p></li>
+<li><p>Do not use <code class="docutils literal notranslate"><span class="pre">sys.exit()</span></code>. Use <code class="docutils literal notranslate"><span class="pre">fail_json()</span></code> from the module object.</p></li>
+</ul>
+</section>
+<section id="handling-exceptions-bugs-gracefully">
+<h2><a class="toc-backref" href="#id8">Handling exceptions (bugs) gracefully</a><a class="headerlink" href="#handling-exceptions-bugs-gracefully" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Validate upfront–fail fast and return useful and clear error messages.</p></li>
+<li><p>Use defensive programming–use a simple design for your module, handle errors gracefully, and avoid direct stacktraces.</p></li>
+<li><p>Fail predictably–if we must fail, do it in a way that is the most expected. Either mimic the underlying tool or the general way the system works.</p></li>
+<li><p>Give out a useful message on what you were doing and add exception messages to that.</p></li>
+<li><p>Avoid catchall exceptions, they are not very useful unless the underlying API gives very good error messages pertaining the attempted action.</p></li>
+</ul>
+</section>
+<section id="creating-correct-and-informative-module-output">
+<span id="module-output"></span><h2><a class="toc-backref" href="#id9">Creating correct and informative module output</a><a class="headerlink" href="#creating-correct-and-informative-module-output" title="Permalink to this headline"></a></h2>
+<p>Modules must output valid JSON only. Follow these guidelines for creating correct, useful module output:</p>
+<ul class="simple">
+<li><p>Make your top-level return type a hash (dictionary).</p></li>
+<li><p>Nest complex return values within the top-level hash.</p></li>
+<li><p>Incorporate any lists or simple scalar values within the top-level return hash.</p></li>
+<li><p>Do not send module output to standard error, because the system will merge standard out with standard error and prevent the JSON from parsing.</p></li>
+<li><p>Capture standard error and return it as a variable in the JSON on standard out. This is how the command module is implemented.</p></li>
+<li><p>Never do <code class="docutils literal notranslate"><span class="pre">print(&quot;some</span> <span class="pre">status</span> <span class="pre">message&quot;)</span></code> in a module, because it will not produce valid JSON output.</p></li>
+<li><p>Always return useful data, even when there is no change.</p></li>
+<li><p>Be consistent about returns (some modules are too random), unless it is detrimental to the state/action.</p></li>
+<li><p>Make returns reusable–most of the time you don’t want to read it, but you do want to process it and re-purpose it.</p></li>
+<li><p>Return diff if in diff mode. This is not required for all modules, as it won’t make sense for certain ones, but please include it when applicable.</p></li>
+<li><p>Enable your return values to be serialized as JSON with Python’s standard <a class="reference external" href="https://docs.python.org/3/library/json.html">JSON encoder and decoder</a> library. Basic python types (strings, int, dicts, lists, and so on) are serializable.</p></li>
+<li><p>Do not return an object using exit_json(). Instead, convert the fields you need from the object into the fields of a dictionary and return the dictionary.</p></li>
+<li><p>Results from many hosts will be aggregated at once, so your module should return only relevant output. Returning the entire contents of a log file is generally bad form.</p></li>
+</ul>
+<p>If a module returns stderr or otherwise fails to produce valid JSON, the actual output will still be shown in Ansible, but the command will not succeed.</p>
+</section>
+<section id="following-ansible-conventions">
+<span id="module-conventions"></span><h2><a class="toc-backref" href="#id10">Following Ansible conventions</a><a class="headerlink" href="#following-ansible-conventions" title="Permalink to this headline"></a></h2>
+<p>Ansible conventions offer a predictable user interface across all modules, playbooks, and roles. To follow Ansible conventions in your module development:</p>
+<ul class="simple">
+<li><p>Use consistent names across modules (yes, we have many legacy deviations - don’t make the problem worse!).</p></li>
+<li><p>Use consistent options (arguments) within your module(s).</p></li>
+<li><p>Do not use ‘message’ or ‘syslog_facility’ as an option name, because this is used internally by Ansible.</p></li>
+<li><p>Normalize options with other modules - if Ansible and the API your module connects to use different names for the same option, add aliases to your options so the user can choose which names to use in tasks and playbooks.</p></li>
+<li><p>Return facts from <code class="docutils literal notranslate"><span class="pre">*_facts</span></code> modules in the <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> field of the <a class="reference internal" href="../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">result dictionary</span></a> so other modules can access them.</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">check_mode</span></code> in all <code class="docutils literal notranslate"><span class="pre">*_info</span></code> and <code class="docutils literal notranslate"><span class="pre">*_facts</span></code> modules. Playbooks which conditionalize based on fact information will only conditionalize correctly in <code class="docutils literal notranslate"><span class="pre">check_mode</span></code> if the facts are returned in <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>. Usually you can add <code class="docutils literal notranslate"><span class="pre">supports_check_mode=True</span></code> when instantiating <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>.</p></li>
+<li><p>Use module-specific environment variables. For example, if you use the helpers in <code class="docutils literal notranslate"><span class="pre">module_utils.api</span></code> for basic authentication with <code class="docutils literal notranslate"><span class="pre">module_utils.urls.fetch_url()</span></code> and you fall back on environment variables for default values, use a module-specific environment variable like <code class="code docutils literal notranslate"><span class="pre">API_&lt;MODULENAME&gt;_USERNAME</span></code> to avoid conflicts between modules.</p></li>
+<li><p>Keep module options simple and focused - if you’re loading a lot of choices/states on an existing option, consider adding a new, simple option instead.</p></li>
+<li><p>Keep options small when possible. Passing a large data structure to an option might save us a few tasks, but it adds a complex requirement that we cannot easily validate before passing on to the module.</p></li>
+<li><p>If you want to pass complex data to an option, write an expert module that allows this, along with several smaller modules that provide a more ‘atomic’ operation against the underlying APIs and services. Complex operations require complex data. Let the user choose whether to reflect that complexity in tasks and plays or in  vars files.</p></li>
+<li><p>Implement declarative operations (not CRUD) so the user can ignore existing state and focus on final state. For example, use <code class="docutils literal notranslate"><span class="pre">started/stopped</span></code>, <code class="docutils literal notranslate"><span class="pre">present/absent</span></code>.</p></li>
+<li><p>Strive for a consistent final state (aka idempotency). If running your module twice in a row against the same system would result in two different states, see if you can redesign or rewrite to achieve consistent final state. If you can’t, document the behavior and the reasons for it.</p></li>
+<li><p>Provide consistent return values within the standard Ansible return structure, even if NA/None are used for keys normally returned under other options.</p></li>
+</ul>
+</section>
+<section id="module-security">
+<h2><a class="toc-backref" href="#id11">Module Security</a><a class="headerlink" href="#module-security" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Avoid passing user input from the shell.</p></li>
+<li><p>Always check return codes.</p></li>
+<li><p>You must always use <code class="docutils literal notranslate"><span class="pre">module.run_command</span></code>, not <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> or <code class="docutils literal notranslate"><span class="pre">Popen</span></code> or <code class="docutils literal notranslate"><span class="pre">os.system</span></code>.</p></li>
+<li><p>Avoid using the shell unless absolutely necessary.</p></li>
+<li><p>If you must use the shell, you must pass <code class="docutils literal notranslate"><span class="pre">use_unsafe_shell=True</span></code> to <code class="docutils literal notranslate"><span class="pre">module.run_command</span></code>.</p></li>
+<li><p>If any variables in your module can come from user input with <code class="docutils literal notranslate"><span class="pre">use_unsafe_shell=True</span></code>, you must wrap them with <code class="docutils literal notranslate"><span class="pre">pipes.quote(x)</span></code>.</p></li>
+<li><p>When fetching URLs, use <code class="docutils literal notranslate"><span class="pre">fetch_url</span></code> or <code class="docutils literal notranslate"><span class="pre">open_url</span></code> from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.urls</span></code>. Do not use <code class="docutils literal notranslate"><span class="pre">urllib2</span></code>, which does not natively verify TLS certificates and so is insecure for https.</p></li>
+<li><p>Sensitive values marked with <code class="docutils literal notranslate"><span class="pre">no_log=True</span></code> will automatically have that value stripped from module return values. If your module could return these sensitive values as part of a dictionary key name, you should call the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic.sanitize_keys()</span></code> function to strip the values from the keys. See the <code class="docutils literal notranslate"><span class="pre">uri</span></code> module for an example.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="developing_modules_checklist.html" class="btn btn-neutral float-left" title="Contributing your module to an existing Ansible collection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="developing_python_3.html" class="btn btn-neutral float-right" title="Ansible and Python 3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

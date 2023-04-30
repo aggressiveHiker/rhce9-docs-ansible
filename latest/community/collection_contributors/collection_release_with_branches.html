@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Releasing collections with release branches &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/community/collection_contributors/collection_release_with_branches.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Contributing to Ansible-maintained Collections" href="../contributing_maintained_collections.html" />
+    <link rel="prev" title="Releasing collections without release branches" href="collection_release_without_branches.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../contributions_collections.html">Ansible Collections Contributor Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../collection_development_process.html">The Ansible Collections Development Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reporting_collections.html">Requesting changes to a collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../create_pr_quick_start.html">Creating your first collection pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test_index.html">Testing Collection Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collection_reviewing.html">Review checklist for collection PRs</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../maintainers.html">Guidelines for collection maintainers</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../maintainers_guidelines.html">Maintainer responsibilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../maintainers_guidelines.html#expanding-the-collection-community">Expanding the collection community</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../maintainers_guidelines.html#maintaining-good-collection-documentation">Maintaining good collection documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../maintainers_workflow.html">Backporting and Ansible inclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../maintainers_workflow.html#stepping-down-as-a-collection-maintainer">Stepping down as a collection maintainer</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="collection_releasing.html">Releasing collections</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="collection_releasing.html#preparing-to-release-a-collection">Preparing to release a collection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_releasing.html#collection-versioning-and-deprecation">Collection versioning and deprecation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_releasing.html#collection-changelogs">Collection changelogs</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="collection_releasing.html#options-for-releasing-a-collection">Options for releasing a collection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_maintained_collections.html">Contributing to Ansible-maintained Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../steering/steering_index.html">Ansible Community Steering Committee</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_contributions.html">Contributing to the Ansible Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html">Other Tools and Programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#popular-editors">Popular editors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#development-tools">Development tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#tools-for-validating-playbooks">Tools for validating playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#other-tools">Other tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributions_collections.html#working-with-the-ansible-collection-repositories">Working with the Ansible collection repositories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../contributions_collections.html">Ansible Collections Contributor Guide</a> &raquo;</li>
+          <li><a href="../maintainers.html">Guidelines for collection maintainers</a> &raquo;</li>
+          <li><a href="collection_releasing.html">Releasing collections</a> &raquo;</li>
+      <li>Releasing collections with release branches</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/community/collection_contributors/collection_release_with_branches.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="releasing-collections-with-release-branches">
+<span id="collection-release-with-branches"></span><h1>Releasing collections with release branches<a class="headerlink" href="#releasing-collections-with-release-branches" title="Permalink to this headline"></a></h1>
+<p>Collections MUST follow the <a class="reference external" href="https://semver.org/">semantic versioning</a> rules. See <a class="reference internal" href="collection_releasing.html#releasing-collections"><span class="std std-ref">Releasing collections</span></a> for high-level details.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#release-planning-and-announcement" id="id15">Release planning and announcement</a></p></li>
+<li><p><a class="reference internal" href="#releasing-major-collection-versions" id="id16">Releasing major collection versions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#creating-the-release-branch" id="id17">Creating the release branch</a></p></li>
+<li><p><a class="reference internal" href="#creating-the-changelogs" id="id18">Creating the changelogs</a></p></li>
+<li><p><a class="reference internal" href="#publishing-the-collection" id="id19">Publishing the collection</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#releasing-minor-collection-versions" id="id20">Releasing minor collection versions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id21">Creating the changelogs</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id22">Publishing the collection</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#releasing-patch-versions" id="id23">Releasing patch versions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#releasing-when-more-minor-versions-are-expected" id="id24">Releasing when more minor versions are expected</a></p></li>
+<li><p><a class="reference internal" href="#releasing-when-no-more-minor-versions-are-expected" id="id25">Releasing when no more minor versions are expected</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="release-planning-and-announcement">
+<h2><a class="toc-backref" href="#id15">Release planning and announcement</a><a class="headerlink" href="#release-planning-and-announcement" title="Permalink to this headline"></a></h2>
+<ol class="arabic simple">
+<li><p>Announce your intention to release the collection in a corresponding pinned release issue/community pinboard of the collection and in the <code class="docutils literal notranslate"><span class="pre">#ansible-community</span></code> <a class="reference external" href="https://docs.ansible.com/ansible/devel/community/communication.html#real-time-chat">Matrix/IRC channel</a>. Repeat the announcement in any other dedicated channels if they exist.</p></li>
+<li><p>Ensure all the other repository maintainers are informed about the time of the following release.</p></li>
+</ol>
+</section>
+<section id="releasing-major-collection-versions">
+<h2><a class="toc-backref" href="#id16">Releasing major collection versions</a><a class="headerlink" href="#releasing-major-collection-versions" title="Permalink to this headline"></a></h2>
+<p>The new version is assumed to be <code class="docutils literal notranslate"><span class="pre">X.0.0</span></code>.</p>
+<ol class="arabic simple">
+<li><p>If you are going to release the <code class="docutils literal notranslate"><span class="pre">community.general</span></code> and <code class="docutils literal notranslate"><span class="pre">community.network</span></code> collections, create new <code class="docutils literal notranslate"><span class="pre">backport-X</span></code> and <code class="docutils literal notranslate"><span class="pre">needs_backport_to_stable_X</span></code> labels in the corresponding repositories. Copy the styles and descriptions from the corresponding existing labels.</p></li>
+<li><p>Ensure you are in a default branch in your local fork. These examples use <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git status
+git checkout main     <span class="c1"># if needed</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Update your local fork:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git pull --rebase upstream main
+</pre></div>
+</div>
+</div></blockquote>
+<section id="creating-the-release-branch">
+<h3><a class="toc-backref" href="#id17">Creating the release branch</a><a class="headerlink" href="#creating-the-release-branch" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>Create a branch <code class="docutils literal notranslate"><span class="pre">stable-X</span></code>. Replace <code class="docutils literal notranslate"><span class="pre">X</span></code> with a correct number and push it to the <strong>upstream</strong> repository, NOT to the <code class="docutils literal notranslate"><span class="pre">origin</span></code>.:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git branch stable-X main
+git push upstream stable-X
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Create and checkout to another branch from the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout -b update_repo
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Update the version in <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> in the branch to the next <strong>expected</strong> version, for example, <code class="docutils literal notranslate"><span class="pre">X.1.0</span></code>.</p></li>
+</ol>
+</section>
+<section id="creating-the-changelogs">
+<h3><a class="toc-backref" href="#id18">Creating the changelogs</a><a class="headerlink" href="#creating-the-changelogs" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">changelogs/changelog.yml</span></code> with:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ancestor</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">X.0.0</span>
+<span class="nt">releases</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Remove all changelog fragments from <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/</span></code>. Removing the changelog fragments ensures that every major release has a changelog describing changes since the last major release.</p></li>
+<li><p>Add and commit all the changes made. Push the branch to the <code class="docutils literal notranslate"><span class="pre">origin</span></code> repository.</p></li>
+<li><p>Create a pull request in the collection repository. If CI tests pass, merge the pull request since the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is expecting changes for the next minor/major versions</p></li>
+<li><p>Switch to the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, ensure that <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> contains the correct version number <code class="docutils literal notranslate"><span class="pre">X.0.0</span></code>. If not, update it.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add a changelog fragment <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/X.0.0.yml</span></code> with the content:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">release_summary</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+  <span class="no">Write some text here that should appear as the release summary for this version.</span>
+  <span class="no">The format is reStructuredText, but not a list as for regular changelog fragments.</span>
+  <span class="no">This text will be inserted into the changelog.</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">release_summary</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">This is release 2.0.0 of ``community.foo``, released on YYYY-MM-DD.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, generate the changelogs:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>antsibull-changelog release --cummulative-release
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, verify that the <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> looks as expected.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, update <code class="docutils literal notranslate"><span class="pre">README.md</span></code> so that the changelog link points to <code class="docutils literal notranslate"><span class="pre">/tree/stable-X/</span></code> and no longer to <code class="docutils literal notranslate"><span class="pre">/tree/main/</span></code>, and change badges respectively, for example, in case of AZP, add <code class="docutils literal notranslate"><span class="pre">?branchName=stable-X</span></code> to the AZP CI badge (<a class="reference external" href="https://dev.azure.com/ansible/community.xxx/_apis/build/status/CI?branchName=stable-X">https://dev.azure.com/ansible/community.xxx/_apis/build/status/CI?branchName=stable-X</a>).</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add, commit, and push changes to <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">changelogs/changelog.yaml</span></code>, and potentially deleted/archived fragments to the <strong>upstream</strong> repository, NOT to the <code class="docutils literal notranslate"><span class="pre">origin</span></code>.</p></li>
+</ol>
+</section>
+<section id="publishing-the-collection">
+<h3><a class="toc-backref" href="#id19">Publishing the collection</a><a class="headerlink" href="#publishing-the-collection" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add an annotated tag to the last commit with the collection version <code class="docutils literal notranslate"><span class="pre">X.0.0</span></code>. Pushing this tag to the <code class="docutils literal notranslate"><span class="pre">upstream</span></code> repository will make Zuul publish the collection on <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a>.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git tag -n    <span class="c1"># see current tags and their comments</span>
+git tag -a NEW_VERSION -m <span class="s2">&quot;comment here&quot;</span>    <span class="c1"># the comment can be, for example, &quot;community.foo: 2.0.0&quot;</span>
+git push upstream NEW_VERSION
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Wait until the new version is published on the collection’s <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a> page. It will appear in a list of tarballs available to download.</p></li>
+<li><p>Add a GitHub release for the new tag. The title should be the version and content, such as -  <code class="docutils literal notranslate"><span class="pre">See</span> <span class="pre">https://github.com/ansible-collections/community.xxx/blob/stable-X/CHANGELOG.rst</span> <span class="pre">for</span> <span class="pre">all</span> <span class="pre">changes</span></code>.</p></li>
+<li><p>Announce the release through the <a class="reference external" href="https://github.com/ansible/community/wiki/News#the-bullhorn">Bullhorn Newsletter</a>.</p></li>
+<li><p>Announce the release in the pinned release issue/community pinboard of the collection and in the <code class="docutils literal notranslate"><span class="pre">#ansible-community</span></code> <a class="reference external" href="https://docs.ansible.com/ansible/devel/community/communication.html#real-time-chat">Matrix/Libera.Chat IRC channel</a>.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, update the version in <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> to the next <strong>expected</strong> version, for example, <code class="docutils literal notranslate"><span class="pre">X.1.0</span></code>. Add, commit and push to the <strong>upstream</strong> repository.</p></li>
+</ol>
+</section>
+</section>
+<section id="releasing-minor-collection-versions">
+<h2><a class="toc-backref" href="#id20">Releasing minor collection versions</a><a class="headerlink" href="#releasing-minor-collection-versions" title="Permalink to this headline"></a></h2>
+<p>The new version is assumed to be <code class="docutils literal notranslate"><span class="pre">X.Y.0</span></code>. All changes that should go into it are expected to be previously backported from the default branch to the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch.</p>
+<section id="id2">
+<h3><a class="toc-backref" href="#id21">Creating the changelogs</a><a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, make sure that <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> contains the correct version number <code class="docutils literal notranslate"><span class="pre">X.Y.0</span></code>. If not, update it.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add a changelog fragment <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/X.Y.0.yml</span></code> with content:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">release_summary</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+  <span class="no">Write some text here that should appear as the release summary for this version.</span>
+  <span class="no">The format is reStructuredText, but not a list as for regular changelog fragments.</span>
+  <span class="no">This text will be inserted into the changelog.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, run:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>antsibull-changelog release
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, verify that <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> looks as expected.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add, commit, and push changes to <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">changelogs/changelog.yaml</span></code>, and potentially deleted/archived fragments to the <strong>upstream</strong> repository, NOT to the origin.</p></li>
+</ol>
+</section>
+<section id="id3">
+<h3><a class="toc-backref" href="#id22">Publishing the collection</a><a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add an annotated tag to the last commit with the collection version <code class="docutils literal notranslate"><span class="pre">X.Y.0</span></code>. Pushing this tag to the <code class="docutils literal notranslate"><span class="pre">upstream</span></code> repository will make Zuul publish the collection on <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a>.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git tag -n    <span class="c1"># see current tags and their comments</span>
+git tag -a NEW_VERSION -m <span class="s2">&quot;comment here&quot;</span>    <span class="c1"># the comment can be, for example, &quot;community.foo: 2.1.0&quot;</span>
+git push upstream NEW_VERSION
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Wait until the new version is published on the collection’s <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a> page. The published version will appear in a list of tarballs available to download.</p></li>
+<li><p>Add a GitHub release for the new tag. The title should be the version and content, such as -  <code class="docutils literal notranslate"><span class="pre">See</span> <span class="pre">https://github.com/ansible-collections/community.xxx/blob/stable-X/CHANGELOG.rst</span> <span class="pre">for</span> <span class="pre">all</span> <span class="pre">changes</span></code>.</p></li>
+<li><p>Announce the release through the <a class="reference external" href="https://github.com/ansible/community/wiki/News#the-bullhorn">Bullhorn Newsletter</a>.</p></li>
+<li><p>Announce the release in the pinned release issue/community pinboard of the collection and in the <code class="docutils literal notranslate"><span class="pre">#ansible-community</span></code> <a class="reference external" href="https://docs.ansible.com/ansible/devel/community/communication.html#real-time-chat">Matrix/IRC channel</a>. Additionally, you can announce it using GitHub’s Releases system.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, update the version in <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> to the next <strong>expected</strong> version, for example, if you have released <code class="docutils literal notranslate"><span class="pre">X.1.0</span></code>, the next expected version could be <code class="docutils literal notranslate"><span class="pre">X.2.0</span></code>. Add, commit and push to the <strong>upstream</strong> repository.</p></li>
+<li><p>Checkout to the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch:</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>If more minor versions are released before the next major version, update the version in <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> to <code class="docutils literal notranslate"><span class="pre">X.(Y+1).0</span></code> as well. Create a dedicated pull request and merge.</p></li>
+<li><p>If the next version will be a new major version, create a pull request where you update the version in <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> to <code class="docutils literal notranslate"><span class="pre">(X+1).0.0</span></code>. Note that the sanity tests will most likely fail since there will be deprecations with removal scheduled for <code class="docutils literal notranslate"><span class="pre">(X+1).0.0</span></code>, which are flagged by the tests.</p></li>
+</ol>
+<p>For every such deprecation, decide:</p>
+<ul class="simple">
+<li><p>Whether to remove them now. For example you remove the complete <code class="docutils literal notranslate"><span class="pre">modules/plugins</span></code> or you remove redirects.</p></li>
+<li><p>Whether to add ignore entries to the corresponding <code class="docutils literal notranslate"><span class="pre">tests/sanity/ignore-*.txt</span></code> file and create issues, for example for removed features in <code class="docutils literal notranslate"><span class="pre">modules/plugins</span></code>.</p></li>
+</ul>
+<p>Once the CI tests pass, merge the pull request. Make sure that this pull request is merged not too much later after the release
+for <code class="docutils literal notranslate"><span class="pre">verison_added</span></code> sanity tests not to expect the wrong version for the new feature pull request.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It makes sense to already do some removals in the days before the release. These removals must happen in the main branch and must not be backported.</p>
+</div>
+</section>
+</section>
+<section id="releasing-patch-versions">
+<h2><a class="toc-backref" href="#id23">Releasing patch versions</a><a class="headerlink" href="#releasing-patch-versions" title="Permalink to this headline"></a></h2>
+<p>The new version is assumed to be <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>, and the previous patch version is assumed to be <code class="docutils literal notranslate"><span class="pre">X.Y.z</span></code> with <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">&lt;</span> <span class="pre">Z</span></code>.  <code class="docutils literal notranslate"><span class="pre">z</span></code> is frequently``0`` snce patch releases are uncommon.</p>
+<section id="releasing-when-more-minor-versions-are-expected">
+<h3><a class="toc-backref" href="#id24">Releasing when more minor versions are expected</a><a class="headerlink" href="#releasing-when-more-minor-versions-are-expected" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>Checkout the <code class="docutils literal notranslate"><span class="pre">X.Y.z</span></code> tag.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> so that the version is <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>. Add and commit.</p></li>
+<li><p>Cherry-pick all changes from <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> that were added after <code class="docutils literal notranslate"><span class="pre">X.Y.z</span></code> and should go into <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>.</p></li>
+<li><p>Add a changelog fragment <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/X.Y.Z.yml</span></code> with content:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">release_summary</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+  <span class="no">Write some text here that should appear as the release summary for this version.</span>
+  <span class="no">The format is reStructuredText but not a list as for regular changelog fragments.</span>
+  <span class="no">This text will be inserted into the changelog.</span>
+</pre></div>
+</div>
+<p>Add to git and commit.</p>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Generate the changelogs.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>antsibull-changelog release
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Verify that <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> looks as expected.</p></li>
+<li><p>Add and commit changes to <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">changelogs/changelog.yaml</span></code>, and potentially deleted/archived fragments.</p></li>
+</ol>
+<p><strong>Publishing the collection</strong></p>
+<ol class="arabic simple">
+<li><p>Add an annotated tag to the last commit with the collection version <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>. Pushing this tag to the <code class="docutils literal notranslate"><span class="pre">upstream</span></code> repository will make Zuul publish the collection on <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a>.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git tag -n    <span class="c1"># see current tags and their comments</span>
+git tag -a NEW_VERSION -m <span class="s2">&quot;comment here&quot;</span>    <span class="c1"># the comment can be, for example, &quot;community.foo: 2.1.1&quot;</span>
+git push upstream NEW_VERSION
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Wait until the new version is published on the collection’s <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a> page. It will appear in a list of tarballs available to download.</p></li>
+<li><p>Add a GitHub release for the new tag. The title should be the version and content, such as - <code class="docutils literal notranslate"><span class="pre">See</span> <span class="pre">https://github.com/ansible-collections/community.xxx/blob/stable-X/CHANGELOG.rst</span> <span class="pre">for</span> <span class="pre">all</span> <span class="pre">changes</span></code>.</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The data for this release is only contained in a tag, and not in a branch, in particular not in <code class="docutils literal notranslate"><span class="pre">stable-X</span></code>.
+This is deliberate, since the next minor release <code class="docutils literal notranslate"><span class="pre">X.(Y+1).0</span></code> already contains the changes for <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code> as well, since these were cherry-picked from <code class="docutils literal notranslate"><span class="pre">stable-X</span></code>.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Announce the release through the <a class="reference external" href="https://github.com/ansible/community/wiki/News#the-bullhorn">Bullhorn Newsletter</a>.</p></li>
+<li><p>Announce the release in the pinned release issue/community pinboard of the collection and in the <code class="docutils literal notranslate"><span class="pre">#ansible-community</span></code> <cite>Matrix/IRC channel &lt;https://docs.ansible.com/ansible/devel/community/communication.html#real-time-chat&gt;</cite>.</p></li>
+</ol>
+</section>
+<section id="releasing-when-no-more-minor-versions-are-expected">
+<h3><a class="toc-backref" href="#id25">Releasing when no more minor versions are expected</a><a class="headerlink" href="#releasing-when-no-more-minor-versions-are-expected" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, make sure that <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> contains the correct version number <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>. If not, update it!</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add a changelog fragment <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/X.Y.Z.yml</span></code> with content:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">release_summary</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+  <span class="no">Write some text here that should appear as the release summary for this version.</span>
+  <span class="no">The format is reStructuredText, but not a list as for regular changelog fragments.</span>
+  <span class="no">This text will be inserted into the changelog.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Generate the changelogs in the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>antsibull-changelog release
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, verify that <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> looks as expected.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add, commit, and push changes to <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">changelogs/changelog.yaml</span></code>, and potentially deleted/archived fragments to the <strong>upstream</strong> repository, NOT to the origin.</p></li>
+</ol>
+<p><strong>Publishing the collection</strong></p>
+<ol class="arabic simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">stable-X</span></code> branch, add an annotated tag to the last commit with the collection version <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>. Pushing this tag to the <code class="docutils literal notranslate"><span class="pre">upstream</span></code> repository will make Zuul publish the collection on <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a>.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git tag -n    <span class="c1"># see current tags and their comments</span>
+git tag -a NEW_VERSION -m <span class="s2">&quot;comment here&quot;</span>    <span class="c1"># the comment can be, for example, &quot;community.foo: 2.1.1&quot;</span>
+git push upstream NEW_VERSION
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Wait until the new version is published on the collection’s <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a> page. It will appear in a list of tarballs available to download.</p></li>
+<li><p>Add a GitHub release for the new tag. Title should be the version and content, such as: <code class="docutils literal notranslate"><span class="pre">See</span> <span class="pre">https://github.com/ansible-collections/community.xxx/blob/stable-X/CHANGELOG.rst</span> <span class="pre">for</span> <span class="pre">all</span> <span class="pre">changes</span></code>.</p></li>
+<li><p>Announce the release through the <a class="reference external" href="https://github.com/ansible/community/wiki/News#the-bullhorn">Bullhorn Newsletter</a>.</p></li>
+<li><p>Announce the release in the pinned issue/community pinboard of the collection and in the <code class="docutils literal notranslate"><span class="pre">#ansible-community</span></code> <a class="reference external" href="https://docs.ansible.com/ansible/devel/community/communication.html#real-time-chat">Matrix/IRC channel</a>.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="collection_release_without_branches.html" class="btn btn-neutral float-left" title="Releasing collections without release branches" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing_maintained_collections.html" class="btn btn-neutral float-right" title="Contributing to Ansible-maintained Collections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

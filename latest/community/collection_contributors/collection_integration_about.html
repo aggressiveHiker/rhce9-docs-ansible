@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Understanding integration tests &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/community/collection_contributors/collection_integration_about.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Adding to an existing integration test" href="collection_integration_updating.html" />
+    <link rel="prev" title="Adding integration tests to a collection" href="collection_integration_tests.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../contributions_collections.html">Ansible Collections Contributor Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../collection_development_process.html">The Ansible Collections Development Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reporting_collections.html">Requesting changes to a collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../create_pr_quick_start.html">Creating your first collection pull request</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="test_index.html">Testing Collection Contributions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="collection_test_pr_locally.html">How to test a collection PR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collection_unit_tests.html">Add unit tests to a collection</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="collection_integration_tests.html">Adding integration tests to a collection</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Understanding integration tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-for-integration-tests-for-collections">Preparing for integration tests for collections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#recommendations-on-coverage">Recommendations on coverage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_updating.html">Adding to an existing integration test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_running.html">Running integration tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_add.html">Creating new integration tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collection_reviewing.html">Review checklist for collection PRs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintainers.html">Guidelines for collection maintainers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_maintained_collections.html">Contributing to Ansible-maintained Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../steering/steering_index.html">Ansible Community Steering Committee</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_contributions.html">Contributing to the Ansible Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html">Other Tools and Programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#popular-editors">Popular editors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#development-tools">Development tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#tools-for-validating-playbooks">Tools for validating playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#other-tools">Other tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributions_collections.html#working-with-the-ansible-collection-repositories">Working with the Ansible collection repositories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../contributions_collections.html">Ansible Collections Contributor Guide</a> &raquo;</li>
+          <li><a href="test_index.html">Testing Collection Contributions</a> &raquo;</li>
+          <li><a href="collection_integration_tests.html">Adding integration tests to a collection</a> &raquo;</li>
+      <li>Understanding integration tests</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/community/collection_contributors/collection_integration_about.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="understanding-integration-tests">
+<span id="collection-integration-tests-about"></span><h1>Understanding integration tests<a class="headerlink" href="#understanding-integration-tests" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some collections do not have integration tests.</p>
+</div>
+<p>Integration tests are functional tests of modules and plugins.
+With integration tests, we check if a module or plugin satisfies its functional requirements. Simply put, we check that features work as expected and users get the outcome described in the module or plugin documentation.</p>
+<p>There are <a class="reference internal" href="../../dev_guide/developing_collections_testing.html#collections-adding-integration-test"><span class="std std-ref">two kinds of integration tests</span></a> used in collections:</p>
+<ul class="simple">
+<li><p>integration tests that use Ansible roles</p></li>
+<li><p>integration tests that use <code class="docutils literal notranslate"><span class="pre">runme.sh</span></code>.</p></li>
+</ul>
+<p>This section focuses on integration tests that use Ansible roles.</p>
+<p>Integration tests check modules with playbooks that invoke those modules. The tests pass standalone parameters and their combinations, check what the module or plugin reports with the <a class="reference internal" href="../../collections/ansible/builtin/assert_module.html#ansible-collections-ansible-builtin-assert-module"><span class="std std-ref">assert</span></a> module, and the actual state of the system after each task.</p>
+<section id="integration-test-example">
+<h2>Integration test example<a class="headerlink" href="#integration-test-example" title="Permalink to this headline"></a></h2>
+<p>Let’s say we want to test the <code class="docutils literal notranslate"><span class="pre">postgresql_user</span></code> module invoked with the <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter. We expect that the module will both create a user based on the provided value of the <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter and will report that the system state has changed. We cannot rely on only what the module reports. To be sure that the user has been created, we query our database with another module to see if the user exists.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create PostgreSQL user and store module&#39;s output to the result variable</span>
+  <span class="nt">postgresql_user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_user</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Check the module returns what we expect</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result is changed</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Check actual system state with another module, in other words, that the user exists</span>
+  <span class="nt">postgresql_query</span><span class="p">:</span>
+    <span class="nt">query</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SELECT * FROM pg_authid WHERE rolename = &#39;test_user&#39;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">query_result</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">We expect it returns one row, check it</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">query_result.rowcount == 1</span>
+</pre></div>
+</div>
+</section>
+<section id="details-about-integration-tests">
+<h2>Details about integration tests<a class="headerlink" href="#details-about-integration-tests" title="Permalink to this headline"></a></h2>
+<p>The basic entity of an Ansible integration test is a <code class="docutils literal notranslate"><span class="pre">target</span></code>. The target is an <a class="reference internal" href="../../user_guide/playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Ansible role</span></a> stored in the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets</span></code> directory of the collection repository. The target role contains everything that is needed to test a module.</p>
+<p>The names of targets contain the module or plugin name that they test. Target names that start with <code class="docutils literal notranslate"><span class="pre">setup_</span></code> are usually executed as dependencies before module and plugin targets start execution. See <a class="reference internal" href="collection_integration_add.html#collection-creating-integration-tests"><span class="std std-ref">Creating new integration tests</span></a> for details.</p>
+<p>To run integration tests, we use the <code class="docutils literal notranslate"><span class="pre">ansible-test</span></code> utility that is included in the <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible</span></code> packages. See <a class="reference internal" href="collection_integration_running.html#collection-run-integration-tests"><span class="std std-ref">Running integration tests</span></a> for details. After you finish your integration tests, see to <a class="reference internal" href="../create_pr_quick_start.html#collection-quickstart"><span class="std std-ref">Creating your first collection pull request</span></a> to learn how to submit a pull request.</p>
+</section>
+</section>
+<section id="preparing-for-integration-tests-for-collections">
+<span id="collection-integration-prepare"></span><h1>Preparing for integration tests for collections<a class="headerlink" href="#preparing-for-integration-tests-for-collections" title="Permalink to this headline"></a></h1>
+<p>To prepare for developing integration tests:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="collection_test_pr_locally.html#collection-prepare-environment"><span class="std std-ref">Set up your local environment</span></a>.</p></li>
+<li><p>Determine if integration tests already exist.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-test integration --list-targets
+</pre></div>
+</div>
+</div></blockquote>
+<p>If a collection already has integration tests, they are stored in <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/*</span></code> subdirectories of the collection repository.</p>
+<p>If you use <code class="docutils literal notranslate"><span class="pre">bash</span></code> and the <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code> package is installed with <code class="docutils literal notranslate"><span class="pre">pip</span></code> on your system, you can also get a full target list.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible-test integration &lt;tab&gt;&lt;tab&gt;
+</pre></div>
+</div>
+<p>Alternately, you can check if the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets</span></code> directory contains a corresponding directory with the same name as the module. For example, the tests for the <code class="docutils literal notranslate"><span class="pre">postgresql_user</span></code> module of the <code class="docutils literal notranslate"><span class="pre">community.postgresql</span></code> collection are stored in the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/postgresql_user</span></code> directory of the collection repository. If there is no corresponding target there, then that module does not have integration tests. In this case, consider adding integration tests for the module. See <a class="reference internal" href="collection_integration_add.html#collection-creating-integration-tests"><span class="std std-ref">Creating new integration tests</span></a> for details.</p>
+</section>
+<section id="recommendations-on-coverage">
+<span id="collection-integration-recommendations"></span><h1>Recommendations on coverage<a class="headerlink" href="#recommendations-on-coverage" title="Permalink to this headline"></a></h1>
+<section id="bugfixes">
+<h2>Bugfixes<a class="headerlink" href="#bugfixes" title="Permalink to this headline"></a></h2>
+<p>Before fixing code, create a test case in an <a class="reference internal" href="#collection-integration-prepare"><span class="std std-ref">appropriate test target</span></a> that reproduces the bug provided by the issue reporter and described in the <code class="docutils literal notranslate"><span class="pre">Steps</span> <span class="pre">to</span> <span class="pre">Reproduce</span></code> issue section. <a class="reference internal" href="collection_integration_running.html#collection-run-integration-tests"><span class="std std-ref">Run</span></a> the tests.</p>
+<p>If you failed to reproduce the bug, ask the reporter to provide additional information. The issue may be related to environment settings. Sometimes specific environment issues cannot be reproduced in integration tests, in that case, manual testing by issue reporter or other interested users is required.</p>
+</section>
+<section id="refactoring-code">
+<h2>Refactoring code<a class="headerlink" href="#refactoring-code" title="Permalink to this headline"></a></h2>
+<p>When refactoring code, always check that related options are covered in a <a class="reference internal" href="#collection-integration-prepare"><span class="std std-ref">corresponding test target</span></a>. Do not assume if the test target exists, everything is covered.</p>
+</section>
+<section id="covering-modules-new-features">
+<span id="collections-recommendation-modules"></span><h2>Covering modules / new features<a class="headerlink" href="#covering-modules-new-features" title="Permalink to this headline"></a></h2>
+<p>When covering a module, cover all its options separately and their meaningful combinations. Every possible use of the module should be tested against:</p>
+<ul class="simple">
+<li><p>Idempotency - Does rerunning a task report no changes?</p></li>
+<li><p>Check-mode - Does dry-running a task behave the same as a real run? Does it not make any changes?</p></li>
+<li><p>Return values - Does the module return values consistently under different conditions?</p></li>
+</ul>
+<p>Each test action has to be tested at least the following times:</p>
+<ul class="simple">
+<li><p>Perform an action in check-mode if supported. This should indicate a change.</p></li>
+<li><p>Check with another module that the changes have <code class="docutils literal notranslate"><span class="pre">not</span></code> been actually made.</p></li>
+<li><p>Perform the action for real. This should indicate a change.</p></li>
+<li><p>Check with another module that the changes have been actually made.</p></li>
+<li><p>Perform the action again in check-mode. This should indicate <code class="docutils literal notranslate"><span class="pre">no</span></code> change.</p></li>
+<li><p>Perform the action again for real. This should indicate <code class="docutils literal notranslate"><span class="pre">no</span></code> change.</p></li>
+</ul>
+<p>To check a task:</p>
+<ol class="arabic simple">
+<li><p>Register the outcome of the task as a variable, for example, <code class="docutils literal notranslate"><span class="pre">register:</span> <span class="pre">result</span></code>. Using the <a class="reference internal" href="../../collections/ansible/builtin/assert_module.html#ansible-collections-ansible-builtin-assert-module"><span class="std std-ref">assert</span></a> module, check:</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">result</span> <span class="pre">is</span> <span class="pre">changed</span></code> or not.</p></li>
+<li><p>Expected return values.</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>If the module changes the system state, check the actual system state using at least one other module. For example, if the module changes a file, we can check that the file has been changed by checking its checksum with the <a class="reference internal" href="../../collections/ansible/builtin/stat_module.html#ansible-collections-ansible-builtin-stat-module"><span class="std std-ref">stat</span></a> module before and after the test tasks.</p></li>
+<li><p>Run the same task with <code class="docutils literal notranslate"><span class="pre">check_mode:</span> <span class="pre">yes</span></code> if check-mode is supported by the module. Check with other modules that the actual system state has not been changed.</p></li>
+<li><p>Cover cases when the module must fail. Use the <code class="docutils literal notranslate"><span class="pre">ignore_errors:</span> <span class="pre">yes</span></code> option and check the returned message with the <code class="docutils literal notranslate"><span class="pre">assert</span></code> module.</p></li>
+</ol>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Task to fail</span>
+  <span class="nt">abstract_module</span><span class="p">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">...</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="nt">ignore_errors</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Check the task fails and its error message</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result is failed</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result.msg == &#39;Message we expect&#39;</span>
+</pre></div>
+</div>
+<p>Here is a summary:</p>
+<ul class="simple">
+<li><p>Cover options and their sensible combinations.</p></li>
+<li><p>Check returned values.</p></li>
+<li><p>Cover check-mode if supported.</p></li>
+<li><p>Check a system state using other modules.</p></li>
+<li><p>Check when a module must fail and error messages.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="collection_integration_tests.html" class="btn btn-neutral float-left" title="Adding integration tests to a collection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="collection_integration_updating.html" class="btn btn-neutral float-right" title="Adding to an existing integration test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jul 06, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

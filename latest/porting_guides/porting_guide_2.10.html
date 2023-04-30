@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansible 2.10 Porting Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/porting_guides/porting_guide_2.10.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ansible 2.9 Porting Guide" href="porting_guide_2.9.html" />
+    <link rel="prev" title="Ansible 3 Porting Guide" href="porting_guide_3.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="porting_guides.html">Ansible Porting Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_6.html">Ansible 6 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_5.html">Ansible 5 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_4.html">Ansible 4 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_3.html">Ansible 3 Porting Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible 2.10 Porting Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#playbook">Playbook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-line">Command Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#noteworthy-module-changes">Noteworthy module changes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#plugins">Plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lookup-plugin-names-case-sensitivity">Lookup plugin names case-sensitivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#noteworthy-plugin-changes">Noteworthy plugin changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#action-plugins-which-execute-modules-should-use-fully-qualified-module-names">Action plugins which execute modules should use fully-qualified module names</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-custom-scripts">Porting custom scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v2-10-7">Porting Guide for v2.10.7</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#major-changes">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deprecated-features">Deprecated Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v2-10-6">Porting Guide for v2.10.6</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Major Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v2-10-5">Porting Guide for v2.10.5</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Deprecated Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v2-10-4">Porting Guide for v2.10.4</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removed-features">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">Deprecated Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v2-10-2">Porting Guide for v2.10.2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id20">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id24">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">Deprecated Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v2-10-1">Porting Guide for v2.10.1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id28">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id29">Deprecated Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v2-10-0">Porting Guide for v2.10.0</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#known-issues">Known Issues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id31">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id36">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id45">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id54">Deprecated Features</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.9.html">Ansible 2.9 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.8.html">Ansible 2.8 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.7.html">Ansible 2.7 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.6.html">Ansible 2.6 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.5.html">Ansible 2.5 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.4.html">Ansible 2.4 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.3.html">Ansible 2.3 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.0.html">Ansible 2.0 Porting Guide</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="porting_guides.html">Ansible Porting Guides</a> &raquo;</li>
+      <li>Ansible 2.10 Porting Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/porting_guides/porting_guide_2.10.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="ansible-2-10-porting-guide">
+<span id="porting-2-10-guide"></span><h1>Ansible 2.10 Porting Guide<a class="headerlink" href="#ansible-2-10-porting-guide" title="Permalink to this headline"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In Ansible 2.10, many plugins and modules have migrated to Collections on <a class="reference external" href="https://galaxy.ansible.com">Ansible Galaxy</a>. Your playbooks should continue to work without any changes. We recommend you start using the fully-qualified collection name (FQCN) in your playbooks as the explicit and authoritative indicator of which collection to use as some collections may contain duplicate module names. You can search the <a class="reference external" href="https://docs.ansible.com/ansible/2.10/collections/index_module.html">index of all modules</a> to find the collection a module has been relocated to.</p>
+</div>
+<p>This section discusses the behavioral changes between Ansible 2.9 and Ansible 2.10.</p>
+<p>It is intended to assist in updating your playbooks, plugins and other parts of your Ansible infrastructure so they will work with this version of Ansible.</p>
+<p>We suggest you read this page along with the <a class="reference external" href="https://github.com/ansible-community/ansible-build-data/blob/main/2.10/CHANGELOG-v2.10.rst">Ansible Changelog for 2.10</a> to understand what updates you may need to make.</p>
+<p>Since 2.10, Ansible consists of two parts:</p>
+<ul class="simple">
+<li><p>ansible-base, which includes the command line tools with a small selection of plugins and modules, and</p></li>
+<li><p>a <a class="reference external" href="https://github.com/ansible-community/ansible-build-data/blob/main/2.10/ansible.in">set of collections</a>.</p></li>
+</ul>
+<p>The <a class="reference external" href="https://docs.ansible.com/ansible/2.10/porting_guides/porting_guide_base_2.10.html#porting-2-10-guide-base" title="(in Ansible v2.10)"><span>Ansible-base 2.10 Porting Guide</span></a> is included in this porting guide. The complete list of porting guides can be found at <a class="reference internal" href="porting_guides.html#porting-guides"><span class="std std-ref">porting guides</span></a>.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#playbook" id="id64">Playbook</a></p></li>
+<li><p><a class="reference internal" href="#command-line" id="id65">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id66">Deprecated</a></p></li>
+<li><p><a class="reference internal" href="#modules" id="id67">Modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id68">Noteworthy module changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#plugins" id="id69">Plugins</a></p>
+<ul>
+<li><p><a class="reference internal" href="#lookup-plugin-names-case-sensitivity" id="id70">Lookup plugin names case-sensitivity</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-plugin-changes" id="id71">Noteworthy plugin changes</a></p></li>
+<li><p><a class="reference internal" href="#action-plugins-which-execute-modules-should-use-fully-qualified-module-names" id="id72">Action plugins which execute modules should use fully-qualified module names</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id73">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v2-10-7" id="id74">Porting Guide for v2.10.7</a></p>
+<ul>
+<li><p><a class="reference internal" href="#breaking-changes" id="id75">Breaking Changes</a></p></li>
+<li><p><a class="reference internal" href="#major-changes" id="id76">Major Changes</a></p></li>
+<li><p><a class="reference internal" href="#deprecated-features" id="id77">Deprecated Features</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-guide-for-v2-10-6" id="id78">Porting Guide for v2.10.6</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id79">Major Changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-guide-for-v2-10-5" id="id80">Porting Guide for v2.10.5</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id81">Breaking Changes</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id82">Major Changes</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id83">Deprecated Features</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-guide-for-v2-10-4" id="id84">Porting Guide for v2.10.4</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id9" id="id85">Breaking Changes</a></p></li>
+<li><p><a class="reference internal" href="#id10" id="id86">Major Changes</a></p></li>
+<li><p><a class="reference internal" href="#removed-features" id="id87">Removed Features</a></p></li>
+<li><p><a class="reference internal" href="#id17" id="id88">Deprecated Features</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-guide-for-v2-10-2" id="id89">Porting Guide for v2.10.2</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id20" id="id90">Breaking Changes</a></p></li>
+<li><p><a class="reference internal" href="#id21" id="id91">Major Changes</a></p></li>
+<li><p><a class="reference internal" href="#id24" id="id92">Removed Features</a></p></li>
+<li><p><a class="reference internal" href="#id26" id="id93">Deprecated Features</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-guide-for-v2-10-1" id="id94">Porting Guide for v2.10.1</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id28" id="id95">Major Changes</a></p></li>
+<li><p><a class="reference internal" href="#id29" id="id96">Deprecated Features</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-guide-for-v2-10-0" id="id97">Porting Guide for v2.10.0</a></p>
+<ul>
+<li><p><a class="reference internal" href="#known-issues" id="id98">Known Issues</a></p></li>
+<li><p><a class="reference internal" href="#id31" id="id99">Breaking Changes</a></p></li>
+<li><p><a class="reference internal" href="#id36" id="id100">Major Changes</a></p></li>
+<li><p><a class="reference internal" href="#id45" id="id101">Removed Features</a></p></li>
+<li><p><a class="reference internal" href="#id54" id="id102">Deprecated Features</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="playbook">
+<h2><a class="toc-backref" href="#id64">Playbook</a><a class="headerlink" href="#playbook" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Fixed a bug on boolean keywords that made random strings return ‘False’, now they should return an error if they are not a proper boolean
+Example: <code class="docutils literal notranslate"><span class="pre">diff:</span> <span class="pre">yes-</span></code> was returning <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p>A new fact, <code class="docutils literal notranslate"><span class="pre">ansible_processor_nproc</span></code> reflects the number of vcpus
+available to processes (falls back to the number of vcpus available to
+the scheduler).</p></li>
+</ul>
+</section>
+<section id="command-line">
+<h2><a class="toc-backref" href="#id65">Command Line</a><a class="headerlink" href="#command-line" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">login</span></code> command has been removed, as the underlying API it used for GitHub auth is being shut down. Publishing roles or
+collections to Galaxy via <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code> now requires that a Galaxy API token be passed to the CLI via a token file (default location
+<code class="docutils literal notranslate"><span class="pre">~/.ansible/galaxy_token</span></code>) or (insecurely) via the <code class="docutils literal notranslate"><span class="pre">--token</span></code> argument to <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code>.</p></li>
+</ul>
+</section>
+<section id="deprecated">
+<h2><a class="toc-backref" href="#id66">Deprecated</a><a class="headerlink" href="#deprecated" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Windows Server 2008 and 2008 R2 will no longer be supported or tested in the next Ansible release, see <a class="reference internal" href="../user_guide/windows_faq.html#windows-faq-server2008"><span class="std std-ref">Are Server 2008, 2008 R2 and Windows 7 supported?</span></a>.</p></li>
+</ul>
+</section>
+<section id="modules">
+<h2><a class="toc-backref" href="#id67">Modules</a><a class="headerlink" href="#modules" title="Permalink to this headline"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Links on this page may not point to the most recent versions of modules. We will update them when we can.</p>
+</div>
+<ul class="simple">
+<li><p>Version 2.10.0 of ansible-base changed the default mode of file-based tasks to <code class="docutils literal notranslate"><span class="pre">0o600</span> <span class="pre">&amp;</span> <span class="pre">~umask</span></code> when the user did not specify a <code class="docutils literal notranslate"><span class="pre">mode</span></code> parameter on file-based tasks. This was in response to a CVE report which we have reconsidered. As a result, the mode change has been reverted in 2.10.1, and mode will now default to <code class="docutils literal notranslate"><span class="pre">0o666</span> <span class="pre">&amp;</span> <span class="pre">~umask</span></code> as in previous versions of Ansible.</p></li>
+<li><p>If you changed any tasks to specify less restrictive permissions while using 2.10.0, those changes will be unnecessary (but will do no harm) in 2.10.1.</p></li>
+<li><p>To avoid the issue raised in CVE-2020-1736, specify a <code class="docutils literal notranslate"><span class="pre">mode</span></code> parameter in all file-based tasks that accept it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dnf</span></code> and <code class="docutils literal notranslate"><span class="pre">yum</span></code> - As of version 2.10.1, the <code class="docutils literal notranslate"><span class="pre">dnf</span></code> module (and <code class="docutils literal notranslate"><span class="pre">yum</span></code> action when it uses <code class="docutils literal notranslate"><span class="pre">dnf</span></code>) now correctly validates GPG signatures of packages (CVE-2020-14365). If you see an error such as <code class="docutils literal notranslate"><span class="pre">Failed</span> <span class="pre">to</span> <span class="pre">validate</span> <span class="pre">GPG</span> <span class="pre">signature</span> <span class="pre">for</span> <span class="pre">[package</span> <span class="pre">name]</span></code>, please ensure that you have imported the correct GPG key for the DNF repository and/or package you are using. One way to do this is with the <code class="docutils literal notranslate"><span class="pre">rpm_key</span></code> module. Although we discourage it, in some cases it may be necessary to disable the GPG check. This can be done by explicitly adding <code class="docutils literal notranslate"><span class="pre">disable_gpg_check:</span> <span class="pre">yes</span></code> in your <code class="docutils literal notranslate"><span class="pre">dnf</span></code> or <code class="docutils literal notranslate"><span class="pre">yum</span></code> task.</p></li>
+</ul>
+<section id="noteworthy-module-changes">
+<h3><a class="toc-backref" href="#id68">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Ansible modules created with <code class="docutils literal notranslate"><span class="pre">add_file_common_args=True</span></code> added a number of undocumented arguments which were mostly there to ease implementing certain action plugins. The undocumented arguments <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">follow</span></code>, <code class="docutils literal notranslate"><span class="pre">force</span></code>, <code class="docutils literal notranslate"><span class="pre">content</span></code>, <code class="docutils literal notranslate"><span class="pre">backup</span></code>, <code class="docutils literal notranslate"><span class="pre">remote_src</span></code>, <code class="docutils literal notranslate"><span class="pre">regexp</span></code>, <code class="docutils literal notranslate"><span class="pre">delimiter</span></code>, and <code class="docutils literal notranslate"><span class="pre">directory_mode</span></code> are now no longer added. Modules relying on these options to be added need to specify them by themselves.</p></li>
+<li><p>Ansible no longer looks for Python modules in the current working directory (typically the <code class="docutils literal notranslate"><span class="pre">remote_user</span></code>’s home directory) when an Ansible module is run. This is to fix becoming an unprivileged user on OpenBSD and to mitigate any attack vector if the current working directory is writable by a malicious user. Install any Python modules needed to run the Ansible modules on the managed node in a system-wide location or in another directory which is in the <code class="docutils literal notranslate"><span class="pre">remote_user</span></code>’s <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code> and readable by the <code class="docutils literal notranslate"><span class="pre">become_user</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="plugins">
+<h2><a class="toc-backref" href="#id69">Plugins</a><a class="headerlink" href="#plugins" title="Permalink to this headline"></a></h2>
+<section id="lookup-plugin-names-case-sensitivity">
+<h3><a class="toc-backref" href="#id70">Lookup plugin names case-sensitivity</a><a class="headerlink" href="#lookup-plugin-names-case-sensitivity" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Prior to Ansible <code class="docutils literal notranslate"><span class="pre">2.10</span></code> lookup plugin names passed in as an argument to the <code class="docutils literal notranslate"><span class="pre">lookup()</span></code> function were treated as case-insensitive as opposed to lookups invoked via <code class="docutils literal notranslate"><span class="pre">with_&lt;lookup_name&gt;</span></code>. <code class="docutils literal notranslate"><span class="pre">2.10</span></code> brings consistency to <code class="docutils literal notranslate"><span class="pre">lookup()</span></code> and <code class="docutils literal notranslate"><span class="pre">with_</span></code> to be both case-sensitive.</p></li>
+</ul>
+</section>
+<section id="noteworthy-plugin-changes">
+<h3><a class="toc-backref" href="#id71">Noteworthy plugin changes</a><a class="headerlink" href="#noteworthy-plugin-changes" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Cache plugins in collections can be used to cache data from inventory plugins. Previously, cache plugins in collections could only be used for fact caching.</p></li>
+<li><p>Some undocumented arguments from <code class="docutils literal notranslate"><span class="pre">FILE_COMMON_ARGUMENTS</span></code> have been removed; plugins using these, in particular action plugins, need to be adjusted. The undocumented arguments which were removed are <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">follow</span></code>, <code class="docutils literal notranslate"><span class="pre">force</span></code>, <code class="docutils literal notranslate"><span class="pre">content</span></code>, <code class="docutils literal notranslate"><span class="pre">backup</span></code>, <code class="docutils literal notranslate"><span class="pre">remote_src</span></code>, <code class="docutils literal notranslate"><span class="pre">regexp</span></code>, <code class="docutils literal notranslate"><span class="pre">delimiter</span></code>, and <code class="docutils literal notranslate"><span class="pre">directory_mode</span></code>.</p></li>
+</ul>
+</section>
+<section id="action-plugins-which-execute-modules-should-use-fully-qualified-module-names">
+<h3><a class="toc-backref" href="#id72">Action plugins which execute modules should use fully-qualified module names</a><a class="headerlink" href="#action-plugins-which-execute-modules-should-use-fully-qualified-module-names" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Action plugins that call modules should pass explicit, fully-qualified module names to <code class="docutils literal notranslate"><span class="pre">_execute_module()</span></code> whenever possible (eg, <code class="docutils literal notranslate"><span class="pre">ansible.builtin.file</span></code> rather than <code class="docutils literal notranslate"><span class="pre">file</span></code>). This ensures that the task’s collection search order is not consulted to resolve the module. Otherwise, a module from a collection earlier in the search path could be used when not intended.</p></li>
+</ul>
+</section>
+</section>
+<section id="porting-custom-scripts">
+<h2><a class="toc-backref" href="#id73">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Permalink to this headline"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="porting-guide-for-v2-10-7">
+<h2><a class="toc-backref" href="#id74">Porting Guide for v2.10.7</a><a class="headerlink" href="#porting-guide-for-v2-10-7" title="Permalink to this headline"></a></h2>
+<section id="breaking-changes">
+<h3><a class="toc-backref" href="#id75">Breaking Changes</a><a class="headerlink" href="#breaking-changes" title="Permalink to this headline"></a></h3>
+<section id="community-general">
+<h4>community.general<a class="headerlink" href="#community-general" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>utm_proxy_auth_profile - the <code class="docutils literal notranslate"><span class="pre">frontend_cookie_secret</span></code> return value now contains a placeholder string instead of the module’s <code class="docutils literal notranslate"><span class="pre">frontend_cookie_secret</span></code> parameter (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/1736">https://github.com/ansible-collections/community.general/pull/1736</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="major-changes">
+<h3><a class="toc-backref" href="#id76">Major Changes</a><a class="headerlink" href="#major-changes" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Restricting the version of the community.okd collection to 1.0.0. The previously included version, 1.0.1, had a dependency on kubernetes.core and thus required the installation of an additional collection that was not included in Ansible 2.10. Version 1.0.0 is essentially identical to 1.0.1, except that it uses community.kubernetes, which is included in Ansible 2.10.</p></li>
+</ul>
+<section id="ovirt-ovirt">
+<h4>ovirt.ovirt<a class="headerlink" href="#ovirt-ovirt" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>ovirt_system_option_info - Add new module (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/206">https://github.com/oVirt/ovirt-ansible-collection/pull/206</a>).</p></li>
+</ul>
+</section>
+<section id="servicenow-servicenow">
+<h4>servicenow.servicenow<a class="headerlink" href="#servicenow-servicenow" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>add new tests (find with no result, search many)</p></li>
+<li><p>add related tests</p></li>
+<li><p>add support for ServiceNOW table api display_value exclude_reference_link and suppress_pagination_header</p></li>
+<li><p>use new API for pysnow &gt;=0.6.0</p></li>
+</ul>
+</section>
+</section>
+<section id="deprecated-features">
+<h3><a class="toc-backref" href="#id77">Deprecated Features</a><a class="headerlink" href="#deprecated-features" title="Permalink to this headline"></a></h3>
+<section id="cisco-nxos">
+<h4>cisco.nxos<a class="headerlink" href="#cisco-nxos" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Deprecated <cite>nxos_bgp</cite> and <cite>nxos_bgp_neighbor</cite> modules in favor of <cite>nxos_bgp_global</cite> resource module.</p></li>
+</ul>
+</section>
+<section id="community-vmware">
+<h4>community.vmware<a class="headerlink" href="#community-vmware" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>vmware_host_firewall_manager - the creation of new rule with no <code class="docutils literal notranslate"><span class="pre">allowed_ip</span></code> entry in the <code class="docutils literal notranslate"><span class="pre">allowed_hosts</span></code> dictionary won’t be allowed after 2.0.0 release.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v2-10-6">
+<h2><a class="toc-backref" href="#id78">Porting Guide for v2.10.6</a><a class="headerlink" href="#porting-guide-for-v2-10-6" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3><a class="toc-backref" href="#id79">Major Changes</a><a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<section id="id2">
+<h4>community.general<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h4>
+<ul>
+<li><p>For community.general 2.0.0, the kubevirt modules will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/kubevirt">community.kubevirt</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use kubevirt modules from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">community.kubevirt.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.general.</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.general.kubevirt_vm</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">community.kubevirt.kubevirt_vm</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.general</span></code> manually and rely on the kubevirt modules, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.kubevirt</span></code> collection as well.
+If you are using FQCNs, for example <code class="docutils literal notranslate"><span class="pre">community.general.kubevirt_vm</span></code> instead of <code class="docutils literal notranslate"><span class="pre">kubevirt_vm</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+</ul>
+</section>
+<section id="community-network">
+<h4>community.network<a class="headerlink" href="#community-network" title="Permalink to this headline"></a></h4>
+<ul>
+<li><p>For community.network 2.0.0, the Cisco NSO modules will be moved to the <a class="reference external" href="https://galaxy.ansible.com/cisco/nso">cisco.nso</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use Cisco NSO modules from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">cisco.nso.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.network.</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.network.nso_config</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">cisco.nso.nso_config</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.network</span></code> manually and rely on the Cisco NSO modules, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">cisco.nso</span></code> collection as well.
+If you are using FQCNs, for example <code class="docutils literal notranslate"><span class="pre">community.network.nso_config</span></code> instead of <code class="docutils literal notranslate"><span class="pre">nso_config</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+<li><p>For community.network 2.0.0, the FortiOS modules will be moved to the <a class="reference external" href="https://galaxy.ansible.com/ansible-collections/community.fortios">community.fortios</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use FortiOS modules from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">community.fortios.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.network.</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.network.fmgr_device</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">community.fortios.fmgr_device</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.network</span></code> manually and rely on the FortiOS modules, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.fortios</span></code> collection as well.
+If you are using FQCNs, for example <code class="docutils literal notranslate"><span class="pre">community.network.fmgr_device</span></code> instead of <code class="docutils literal notranslate"><span class="pre">fmgr_device</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+</ul>
+</section>
+<section id="f5networks-f5-modules">
+<h4>f5networks.f5_modules<a class="headerlink" href="#f5networks-f5-modules" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Added async_timeout parameter to bigip_ucs_fetch module to allow customization of module wait for async interface</p></li>
+<li><p>Changed bigip_ucs_fetch module to use asynchronous interface when generating UCS files</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v2-10-5">
+<h2><a class="toc-backref" href="#id80">Porting Guide for v2.10.5</a><a class="headerlink" href="#porting-guide-for-v2-10-5" title="Permalink to this headline"></a></h2>
+<section id="id3">
+<h3><a class="toc-backref" href="#id81">Breaking Changes</a><a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<section id="community-hashi-vault">
+<h4>community.hashi_vault<a class="headerlink" href="#community-hashi-vault" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>hashi_vault - the <code class="docutils literal notranslate"><span class="pre">VAULT_ADDR</span></code> environment variable is now checked last for the <code class="docutils literal notranslate"><span class="pre">url</span></code> parameter. For details on which use cases are impacted, see (<a class="reference external" href="https://github.com/ansible-collections/community.hashi_vault/issues/8">https://github.com/ansible-collections/community.hashi_vault/issues/8</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h3><a class="toc-backref" href="#id82">Major Changes</a><a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<section id="id5">
+<h4>community.general<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h4>
+<ul>
+<li><p>For community.general 2.0.0, the Google modules will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/google">community.google</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use Google modules from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">community.google.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.general.</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.general.gcpubsub</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">community.google.gcpubsub</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.general</span></code> manually and rely on the Google modules, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.google</span></code> collection as well.
+If you are using FQCNs, for example <code class="docutils literal notranslate"><span class="pre">community.general.gcpubsub</span></code> instead of <code class="docutils literal notranslate"><span class="pre">gcpubsub</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+<li><p>For community.general 2.0.0, the OC connection plugin will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/okd">community.okd</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use OC connection plugin from this collection, you will need to adjust your playbooks and roles to use FQCNs <code class="docutils literal notranslate"><span class="pre">community.okd.oc</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.general.oc</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.general</span></code> manually and rely on the OC connection plugin, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.okd</span></code> collection as well.
+If you are using FQCNs, in other words <code class="docutils literal notranslate"><span class="pre">community.general.oc</span></code> instead of <code class="docutils literal notranslate"><span class="pre">oc</span></code>, it will continue working, but we still recommend to adjust this FQCN as well.</p>
+</li>
+<li><p>For community.general 2.0.0, the hashi_vault lookup plugin will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/hashi_vault">community.hashi_vault</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use hashi_vault lookup plugin from this collection, you will need to adjust your playbooks and roles to use FQCNs <code class="docutils literal notranslate"><span class="pre">community.hashi_vault.hashi_vault</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.general.hashi_vault</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.general</span></code> manually and rely on the hashi_vault lookup plugin, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.hashi_vault</span></code> collection as well.
+If you are using FQCNs, in other words <code class="docutils literal notranslate"><span class="pre">community.general.hashi_vault</span></code> instead of <code class="docutils literal notranslate"><span class="pre">hashi_vault</span></code>, it will continue working, but we still recommend to adjust this FQCN as well.</p>
+</li>
+</ul>
+</section>
+<section id="netbox-netbox">
+<h4>netbox.netbox<a class="headerlink" href="#netbox-netbox" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>nb_inventory - Add <code class="docutils literal notranslate"><span class="pre">dns_name</span></code> option that adds <code class="docutils literal notranslate"><span class="pre">dns_name</span></code> to the host when <code class="docutils literal notranslate"><span class="pre">True</span></code> and device has a primary IP address. (#394)</p></li>
+<li><p>nb_inventory - Add <code class="docutils literal notranslate"><span class="pre">status</span></code> as a <code class="docutils literal notranslate"><span class="pre">group_by</span></code> option. (398)</p></li>
+<li><p>nb_inventory - Move around <code class="docutils literal notranslate"><span class="pre">extracted_primary_ip</span></code> to allow for <code class="docutils literal notranslate"><span class="pre">config_context</span></code> or <code class="docutils literal notranslate"><span class="pre">custom_field</span></code> to overwrite. (#377)</p></li>
+<li><p>nb_inventory - Services are now a list of integers due to NetBox 2.10 changes. (#396)</p></li>
+<li><p>nb_lookup - Allow ID to be passed in and use <code class="docutils literal notranslate"><span class="pre">.get</span></code> instead of <code class="docutils literal notranslate"><span class="pre">.filter</span></code>. (#376)</p></li>
+<li><p>nb_lookup - Allow <code class="docutils literal notranslate"><span class="pre">api_endpoint</span></code> and <code class="docutils literal notranslate"><span class="pre">token</span></code> to be found via env. (#391)</p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h3><a class="toc-backref" href="#id83">Deprecated Features</a><a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<section id="community-aws">
+<h4>community.aws<a class="headerlink" href="#community-aws" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>ec2_vpc_igw_info - After 2022-06-22 the <code class="docutils literal notranslate"><span class="pre">convert_tags</span></code> parameter default value will change from <code class="docutils literal notranslate"><span class="pre">False</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code> to match the collection standard behavior (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/318">https://github.com/ansible-collections/community.aws/pull/318</a>).</p></li>
+</ul>
+</section>
+<section id="community-docker">
+<h4>community.docker<a class="headerlink" href="#community-docker" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>docker_container - currently <code class="docutils literal notranslate"><span class="pre">published_ports</span></code> can contain port mappings next to the special value <code class="docutils literal notranslate"><span class="pre">all</span></code>, in which case the port mappings are ignored. This behavior is deprecated for community.docker 2.0.0, at which point it will either be forbidden, or this behavior will be properly implemented similar to how the Docker CLI tool handles this (<a class="reference external" href="https://github.com/ansible-collections/community.docker/issues/8">https://github.com/ansible-collections/community.docker/issues/8</a>, <a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/60">https://github.com/ansible-collections/community.docker/pull/60</a>).</p></li>
+</ul>
+</section>
+<section id="id8">
+<h4>community.hashi_vault<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>hashi_vault - <code class="docutils literal notranslate"><span class="pre">VAULT_ADDR</span></code> environment variable for option <code class="docutils literal notranslate"><span class="pre">url</span></code> will have its precedence lowered in 1.0.0; use <code class="docutils literal notranslate"><span class="pre">ANSIBLE_HASHI_VAULT_ADDR</span></code> to intentionally override a config value (<a class="reference external" href="https://github.com/ansible-collections/community.hashi_vault/issues/8">https://github.com/ansible-collections/community.hashi_vault/issues/8</a>).</p></li>
+<li><p>hashi_vault - <code class="docutils literal notranslate"><span class="pre">VAULT_AUTH_METHOD</span></code> environment variable for option <code class="docutils literal notranslate"><span class="pre">auth_method</span></code> will be removed in 2.0.0, use <code class="docutils literal notranslate"><span class="pre">ANSIBLE_HASHI_VAULT_AUTH_METHOD</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.hashi_vault/issues/17">https://github.com/ansible-collections/community.hashi_vault/issues/17</a>).</p></li>
+<li><p>hashi_vault - <code class="docutils literal notranslate"><span class="pre">VAULT_ROLE_ID</span></code> environment variable for option <code class="docutils literal notranslate"><span class="pre">role_id</span></code> will be removed in 2.0.0, use <code class="docutils literal notranslate"><span class="pre">ANSIBLE_HASHI_VAULT_ROLE_ID</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.hashi_vault/issues/20">https://github.com/ansible-collections/community.hashi_vault/issues/20</a>).</p></li>
+<li><p>hashi_vault - <code class="docutils literal notranslate"><span class="pre">VAULT_SECRET_ID</span></code> environment variable for option <code class="docutils literal notranslate"><span class="pre">secret_id</span></code> will be removed in 2.0.0, use <code class="docutils literal notranslate"><span class="pre">ANSIBLE_HASHI_VAULT_SECRET_ID</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.hashi_vault/issues/20">https://github.com/ansible-collections/community.hashi_vault/issues/20</a>).</p></li>
+<li><p>hashi_vault - <code class="docutils literal notranslate"><span class="pre">VAULT_TOKEN_FILE</span></code> environment variable for option <code class="docutils literal notranslate"><span class="pre">token_file</span></code> will be removed in 2.0.0, use <code class="docutils literal notranslate"><span class="pre">ANSIBLE_HASHI_VAULT_TOKEN_FILE</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.hashi_vault/issues/15">https://github.com/ansible-collections/community.hashi_vault/issues/15</a>).</p></li>
+<li><p>hashi_vault - <code class="docutils literal notranslate"><span class="pre">VAULT_TOKEN_PATH</span></code> environment variable for option <code class="docutils literal notranslate"><span class="pre">token_path</span></code> will be removed in 2.0.0, use <code class="docutils literal notranslate"><span class="pre">ANSIBLE_HASHI_VAULT_TOKEN_PATH</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.hashi_vault/issues/15">https://github.com/ansible-collections/community.hashi_vault/issues/15</a>).</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v2-10-4">
+<h2><a class="toc-backref" href="#id84">Porting Guide for v2.10.4</a><a class="headerlink" href="#porting-guide-for-v2-10-4" title="Permalink to this headline"></a></h2>
+<section id="id9">
+<h3><a class="toc-backref" href="#id85">Breaking Changes</a><a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
+<section id="community-hrobot">
+<h4>community.hrobot<a class="headerlink" href="#community-hrobot" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>firewall - now requires the <a class="reference external" href="https://pypi.org/project/ipaddress/">ipaddress</a> library (<a class="reference external" href="https://github.com/ansible-collections/community.hrobot/pull/2">https://github.com/ansible-collections/community.hrobot/pull/2</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="id10">
+<h3><a class="toc-backref" href="#id86">Major Changes</a><a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
+<section id="id11">
+<h4>community.general<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h4>
+<ul>
+<li><p>For community.general 2.0.0, the Hetzner Robot modules will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/hrobot">community.hrobot</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use Hetzner Robot modules from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">community.hrobot.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.general.hetzner_</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.general.hetzner_firewall_info</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">community.hrobot.firewall_info</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.general</span></code> manually and rely on the Hetzner Robot modules, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.hrobot</span></code> collection as well.
+If you are using FQCNs, i.e. <code class="docutils literal notranslate"><span class="pre">community.general.hetzner_failover_ip</span></code> instead of <code class="docutils literal notranslate"><span class="pre">hetzner_failover_ip</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+<li><p>For community.general 2.0.0, the <code class="docutils literal notranslate"><span class="pre">docker</span></code> modules and plugins will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/docker">community.docker</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use <code class="docutils literal notranslate"><span class="pre">docker</span></code> content from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">community.docker.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.general.</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.general.docker_container</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">community.docker.docker_container</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.general</span></code> manually and rely on the <code class="docutils literal notranslate"><span class="pre">docker</span></code> content, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.docker</span></code> collection as well.
+If you are using FQCNs, i.e. <code class="docutils literal notranslate"><span class="pre">community.general.docker_container</span></code> instead of <code class="docutils literal notranslate"><span class="pre">docker_container</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+<li><p>For community.general 2.0.0, the <code class="docutils literal notranslate"><span class="pre">postgresql</span></code> modules and plugins will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/postgresql">community.postgresql</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use <code class="docutils literal notranslate"><span class="pre">postgresql</span></code> content from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">community.postgresql.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.general.</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.general.postgresql_info</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">community.postgresql.postgresql_info</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.general</span></code> manually and rely on the <code class="docutils literal notranslate"><span class="pre">postgresql</span></code> content, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.postgresql</span></code> collection as well.
+If you are using FQCNs, i.e. <code class="docutils literal notranslate"><span class="pre">community.general.postgresql_info</span></code> instead of <code class="docutils literal notranslate"><span class="pre">postgresql_info</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+<li><p>The community.general collection no longer depends on the ansible.posix collection (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/1157">https://github.com/ansible-collections/community.general/pull/1157</a>).</p></li>
+</ul>
+</section>
+<section id="id14">
+<h4>community.network<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h4>
+<ul>
+<li><p>For community.network 2.0.0, the <code class="docutils literal notranslate"><span class="pre">routeros</span></code> modules and plugins will be moved to the <a class="reference external" href="https://galaxy.ansible.com/community/routeros">community.routeros</a> collection.
+A redirection will be inserted so that users using ansible-base 2.10 or newer do not have to change anything.</p>
+<p>If you use Ansible 2.9 and explicitly use <code class="docutils literal notranslate"><span class="pre">routeros</span></code> content from this collection, you will need to adjust your playbooks and roles to use FQCNs starting with <code class="docutils literal notranslate"><span class="pre">community.routeros.</span></code> instead of <code class="docutils literal notranslate"><span class="pre">community.network.routeros_</span></code>,
+for example replace <code class="docutils literal notranslate"><span class="pre">community.network.routeros_api</span></code> in a task by <code class="docutils literal notranslate"><span class="pre">community.routeros.api</span></code>.</p>
+<p>If you use ansible-base and installed <code class="docutils literal notranslate"><span class="pre">community.network</span></code> manually and rely on the <code class="docutils literal notranslate"><span class="pre">routeros</span></code> content, you have to make sure to install the <code class="docutils literal notranslate"><span class="pre">community.routeros</span></code> collection as well.
+If you are using FQCNs, i.e. <code class="docutils literal notranslate"><span class="pre">community.network.routeros_command</span></code> instead of <code class="docutils literal notranslate"><span class="pre">routeros_command</span></code>, it will continue working, but we still recommend to adjust the FQCNs as well.</p>
+</li>
+<li><p>In community.network 2.0.0, the <code class="docutils literal notranslate"><span class="pre">fortimanager</span></code> httpapi plugin will be removed and replaced by a redirect to the corresponding plugin in the fortios.fortimanager collection. For Ansible 2.10 and ansible-base 2.10 users, this means that it will continue to work assuming that collection is installed. For Ansible 2.9 users, this means that they have to adjust the FQCN from <code class="docutils literal notranslate"><span class="pre">community.network.fortimanager</span></code> to <code class="docutils literal notranslate"><span class="pre">fortios.fortimanager.fortimanager</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.network/pull/151">https://github.com/ansible-collections/community.network/pull/151</a>).</p></li>
+</ul>
+</section>
+<section id="id15">
+<h4>community.okd<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Add custom k8s module, integrate better Molecule tests (<a class="reference external" href="https://github.com/ansible-collections/community.okd/pull/7">https://github.com/ansible-collections/community.okd/pull/7</a>).</p></li>
+<li><p>Add downstream build scripts to build redhat.openshift (<a class="reference external" href="https://github.com/ansible-collections/community.okd/pull/20">https://github.com/ansible-collections/community.okd/pull/20</a>).</p></li>
+<li><p>Add openshift connection plugin, update inventory plugin to use it (<a class="reference external" href="https://github.com/ansible-collections/community.okd/pull/18">https://github.com/ansible-collections/community.okd/pull/18</a>).</p></li>
+<li><p>Add openshift_process module for template rendering and optional application of rendered resources (<a class="reference external" href="https://github.com/ansible-collections/community.okd/pull/44">https://github.com/ansible-collections/community.okd/pull/44</a>).</p></li>
+<li><p>Add openshift_route module for creating routes from services (<a class="reference external" href="https://github.com/ansible-collections/community.okd/pull/40">https://github.com/ansible-collections/community.okd/pull/40</a>).</p></li>
+<li><p>Initial content migration from community.kubernetes (<a class="reference external" href="https://github.com/ansible-collections/community.okd/pull/3">https://github.com/ansible-collections/community.okd/pull/3</a>).</p></li>
+<li><p>openshift_auth - new module (migrated from k8s_auth in community.kubernetes) (<a class="reference external" href="https://github.com/ansible-collections/community.okd/pull/33">https://github.com/ansible-collections/community.okd/pull/33</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="removed-features">
+<h3><a class="toc-backref" href="#id87">Removed Features</a><a class="headerlink" href="#removed-features" title="Permalink to this headline"></a></h3>
+<section id="id16">
+<h4>community.docker<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>docker_container - no longer returns <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_container - the default of <code class="docutils literal notranslate"><span class="pre">networks_cli_compatible</span></code> changed to <code class="docutils literal notranslate"><span class="pre">true</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_container - the unused option <code class="docutils literal notranslate"><span class="pre">trust_image_content</span></code> has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_image - <code class="docutils literal notranslate"><span class="pre">state=build</span></code> has been removed. Use <code class="docutils literal notranslate"><span class="pre">present</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_image - the <code class="docutils literal notranslate"><span class="pre">container_limits</span></code>, <code class="docutils literal notranslate"><span class="pre">dockerfile</span></code>, <code class="docutils literal notranslate"><span class="pre">http_timeout</span></code>, <code class="docutils literal notranslate"><span class="pre">nocache</span></code>, <code class="docutils literal notranslate"><span class="pre">rm</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">buildargs</span></code>, <code class="docutils literal notranslate"><span class="pre">pull</span></code> have been removed. Use the corresponding suboptions of <code class="docutils literal notranslate"><span class="pre">build</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_image - the <code class="docutils literal notranslate"><span class="pre">force</span></code> option has been removed. Use the more specific <code class="docutils literal notranslate"><span class="pre">force_*</span></code> options instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_image - the <code class="docutils literal notranslate"><span class="pre">source</span></code> option is now mandatory (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_image - the <code class="docutils literal notranslate"><span class="pre">use_tls</span></code> option has been removed. Use <code class="docutils literal notranslate"><span class="pre">tls</span></code> and <code class="docutils literal notranslate"><span class="pre">validate_certs</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_image - the default of the <code class="docutils literal notranslate"><span class="pre">build.pull</span></code> option changed to <code class="docutils literal notranslate"><span class="pre">false</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_image_facts - this alias is on longer available, use <code class="docutils literal notranslate"><span class="pre">docker_image_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_network - no longer returns <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_network - the <code class="docutils literal notranslate"><span class="pre">ipam_options</span></code> option has been removed. Use <code class="docutils literal notranslate"><span class="pre">ipam_config</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_service - no longer returns <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_swarm - <code class="docutils literal notranslate"><span class="pre">state=inspect</span></code> has been removed. Use <code class="docutils literal notranslate"><span class="pre">docker_swarm_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_swarm_service - the <code class="docutils literal notranslate"><span class="pre">constraints</span></code> option has been removed. Use <code class="docutils literal notranslate"><span class="pre">placement.constraints</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_swarm_service - the <code class="docutils literal notranslate"><span class="pre">limit_cpu</span></code> and <code class="docutils literal notranslate"><span class="pre">limit_memory</span></code> options has been removed. Use the corresponding suboptions in <code class="docutils literal notranslate"><span class="pre">limits</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_swarm_service - the <code class="docutils literal notranslate"><span class="pre">log_driver</span></code> and <code class="docutils literal notranslate"><span class="pre">log_driver_options</span></code> options has been removed. Use the corresponding suboptions in <code class="docutils literal notranslate"><span class="pre">logging</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_swarm_service - the <code class="docutils literal notranslate"><span class="pre">reserve_cpu</span></code> and <code class="docutils literal notranslate"><span class="pre">reserve_memory</span></code> options has been removed. Use the corresponding suboptions in <code class="docutils literal notranslate"><span class="pre">reservations</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_swarm_service - the <code class="docutils literal notranslate"><span class="pre">restart_policy</span></code>, <code class="docutils literal notranslate"><span class="pre">restart_policy_attempts</span></code>, <code class="docutils literal notranslate"><span class="pre">restart_policy_delay</span></code> and <code class="docutils literal notranslate"><span class="pre">restart_policy_window</span></code> options has been removed. Use the corresponding suboptions in <code class="docutils literal notranslate"><span class="pre">restart_config</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_swarm_service - the <code class="docutils literal notranslate"><span class="pre">update_delay</span></code>, <code class="docutils literal notranslate"><span class="pre">update_parallelism</span></code>, <code class="docutils literal notranslate"><span class="pre">update_failure_action</span></code>, <code class="docutils literal notranslate"><span class="pre">update_monitor</span></code>, <code class="docutils literal notranslate"><span class="pre">update_max_failure_ratio</span></code> and <code class="docutils literal notranslate"><span class="pre">update_order</span></code> options has been removed. Use the corresponding suboptions in <code class="docutils literal notranslate"><span class="pre">update_config</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_volume - no longer returns <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+<li><p>docker_volume - the <code class="docutils literal notranslate"><span class="pre">force</span></code> option has been removed. Use <code class="docutils literal notranslate"><span class="pre">recreate</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1">https://github.com/ansible-collections/community.docker/pull/1</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="id17">
+<h3><a class="toc-backref" href="#id88">Deprecated Features</a><a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
+<section id="id18">
+<h4>community.general<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>django_manage - the parameter <code class="docutils literal notranslate"><span class="pre">liveserver</span></code> relates to a no longer maintained third-party module for django. It is now deprecated, and will be remove in community.general 3.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/1154">https://github.com/ansible-collections/community.general/pull/1154</a>).</p></li>
+<li><p>proxmox - the default of the new <code class="docutils literal notranslate"><span class="pre">proxmox_default_behavior</span></code> option will change from <code class="docutils literal notranslate"><span class="pre">compatibility</span></code> to <code class="docutils literal notranslate"><span class="pre">no_defaults</span></code> in community.general 4.0.0. Set the option to an explicit value to avoid a deprecation warning (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/850">https://github.com/ansible-collections/community.general/pull/850</a>).</p></li>
+<li><p>proxmox_kvm - the default of the new <code class="docutils literal notranslate"><span class="pre">proxmox_default_behavior</span></code> option will change from <code class="docutils literal notranslate"><span class="pre">compatibility</span></code> to <code class="docutils literal notranslate"><span class="pre">no_defaults</span></code> in community.general 4.0.0. Set the option to an explicit value to avoid a deprecation warning (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/850">https://github.com/ansible-collections/community.general/pull/850</a>).</p></li>
+<li><p>syspatch - deprecate the redundant <code class="docutils literal notranslate"><span class="pre">apply</span></code> argument (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/360">https://github.com/ansible-collections/community.general/pull/360</a>).</p></li>
+</ul>
+</section>
+<section id="id19">
+<h4>community.network<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Deprecate connection=local support for network platforms using persistent framework (<a class="reference external" href="https://github.com/ansible-collections/community.network/pull/120">https://github.com/ansible-collections/community.network/pull/120</a>).</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v2-10-2">
+<h2><a class="toc-backref" href="#id89">Porting Guide for v2.10.2</a><a class="headerlink" href="#porting-guide-for-v2-10-2" title="Permalink to this headline"></a></h2>
+<section id="id20">
+<h3><a class="toc-backref" href="#id90">Breaking Changes</a><a class="headerlink" href="#id20" title="Permalink to this headline"></a></h3>
+<section id="ansible-base">
+<h4>Ansible-base<a class="headerlink" href="#ansible-base" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>ansible-galaxy login command has been removed (see <a class="reference external" href="https://github.com/ansible/ansible/issues/71560">https://github.com/ansible/ansible/issues/71560</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="id21">
+<h3><a class="toc-backref" href="#id91">Major Changes</a><a class="headerlink" href="#id21" title="Permalink to this headline"></a></h3>
+<section id="id22">
+<h4>f5networks.f5_modules<a class="headerlink" href="#id22" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Add phone home Teem integration into all modules, functionality can be disabled by setting up F5_TEEM environment variable or no_f5_teem provider parameter</p></li>
+</ul>
+</section>
+<section id="id23">
+<h4>ovirt.ovirt<a class="headerlink" href="#id23" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>cluster_upgrade - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/94">https://github.com/oVirt/ovirt-ansible-collection/pull/94</a>).</p></li>
+<li><p>disaster_recovery - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/134">https://github.com/oVirt/ovirt-ansible-collection/pull/134</a>).</p></li>
+<li><p>engine_setup - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/69">https://github.com/oVirt/ovirt-ansible-collection/pull/69</a>).</p></li>
+<li><p>hosted_engine_setup - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/106">https://github.com/oVirt/ovirt-ansible-collection/pull/106</a>).</p></li>
+<li><p>image_template - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/95">https://github.com/oVirt/ovirt-ansible-collection/pull/95</a>).</p></li>
+<li><p>infra - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/92">https://github.com/oVirt/ovirt-ansible-collection/pull/92</a>).</p></li>
+<li><p>manageiq - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/97">https://github.com/oVirt/ovirt-ansible-collection/pull/97</a>).</p></li>
+<li><p>repositories - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/96">https://github.com/oVirt/ovirt-ansible-collection/pull/96</a>).</p></li>
+<li><p>shutdown_env - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/112">https://github.com/oVirt/ovirt-ansible-collection/pull/112</a>).</p></li>
+<li><p>vm_infra - Migrate role (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/93">https://github.com/oVirt/ovirt-ansible-collection/pull/93</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="id24">
+<h3><a class="toc-backref" href="#id92">Removed Features</a><a class="headerlink" href="#id24" title="Permalink to this headline"></a></h3>
+<section id="id25">
+<h4>f5networks.f5_modules<a class="headerlink" href="#id25" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Removed arp_state parameter from the bigip_virtual_address module</p></li>
+</ul>
+</section>
+</section>
+<section id="id26">
+<h3><a class="toc-backref" href="#id93">Deprecated Features</a><a class="headerlink" href="#id26" title="Permalink to this headline"></a></h3>
+<section id="id27">
+<h4>cisco.nxos<a class="headerlink" href="#id27" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Deprecated <cite>nxos_interface_ospf</cite> in favor of <cite>nxos_ospf_interfaces</cite> Resource Module.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v2-10-1">
+<h2><a class="toc-backref" href="#id94">Porting Guide for v2.10.1</a><a class="headerlink" href="#porting-guide-for-v2-10-1" title="Permalink to this headline"></a></h2>
+<section id="id28">
+<h3><a class="toc-backref" href="#id95">Major Changes</a><a class="headerlink" href="#id28" title="Permalink to this headline"></a></h3>
+<section id="community-kubernetes">
+<h4>community.kubernetes<a class="headerlink" href="#community-kubernetes" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>k8s - Add support for template parameter (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/230">https://github.com/ansible-collections/community.kubernetes/pull/230</a>).</p></li>
+<li><p>k8s_* - Add support for vaulted kubeconfig and src (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/193">https://github.com/ansible-collections/community.kubernetes/pull/193</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="id29">
+<h3><a class="toc-backref" href="#id96">Deprecated Features</a><a class="headerlink" href="#id29" title="Permalink to this headline"></a></h3>
+<section id="id30">
+<h4>cisco.nxos<a class="headerlink" href="#id30" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Deprecated <cite>nxos_smu</cite> in favor of <cite>nxos_rpm</cite> module.</p></li>
+<li><p>The <cite>nxos_ospf_vrf</cite> module is deprecated by <cite>nxos_ospfv2</cite> and <cite>nxos_ospfv3</cite> Resource Modules.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v2-10-0">
+<h2><a class="toc-backref" href="#id97">Porting Guide for v2.10.0</a><a class="headerlink" href="#porting-guide-for-v2-10-0" title="Permalink to this headline"></a></h2>
+<section id="known-issues">
+<h3><a class="toc-backref" href="#id98">Known Issues</a><a class="headerlink" href="#known-issues" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Due to a limitation in pip, you cannot <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--upgrade</span></code> from ansible-2.9 or earlier to ansible-2.10 or higher. Instead, you must explicitly use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span> <span class="pre">ansible</span></code> before pip installing the new version. If you attempt to upgrade Ansible with pip without first uninstalling, the installer warns you to uninstall first.</p></li>
+<li><p>The individual collections that make up the ansible-2.10.0 package can be viewed independently. However, they are not currently listed by ansible-galaxy. To view these collections with ansible-galaxy, explicitly specify where ansible has installed the collections – <code class="docutils literal notranslate"><span class="pre">COLLECTION_INSTALL=$(python</span> <span class="pre">-c</span> <span class="pre">'import</span> <span class="pre">ansible,</span> <span class="pre">os.path</span> <span class="pre">;</span> <span class="pre">print(&quot;%s/../ansible_collections&quot;</span> <span class="pre">%</span> <span class="pre">os.path.dirname(ansible.__file__))')</span> <span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span> <span class="pre">-p</span> <span class="pre">&quot;$COLLECTION_INSTALL&quot;</span></code>.</p></li>
+<li><p>These fortios modules are not automatically redirected from their 2.9.x names to the new 2.10.x names within collections. You must modify your playbooks to use fully qualified collection names for them. You can use the documentation (<a class="reference external" href="https://docs.ansible.com/ansible/2.10/collections/fortinet/fortios/">https://docs.ansible.com/ansible/2.10/collections/fortinet/fortios/</a>) for the <code class="docutils literal notranslate"><span class="pre">fortinet.fortios</span></code> collection to determine what the fully qualified collection names are.</p>
+<ul>
+<li><p>fortios_address</p></li>
+<li><p>fortios_config</p></li>
+<li><p>fortios_firewall_DoS_policy</p></li>
+<li><p>fortios_firewall_DoS_policy6</p></li>
+<li><p>fortios_ipv4_policy</p></li>
+<li><p>fortios_switch_controller_802_1X_settings</p></li>
+<li><p>fortios_switch_controller_security_policy_802_1X</p></li>
+<li><p>fortios_system_firmware_upgrade</p></li>
+<li><p>fortios_system_nd_proxy</p></li>
+<li><p>fortios_webfilter</p></li>
+</ul>
+</li>
+</ul>
+<section id="community-grafana">
+<h4>community.grafana<a class="headerlink" href="#community-grafana" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>grafana_datasource doesn’t set password correctly (#113)</p></li>
+</ul>
+</section>
+</section>
+<section id="id31">
+<h3><a class="toc-backref" href="#id99">Breaking Changes</a><a class="headerlink" href="#id31" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>cisco.nxos.nxos_igmp_interface - no longer supports the deprecated <code class="docutils literal notranslate"><span class="pre">oif_prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">oif_source</span></code> options. These have been superseded by <code class="docutils literal notranslate"><span class="pre">oif_ps</span></code>.</p></li>
+<li><p>community.grafana.grafana_dashboard - the parameter <code class="docutils literal notranslate"><span class="pre">message</span></code> is renamed to <code class="docutils literal notranslate"><span class="pre">commit_message</span></code> since <code class="docutils literal notranslate"><span class="pre">message</span></code> is used by Ansible Core engine internally.</p></li>
+<li><p>purestorage.flashblade.purefb_fs - no longer supports the deprecated <code class="docutils literal notranslate"><span class="pre">nfs</span></code> option. This has been superseded by <code class="docutils literal notranslate"><span class="pre">nfsv3</span></code>.</p></li>
+</ul>
+<section id="amazon-aws">
+<h4>amazon.aws<a class="headerlink" href="#amazon-aws" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>aws_s3 - can now delete versioned buckets even when they are not empty - set mode to delete to delete a versioned bucket and everything in it.</p></li>
+</ul>
+</section>
+<section id="ansible-windows">
+<h4>ansible.windows<a class="headerlink" href="#ansible-windows" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>setup - Make sure <code class="docutils literal notranslate"><span class="pre">ansible_date_time.epoch</span></code> is seconds since EPOCH in UTC to mirror the POSIX facts. The <code class="docutils literal notranslate"><span class="pre">ansible_date_time.epoch_local</span></code> contains seconds since EPOCH in the local timezone for backwards compatibility</p></li>
+<li><p>setup - Will now add the IPv6 scope on link local addresses for <code class="docutils literal notranslate"><span class="pre">ansible_ip_addresses</span></code></p></li>
+<li><p>setup - <code class="docutils literal notranslate"><span class="pre">ansible_processor</span></code> will now return the index before the other values to match the POSIX fact behaviour</p></li>
+<li><p>win_find - No longer filters by size on directories, this feature had a lot of bugs, slowed down the module, and not a supported scenario with the <code class="docutils literal notranslate"><span class="pre">find</span></code> module.</p></li>
+<li><dl class="simple">
+<dt>win_find - module has been refactored to better match the behaviour of the <code class="docutils literal notranslate"><span class="pre">find</span></code> module. Here is what has changed:</dt><dd><ul>
+<li><p>When the directory specified by <code class="docutils literal notranslate"><span class="pre">paths</span></code> does not exist or is a file, it will no longer fail and will just warn the user</p></li>
+<li><p>Junction points are no longer reported as <code class="docutils literal notranslate"><span class="pre">islnk</span></code>, use <code class="docutils literal notranslate"><span class="pre">isjunction</span></code> to properly report these files. This behaviour matches the win_stat module</p></li>
+<li><p>Directories no longer return a <code class="docutils literal notranslate"><span class="pre">size</span></code>, this matches the <code class="docutils literal notranslate"><span class="pre">stat</span></code> and <code class="docutils literal notranslate"><span class="pre">find</span></code> behaviour and has been removed due to the difficulties in correctly reporting the size of a directory</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>win_user - Change idempotency checks for <code class="docutils literal notranslate"><span class="pre">description</span></code> to be case sensitive</p></li>
+<li><p>win_user - Change idempotency checks for <code class="docutils literal notranslate"><span class="pre">fullname</span></code> to be case sensitive</p></li>
+</ul>
+</section>
+<section id="cisco-meraki">
+<h4>cisco.meraki<a class="headerlink" href="#cisco-meraki" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>meraki_device - Changed tags from string to list</p></li>
+<li><p>meraki_device - Removed serial_lldp_cdp parameter</p></li>
+<li><p>meraki_device - Removed serial_uplink parameter</p></li>
+<li><p>meraki_intrusion_prevention - Rename whitedlisted_rules to allowed_rules</p></li>
+<li><p>meraki_mx_l3_firewall - Rule responses are now in a <cite>rules</cite> list</p></li>
+<li><p>meraki_mx_l7_firewall - Rename blacklisted_countries to blocked_countries</p></li>
+<li><p>meraki_mx_l7_firewall - Rename whitelisted_countries to allowed_countries</p></li>
+<li><p>meraki_network - Local and remote status page settings cannot be set during network creation</p></li>
+<li><p>meraki_network - <cite>disableRemoteStatusPage</cite> response is now <cite>remote_status_page_enabled</cite></p></li>
+<li><p>meraki_network - <cite>disable_my_meraki_com</cite> response is now <cite>local_status_page_enabled</cite></p></li>
+<li><p>meraki_network - <cite>disable_my_meraki</cite> has been deprecated</p></li>
+<li><p>meraki_network - <cite>enable_my_meraki</cite> is now called <cite>local_status_page_enabled</cite></p></li>
+<li><p>meraki_network - <cite>enable_remote_status_page</cite> is now called <cite>remote_status_page_enabled</cite></p></li>
+<li><p>meraki_network - <cite>enabled</cite> response for VLAN status is now <cite>vlans_enabled</cite></p></li>
+<li><p>meraki_network - <cite>tags</cite> and <cite>type</cite> now return a list</p></li>
+<li><p>meraki_snmp - peer_ips is now a list</p></li>
+<li><p>meraki_switchport - <cite>access_policy_number</cite> is now an int and not a string</p></li>
+<li><p>meraki_switchport - <cite>tags</cite> is now a list and not a string</p></li>
+<li><p>meraki_webhook - Querying test status now uses state of query.</p></li>
+</ul>
+</section>
+<section id="id32">
+<h4>community.general<a class="headerlink" href="#id32" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>The environment variable for the auth context for the oc.py connection plugin has been corrected (K8S_CONTEXT).  It was using an initial lowercase k by mistake. (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/377">https://github.com/ansible-collections/community.general/pull/377</a>).</p></li>
+<li><p>bigpanda - the parameter <code class="docutils literal notranslate"><span class="pre">message</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">deployment_message</span></code> since <code class="docutils literal notranslate"><span class="pre">message</span></code> is used by Ansible Core engine internally.</p></li>
+<li><p>cisco_spark - the module option <code class="docutils literal notranslate"><span class="pre">message</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">msg</span></code>, as <code class="docutils literal notranslate"><span class="pre">message</span></code> is used internally in Ansible Core engine (<a class="reference external" href="https://github.com/ansible/ansible/issues/39295">https://github.com/ansible/ansible/issues/39295</a>)</p></li>
+<li><p>datadog - the parameter <code class="docutils literal notranslate"><span class="pre">message</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">notification_message</span></code> since <code class="docutils literal notranslate"><span class="pre">message</span></code> is used by Ansible Core engine internally.</p></li>
+<li><p>docker_container - no longer passes information on non-anonymous volumes or binds as <code class="docutils literal notranslate"><span class="pre">Volumes</span></code> to the Docker daemon. This increases compatibility with the <code class="docutils literal notranslate"><span class="pre">docker</span></code> CLI program. Note that if you specify <code class="docutils literal notranslate"><span class="pre">volumes:</span> <span class="pre">strict</span></code> in <code class="docutils literal notranslate"><span class="pre">comparisons</span></code>, this could cause existing containers created with docker_container from Ansible 2.9 or earlier to restart.</p></li>
+<li><p>docker_container - support for port ranges was adjusted to be more compatible to the <code class="docutils literal notranslate"><span class="pre">docker</span></code> command line utility: a one-port container range combined with a multiple-port host range will no longer result in only the first host port be used, but the whole range being passed to Docker so that a free port in that range will be used.</p></li>
+<li><p>hashi_vault lookup - now returns the latest version when using the KV v2 secrets engine. Previously, it returned all versions of the secret which required additional steps to extract and filter the desired version.</p></li>
+<li><p>log_plays callback - add missing information to the logs generated by the callback plugin. This changes the log message format (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/442">https://github.com/ansible-collections/community.general/pull/442</a>).</p></li>
+<li><p>pkgng - passing <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">*</span></code> with <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> will no longer remove every installed package from the system. It is now a noop. (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/569">https://github.com/ansible-collections/community.general/pull/569</a>).</p></li>
+<li><p>pkgng - passing <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">*</span></code> with <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">latest</span></code> or <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">present</span></code> will no longer install every package from the configured package repositories. Instead, <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">*,</span> <span class="pre">state:</span> <span class="pre">latest</span></code> will upgrade all already-installed packages, and <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">*,</span> <span class="pre">state:</span> <span class="pre">present</span></code> is a noop. (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/569">https://github.com/ansible-collections/community.general/pull/569</a>).</p></li>
+</ul>
+</section>
+<section id="id33">
+<h4>community.network<a class="headerlink" href="#id33" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>routeros_facts - allow multiple addresses and neighbors per interface. This makes <code class="docutils literal notranslate"><span class="pre">ansible_net_neighbors</span></code> a list instead of a dict (<a class="reference external" href="https://github.com/ansible-collections/community.network/pull/6">https://github.com/ansible-collections/community.network/pull/6</a>).</p></li>
+</ul>
+</section>
+<section id="id34">
+<h4>community.vmware<a class="headerlink" href="#id34" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>vmware_datastore_maintenancemode - now returns <code class="docutils literal notranslate"><span class="pre">datastore_status</span></code> instead of Ansible internal key <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p></li>
+<li><p>vmware_guest_custom_attributes - does not require VM name which was a required parameter for releases prior to Ansible 2.10.</p></li>
+<li><p>vmware_guest_find - the <code class="docutils literal notranslate"><span class="pre">datacenter</span></code> option has been removed.</p></li>
+<li><p>vmware_host_kernel_manager - now returns <code class="docutils literal notranslate"><span class="pre">host_kernel_status</span></code> instead of Ansible internal key <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p></li>
+<li><p>vmware_host_ntp - now returns <code class="docutils literal notranslate"><span class="pre">host_ntp_status</span></code> instead of Ansible internal key <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p></li>
+<li><p>vmware_host_service_manager - now returns <code class="docutils literal notranslate"><span class="pre">host_service_status</span></code> instead of Ansible internal key <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p></li>
+<li><p>vmware_tag - now returns <code class="docutils literal notranslate"><span class="pre">tag_status</span></code> instead of Ansible internal key <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p></li>
+<li><p>vmware_vmkernel - the options <code class="docutils literal notranslate"><span class="pre">ip_address</span></code> and <code class="docutils literal notranslate"><span class="pre">subnet_mask</span></code> have been removed; use the suboptions <code class="docutils literal notranslate"><span class="pre">ip_address</span></code> and <code class="docutils literal notranslate"><span class="pre">subnet_mask</span></code> of the <code class="docutils literal notranslate"><span class="pre">network</span></code> option instead.</p></li>
+</ul>
+</section>
+<section id="community-windows">
+<h4>community.windows<a class="headerlink" href="#community-windows" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>win_pester - no longer runs all <code class="docutils literal notranslate"><span class="pre">*.ps1</span></code> file in the directory specified due to it executing potentially unknown scripts. It will follow the default behaviour of only running tests for files that are like <code class="docutils literal notranslate"><span class="pre">*.tests.ps1</span></code> which is built into Pester itself.</p></li>
+</ul>
+</section>
+<section id="community-zabbix">
+<h4>community.zabbix<a class="headerlink" href="#community-zabbix" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>zabbix_javagateway - options <code class="docutils literal notranslate"><span class="pre">javagateway_pidfile</span></code>, <code class="docutils literal notranslate"><span class="pre">javagateway_listenip</span></code>, <code class="docutils literal notranslate"><span class="pre">javagateway_listenport</span></code> and <code class="docutils literal notranslate"><span class="pre">javagateway_startpollers</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">zabbix_javagateway_xyz</span></code> (see <a class="reference external" href="https://github.com/ansible-collections/community.zabbix/blob/main/docs/UPGRADE.md">UPGRADE.md</a>).</p></li>
+</ul>
+</section>
+<section id="id35">
+<h4>netbox.netbox<a class="headerlink" href="#id35" title="Permalink to this headline"></a></h4>
+<ul>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">ip-addresses</span></code> key in netbox inventory plugin to <code class="docutils literal notranslate"><span class="pre">ip_addresses</span></code> (<a class="reference external" href="https://github.com/netbox-community/ansible_modules/issues/139">https://github.com/netbox-community/ansible_modules/issues/139</a>)</p></li>
+<li><p>Changed <code class="docutils literal notranslate"><span class="pre">group</span></code> to <code class="docutils literal notranslate"><span class="pre">tenant_group</span></code> in <code class="docutils literal notranslate"><span class="pre">netbox_tenant.py</span></code> (<a class="reference external" href="https://github.com/netbox-community/ansible_modules/issues/9">https://github.com/netbox-community/ansible_modules/issues/9</a>)</p></li>
+<li><p>Changed <code class="docutils literal notranslate"><span class="pre">role</span></code> to <code class="docutils literal notranslate"><span class="pre">prefix_role</span></code> in <code class="docutils literal notranslate"><span class="pre">netbox_prefix.py</span></code> (<a class="reference external" href="https://github.com/netbox-community/ansible_modules/issues/9">https://github.com/netbox-community/ansible_modules/issues/9</a>)</p></li>
+<li><p>Module failures when required fields aren’t provided (<a class="reference external" href="https://github.com/netbox-community/ansible_modules/issues/24">https://github.com/netbox-community/ansible_modules/issues/24</a>)</p></li>
+<li><p>Renamed <code class="docutils literal notranslate"><span class="pre">netbox_interface</span></code> to <code class="docutils literal notranslate"><span class="pre">netbox_device_interface</span></code> (<a class="reference external" href="https://github.com/netbox-community/ansible_modules/issues/9">https://github.com/netbox-community/ansible_modules/issues/9</a>)</p></li>
+<li><p>This version has a few breaking changes due to new namespace and collection name. I felt it necessary to change the name of the lookup plugin and inventory plugin just not to have a non descriptive namespace call to use them. Below is an example:
+<code class="docutils literal notranslate"><span class="pre">netbox.netbox.netbox</span></code> would be used for both inventory plugin and lookup plugin, but in different contexts so no collision will arise, but confusion will.
+I renamed the lookup plugin to <code class="docutils literal notranslate"><span class="pre">nb_lookup</span></code> so it will be used with the FQCN <code class="docutils literal notranslate"><span class="pre">netbox.netbox.nb_lookup</span></code>.
+The inventory plugin will now be called within an inventory file by <code class="docutils literal notranslate"><span class="pre">netbox.netbox.nb_inventory</span></code></p></li>
+<li><p>To pass in integers via Ansible Jinja filters for a key in <code class="docutils literal notranslate"><span class="pre">data</span></code> that
+requires querying an endpoint is now done by making it a dictionary with
+an <code class="docutils literal notranslate"><span class="pre">id</span></code> key. The previous behavior was to just pass in an integer and
+it was converted when normalizing the data, but some people may have names
+that are all integers and those were being converted erroneously so we made
+the decision to change the method to convert to an integer for the NetBox
+API.</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create device within NetBox with only required information</span>
+    <span class="nt">netbox_device</span><span class="p">:</span>
+      <span class="nt">netbox_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">http://netbox-demo.org:32768</span>
+      <span class="nt">netbox_token</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0123456789abcdef0123456789abcdef01234567</span>
+      <span class="nt">data</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Test66</span>
+        <span class="nt">device_type</span><span class="p">:</span>
+          <span class="nt">id</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">some_jinja_variable</span> <span class="cp">}}</span><span class="s">&quot;</span>
+        <span class="nt">device_role</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Core Switch</span>
+        <span class="nt">site</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Test Site</span>
+        <span class="nt">status</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Staged</span>
+      <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pynetbox</span></code> changed to using <code class="docutils literal notranslate"><span class="pre">requests.Session()</span></code> to manage the HTTP session
+which broke passing in <code class="docutils literal notranslate"><span class="pre">ssl_verify</span></code> when building the NetBox API client.
+This PR makes <code class="docutils literal notranslate"><span class="pre">pynetbox</span> <span class="pre">5.0.4+</span></code> the new required version of <cite>pynetbox</cite> for
+the Ansible modules and lookup plugin. (<a class="reference external" href="https://github.com/netbox-community/ansible_modules/pull/269">https://github.com/netbox-community/ansible_modules/pull/269</a>)</p></li>
+</ul>
+</section>
+<section id="theforeman-foreman">
+<h4>theforeman.foreman<a class="headerlink" href="#theforeman-foreman" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>All modules were renamed to drop the <code class="docutils literal notranslate"><span class="pre">foreman_</span></code> and <code class="docutils literal notranslate"><span class="pre">katello_</span></code> prefixes.
+Additionally to the prefix removal, the following modules were further ranamed:</p>
+<ul>
+<li><p>katello_upload to content_upload</p></li>
+<li><p>katello_sync to repository_sync</p></li>
+<li><p>katello_manifest to subscription_manifest</p></li>
+<li><p>foreman_search_facts to resource_info</p></li>
+<li><p>foreman_ptable to partition_table</p></li>
+<li><p>foreman_model to hardware_model</p></li>
+<li><p>foreman_environment to puppet_environment</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="id36">
+<h3><a class="toc-backref" href="#id100">Major Changes</a><a class="headerlink" href="#id36" title="Permalink to this headline"></a></h3>
+<section id="id37">
+<h4>Ansible-base<a class="headerlink" href="#id37" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Both ansible-doc and ansible-console’s help command will error for modules and plugins whose return documentation cannot be parsed as YAML. All modules and plugins passing <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">sanity</span> <span class="pre">--test</span> <span class="pre">yamllint</span></code> will not be affected by this.</p></li>
+<li><p>Collections may declare a list of supported/tested Ansible versions for the collection. A warning is issued if a collection does not support the Ansible version that loads it (can also be configured as silent or a fatal error). Collections that do not declare supported Ansible versions do not issue a warning/error.</p></li>
+<li><p>Plugin routing allows collections to declare deprecation, redirection targets, and removals for all plugin types.</p></li>
+<li><p>Plugins that import module_utils and other ansible namespaces that have moved to collections should continue to work unmodified.</p></li>
+<li><p>Routing data built into Ansible 2.10 ensures that 2.9 content should work unmodified on 2.10. Formerly included modules and plugins that were moved to collections are still accessible by their original unqualified names, so long as their destination collections are installed.</p></li>
+<li><p>When deprecations are done in code, they to specify a <code class="docutils literal notranslate"><span class="pre">collection_name</span></code> so that deprecation warnings can mention which collection - or ansible-base - is deprecating a feature. This affects all <code class="docutils literal notranslate"><span class="pre">Display.deprecated()</span></code> or <code class="docutils literal notranslate"><span class="pre">AnsibleModule.deprecate()</span></code> or <code class="docutils literal notranslate"><span class="pre">Ansible.Basic.Deprecate()</span></code> calls, and <code class="docutils literal notranslate"><span class="pre">removed_in_version</span></code>/<code class="docutils literal notranslate"><span class="pre">removed_at_date</span></code> or <code class="docutils literal notranslate"><span class="pre">deprecated_aliases</span></code> in module argument specs.</p></li>
+<li><p>ansible-test now uses a different <code class="docutils literal notranslate"><span class="pre">default</span></code> test container for Ansible Collections</p></li>
+</ul>
+</section>
+<section id="id38">
+<h4>amazon.aws<a class="headerlink" href="#id38" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>ec2 module_utils - The <code class="docutils literal notranslate"><span class="pre">AWSRetry</span></code> decorator no longer catches <code class="docutils literal notranslate"><span class="pre">NotFound</span></code> exceptions by default.  <code class="docutils literal notranslate"><span class="pre">NotFound</span></code> exceptions need to be explicitly added using <code class="docutils literal notranslate"><span class="pre">catch_extra_error_codes</span></code>.  Some AWS modules may see an increase in transient failures due to AWS’’s eventual consistency model.</p></li>
+</ul>
+</section>
+<section id="ansible-netcommon">
+<h4>ansible.netcommon<a class="headerlink" href="#ansible-netcommon" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Add libssh connection plugin and refactor network_cli (<a class="reference external" href="https://github.com/ansible-collections/ansible.netcommon/pull/30">https://github.com/ansible-collections/ansible.netcommon/pull/30</a>)</p></li>
+</ul>
+</section>
+<section id="ansible-posix">
+<h4>ansible.posix<a class="headerlink" href="#ansible-posix" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Bootstrap Collection (<a class="reference external" href="https://github.com/ansible-collections/ansible.posix/pull/1">https://github.com/ansible-collections/ansible.posix/pull/1</a>).</p></li>
+</ul>
+</section>
+<section id="id39">
+<h4>cisco.meraki<a class="headerlink" href="#id39" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Rewrite requests method for version 1.0 API and improved readability</p></li>
+<li><p>meraki_mr_rf_profile - Configure wireless RF profiles.</p></li>
+<li><p>meraki_mr_settings - Configure network settings for wireless.</p></li>
+<li><p>meraki_ms_l3_interface - New module</p></li>
+<li><p>meraki_ms_ospf - Configure OSPF.</p></li>
+</ul>
+</section>
+<section id="id40">
+<h4>community.general<a class="headerlink" href="#id40" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>docker_container - the <code class="docutils literal notranslate"><span class="pre">network_mode</span></code> option will be set by default to the name of the first network in <code class="docutils literal notranslate"><span class="pre">networks</span></code> if at least one network is given and <code class="docutils literal notranslate"><span class="pre">networks_cli_compatible</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code> (will be default from community.general 2.0.0 on). Set to an explicit value to avoid deprecation warnings if you specify networks and set <code class="docutils literal notranslate"><span class="pre">networks_cli_compatible</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>. The current default (not specifying it) is equivalent to the value <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p></li>
+<li><p>docker_container - the module has a new option, <code class="docutils literal notranslate"><span class="pre">container_default_behavior</span></code>, whose default value will change from <code class="docutils literal notranslate"><span class="pre">compatibility</span></code> to <code class="docutils literal notranslate"><span class="pre">no_defaults</span></code>. Set to an explicit value to avoid deprecation warnings.</p></li>
+<li><p>gitlab_user - no longer requires <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">email</span></code> and <code class="docutils literal notranslate"><span class="pre">password</span></code> arguments when <code class="docutils literal notranslate"><span class="pre">state=absent</span></code>.</p></li>
+</ul>
+</section>
+<section id="id41">
+<h4>community.grafana<a class="headerlink" href="#id41" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Add changelog management for ansible 2.10 (#112)</p></li>
+<li><p>grafana_datasource ; adding additional_json_data param</p></li>
+</ul>
+</section>
+<section id="id42">
+<h4>community.kubernetes<a class="headerlink" href="#id42" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Add changelog and fragments and document changelog process (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/131">https://github.com/ansible-collections/community.kubernetes/pull/131</a>).</p></li>
+<li><p>helm - New module for managing Helm charts (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/61">https://github.com/ansible-collections/community.kubernetes/pull/61</a>).</p></li>
+<li><p>helm_info - New module for retrieving Helm chart information (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/61">https://github.com/ansible-collections/community.kubernetes/pull/61</a>).</p></li>
+<li><p>helm_plugin - new module to manage Helm plugins (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/154">https://github.com/ansible-collections/community.kubernetes/pull/154</a>).</p></li>
+<li><p>helm_plugin_info - new modules to gather information about Helm plugins (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/154">https://github.com/ansible-collections/community.kubernetes/pull/154</a>).</p></li>
+<li><p>helm_repository - New module for managing Helm repositories (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/61">https://github.com/ansible-collections/community.kubernetes/pull/61</a>).</p></li>
+<li><p>k8s - Inventory source migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>k8s - Lookup plugin migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>k8s - Module migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>k8s_auth - Module migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>k8s_config_resource_name - Filter plugin migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>k8s_exec - New module for executing commands on pods via Kubernetes API (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/14">https://github.com/ansible-collections/community.kubernetes/pull/14</a>).</p></li>
+<li><p>k8s_exec - Return rc for the command executed (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/158">https://github.com/ansible-collections/community.kubernetes/pull/158</a>).</p></li>
+<li><p>k8s_info - Module migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>k8s_log - New module for retrieving pod logs (<a class="reference external" href="https://github.com/ansible-collections/community.kubernetes/pull/16">https://github.com/ansible-collections/community.kubernetes/pull/16</a>).</p></li>
+<li><p>k8s_scale - Module migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>k8s_service - Module migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>kubectl - Connection plugin migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+<li><p>openshift - Inventory source migrated from Ansible 2.9 to Kubernetes collection.</p></li>
+</ul>
+</section>
+<section id="community-libvirt">
+<h4>community.libvirt<a class="headerlink" href="#community-libvirt" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>added generic libvirt inventory plugin</p></li>
+<li><p>removed libvirt_lxc inventory script</p></li>
+</ul>
+</section>
+<section id="dellemc-os10">
+<h4>dellemc.os10<a class="headerlink" href="#dellemc-os10" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>New role os10_aaa - Facilitates the configuration of Authentication Authorization and Accounting (AAA), TACACS and RADIUS server.</p></li>
+<li><p>New role os10_acl - Facilitates the configuration of Access Control lists.</p></li>
+<li><p>New role os10_bfd - Facilitates the configuration of BFD global attributes.</p></li>
+<li><p>New role os10_bgp - Facilitates the configuration of border gateway protocol (BGP) attributes.</p></li>
+<li><p>New role os10_copy_config - This role pushes the backup running configuration into a OS10 device.</p></li>
+<li><p>New role os10_dns - Facilitates the configuration of domain name service (DNS).</p></li>
+<li><p>New role os10_ecmp - Facilitates the configuration of equal cost multi-path (ECMP) for IPv4.</p></li>
+<li><p>New role os10_fabric_summary Facilitates to get show system information of all the OS10 switches in the fabric.</p></li>
+<li><p>New role os10_flow_monitor Facilitates the configuration of ACL flow-based monitoring attributes.</p></li>
+<li><p>New role os10_image_upgrade Facilitates installation of OS10 software images.</p></li>
+<li><p>New role os10_interface Facilitates the configuration of interface attributes.</p></li>
+<li><p>New role os10_lag Facilitates the configuration of link aggregation group (LAG) attributes.</p></li>
+<li><p>New role os10_lldp Facilitates the configuration of link layer discovery protocol (LLDP) attributes at global and interface level.</p></li>
+<li><p>New role os10_logging Facilitates the configuration of global logging attributes and logging servers.</p></li>
+<li><p>New role os10_network_validation Facilitates validation of wiring connection, BGP neighbors, MTU between neighbors and VLT pair.</p></li>
+<li><p>New role os10_ntp Facilitates the configuration of network time protocol (NTP) attributes.</p></li>
+<li><p>New role os10_prefix_list Facilitates the configuration of IP prefix-list.</p></li>
+<li><p>New role os10_qos Facilitates the configuration of quality of service attributes including policy-map and class-map.</p></li>
+<li><p>New role os10_raguard Facilitates the configuration of IPv6 RA Guard attributes.</p></li>
+<li><p>New role os10_route_map Facilitates the configuration of route-map attributes.</p></li>
+<li><p>New role os10_snmp Facilitates the configuration of  global SNMP attributes.</p></li>
+<li><p>New role os10_system Facilitates the configuration of hostname and hashing algorithm.</p></li>
+<li><p>New role os10_template The role takes the raw string input from the CLI of OS10 device, and returns a structured text in the form of a Python dictionary.</p></li>
+<li><p>New role os10_uplink Facilitates the configuration of uplink attributes like uplink-state group.</p></li>
+<li><p>New role os10_users Facilitates the configuration of global system user attributes.</p></li>
+<li><p>New role os10_vlan Facilitates the configuration of virtual LAN (VLAN) attributes.</p></li>
+<li><p>New role os10_vlt Facilitates the configuration of virtual link trunking (VLT).</p></li>
+<li><p>New role os10_vrf Facilitates the configuration of virtual routing and forwarding (VRF).</p></li>
+<li><p>New role os10_vrrp Facilitates the configuration of virtual router redundancy protocol (VRRP) attributes.</p></li>
+<li><p>New role os10_vxlan Facilitates the configuration of virtual extensible LAN (VXLAN) attributes.</p></li>
+<li><p>New role os10_xstp Facilitates the configuration of xSTP attributes.</p></li>
+</ul>
+</section>
+<section id="id43">
+<h4>f5networks.f5_modules<a class="headerlink" href="#id43" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Broke apart bigip_device_auth_radius to implement radius server configuration in bigip_device_auth_server module. Refer to module documentation for usage details</p></li>
+<li><p>Remove redundant parameters in f5_provider to fix disparity between documentation and module parameters</p></li>
+</ul>
+</section>
+<section id="gluster-gluster">
+<h4>gluster.gluster<a class="headerlink" href="#gluster-gluster" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>geo_rep - Added the independent module of geo rep with other gluster modules (<a class="reference external" href="https://github.com/gluster/gluster-ansible-collection/pull/2">https://github.com/gluster/gluster-ansible-collection/pull/2</a>).</p></li>
+</ul>
+</section>
+<section id="id44">
+<h4>ovirt.ovirt<a class="headerlink" href="#id44" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>ovirt_disk - Add backup (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/57">https://github.com/oVirt/ovirt-ansible-collection/pull/57</a>).</p></li>
+<li><p>ovirt_disk - Support direct upload/download (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/35">https://github.com/oVirt/ovirt-ansible-collection/pull/35</a>).</p></li>
+<li><p>ovirt_host - Add ssh_port (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/60">https://github.com/oVirt/ovirt-ansible-collection/pull/60</a>).</p></li>
+<li><p>ovirt_vm_os_info - Creation of module (<a class="reference external" href="https://github.com/oVirt/ovirt-ansible-collection/pull/26">https://github.com/oVirt/ovirt-ansible-collection/pull/26</a>).</p></li>
+</ul>
+</section>
+<section id="purestorage-flasharray">
+<h4>purestorage.flasharray<a class="headerlink" href="#purestorage-flasharray" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>purefa_console - manage Console Lock setting for the FlashArray</p></li>
+<li><p>purefa_endpoint - manage VMware protocol-endpoints on the FlashArray</p></li>
+<li><p>purefa_eula - sign, or resign, FlashArray EULA</p></li>
+<li><p>purefa_inventory - get hardware inventory information from a FlashArray</p></li>
+<li><p>purefa_network - manage the physical and virtual network settings on the FlashArray</p></li>
+<li><p>purefa_pgsched - manage protection group snapshot and replication schedules on the FlashArray</p></li>
+<li><p>purefa_pod - manage ActiveCluster pods in FlashArrays</p></li>
+<li><p>purefa_pod_replica - manage ActiveDR pod replica links in FlashArrays</p></li>
+<li><p>purefa_proxy - manage the phonehome HTTPS proxy setting for the FlashArray</p></li>
+<li><p>purefa_smis - manage SMI-S settings on the FlashArray</p></li>
+<li><p>purefa_subnet - manage network subnets on the FlashArray</p></li>
+<li><p>purefa_timeout - manage the GUI idle timeout on the FlashArray</p></li>
+<li><p>purefa_vlan - manage VLAN interfaces on the FlashArray</p></li>
+<li><p>purefa_vnc - manage VNC for installed applications on the FlashArray</p></li>
+<li><p>purefa_volume_tags - manage volume tags on the FlashArray</p></li>
+</ul>
+</section>
+<section id="purestorage-flashblade">
+<h4>purestorage.flashblade<a class="headerlink" href="#purestorage-flashblade" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>purefb_alert - manage alert email settings on a FlashBlade</p></li>
+<li><p>purefb_bladename - manage FlashBlade name</p></li>
+<li><p>purefb_bucket_replica - manage bucket replica links on a FlashBlade</p></li>
+<li><p>purefb_connect - manage connections between FlashBlades</p></li>
+<li><p>purefb_dns - manage DNS settings on a FlashBlade</p></li>
+<li><p>purefb_fs_replica - manage filesystem replica links on a FlashBlade</p></li>
+<li><p>purefb_inventory - get information about the hardware inventory of a FlashBlade</p></li>
+<li><p>purefb_ntp - manage the NTP settings for a FlashBlade</p></li>
+<li><p>purefb_phonehome - manage the phone home settings for a FlashBlade</p></li>
+<li><p>purefb_policy - manage the filesystem snapshot policies for a FlashBlade</p></li>
+<li><p>purefb_proxy - manage the phone home HTTP proxy settings for a FlashBlade</p></li>
+<li><p>purefb_remote_cred - manage the Object Store Remote Credentials on a FlashBlade</p></li>
+<li><p>purefb_snmp_agent - modify the FlashBlade SNMP Agent</p></li>
+<li><p>purefb_snmp_mgr - manage SNMP Managers on a FlashBlade</p></li>
+<li><p>purefb_target - manage remote S3-capable targets for a FlashBlade</p></li>
+<li><p>purefb_user - manage local <code class="docutils literal notranslate"><span class="pre">pureuser</span></code> account password on a FlashBlade</p></li>
+</ul>
+</section>
+</section>
+<section id="id45">
+<h3><a class="toc-backref" href="#id101">Removed Features</a><a class="headerlink" href="#id45" title="Permalink to this headline"></a></h3>
+<section id="id46">
+<h4>Ansible-base<a class="headerlink" href="#id46" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>core - remove support for <code class="docutils literal notranslate"><span class="pre">check_invalid_arguments</span></code> in <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>, <code class="docutils literal notranslate"><span class="pre">AzureModule</span></code> and <code class="docutils literal notranslate"><span class="pre">UTMModule</span></code>.</p></li>
+</ul>
+</section>
+<section id="id47">
+<h4>ansible.netcommon<a class="headerlink" href="#id47" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>module_utils.network.common.utils.ComplexDict has been removed</p></li>
+</ul>
+</section>
+<section id="id48">
+<h4>ansible.windows<a class="headerlink" href="#id48" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>win_stat - removed the deprecated <code class="docutils literal notranslate"><span class="pre">get_md55</span></code> option and <code class="docutils literal notranslate"><span class="pre">md5</span></code> return value.</p></li>
+</ul>
+</section>
+<section id="community-crypto">
+<h4>community.crypto<a class="headerlink" href="#community-crypto" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">letsencrypt</span></code> module has been removed. Use <code class="docutils literal notranslate"><span class="pre">acme_certificate</span></code> instead.</p></li>
+</ul>
+</section>
+<section id="id49">
+<h4>community.general<a class="headerlink" href="#id49" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>conjur_variable lookup - has been moved to the <code class="docutils literal notranslate"><span class="pre">cyberark.conjur</span></code> collection. A redirection is active, which will be removed in version 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/570">https://github.com/ansible-collections/community.general/pull/570</a>).</p></li>
+<li><p>core - remove support for <code class="docutils literal notranslate"><span class="pre">check_invalid_arguments</span></code> in <code class="docutils literal notranslate"><span class="pre">UTMModule</span></code>.</p></li>
+<li><p>digital_ocean_* - all DigitalOcean modules have been moved to the <code class="docutils literal notranslate"><span class="pre">community.digitalocean</span></code> collection. A redirection is active, which will be removed in version 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/622">https://github.com/ansible-collections/community.general/pull/622</a>).</p></li>
+<li><p>infini_* - all infinidat modules have been moved to the <code class="docutils literal notranslate"><span class="pre">infinidat.infinibox</span></code> collection. A redirection is active, which will be removed in version 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/607">https://github.com/ansible-collections/community.general/pull/607</a>).</p></li>
+<li><p>logicmonitor - the module has been removed in 1.0.0 since it is unmaintained and the API used by the module has been turned off in 2017 (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/539">https://github.com/ansible-collections/community.general/issues/539</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/541">https://github.com/ansible-collections/community.general/pull/541</a>).</p></li>
+<li><p>logicmonitor_facts - the module has been removed in 1.0.0 since it is unmaintained and the API used by the module has been turned off in 2017 (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/539">https://github.com/ansible-collections/community.general/issues/539</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/541">https://github.com/ansible-collections/community.general/pull/541</a>).</p></li>
+<li><p>mysql_* - all MySQL modules have been moved to the <code class="docutils literal notranslate"><span class="pre">community.mysql</span></code> collection. A redirection is active, which will be removed in version 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/633">https://github.com/ansible-collections/community.general/pull/633</a>).</p></li>
+<li><p>pacman - Removed deprecated <code class="docutils literal notranslate"><span class="pre">recurse</span></code> option, use <code class="docutils literal notranslate"><span class="pre">extra_args=--recursive</span></code> instead</p></li>
+<li><p>proxysql_* - all ProxySQL modules have been moved to the <code class="docutils literal notranslate"><span class="pre">community.proxysql</span></code> collection. A redirection is active, which will be removed in version 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/624">https://github.com/ansible-collections/community.general/pull/624</a>).</p></li>
+</ul>
+</section>
+<section id="id50">
+<h4>community.network<a class="headerlink" href="#id50" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>onyx - all onyx modules and plugins have been moved to the mellanox.onyx collection. Redirects have been added that will be removed in community.network 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.network/pull/83">https://github.com/ansible-collections/community.network/pull/83</a>).</p></li>
+</ul>
+</section>
+<section id="id51">
+<h4>community.vmware<a class="headerlink" href="#id51" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>vmware_guest_find - Removed deprecated <code class="docutils literal notranslate"><span class="pre">datacenter</span></code> option</p></li>
+<li><p>vmware_portgroup - removed ‘inbound_policy’, and ‘rolling_order’ deprecated options.</p></li>
+<li><p>vmware_vmkernel - Removed deprecated <code class="docutils literal notranslate"><span class="pre">ip_address</span></code> option; use sub-option ip_address in the network option instead</p></li>
+<li><p>vmware_vmkernel - Removed deprecated <code class="docutils literal notranslate"><span class="pre">subnet_mask</span></code> option; use sub-option subnet_mask in the network option instead</p></li>
+</ul>
+</section>
+<section id="id52">
+<h4>community.windows<a class="headerlink" href="#id52" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>win_disk_image - removed the deprecated return value <code class="docutils literal notranslate"><span class="pre">mount_path</span></code> in favor of <code class="docutils literal notranslate"><span class="pre">mount_paths</span></code>.</p></li>
+<li><p>win_psexec - removed the deprecated <code class="docutils literal notranslate"><span class="pre">extra_opts</span></code> option.</p></li>
+</ul>
+</section>
+<section id="id53">
+<h4>f5networks.f5_modules<a class="headerlink" href="#id53" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Remove _bigip_iapplx_package alias</p></li>
+<li><p>Remove _bigip_security_address_list alias</p></li>
+<li><p>Remove _bigip_security_port_list alias</p></li>
+<li><p>Remove _bigip_traffic_group alias</p></li>
+<li><p>Remove bigip_appsvcs_extension module</p></li>
+<li><p>Remove bigip_asm_policy module</p></li>
+</ul>
+</section>
+</section>
+<section id="id54">
+<h3><a class="toc-backref" href="#id102">Deprecated Features</a><a class="headerlink" href="#id54" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>The vyos.vyos.vyos_static_route module has been deprecated and will be removed in a later release; use vyos.vyos.vyos_static_routes instead.</p></li>
+</ul>
+<section id="id55">
+<h4>Ansible-base<a class="headerlink" href="#id55" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Using the DefaultCallback without the correspodning doc_fragment or copying the documentation.</p></li>
+<li><p>hash_behaviour - Deprecate <code class="docutils literal notranslate"><span class="pre">hash_behaviour</span></code> for future removal.</p></li>
+<li><p>script inventory plugin - The ‘cache’ option is deprecated and will be removed in 2.12. Its use has been removed from the plugin since it has never had any effect.</p></li>
+</ul>
+</section>
+<section id="id56">
+<h4>amazon.aws<a class="headerlink" href="#id56" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>All AWS Modules - <code class="docutils literal notranslate"><span class="pre">aws_access_key</span></code>, <code class="docutils literal notranslate"><span class="pre">aws_secret_key</span></code> and <code class="docutils literal notranslate"><span class="pre">security_token</span></code> will be made mutually exclusive with <code class="docutils literal notranslate"><span class="pre">profile</span></code> after 2022-06-01.</p></li>
+<li><p>cloudformation - The <code class="docutils literal notranslate"><span class="pre">template_format</span></code> option had no effect since Ansible 2.3 and will be removed after 2022-06-01</p></li>
+<li><p>cloudformation - the <code class="docutils literal notranslate"><span class="pre">template_format</span></code> option has been deprecated and will be removed in a later release. It has been ignored by the module since Ansible 2.3.</p></li>
+<li><p>data_pipeline - The <code class="docutils literal notranslate"><span class="pre">version</span></code> option had no effect and will be removed in after 2022-06-01</p></li>
+<li><p>ec2 - in a later release, the <code class="docutils literal notranslate"><span class="pre">group</span></code> and <code class="docutils literal notranslate"><span class="pre">group_id</span></code> options will become mutually exclusive.  Currently <code class="docutils literal notranslate"><span class="pre">group_id</span></code> is ignored if you pass both.</p></li>
+<li><p>ec2_ami - The <code class="docutils literal notranslate"><span class="pre">no_device</span></code> alias <code class="docutils literal notranslate"><span class="pre">NoDevice</span></code> has been deprecated  and will be removed after 2022-06-01</p></li>
+<li><p>ec2_ami - The <code class="docutils literal notranslate"><span class="pre">virtual_name</span></code> alias <code class="docutils literal notranslate"><span class="pre">VirtualName</span></code> has been deprecated and will be removed after 2022-06-01</p></li>
+<li><p>ec2_eip - The <code class="docutils literal notranslate"><span class="pre">wait_timeout</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_key - The <code class="docutils literal notranslate"><span class="pre">wait_timeout</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_key - The <code class="docutils literal notranslate"><span class="pre">wait</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_key - the <code class="docutils literal notranslate"><span class="pre">wait_timeout</span></code> option has been deprecated and will be removed in a later release. It has had no effect since Ansible 2.5.</p></li>
+<li><p>ec2_key - the <code class="docutils literal notranslate"><span class="pre">wait</span></code> option has been deprecated and will be removed in a later release. It has had no effect since Ansible 2.5.</p></li>
+<li><p>ec2_lc - The <code class="docutils literal notranslate"><span class="pre">associate_public_ip_address</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_tag - deprecate the <code class="docutils literal notranslate"><span class="pre">list</span></code> option in favor of ec2_tag_info</p></li>
+<li><p>ec2_tag - support for <code class="docutils literal notranslate"><span class="pre">list</span></code> as a state has been deprecated and will be removed in a later release.  The <code class="docutils literal notranslate"><span class="pre">ec2_tag_info</span></code> can be used to fetch the tags on an EC2 resource.</p></li>
+</ul>
+</section>
+<section id="id57">
+<h4>ansible.windows<a class="headerlink" href="#id57" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>win_domain_computer - Deprecated the undocumented <code class="docutils literal notranslate"><span class="pre">log_path</span></code> option. This option will be removed in a major release after <code class="docutils literal notranslate"><span class="pre">2022-07-01</span></code>.</p></li>
+<li><p>win_domain_controller - the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> option has been deprecated and will be removed in a later release. This was undocumented and only related to debugging information for module development.</p></li>
+<li><p>win_package - the <code class="docutils literal notranslate"><span class="pre">ensure</span></code> alias for the <code class="docutils literal notranslate"><span class="pre">state</span></code> option has been deprecated and will be removed in a later release. Please use <code class="docutils literal notranslate"><span class="pre">state</span></code> instead of <code class="docutils literal notranslate"><span class="pre">ensure</span></code>.</p></li>
+<li><p>win_package - the <code class="docutils literal notranslate"><span class="pre">productid</span></code> alias for the <code class="docutils literal notranslate"><span class="pre">product_id</span></code> option has been deprecated and will be removed in a later release. Please use <code class="docutils literal notranslate"><span class="pre">product_id</span></code> instead of <code class="docutils literal notranslate"><span class="pre">productid</span></code>.</p></li>
+<li><p>win_package - the <code class="docutils literal notranslate"><span class="pre">username</span></code> and <code class="docutils literal notranslate"><span class="pre">password</span></code> options has been deprecated and will be removed in a later release. The same functionality can be done by using <code class="docutils literal notranslate"><span class="pre">become:</span> <span class="pre">yes</span></code> and <code class="docutils literal notranslate"><span class="pre">become_flags:</span> <span class="pre">logon_type=new_credentials</span> <span class="pre">logon_flags=netcredentials_only</span></code> on the task.</p></li>
+<li><p>win_regedit - Deprecated using forward slashes as a path separator, use backslashes to avoid ambiguity between a forward slash in the key name or a forward slash as a path separator. This feature will be removed in a major release after <code class="docutils literal notranslate"><span class="pre">2021-07-01</span></code>.</p></li>
+</ul>
+</section>
+<section id="id58">
+<h4>community.aws<a class="headerlink" href="#id58" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>cloudformation - The <code class="docutils literal notranslate"><span class="pre">template_format</span></code> option had no effect since Ansible 2.3 and will be removed after 2022-06-01</p></li>
+<li><p>data_pipeline - The <code class="docutils literal notranslate"><span class="pre">version</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>data_pipeline - the <code class="docutils literal notranslate"><span class="pre">version</span></code> option has been deprecated and will be removed in a later release. It has always been ignored by the module.</p></li>
+<li><p>ec2_eip - The <code class="docutils literal notranslate"><span class="pre">wait_timeout</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_eip - the <code class="docutils literal notranslate"><span class="pre">wait_timeout</span></code> option has been deprecated and will be removed in a later release. It has had no effect since Ansible 2.3.</p></li>
+<li><p>ec2_key - The <code class="docutils literal notranslate"><span class="pre">wait_timeout</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_key - The <code class="docutils literal notranslate"><span class="pre">wait</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_lc - The <code class="docutils literal notranslate"><span class="pre">associate_public_ip_address</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>ec2_lc - the <code class="docutils literal notranslate"><span class="pre">associate_public_ip_address</span></code> option has been deprecated and will be removed after a later release. It has always been ignored by the module.</p></li>
+<li><p>elb_network_lb - The current default value of the <code class="docutils literal notranslate"><span class="pre">state</span></code> option has been deprecated and will change from absent to present after 2022-06-01</p></li>
+<li><p>elb_network_lb - in a later release, the default behaviour for the <code class="docutils literal notranslate"><span class="pre">state</span></code> option will change from <code class="docutils literal notranslate"><span class="pre">absent</span></code> to <code class="docutils literal notranslate"><span class="pre">present</span></code>.  To maintain the existing behavior explicitly set state to <code class="docutils literal notranslate"><span class="pre">absent</span></code>.</p></li>
+<li><p>iam_managed_policy - The <code class="docutils literal notranslate"><span class="pre">fail_on_delete</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>iam_managed_policy - the <code class="docutils literal notranslate"><span class="pre">fail_on_delete</span></code> option has been deprecated and will be removed after a later release.  It has always been ignored by the module.</p></li>
+<li><p>iam_policy - The <code class="docutils literal notranslate"><span class="pre">policy_document</span></code> will be removed after 2022-06-01.  To maintain the existing behavior use the <code class="docutils literal notranslate"><span class="pre">policy_json</span></code> option and read the file with the <code class="docutils literal notranslate"><span class="pre">lookup</span></code> plugin.</p></li>
+<li><p>iam_policy - The default value of <code class="docutils literal notranslate"><span class="pre">skip_duplicates</span></code> will change after 2022-06-01 from <code class="docutils literal notranslate"><span class="pre">true</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p>iam_policy - in a later release, the default value for the <code class="docutils literal notranslate"><span class="pre">skip_duplicates</span></code> option will change from <code class="docutils literal notranslate"><span class="pre">true</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>.  To maintain the existing behavior explicitly set it to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+<li><p>iam_policy - the <code class="docutils literal notranslate"><span class="pre">policy_document</span></code> option has been deprecated and will be removed after a later release. To maintain the existing behavior use the <code class="docutils literal notranslate"><span class="pre">policy_json</span></code> option and read the file with the <code class="docutils literal notranslate"><span class="pre">lookup</span></code> plugin.</p></li>
+<li><p>iam_role - The default value of the purge_policies has been deprecated and will change from true to false after 2022-06-01</p></li>
+<li><p>iam_role - in a later release, the <code class="docutils literal notranslate"><span class="pre">purge_policies</span></code> option (also know as <code class="docutils literal notranslate"><span class="pre">purge_policy</span></code>) default value will change from <code class="docutils literal notranslate"><span class="pre">true</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>s3_lifecycle - The <code class="docutils literal notranslate"><span class="pre">requester_pays</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>s3_lifecycle - the <code class="docutils literal notranslate"><span class="pre">requester_pays</span></code> option has been deprecated and will be removed after a later release. It has always been ignored by the module.</p></li>
+<li><p>s3_sync - The <code class="docutils literal notranslate"><span class="pre">retries</span></code> option had no effect and will be removed after 2022-06-01</p></li>
+<li><p>s3_sync - the <code class="docutils literal notranslate"><span class="pre">retries</span></code> option has been deprecated and will be removed after 2022-06-01. It has always been ignored by the module.</p></li>
+</ul>
+</section>
+<section id="id59">
+<h4>community.crypto<a class="headerlink" href="#id59" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>openssl_csr - all values for the <code class="docutils literal notranslate"><span class="pre">version</span></code> option except <code class="docutils literal notranslate"><span class="pre">1</span></code> are deprecated. The value 1 denotes the current only standardized CSR version.</p></li>
+</ul>
+</section>
+<section id="id60">
+<h4>community.general<a class="headerlink" href="#id60" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>The ldap_attr module has been deprecated and will be removed in a later release; use ldap_attrs instead.</p></li>
+<li><p>airbrake_deployment - Add deprecation notice for <code class="docutils literal notranslate"><span class="pre">token</span></code> parameter and v2 api deploys. This feature will be removed in community.general 3.0.0.</p></li>
+<li><p>clc_aa_policy - The <code class="docutils literal notranslate"><span class="pre">wait</span></code> option had no effect and will be removed in community.general 3.0.0.</p></li>
+<li><p>clc_aa_policy - the <code class="docutils literal notranslate"><span class="pre">wait</span></code> parameter will be removed. It has always been ignored by the module.</p></li>
+<li><p>docker_container - the <code class="docutils literal notranslate"><span class="pre">trust_image_content</span></code> option is now deprecated and will be removed in community.general 3.0.0. It has never been used by the module.</p></li>
+<li><p>docker_container - the <code class="docutils literal notranslate"><span class="pre">trust_image_content</span></code> option will be removed. It has always been ignored by the module.</p></li>
+<li><p>docker_container - the default of <code class="docutils literal notranslate"><span class="pre">container_default_behavior</span></code> will change from <code class="docutils literal notranslate"><span class="pre">compatibility</span></code> to <code class="docutils literal notranslate"><span class="pre">no_defaults</span></code> in community.general 3.0.0. Set the option to an explicit value to avoid a deprecation warning.</p></li>
+<li><p>docker_container - the default value for <code class="docutils literal notranslate"><span class="pre">network_mode</span></code> will change in community.general 3.0.0, provided at least one network is specified and <code class="docutils literal notranslate"><span class="pre">networks_cli_compatible</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>. See porting guide, module documentation or deprecation warning for more details.</p></li>
+<li><p>docker_stack - Return values <code class="docutils literal notranslate"><span class="pre">out</span></code> and <code class="docutils literal notranslate"><span class="pre">err</span></code> have been deprecated and will be removed in community.general 3.0.0. Use <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code> instead.</p></li>
+<li><p>docker_stack - the return values <code class="docutils literal notranslate"><span class="pre">err</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code> have been deprecated. Use <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code> from now on instead.</p></li>
+<li><p>helm - Put <code class="docutils literal notranslate"><span class="pre">helm</span></code> module to deprecated. New implementation is available in community.kubernetes collection.</p></li>
+<li><p>redfish_config - Deprecate <code class="docutils literal notranslate"><span class="pre">bios_attribute_name</span></code> and <code class="docutils literal notranslate"><span class="pre">bios_attribute_value</span></code> in favor of new <cite>bios_attributes`</cite> option.</p></li>
+<li><p>redfish_config - the <code class="docutils literal notranslate"><span class="pre">bios_attribute_name</span></code> and <code class="docutils literal notranslate"><span class="pre">bios_attribute_value</span></code> options will be removed. To maintain the existing behavior use the <code class="docutils literal notranslate"><span class="pre">bios_attributes</span></code> option instead.</p></li>
+<li><p>redfish_config and redfish_command - the behavior to select the first System, Manager, or Chassis resource to modify when multiple are present will be removed. Use the new <code class="docutils literal notranslate"><span class="pre">resource_id</span></code> option to specify target resource to modify.</p></li>
+<li><p>redfish_config, redfish_command - Behavior to modify the first System, Manager, or Chassis resource when multiple are present is deprecated. Use the new <code class="docutils literal notranslate"><span class="pre">resource_id</span></code> option to specify target resource to modify.</p></li>
+<li><p>xbps - the <code class="docutils literal notranslate"><span class="pre">force</span></code> option never had any effect. It is now deprecated, and will be removed in 3.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/568">https://github.com/ansible-collections/community.general/pull/568</a>).</p></li>
+</ul>
+</section>
+<section id="id61">
+<h4>community.vmware<a class="headerlink" href="#id61" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>The vmware_dns_config module has been deprecated and will be removed in a later release; use vmware_host_dns instead.</p></li>
+<li><p>vca - vca_fw, vca_nat, vca_app are deprecated since these modules rely on deprecated part of Pyvcloud library.</p></li>
+<li><p>vmware_dns_config - Deprecate in favor of new module vmware_host_dns.</p></li>
+<li><p>vmware_guest - deprecate specifying CDROM configuration as a dict, instead use a list.</p></li>
+<li><p>vmware_tag_info - in a later release, the module will not return <code class="docutils literal notranslate"><span class="pre">tag_facts</span></code> since it does not return multiple tags with the same name and different category id. To maintain the existing behavior use <code class="docutils literal notranslate"><span class="pre">tag_info</span></code> which is a list of tag metadata.</p></li>
+</ul>
+</section>
+<section id="id62">
+<h4>community.zabbix<a class="headerlink" href="#id62" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>zabbix_proxy (module) - deprecates <code class="docutils literal notranslate"><span class="pre">interface</span></code> sub-options <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">main</span></code> when proxy type is set to passive via <code class="docutils literal notranslate"><span class="pre">status=passive</span></code>. Make sure these suboptions are removed from your playbook as they were never supported by Zabbix in the first place.</p></li>
+</ul>
+</section>
+<section id="id63">
+<h4>f5networks.f5_modules<a class="headerlink" href="#id63" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Deprecated bigip_appsvcs_extension module</p></li>
+<li><p>Deprecated bigip_device_facts module name</p></li>
+<li><p>Deprecated bigiq_device_facts module name</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="porting_guide_3.html" class="btn btn-neutral float-left" title="Ansible 3 Porting Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="porting_guide_2.9.html" class="btn btn-neutral float-right" title="Ansible 2.9 Porting Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

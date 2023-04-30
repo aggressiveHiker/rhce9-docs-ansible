@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>validate-modules &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/testing_validate-modules.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>validate-modules</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/dev_guide/testing_validate-modules.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="validate-modules">
+<span id="testing-validate-modules"></span><h1><a class="toc-backref" href="#id1">validate-modules</a><a class="headerlink" href="#validate-modules" title="Permalink to this headline"></a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#validate-modules" id="id1">validate-modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#usage" id="id2">Usage</a></p></li>
+<li><p><a class="reference internal" href="#help" id="id3">Help</a></p></li>
+<li><p><a class="reference internal" href="#extending-validate-modules" id="id4">Extending validate-modules</a></p></li>
+<li><p><a class="reference internal" href="#codes" id="id5">Codes</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Python program to help test or validate Ansible modules.</p>
+<p><code class="docutils literal notranslate"><span class="pre">validate-modules</span></code> is one of the <code class="docutils literal notranslate"><span class="pre">ansible-test</span></code> Sanity Tests, see <a class="reference internal" href="testing_sanity.html#testing-sanity"><span class="std std-ref">Sanity Tests</span></a> for more information.</p>
+<p>Originally developed by Matt Martz (&#64;sivel)</p>
+<section id="usage">
+<h2><a class="toc-backref" href="#id2">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /path/to/ansible/source
+<span class="nb">source</span> hacking/env-setup
+ansible-test sanity --test validate-modules
+</pre></div>
+</div>
+</section>
+<section id="help">
+<h2><a class="toc-backref" href="#id3">Help</a><a class="headerlink" href="#help" title="Permalink to this headline"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>usage: validate-modules <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-w<span class="o">]</span> <span class="o">[</span>--exclude EXCLUDE<span class="o">]</span> <span class="o">[</span>--arg-spec<span class="o">]</span>
+                        <span class="o">[</span>--base-branch BASE_BRANCH<span class="o">]</span> <span class="o">[</span>--format <span class="o">{</span>json,plain<span class="o">}]</span>
+                        <span class="o">[</span>--output OUTPUT<span class="o">]</span>
+                        modules <span class="o">[</span>modules ...<span class="o">]</span>
+
+positional arguments:
+  modules               Path to module or module directory
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+  -w, --warnings        Show warnings
+  --exclude EXCLUDE     RegEx exclusion pattern
+  --arg-spec            Analyze module argument spec
+  --base-branch BASE_BRANCH
+                        Used <span class="k">in</span> determining <span class="k">if</span> new options were added
+  --format <span class="o">{</span>json,plain<span class="o">}</span>
+                        Output format. Default: <span class="s2">&quot;plain&quot;</span>
+  --output OUTPUT       Output location, use <span class="s2">&quot;-&quot;</span> <span class="k">for</span> stdout. Default <span class="s2">&quot;-&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="extending-validate-modules">
+<h2><a class="toc-backref" href="#id4">Extending validate-modules</a><a class="headerlink" href="#extending-validate-modules" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">validate-modules</span></code> tool has a <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/test/lib/ansible_test/_util/controller/sanity/validate-modules/validate_modules/schema.py">schema.py</a> that is used to validate the YAML blocks, such as <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> and <code class="docutils literal notranslate"><span class="pre">RETURNS</span></code>.</p>
+</section>
+<section id="codes">
+<h2><a class="toc-backref" href="#id5">Codes</a><a class="headerlink" href="#codes" title="Permalink to this headline"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 70%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Error Code</strong></p></td>
+<td><p><strong>Type</strong></p></td>
+<td><p><strong>Level</strong></p></td>
+<td><p><strong>Sample Message</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>ansible-deprecated-module</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>A module is deprecated and supposed to be removed in the current or an earlier Ansible version</p></td>
+</tr>
+<tr class="row-odd"><td><p>collection-deprecated-module</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>A module is deprecated and supposed to be removed in the current or an earlier collection version</p></td>
+</tr>
+<tr class="row-even"><td><p>ansible-deprecated-version</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>A feature is deprecated and supposed to be removed in the current or an earlier Ansible version</p></td>
+</tr>
+<tr class="row-odd"><td><p>ansible-module-not-initialized</p></td>
+<td><p>Syntax</p></td>
+<td><p>Error</p></td>
+<td><p>Execution of the module did not result in initialization of AnsibleModule</p></td>
+</tr>
+<tr class="row-even"><td><p>collection-deprecated-version</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>A feature is deprecated and supposed to be removed in the current or an earlier collection version</p></td>
+</tr>
+<tr class="row-odd"><td><p>deprecated-date</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>A date before today appears as <code class="docutils literal notranslate"><span class="pre">removed_at_date</span></code> or in <code class="docutils literal notranslate"><span class="pre">deprecated_aliases</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>deprecation-mismatch</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Module marked as deprecated or removed in at least one of the filename, its metadata, or in DOCUMENTATION (setting DOCUMENTATION.deprecated for deprecation or removing all Documentation for removed) but not in all three places.</p></td>
+</tr>
+<tr class="row-odd"><td><p>doc-choices-do-not-match-spec</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Value for “choices” from the argument_spec does not match the documentation</p></td>
+</tr>
+<tr class="row-even"><td><p>doc-choices-incompatible-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Choices value from the documentation is not compatible with type defined in the argument_spec</p></td>
+</tr>
+<tr class="row-odd"><td><p>doc-default-does-not-match-spec</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Value for “default” from the argument_spec does not match the documentation</p></td>
+</tr>
+<tr class="row-even"><td><p>doc-default-incompatible-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Default value from the documentation is not compatible with type defined in the argument_spec</p></td>
+</tr>
+<tr class="row-odd"><td><p>doc-elements-invalid</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Documentation specifies elements for argument, when “type” is not <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>doc-elements-mismatch</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument_spec defines elements different than documentation does</p></td>
+</tr>
+<tr class="row-odd"><td><p>doc-missing-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Documentation doesn’t specify a type but argument in <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> use default type (<code class="docutils literal notranslate"><span class="pre">str</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>doc-required-mismatch</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>argument in argument_spec is required but documentation says it is not, or vice versa</p></td>
+</tr>
+<tr class="row-odd"><td><p>doc-type-does-not-match-spec</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument_spec defines type different than documentation does</p></td>
+</tr>
+<tr class="row-even"><td><p>documentation-error</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Unknown <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> error</p></td>
+</tr>
+<tr class="row-odd"><td><p>documentation-syntax-error</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Invalid <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> schema</p></td>
+</tr>
+<tr class="row-even"><td><p>illegal-future-imports</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p>Only the following <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span></code> imports are allowed: <code class="docutils literal notranslate"><span class="pre">absolute_import</span></code>, <code class="docutils literal notranslate"><span class="pre">division</span></code>, and <code class="docutils literal notranslate"><span class="pre">print_function</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>import-before-documentation</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p>Import found before documentation variables. All imports must appear below <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code>/<code class="docutils literal notranslate"><span class="pre">EXAMPLES</span></code>/<code class="docutils literal notranslate"><span class="pre">RETURN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>import-error</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Exception</span></code> attempting to import module for <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> introspection</p></td>
+</tr>
+<tr class="row-odd"><td><p>import-placement</p></td>
+<td><p>Locations</p></td>
+<td><p>Warning</p></td>
+<td><p>Imports should be directly below <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code>/<code class="docutils literal notranslate"><span class="pre">EXAMPLES</span></code>/<code class="docutils literal notranslate"><span class="pre">RETURN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>imports-improper-location</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p>Imports should be directly below <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code>/<code class="docutils literal notranslate"><span class="pre">EXAMPLES</span></code>/<code class="docutils literal notranslate"><span class="pre">RETURN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>incompatible-choices</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Choices value from the argument_spec is not compatible with type defined in the argument_spec</p></td>
+</tr>
+<tr class="row-even"><td><p>incompatible-default-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Default value from the argument_spec is not compatible with type defined in the argument_spec</p></td>
+</tr>
+<tr class="row-odd"><td><p>invalid-argument-name</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument in argument_spec must not be one of ‘message’, ‘syslog_facility’ as it is used internally by Ansible Core Engine</p></td>
+</tr>
+<tr class="row-even"><td><p>invalid-argument-spec</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument in argument_spec must be a dictionary/hash when used</p></td>
+</tr>
+<tr class="row-odd"><td><p>invalid-argument-spec-options</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Suboptions in argument_spec are invalid</p></td>
+</tr>
+<tr class="row-even"><td><p>invalid-documentation</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> is not valid YAML</p></td>
+</tr>
+<tr class="row-odd"><td><p>invalid-documentation-markup</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> or <code class="docutils literal notranslate"><span class="pre">RETURN</span></code> contains invalid markup</p></td>
+</tr>
+<tr class="row-even"><td><p>invalid-documentation-options</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOCUMENTATION.options</span></code> must be a dictionary/hash when used</p></td>
+</tr>
+<tr class="row-odd"><td><p>invalid-examples</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EXAMPLES</span></code> is not valid YAML</p></td>
+</tr>
+<tr class="row-even"><td><p>invalid-extension</p></td>
+<td><p>Naming</p></td>
+<td><p>Error</p></td>
+<td><p>Official Ansible modules must have a <code class="docutils literal notranslate"><span class="pre">.py</span></code> extension for python modules or a <code class="docutils literal notranslate"><span class="pre">.ps1</span></code> for powershell modules</p></td>
+</tr>
+<tr class="row-odd"><td><p>invalid-module-schema</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> schema validation error</p></td>
+</tr>
+<tr class="row-even"><td><p>invalid-removal-version</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>The version at which a feature is supposed to be removed cannot be parsed (for collections, it must be a semantic version, see <a class="reference external" href="https://semver.org/">https://semver.org/</a>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>invalid-requires-extension</p></td>
+<td><p>Naming</p></td>
+<td><p>Error</p></td>
+<td><p>Module <code class="docutils literal notranslate"><span class="pre">#AnsibleRequires</span> <span class="pre">-CSharpUtil</span></code> should not end in .cs, Module <code class="docutils literal notranslate"><span class="pre">#Requires</span></code> should not end in .psm1</p></td>
+</tr>
+<tr class="row-even"><td><p>missing-doc-fragment</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> fragment missing</p></td>
+</tr>
+<tr class="row-odd"><td><p>missing-existing-doc-fragment</p></td>
+<td><p>Documentation</p></td>
+<td><p>Warning</p></td>
+<td><p>Pre-existing <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> fragment missing</p></td>
+</tr>
+<tr class="row-even"><td><p>missing-documentation</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>No <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> provided</p></td>
+</tr>
+<tr class="row-odd"><td><p>missing-examples</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>No <code class="docutils literal notranslate"><span class="pre">EXAMPLES</span></code> provided</p></td>
+</tr>
+<tr class="row-even"><td><p>missing-gplv3-license</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>GPLv3 license header not found</p></td>
+</tr>
+<tr class="row-odd"><td><p>missing-module-utils-basic-import</p></td>
+<td><p>Imports</p></td>
+<td><p>Warning</p></td>
+<td><p>Did not find <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code> import</p></td>
+</tr>
+<tr class="row-even"><td><p>missing-module-utils-import-csharp-requirements</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p>No <code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils</span></code> or C# Ansible util requirements/imports found</p></td>
+</tr>
+<tr class="row-odd"><td><p>missing-powershell-interpreter</p></td>
+<td><p>Syntax</p></td>
+<td><p>Error</p></td>
+<td><p>Interpreter line is not <code class="docutils literal notranslate"><span class="pre">#!powershell</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>missing-python-doc</p></td>
+<td><p>Naming</p></td>
+<td><p>Error</p></td>
+<td><p>Missing python documentation file</p></td>
+</tr>
+<tr class="row-odd"><td><p>missing-python-interpreter</p></td>
+<td><p>Syntax</p></td>
+<td><p>Error</p></td>
+<td><p>Interpreter line is not <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/python</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>missing-return</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>No <code class="docutils literal notranslate"><span class="pre">RETURN</span></code> documentation provided</p></td>
+</tr>
+<tr class="row-odd"><td><p>missing-return-legacy</p></td>
+<td><p>Documentation</p></td>
+<td><p>Warning</p></td>
+<td><p>No <code class="docutils literal notranslate"><span class="pre">RETURN</span></code> documentation provided for legacy module</p></td>
+</tr>
+<tr class="row-even"><td><p>missing-suboption-docs</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument in argument_spec has sub-options but documentation does not define sub-options</p></td>
+</tr>
+<tr class="row-odd"><td><p>module-incorrect-version-added</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Module level <code class="docutils literal notranslate"><span class="pre">version_added</span></code> is incorrect</p></td>
+</tr>
+<tr class="row-even"><td><p>module-invalid-version-added</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Module level <code class="docutils literal notranslate"><span class="pre">version_added</span></code> is not a valid version number</p></td>
+</tr>
+<tr class="row-odd"><td><p>module-utils-specific-import</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">module_utils</span></code> imports should import specific components, not <code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>multiple-utils-per-requires</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils</span></code> requirements do not support multiple modules per statement</p></td>
+</tr>
+<tr class="row-odd"><td><p>multiple-csharp-utils-per-requires</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p>Ansible C# util requirements do not support multiple utils per statement</p></td>
+</tr>
+<tr class="row-even"><td><p>no-default-for-required-parameter</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Option is marked as required but specifies a default. Arguments with a default should not be marked as required</p></td>
+</tr>
+<tr class="row-odd"><td><p>no-log-needed</p></td>
+<td><p>Parameters</p></td>
+<td><p>Error</p></td>
+<td><p>Option name suggests that the option contains a secret value, while <code class="docutils literal notranslate"><span class="pre">no_log</span></code> is not specified for this option in the argument spec. If this is a false positive, explicitly set <code class="docutils literal notranslate"><span class="pre">no_log=False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>nonexistent-parameter-documented</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument is listed in DOCUMENTATION.options, but not accepted by the module</p></td>
+</tr>
+<tr class="row-odd"><td><p>option-incorrect-version-added</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">version_added</span></code> for new option is incorrect</p></td>
+</tr>
+<tr class="row-even"><td><p>option-invalid-version-added</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">version_added</span></code> for option is not a valid version number</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter-invalid</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument in argument_spec is not a valid python identifier</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter-invalid-elements</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Value for “elements” is valid only when value of “type” is <code class="docutils literal notranslate"><span class="pre">list</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>implied-parameter-type-mismatch</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument_spec implies <code class="docutils literal notranslate"><span class="pre">type=&quot;str&quot;</span></code> but documentation defines it as different data type</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter-type-not-in-doc</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Type value is defined in <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> but documentation doesn’t specify a type</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter-alias-repeated</p></td>
+<td><p>Parameters</p></td>
+<td><p>Error</p></td>
+<td><p>argument in argument_spec has at least one alias specified multiple times in aliases</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter-alias-self</p></td>
+<td><p>Parameters</p></td>
+<td><p>Error</p></td>
+<td><p>argument in argument_spec is specified as its own alias</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter-documented-multiple-times</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>argument in argument_spec with aliases is documented multiple times</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter-list-no-elements</p></td>
+<td><p>Parameters</p></td>
+<td><p>Error</p></td>
+<td><p>argument in argument_spec “type” is specified as <code class="docutils literal notranslate"><span class="pre">list</span></code> without defining “elements”</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter-state-invalid-choice</p></td>
+<td><p>Parameters</p></td>
+<td><p>Error</p></td>
+<td><p>Argument <code class="docutils literal notranslate"><span class="pre">state</span></code> includes <code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">info</span></code> as a choice.  Functionality should be in an <code class="docutils literal notranslate"><span class="pre">_info</span></code> or (if further conditions apply) <code class="docutils literal notranslate"><span class="pre">_facts</span></code> module.</p></td>
+</tr>
+<tr class="row-even"><td><p>python-syntax-error</p></td>
+<td><p>Syntax</p></td>
+<td><p>Error</p></td>
+<td><p>Python <code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code> while parsing module</p></td>
+</tr>
+<tr class="row-odd"><td><p>removal-version-must-be-major</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>According to the semantic versioning specification (<a class="reference external" href="https://semver.org/">https://semver.org/</a>), the only versions in which features are allowed to be removed are major versions (x.0.0)</p></td>
+</tr>
+<tr class="row-even"><td><p>return-syntax-error</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RETURN</span></code> is not valid YAML, <code class="docutils literal notranslate"><span class="pre">RETURN</span></code> fragments missing  or invalid</p></td>
+</tr>
+<tr class="row-odd"><td><p>return-invalid-version-added</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">version_added</span></code> for return value is not a valid version number</p></td>
+</tr>
+<tr class="row-even"><td><p>subdirectory-missing-init</p></td>
+<td><p>Naming</p></td>
+<td><p>Error</p></td>
+<td><p>Ansible module subdirectories must contain an <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>try-except-missing-has</p></td>
+<td><p>Imports</p></td>
+<td><p>Warning</p></td>
+<td><p>Try/Except <code class="docutils literal notranslate"><span class="pre">HAS_</span></code> expression missing</p></td>
+</tr>
+<tr class="row-even"><td><p>undocumented-parameter</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>Argument is listed in the argument_spec, but not documented in the module</p></td>
+</tr>
+<tr class="row-odd"><td><p>unidiomatic-typecheck</p></td>
+<td><p>Syntax</p></td>
+<td><p>Error</p></td>
+<td><p>Type comparison using <code class="docutils literal notranslate"><span class="pre">type()</span></code> found. Use <code class="docutils literal notranslate"><span class="pre">isinstance()</span></code> instead</p></td>
+</tr>
+<tr class="row-even"><td><p>unknown-doc-fragment</p></td>
+<td><p>Documentation</p></td>
+<td><p>Warning</p></td>
+<td><p>Unknown pre-existing <code class="docutils literal notranslate"><span class="pre">DOCUMENTATION</span></code> error</p></td>
+</tr>
+<tr class="row-odd"><td><p>use-boto3</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">boto</span></code> import found, new modules should use <code class="docutils literal notranslate"><span class="pre">boto3</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>use-fail-json-not-sys-exit</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sys.exit()</span></code> call found. Should be <code class="docutils literal notranslate"><span class="pre">exit_json</span></code>/<code class="docutils literal notranslate"><span class="pre">fail_json</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>use-module-utils-urls</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">requests</span></code> import found, should use <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.urls</span></code> instead</p></td>
+</tr>
+<tr class="row-even"><td><p>use-run-command-not-os-call</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">os.call</span></code> used instead of <code class="docutils literal notranslate"><span class="pre">module.run_command</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>use-run-command-not-popen</p></td>
+<td><p>Imports</p></td>
+<td><p>Error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">subprocess.Popen</span></code> used instead of <code class="docutils literal notranslate"><span class="pre">module.run_command</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>use-short-gplv3-license</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>GPLv3 license header should be the <a class="reference internal" href="developing_modules_documenting.html#copyright"><span class="std std-ref">short form</span></a> for new modules</p></td>
+</tr>
+<tr class="row-odd"><td><p>mutually_exclusive-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>mutually_exclusive entry contains non-string value</p></td>
+</tr>
+<tr class="row-even"><td><p>mutually_exclusive-collision</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>mutually_exclusive entry has repeated terms</p></td>
+</tr>
+<tr class="row-odd"><td><p>mutually_exclusive-unknown</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>mutually_exclusive entry contains option which does not appear in argument_spec (potentially an alias of an option?)</p></td>
+</tr>
+<tr class="row-even"><td><p>required_one_of-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_one_of entry contains non-string value</p></td>
+</tr>
+<tr class="row-odd"><td><p>required_one_of-collision</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_one_of entry has repeated terms</p></td>
+</tr>
+<tr class="row-even"><td><p>required_one_of-unknown</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_one_of entry contains option which does not appear in argument_spec (potentially an alias of an option?)</p></td>
+</tr>
+<tr class="row-odd"><td><p>required_together-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_together entry contains non-string value</p></td>
+</tr>
+<tr class="row-even"><td><p>required_together-collision</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_together entry has repeated terms</p></td>
+</tr>
+<tr class="row-odd"><td><p>required_together-unknown</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_together entry contains option which does not appear in argument_spec (potentially an alias of an option?)</p></td>
+</tr>
+<tr class="row-even"><td><p>required_if-is_one_of-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_if entry has a fourth value which is not a bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>required_if-requirements-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_if entry has a third value (requirements) which is not a list or tuple</p></td>
+</tr>
+<tr class="row-even"><td><p>required_if-requirements-collision</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_if entry has repeated terms in requirements</p></td>
+</tr>
+<tr class="row-odd"><td><p>required_if-requirements-unknown</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_if entry’s requirements contains option which does not appear in argument_spec (potentially an alias of an option?)</p></td>
+</tr>
+<tr class="row-even"><td><p>required_if-unknown-key</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_if entry’s key does not appear in argument_spec (potentially an alias of an option?)</p></td>
+</tr>
+<tr class="row-odd"><td><p>required_if-key-in-requirements</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_if entry contains its key in requirements list/tuple</p></td>
+</tr>
+<tr class="row-even"><td><p>required_if-value-type</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_if entry’s value is not of the type specified for its key</p></td>
+</tr>
+<tr class="row-odd"><td><p>required_by-collision</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_by entry has repeated terms</p></td>
+</tr>
+<tr class="row-even"><td><p>required_by-unknown</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>required_by entry contains option which does not appear in argument_spec (potentially an alias of an option?)</p></td>
+</tr>
+<tr class="row-odd"><td><p>version-added-must-be-major-or-minor</p></td>
+<td><p>Documentation</p></td>
+<td><p>Error</p></td>
+<td><p>According to the semantic versioning specification (<a class="reference external" href="https://semver.org/">https://semver.org/</a>), the only versions in which features are allowed to be added are major and minor versions (x.y.0)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 21, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

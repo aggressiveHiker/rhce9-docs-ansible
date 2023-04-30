@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction to ad hoc commands &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/intro_adhoc.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ansible CLI cheatsheet" href="cheatsheet.html" />
+    <link rel="prev" title="Ansible concepts" href="basic_concepts.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#table-of-contents">Table of contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Introduction to ad hoc commands</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#why-use-ad-hoc-commands">Why use ad hoc commands?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-cases-for-ad-hoc-tasks">Use cases for ad hoc tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cheatsheet.html">Ansible CLI cheatsheet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Introduction to ad hoc commands</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/intro_adhoc.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="introduction-to-ad-hoc-commands">
+<span id="intro-adhoc"></span><h1>Introduction to ad hoc commands<a class="headerlink" href="#introduction-to-ad-hoc-commands" title="Permalink to this headline"></a></h1>
+<p>An Ansible ad hoc command uses the <cite>/usr/bin/ansible</cite> command-line tool to automate a single task on one or more managed nodes. ad hoc commands are quick and easy, but they are not reusable. So why learn about ad hoc commands first? ad hoc commands demonstrate the simplicity and power of Ansible. The concepts you learn here will port over directly to the playbook language. Before reading and executing these examples, please read <a class="reference internal" href="intro_inventory.html#intro-inventory"><span class="std std-ref">How to build your inventory</span></a>.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#why-use-ad-hoc-commands" id="id4">Why use ad hoc commands?</a></p></li>
+<li><p><a class="reference internal" href="#use-cases-for-ad-hoc-tasks" id="id5">Use cases for ad hoc tasks</a></p>
+<ul>
+<li><p><a class="reference internal" href="#rebooting-servers" id="id6">Rebooting servers</a></p></li>
+<li><p><a class="reference internal" href="#managing-files" id="id7">Managing files</a></p></li>
+<li><p><a class="reference internal" href="#managing-packages" id="id8">Managing packages</a></p></li>
+<li><p><a class="reference internal" href="#managing-users-and-groups" id="id9">Managing users and groups</a></p></li>
+<li><p><a class="reference internal" href="#managing-services" id="id10">Managing services</a></p></li>
+<li><p><a class="reference internal" href="#gathering-facts" id="id11">Gathering facts</a></p></li>
+<li><p><a class="reference internal" href="#patterns-and-ad-hoc-commands" id="id12">Patterns and ad-hoc commands</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="why-use-ad-hoc-commands">
+<h2><a class="toc-backref" href="#id4">Why use ad hoc commands?</a><a class="headerlink" href="#why-use-ad-hoc-commands" title="Permalink to this headline"></a></h2>
+<p>ad hoc commands are great for tasks you repeat rarely. For example, if you want to power off all the machines in your lab for Christmas vacation, you could execute a quick one-liner in Ansible without writing a playbook. An ad hoc command looks like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible <span class="o">[</span>pattern<span class="o">]</span> -m <span class="o">[</span>module<span class="o">]</span> -a <span class="s2">&quot;[module options]&quot;</span>
+</pre></div>
+</div>
+<p>You can learn more about <a class="reference internal" href="intro_patterns.html#intro-patterns"><span class="std std-ref">patterns</span></a> and <a class="reference internal" href="modules.html#working-with-modules"><span class="std std-ref">modules</span></a> on other pages.</p>
+</section>
+<section id="use-cases-for-ad-hoc-tasks">
+<h2><a class="toc-backref" href="#id5">Use cases for ad hoc tasks</a><a class="headerlink" href="#use-cases-for-ad-hoc-tasks" title="Permalink to this headline"></a></h2>
+<p>ad hoc tasks can be used to reboot servers, copy files, manage packages and users, and much more. You can use any Ansible module in an ad hoc task. ad hoc tasks, like playbooks, use a declarative model,
+calculating and executing the actions required to reach a specified final state. They
+achieve a form of idempotence by checking the current state before they begin and doing nothing unless the current state is different from the specified final state.</p>
+<section id="rebooting-servers">
+<h3><a class="toc-backref" href="#id6">Rebooting servers</a><a class="headerlink" href="#rebooting-servers" title="Permalink to this headline"></a></h3>
+<p>The default module for the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> command-line utility is the <a class="reference internal" href="../collections/ansible/builtin/command_module.html#command-module"><span class="std std-ref">ansible.builtin.command module</span></a>. You can use an ad hoc task to call the command module and reboot all web servers in Atlanta, 10 at a time. Before Ansible can do this, you must have all servers in Atlanta listed in a group called [atlanta] in your inventory, and you must have working SSH credentials for each machine in that group. To reboot all the servers in the [atlanta] group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible atlanta -a <span class="s2">&quot;/sbin/reboot&quot;</span>
+</pre></div>
+</div>
+<p>By default Ansible uses only 5 simultaneous processes. If you have more hosts than the value set for the fork count, Ansible will talk to them, but it will take a little longer. To reboot the [atlanta] servers with 10 parallel forks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible atlanta -a <span class="s2">&quot;/sbin/reboot&quot;</span> -f <span class="m">10</span>
+</pre></div>
+</div>
+<p>/usr/bin/ansible will default to running from your user account. To connect as a different user:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible atlanta -a <span class="s2">&quot;/sbin/reboot&quot;</span> -f <span class="m">10</span> -u username
+</pre></div>
+</div>
+<p>Rebooting probably requires privilege escalation. You can connect to the server as <code class="docutils literal notranslate"><span class="pre">username</span></code> and run the command as the <code class="docutils literal notranslate"><span class="pre">root</span></code> user by using the <a class="reference internal" href="become.html#become"><span class="std std-ref">become</span></a> keyword:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible atlanta -a <span class="s2">&quot;/sbin/reboot&quot;</span> -f <span class="m">10</span> -u username --become <span class="o">[</span>--ask-become-pass<span class="o">]</span>
+</pre></div>
+</div>
+<p>If you add <code class="docutils literal notranslate"><span class="pre">--ask-become-pass</span></code> or <code class="docutils literal notranslate"><span class="pre">-K</span></code>, Ansible prompts you for the password to use for privilege escalation (sudo/su/pfexec/doas/etc).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="../collections/ansible/builtin/command_module.html#command-module"><span class="std std-ref">command module</span></a> does not support extended shell syntax like piping and
+redirects (although shell variables will always work). If your command requires shell-specific
+syntax, use the <cite>shell</cite> module instead. Read more about the differences on the
+<a class="reference internal" href="modules.html#working-with-modules"><span class="std std-ref">Working With Modules</span></a> page.</p>
+</div>
+<p>So far all our examples have used the default ‘command’ module. To use a different module, pass <code class="docutils literal notranslate"><span class="pre">-m</span></code> for module name. For example, to use the <a class="reference internal" href="../collections/ansible/builtin/shell_module.html#shell-module"><span class="std std-ref">ansible.builtin.shell module</span></a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible raleigh -m ansible.builtin.shell -a <span class="s1">&#39;echo $TERM&#39;</span>
+</pre></div>
+</div>
+<p>When running any command with the Ansible <em>ad hoc</em> CLI (as opposed to
+<a class="reference internal" href="playbooks.html#working-with-playbooks"><span class="std std-ref">Playbooks</span></a>), pay particular attention to shell quoting rules, so
+the local shell retains the variable and passes it to Ansible.
+For example, using double rather than single quotes in the above example would
+evaluate the variable on the box you were on.</p>
+</section>
+<section id="managing-files">
+<span id="file-transfer"></span><h3><a class="toc-backref" href="#id7">Managing files</a><a class="headerlink" href="#managing-files" title="Permalink to this headline"></a></h3>
+<p>An ad hoc task can harness the power of Ansible and SCP to transfer many files to multiple machines in parallel. To transfer a file directly to all servers in the [atlanta] group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible atlanta -m ansible.builtin.copy -a <span class="s2">&quot;src=/etc/hosts dest=/tmp/hosts&quot;</span>
+</pre></div>
+</div>
+<p>If you plan to repeat a task like this, use the <a class="reference internal" href="../collections/ansible/builtin/template_module.html#template-module"><span class="std std-ref">ansible.builtin.template</span></a> module in a playbook.</p>
+<p>The <a class="reference internal" href="../collections/ansible/builtin/file_module.html#file-module"><span class="std std-ref">ansible.builtin.file</span></a> module allows changing ownership and permissions on files. These
+same options can be passed directly to the <code class="docutils literal notranslate"><span class="pre">copy</span></code> module as well:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.file -a <span class="s2">&quot;dest=/srv/foo/a.txt mode=600&quot;</span>
+$ ansible webservers -m ansible.builtin.file -a <span class="s2">&quot;dest=/srv/foo/b.txt mode=600 owner=mdehaan group=mdehaan&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">file</span></code> module can also create directories, similar to <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">-p</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.file -a <span class="s2">&quot;dest=/path/to/c mode=755 owner=mdehaan group=mdehaan state=directory&quot;</span>
+</pre></div>
+</div>
+<p>As well as delete directories (recursively) and delete files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.file -a <span class="s2">&quot;dest=/path/to/c state=absent&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="managing-packages">
+<span id="id1"></span><h3><a class="toc-backref" href="#id8">Managing packages</a><a class="headerlink" href="#managing-packages" title="Permalink to this headline"></a></h3>
+<p>You might also use an ad hoc task to install, update, or remove packages on managed nodes using a package management module like yum. To ensure a package is installed without updating it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.yum -a <span class="s2">&quot;name=acme state=present&quot;</span>
+</pre></div>
+</div>
+<p>To ensure a specific version of a package is installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.yum -a <span class="s2">&quot;name=acme-1.5 state=present&quot;</span>
+</pre></div>
+</div>
+<p>To ensure a package is at the latest version:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.yum -a <span class="s2">&quot;name=acme state=latest&quot;</span>
+</pre></div>
+</div>
+<p>To ensure a package is not installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.yum -a <span class="s2">&quot;name=acme state=absent&quot;</span>
+</pre></div>
+</div>
+<p>Ansible has modules for managing packages under many platforms. If there is no module for your package manager, you can install packages using the command module or create a module for your package manager.</p>
+</section>
+<section id="managing-users-and-groups">
+<span id="users-and-groups"></span><h3><a class="toc-backref" href="#id9">Managing users and groups</a><a class="headerlink" href="#managing-users-and-groups" title="Permalink to this headline"></a></h3>
+<p>You can create, manage, and remove user accounts on your managed nodes with ad hoc tasks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible all -m ansible.builtin.user -a <span class="s2">&quot;name=foo password=&lt;crypted password here&gt;&quot;</span>
+
+$ ansible all -m ansible.builtin.user -a <span class="s2">&quot;name=foo state=absent&quot;</span>
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="../collections/ansible/builtin/user_module.html#user-module"><span class="std std-ref">ansible.builtin.user</span></a> module documentation for details on all of the available options, including
+how to manipulate groups and group membership.</p>
+</section>
+<section id="managing-services">
+<span id="id2"></span><h3><a class="toc-backref" href="#id10">Managing services</a><a class="headerlink" href="#managing-services" title="Permalink to this headline"></a></h3>
+<p>Ensure a service is started on all webservers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.service -a <span class="s2">&quot;name=httpd state=started&quot;</span>
+</pre></div>
+</div>
+<p>Alternatively, restart a service on all webservers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.service -a <span class="s2">&quot;name=httpd state=restarted&quot;</span>
+</pre></div>
+</div>
+<p>Ensure a service is stopped:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible webservers -m ansible.builtin.service -a <span class="s2">&quot;name=httpd state=stopped&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="gathering-facts">
+<span id="id3"></span><h3><a class="toc-backref" href="#id11">Gathering facts</a><a class="headerlink" href="#gathering-facts" title="Permalink to this headline"></a></h3>
+<p>Facts represent discovered variables about a system. You can use facts to implement conditional execution of tasks but also just to get ad hoc information about your systems. To see all facts:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible all -m ansible.builtin.setup
+</pre></div>
+</div>
+<p>You can also filter this output to display only certain facts, see the <a class="reference internal" href="../collections/ansible/builtin/setup_module.html#setup-module"><span class="std std-ref">ansible.builtin.setup</span></a> module documentation for details.</p>
+</section>
+<section id="patterns-and-ad-hoc-commands">
+<h3><a class="toc-backref" href="#id12">Patterns and ad-hoc commands</a><a class="headerlink" href="#patterns-and-ad-hoc-commands" title="Permalink to this headline"></a></h3>
+<p>See the <a class="reference internal" href="intro_patterns.html#intro-patterns"><span class="std std-ref">patterns</span></a> documentation for details on all of the available options, including
+how to limit using patterns in ad-hoc commands.</p>
+<p>Now that you understand the basic elements of Ansible execution, you are ready to learn to automate repetitive tasks using <a class="reference internal" href="playbooks_intro.html#playbooks-intro"><span class="std std-ref">Ansible Playbooks</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../installation_guide/intro_configuration.html#intro-configuration"><span class="std std-ref">Configuring Ansible</span></a></dt><dd><p>All about the Ansible config file</p>
+</dd>
+<dt><a class="reference internal" href="../collections/index.html#list-of-collections"><span class="std std-ref">Collection Index</span></a></dt><dd><p>Browse existing collections, modules, and plugins</p>
+</dd>
+<dt><a class="reference internal" href="playbooks.html#working-with-playbooks"><span class="std std-ref">Working with playbooks</span></a></dt><dd><p>Using Ansible for configuration management &amp; deployment</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-project">Mailing List</a></dt><dd><p>Questions? Help? Ideas?  Stop by the list on Google Groups</p>
+</dd>
+<dt><a class="reference internal" href="../community/communication.html#communication-irc"><span class="std std-ref">Real-time chat</span></a></dt><dd><p>How to join Ansible chat channels</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic_concepts.html" class="btn btn-neutral float-left" title="Ansible concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cheatsheet.html" class="btn btn-neutral float-right" title="Ansible CLI cheatsheet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Cloud Platform Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/guide_gce.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Microsoft Azure Guide" href="guide_azure.html" />
+    <link rel="prev" title="CloudStack Cloud Guide" href="guide_cloudstack.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cloud_guides.html">Legacy Public Cloud Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide_alicloud.html">Alibaba Cloud Compute Services Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_cloudstack.html">CloudStack Cloud Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Google Cloud Platform Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requisites">Requisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#credentials">Credentials</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#providing-credentials-as-module-parameters">Providing Credentials as Module Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#providing-credentials-as-environment-variables">Providing Credentials as Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#gce-dynamic-inventory">GCE Dynamic Inventory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create-an-instance">Create an instance</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#migration-guides">Migration Guides</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gce-py-gcp-compute-instance-py">gce.py -&gt; gcp_compute_instance.py</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide_azure.html">Microsoft Azure Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_online.html">Online.net Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_oracle.html">Oracle Cloud Infrastructure Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_packet.html">Packet.net Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_rax.html">Rackspace Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_scaleway.html">Scaleway Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_vultr.html">Vultr Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cloud_guides.html">Legacy Public Cloud Guides</a> &raquo;</li>
+      <li>Google Cloud Platform Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/scenario_guides/guide_gce.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="google-cloud-platform-guide">
+<h1>Google Cloud Platform Guide<a class="headerlink" href="#google-cloud-platform-guide" title="Permalink to this headline"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>Ansible + Google have been working together on a set of auto-generated
+Ansible modules designed to consistently and comprehensively cover the entirety
+of the Google Cloud Platform (GCP).</p>
+<p>Ansible contains modules for managing Google Cloud Platform resources,
+including creating instances, controlling network access, working with
+persistent disks, managing load balancers, and a lot more.</p>
+<p>These new modules can be found under a new consistent name scheme “gcp_*”
+(Note: gcp_target_proxy and gcp_url_map are legacy modules, despite the “gcp_*”
+name. Please use gcp_compute_target_proxy and gcp_compute_url_map instead).</p>
+<p>Additionally, the gcp_compute inventory plugin can discover all
+Google Compute Engine (GCE) instances
+and make them automatically available in your Ansible inventory.</p>
+<p>You may see a collection of other GCP modules that do not conform to this
+naming convention. These are the original modules primarily developed by the
+Ansible community. You will find some overlapping functionality such as with
+the “gce” module and the new “gcp_compute_instance” module. Either can be
+used, but you may experience issues trying to use them together.</p>
+<p>While the community GCP modules are not going away, Google is investing effort
+into the new “gcp_*” modules. Google is committed to ensuring the Ansible
+community has a great experience with GCP and therefore recommends adopting
+these new modules if possible.</p>
+</section>
+<section id="requisites">
+<h2>Requisites<a class="headerlink" href="#requisites" title="Permalink to this headline"></a></h2>
+<p>The GCP modules require both the <code class="docutils literal notranslate"><span class="pre">requests</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">google-auth</span></code> libraries to be installed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install requests google-auth
+</pre></div>
+</div>
+<p>Alternatively for RHEL / CentOS, the <code class="docutils literal notranslate"><span class="pre">python-requests</span></code> package is also
+available to satisfy <code class="docutils literal notranslate"><span class="pre">requests</span></code> libraries.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ yum install python-requests
+</pre></div>
+</div>
+</section>
+<section id="credentials">
+<h2>Credentials<a class="headerlink" href="#credentials" title="Permalink to this headline"></a></h2>
+<p>It’s easy to create a GCP account with credentials for Ansible. You have multiple options to
+get your credentials - here are two of the most common options:</p>
+<ul class="simple">
+<li><p>Service Accounts (Recommended): Use JSON service accounts with specific permissions.</p></li>
+<li><p>Machine Accounts: Use the permissions associated with the GCP Instance you’re using Ansible on.</p></li>
+</ul>
+<p>For the following examples, we’ll be using service account credentials.</p>
+<p>To work with the GCP modules, you’ll first need to get some credentials in the
+JSON format:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://developers.google.com/identity/protocols/OAuth2ServiceAccount#creatinganaccount">Create a Service Account</a></p></li>
+<li><p><a class="reference external" href="https://support.google.com/cloud/answer/6158849?hl=en&amp;ref_topic=6262490#serviceaccounts">Download JSON credentials</a></p></li>
+</ol>
+<p>Once you have your credentials, there are two different ways to provide them to Ansible:</p>
+<ul class="simple">
+<li><p>by specifying them directly as module parameters</p></li>
+<li><p>by setting environment variables</p></li>
+</ul>
+<section id="providing-credentials-as-module-parameters">
+<h3>Providing Credentials as Module Parameters<a class="headerlink" href="#providing-credentials-as-module-parameters" title="Permalink to this headline"></a></h3>
+<p>For the GCE modules you can specify the credentials as arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">auth_kind</span></code>: type of authentication being used (choices: machineaccount, serviceaccount, application)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">service_account_email</span></code>: email associated with the project</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">service_account_file</span></code>: path to the JSON credentials file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">project</span></code>: id of the project</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scopes</span></code>: The specific scopes that you want the actions to use.</p></li>
+</ul>
+<p>For example, to create a new IP address using the <code class="docutils literal notranslate"><span class="pre">gcp_compute_address</span></code> module,
+you can use the following configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create IP address</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">service_account_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/home/my_account.json</span>
+    <span class="nt">project</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-project</span>
+    <span class="nt">auth_kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">serviceaccount</span>
+    <span class="nt">scopes</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://www.googleapis.com/auth/compute</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Allocate an IP Address</span>
+     <span class="nt">gcp_compute_address</span><span class="p">:</span>
+         <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+         <span class="nt">name</span><span class="p">:</span> <span class="s">&#39;test-address1&#39;</span>
+         <span class="nt">region</span><span class="p">:</span> <span class="s">&#39;us-west1&#39;</span>
+         <span class="nt">project</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">project</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">auth_kind</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">auth_kind</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">service_account_file</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">service_account_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">scopes</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">scopes</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="providing-credentials-as-environment-variables">
+<h3>Providing Credentials as Environment Variables<a class="headerlink" href="#providing-credentials-as-environment-variables" title="Permalink to this headline"></a></h3>
+<p>Set the following environment variables before running Ansible in order to configure your credentials:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>GCP_AUTH_KIND
+GCP_SERVICE_ACCOUNT_EMAIL
+GCP_SERVICE_ACCOUNT_FILE
+GCP_SCOPES
+</pre></div>
+</div>
+</section>
+</section>
+<section id="gce-dynamic-inventory">
+<h2>GCE Dynamic Inventory<a class="headerlink" href="#gce-dynamic-inventory" title="Permalink to this headline"></a></h2>
+<p>The best way to interact with your hosts is to use the gcp_compute inventory plugin, which dynamically queries GCE and tells Ansible what nodes can be managed.</p>
+<p>To be able to use this GCE dynamic inventory plugin, you need to enable it first by specifying the following in the <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[inventory]</span>
+<span class="na">enable_plugins</span> <span class="o">=</span> <span class="s">gcp_compute</span>
+</pre></div>
+</div>
+<p>Then, create a file that ends in <code class="docutils literal notranslate"><span class="pre">.gcp.yml</span></code> in your root directory.</p>
+<p>The gcp_compute inventory script takes in the same authentication information as any module.</p>
+<p>Here’s an example of a valid inventory file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">plugin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcp_compute</span>
+<span class="nt">projects</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">graphite-playground</span>
+<span class="nt">auth_kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">serviceaccount</span>
+<span class="nt">service_account_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/home/alexstephen/my_account.json</span>
+</pre></div>
+</div>
+<p>Executing <code class="docutils literal notranslate"><span class="pre">ansible-inventory</span> <span class="pre">--list</span> <span class="pre">-i</span> <span class="pre">&lt;filename&gt;.gcp.yml</span></code> will create a list of GCP instances that are ready to be configured using Ansible.</p>
+<section id="create-an-instance">
+<h3>Create an instance<a class="headerlink" href="#create-an-instance" title="Permalink to this headline"></a></h3>
+<p>The full range of GCP modules provide the ability to create a wide variety of
+GCP resources with the full support of the entire GCP API.</p>
+<p>The following playbook creates a GCE Instance. This instance relies on other GCP
+resources like Disk. By creating other resources separately, we can give as
+much detail as necessary about how we want to configure the other resources, for example
+formatting of the Disk. By registering it to a variable, we can simply insert the
+variable into the instance task. The gcp_compute_instance module will figure out the
+rest.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create an instance</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+  <span class="nt">vars</span><span class="p">:</span>
+      <span class="nt">gcp_project</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-project</span>
+      <span class="nt">gcp_cred_kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">serviceaccount</span>
+      <span class="nt">gcp_cred_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/home/my_account.json</span>
+      <span class="nt">zone</span><span class="p">:</span> <span class="s">&quot;us-central1-a&quot;</span>
+      <span class="nt">region</span><span class="p">:</span> <span class="s">&quot;us-central1&quot;</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create a disk</span>
+     <span class="nt">gcp_compute_disk</span><span class="p">:</span>
+         <span class="nt">name</span><span class="p">:</span> <span class="s">&#39;disk-instance&#39;</span>
+         <span class="nt">size_gb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">50</span>
+         <span class="nt">source_image</span><span class="p">:</span> <span class="s">&#39;projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts&#39;</span>
+         <span class="nt">zone</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">zone</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">project</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_project</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">auth_kind</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_cred_kind</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">service_account_file</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_cred_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">scopes</span><span class="p">:</span>
+           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://www.googleapis.com/auth/compute</span>
+         <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+     <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">disk</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create a address</span>
+     <span class="nt">gcp_compute_address</span><span class="p">:</span>
+         <span class="nt">name</span><span class="p">:</span> <span class="s">&#39;address-instance&#39;</span>
+         <span class="nt">region</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">region</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">project</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_project</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">auth_kind</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_cred_kind</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">service_account_file</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_cred_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">scopes</span><span class="p">:</span>
+           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://www.googleapis.com/auth/compute</span>
+         <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+     <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">address</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create a instance</span>
+     <span class="nt">gcp_compute_instance</span><span class="p">:</span>
+         <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test-vm</span>
+         <span class="nt">machine_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">n1-standard-1</span>
+         <span class="nt">disks</span><span class="p">:</span>
+           <span class="p p-Indicator">-</span> <span class="nt">auto_delete</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+             <span class="nt">boot</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+             <span class="nt">source</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">disk</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">network_interfaces</span><span class="p">:</span>
+             <span class="p p-Indicator">-</span> <span class="nt">network</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span> <span class="c1"># use default</span>
+               <span class="nt">access_configs</span><span class="p">:</span>
+                 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&#39;External</span><span class="nv"> </span><span class="s">NAT&#39;</span>
+                   <span class="nt">nat_ip</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">}}&quot;</span>
+                   <span class="nt">type</span><span class="p">:</span> <span class="s">&#39;ONE_TO_ONE_NAT&#39;</span>
+         <span class="nt">zone</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">zone</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">project</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_project</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">auth_kind</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_cred_kind</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">service_account_file</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gcp_cred_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+         <span class="nt">scopes</span><span class="p">:</span>
+           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://www.googleapis.com/auth/compute</span>
+     <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">instance</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Wait for SSH to come up</span>
+     <span class="nt">wait_for</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host={{ address.address }} port=22 delay=10 timeout=60</span>
+
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add host to groupname</span>
+     <span class="nt">add_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hostname={{ address.address }} groupname=new_instances</span>
+
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Manage new instances</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">new_instances</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ssh</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+  <span class="nt">roles</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">base_configuration</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">production_server</span>
+</pre></div>
+</div>
+<p>Note that use of the “add_host” module above creates a temporary, in-memory group.  This means that a play in the same playbook can then manage machines
+in the ‘new_instances’ group, if so desired.  Any sort of arbitrary configuration is possible at this point.</p>
+<p>For more information about Google Cloud, please visit the <a class="reference external" href="https://cloud.google.com">Google Cloud website</a>.</p>
+</section>
+</section>
+<section id="migration-guides">
+<h2>Migration Guides<a class="headerlink" href="#migration-guides" title="Permalink to this headline"></a></h2>
+<section id="gce-py-gcp-compute-instance-py">
+<h3>gce.py -&gt; gcp_compute_instance.py<a class="headerlink" href="#gce-py-gcp-compute-instance-py" title="Permalink to this headline"></a></h3>
+<p>As of Ansible 2.8, we’re encouraging everyone to move from the <code class="docutils literal notranslate"><span class="pre">gce</span></code> module to the
+<code class="docutils literal notranslate"><span class="pre">gcp_compute_instance</span></code> module. The <code class="docutils literal notranslate"><span class="pre">gcp_compute_instance</span></code> module has better
+support for all of GCP’s features, fewer dependencies, more flexibility, and
+better supports GCP’s authentication systems.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">gcp_compute_instance</span></code> module supports all of the features of the <code class="docutils literal notranslate"><span class="pre">gce</span></code>
+module (and more!). Below is a mapping of <code class="docutils literal notranslate"><span class="pre">gce</span></code> fields over to
+<code class="docutils literal notranslate"><span class="pre">gcp_compute_instance</span></code> fields.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 12%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>gce.py</p></th>
+<th class="head"><p>gcp_compute_instance.py</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>state</p></td>
+<td><p>state/status</p></td>
+<td><p>State on gce has multiple values: “present”, “absent”, “stopped”, “started”, “terminated”. State on gcp_compute_instance is used to describe if the instance exists (present) or does not (absent). Status is used to describe if the instance is “started”, “stopped” or “terminated”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>image</p></td>
+<td><p>disks[].initialize_params.source_image</p></td>
+<td><p>You’ll need to create a single disk using the disks[] parameter and set it to be the boot disk (disks[].boot = true)</p></td>
+</tr>
+<tr class="row-even"><td><p>image_family</p></td>
+<td><p>disks[].initialize_params.source_image</p></td>
+<td><p>See above.</p></td>
+</tr>
+<tr class="row-odd"><td><p>external_projects</p></td>
+<td><p>disks[].initialize_params.source_image</p></td>
+<td><p>The name of the source_image will include the name of the project.</p></td>
+</tr>
+<tr class="row-even"><td><p>instance_names</p></td>
+<td><p>Use a loop or multiple tasks.</p></td>
+<td><p>Using loops is a more Ansible-centric way of creating multiple instances and gives you the most flexibility.</p></td>
+</tr>
+<tr class="row-odd"><td><p>service_account_email</p></td>
+<td><p>service_accounts[].email</p></td>
+<td><p>This is the service_account email address that you want the instance to be associated with. It is not the service_account email address that is used for the credentials necessary to create the instance.</p></td>
+</tr>
+<tr class="row-even"><td><p>service_account_permissions</p></td>
+<td><p>service_accounts[].scopes</p></td>
+<td><p>These are the permissions you want to grant to the instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pem_file</p></td>
+<td><p>Not supported.</p></td>
+<td><p>We recommend using JSON service account credentials instead of PEM files.</p></td>
+</tr>
+<tr class="row-even"><td><p>credentials_file</p></td>
+<td><p>service_account_file</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>project_id</p></td>
+<td><p>project</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>name</p></td>
+<td><p>This field does not accept an array of names. Use a loop to create multiple instances.</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_instances</p></td>
+<td><p>Use a loop</p></td>
+<td><p>For maximum flexibility, we’re encouraging users to use Ansible features to create multiple instances, rather than letting the module do it for you.</p></td>
+</tr>
+<tr class="row-even"><td><p>network</p></td>
+<td><p>network_interfaces[].network</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>subnetwork</p></td>
+<td><p>network_interfaces[].subnetwork</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>persistent_boot_disk</p></td>
+<td><p>disks[].type = ‘PERSISTENT’</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>disks</p></td>
+<td><p>disks[]</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ip_forward</p></td>
+<td><p>can_ip_forward</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>external_ip</p></td>
+<td><p>network_interfaces[].access_configs.nat_ip</p></td>
+<td><p>This field takes multiple types of values. You can create an IP address with <code class="docutils literal notranslate"><span class="pre">gcp_compute_address</span></code> and place the name/output of the address here. You can also place the string value of the IP address’s GCP name or the actual IP address.</p></td>
+</tr>
+<tr class="row-even"><td><p>disks_auto_delete</p></td>
+<td><p>disks[].auto_delete</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>preemptible</p></td>
+<td><p>scheduling.preemptible</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>disk_size</p></td>
+<td><p>disks[].initialize_params.disk_size_gb</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>An example playbook is below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">gcp_compute_instance</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">machine_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">n1-standard-1</span>
+    <span class="l l-Scalar l-Scalar-Plain">...</span> <span class="c1"># any other settings</span>
+    <span class="nt">zone</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-central1-a</span>
+    <span class="nt">project</span><span class="p">:</span> <span class="s">&quot;my-project&quot;</span>
+    <span class="nt">auth_kind</span><span class="p">:</span> <span class="s">&quot;service_account_file&quot;</span>
+    <span class="nt">service_account_file</span><span class="p">:</span> <span class="s">&quot;~/my_account.json&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="nt">loop</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">instance-1</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">instance-2</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guide_cloudstack.html" class="btn btn-neutral float-left" title="CloudStack Cloud Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guide_azure.html" class="btn btn-neutral float-right" title="Microsoft Azure Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jul 12, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

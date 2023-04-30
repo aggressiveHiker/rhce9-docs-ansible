@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating new integration tests &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/community/collection_contributors/collection_integration_add.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Review checklist for collection PRs" href="collection_reviewing.html" />
+    <link rel="prev" title="Running integration tests" href="collection_integration_running.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="6">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                6
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/6/") > -1
+            ? "/6/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting started with Ansible</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../contributions_collections.html">Ansible Collections Contributor Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../collection_development_process.html">The Ansible Collections Development Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reporting_collections.html">Requesting changes to a collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../create_pr_quick_start.html">Creating your first collection pull request</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="test_index.html">Testing Collection Contributions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="collection_test_pr_locally.html">How to test a collection PR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collection_unit_tests.html">Add unit tests to a collection</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="collection_integration_tests.html">Adding integration tests to a collection</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_about.html">Understanding integration tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_about.html#preparing-for-integration-tests-for-collections">Preparing for integration tests for collections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_about.html#recommendations-on-coverage">Recommendations on coverage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_updating.html">Adding to an existing integration test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collection_integration_running.html">Running integration tests</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Creating new integration tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collection_reviewing.html">Review checklist for collection PRs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../maintainers.html">Guidelines for collection maintainers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_maintained_collections.html">Contributing to Ansible-maintained Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../steering/steering_index.html">Ansible Community Steering Committee</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_contributions.html">Contributing to the Ansible Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html">Other Tools and Programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#popular-editors">Popular editors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#development-tools">Development tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#tools-for-validating-playbooks">Tools for validating playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_tools_and_programs.html#other-tools">Other tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributions_collections.html#working-with-the-ansible-collection-repositories">Working with the Ansible collection repositories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../contributions_collections.html">Ansible Collections Contributor Guide</a> &raquo;</li>
+          <li><a href="test_index.html">Testing Collection Contributions</a> &raquo;</li>
+          <li><a href="collection_integration_tests.html">Adding integration tests to a collection</a> &raquo;</li>
+      <li>Creating new integration tests</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/community/collection_contributors/collection_integration_add.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/6/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>latest</b> (stable) community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="creating-new-integration-tests">
+<span id="collection-creating-integration-tests"></span><h1>Creating new integration tests<a class="headerlink" href="#creating-new-integration-tests" title="Permalink to this headline"></a></h1>
+<p>This section covers the following cases:</p>
+<ul class="simple">
+<li><p>There are no integration tests for a collection / group of modules in a collection at all.</p></li>
+<li><p>You are adding a new module and you want to include integration tests.</p></li>
+<li><p>You want to add integration tests for a module that already exists without integration tests.</p></li>
+</ul>
+<p>In other words, there are currently no tests for a module regardless of whether the module exists or not.</p>
+<p>If the module already has tests, see <a class="reference internal" href="collection_integration_updating.html#collection-updating-integration-tests"><span class="std std-ref">Adding to an existing integration test</span></a>.</p>
+<section id="simplified-example">
+<h2>Simplified example<a class="headerlink" href="#simplified-example" title="Permalink to this headline"></a></h2>
+<p>Here is a simplified abstract example.</p>
+<p>Let’s say we are going to add integration tests to a new module in the <code class="docutils literal notranslate"><span class="pre">community.abstract</span></code> collection which interacts with some service.</p>
+<p>We <a class="reference internal" href="collection_integration_about.html#collection-integration-prepare"><span class="std std-ref">checked</span></a> and determined that there are no integration tests at all.</p>
+<p>We should basically do the following:</p>
+<ol class="arabic simple">
+<li><p>Install and run the service with a <code class="docutils literal notranslate"><span class="pre">setup</span></code> target.</p></li>
+<li><p>Create a test target.</p></li>
+<li><p>Add integration tests for the module.</p></li>
+<li><p><a class="reference internal" href="collection_integration_running.html#collection-run-integration-tests"><span class="std std-ref">Run the tests</span></a>.</p></li>
+<li><p>Fix the code and tests as needed, run the tests again, and repeat the cycle until they pass.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can reuse the <code class="docutils literal notranslate"><span class="pre">setup</span></code> target when implementing other targets that also use the same service.</p>
+</div>
+<ol class="arabic simple">
+<li><p>Clone the collection to the <code class="docutils literal notranslate"><span class="pre">~/ansible_collections/community.abstract</span></code> directory on your local machine.</p></li>
+<li><p>From the <code class="docutils literal notranslate"><span class="pre">~/ansble_collections/community.abstract</span></code> directory, create directories for the <code class="docutils literal notranslate"><span class="pre">setup</span></code> target:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p tests/integration/targets/setup_abstract_service/tasks
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Write all the tasks needed to prepare the environment, install, and run the service.</p></li>
+</ol>
+<p>For simplicity, let’s imagine that the service is available in the native distribution repositories and no sophisticated environment configuration is required.</p>
+<p>Add the following tasks to the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/setup_abstract_service/tasks/main.yml</span></code> file to install and run the service:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install abstract service</span>
+  <span class="nt">package</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">abstract_service</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run the service</span>
+  <span class="nt">systemd</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">abstract_service</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+</pre></div>
+</div>
+<p>This is a very simplified example.</p>
+<ol class="arabic simple" start="4">
+<li><p>Add the target for the module you are testing.</p></li>
+</ol>
+<p>Let’s say the module is called <code class="docutils literal notranslate"><span class="pre">abstact_service_info</span></code>. Create the following directory structure in the target:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p tests/integration/targets/abstract_service_info/tasks
+mkdir -p tests/integration/targets/abstract_service_info/meta
+</pre></div>
+</div>
+<p>Add all of the needed subdirectories. For example, if you are going to use defaults and files, add the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">files</span></code> directories, and so on. The approach is the same as when you are creating a role.</p>
+<ol class="arabic simple" start="5">
+<li><p>To make the <code class="docutils literal notranslate"><span class="pre">setup_abstract_service</span></code> target run before the module’s target, add the following lines to the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/abstract_service_info/meta/main.yml</span></code> file.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dependencies</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">setup_abstract_service</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Start with writing a single stand-alone task to check that your module can interact with the service.</p></li>
+</ol>
+<p>We assume that the <code class="docutils literal notranslate"><span class="pre">abstract_service_info</span></code> module fetches some information from the <code class="docutils literal notranslate"><span class="pre">abstract_service</span></code> and that it has two connection parameters.</p>
+<p>Among other fields, it returns a field called <code class="docutils literal notranslate"><span class="pre">version</span></code> containing a service version.</p>
+<p>Add the following to <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/abstract_service_info/tasks/main.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch info from abstract service</span>
+  <span class="nt">anstract_service_info</span><span class="p">:</span>
+    <span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>  <span class="c1"># We assume the service accepts local connection by default</span>
+    <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1234</span>       <span class="c1"># We assume that the service is listening this port by default</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>   <span class="c1"># This variable will contain the returned JSON including the server version</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Test the output</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result.version == &#39;1.0.0&#39;</span>  <span class="c1"># Check version field contains what we expect</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p><a class="reference internal" href="collection_integration_running.html#collection-run-integration-tests"><span class="std std-ref">Run the tests</span></a> with the <code class="docutils literal notranslate"><span class="pre">-vvv</span></code> argument.</p></li>
+</ol>
+<p>If there are any issues with connectivity (for example, the service is not accepting connections) or with the code, the play will fail.</p>
+<p>Examine the output to see at which step the failure occurred. Investigate the reason, fix, and run again. Repeat the cycle until the test passes.</p>
+<ol class="arabic simple" start="8">
+<li><p>If the test succeeds, write more tests. Refer to the <a class="reference internal" href="collection_integration_about.html#collection-integration-recommendations"><span class="std std-ref">Recommendations on coverage</span></a> section for details.</p></li>
+</ol>
+</section>
+<section id="community-postgresql-example">
+<h2><code class="docutils literal notranslate"><span class="pre">community.postgresql</span></code> example<a class="headerlink" href="#community-postgresql-example" title="Permalink to this headline"></a></h2>
+<p>Here is a real example of writing integration tests from scratch for the <code class="docutils literal notranslate"><span class="pre">community.postgresql.postgresql_info</span></code> module.</p>
+<p>For the sake of simplicity, we will create very basic tests which we will run using the Ubuntu 20.04 test container.</p>
+<p>We use <code class="docutils literal notranslate"><span class="pre">Linux</span></code> as a work environment and have <code class="docutils literal notranslate"><span class="pre">git</span></code> and <code class="docutils literal notranslate"><span class="pre">docker</span></code> installed and running.</p>
+<p>We also installed <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.</p>
+<ol class="arabic simple">
+<li><p>Create the following directories in your home directory:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p ~/ansible_collections/community
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Fork the <a class="reference external" href="https://github.com/ansible-collections/community.postgresql">collection repository</a> through the GitHub web interface.</p></li>
+<li><p>Clone the forked repository from your profile to the created path:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/YOURACC/community.postgresql.git ~/ansible_collections/community/postgresql
+</pre></div>
+</div>
+<p>If you prefer to use the SSH protocol:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9dfaf4e9ddfaf4e9f5e8ffb3fef2f0">[email&#160;protected]</a>:YOURACC/community.postgresql.git ~/ansible_collections/community/postgresql
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Go to the cloned repository:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/ansible_collections/community/postgresql
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Be sure you are in the default branch:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git status
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Checkout a test branch:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout -b postgresql_info_tests
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Since we already have tests for the <code class="docutils literal notranslate"><span class="pre">postgresql_info</span></code> module, we will run the following command:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm -rf tests/integration/targets/*
+</pre></div>
+</div>
+<p>With all of the targets now removed, the current state is as if we do not have any integration tests for the <code class="docutils literal notranslate"><span class="pre">community.postgresql</span></code> collection at all. We can now start writing integration tests from scratch.</p>
+<ol class="arabic simple" start="8">
+<li><p>We will start with creating a <code class="docutils literal notranslate"><span class="pre">setup</span></code> target that will install all required packages and will launch PostgreSQL. Create the following directories:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p tests/integration/targets/setup_postgresql_db/tasks
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>Create the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/setup_postgresql_db/tasks/main.yml</span></code> file and add the following tasks to it:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install required packages</span>
+  <span class="nt">package</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">apt-utils</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">postgresql</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">postgresql-common</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">python3-psycopg2</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Initialize PostgreSQL</span>
+  <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">. /usr/share/postgresql-common/maintscripts-functions &amp;&amp; set_system_locale &amp;&amp; /usr/bin/pg_createcluster -u postgres 12 main</span>
+  <span class="nt">args</span><span class="p">:</span>
+    <span class="nt">creates</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/postgresql/12/</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Start PostgreSQL service</span>
+  <span class="nt">service</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgresql</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+</pre></div>
+</div>
+<p>That is enough for our very basic example.</p>
+<ol class="arabic simple" start="10">
+<li><p>Then, create the following directories for the <code class="docutils literal notranslate"><span class="pre">postgresql_info</span></code> target:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p tests/integration/targets/postgresql_info/tasks tests/integration/targets/postgresql_info/meta
+</pre></div>
+</div>
+<ol class="arabic simple" start="11">
+<li><p>To make the <code class="docutils literal notranslate"><span class="pre">setup_postgresql_db</span></code> target running before the <code class="docutils literal notranslate"><span class="pre">postgresql_info</span></code> target as a dependency, create the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/postgresql_info/meta/main.yml</span></code> file and add the following code to it:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dependencies</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">setup_postgresql_db</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="12">
+<li><p>Now we are ready to add our first test task for the <code class="docutils literal notranslate"><span class="pre">postgresql_info</span></code> module. Create the <code class="docutils literal notranslate"><span class="pre">tests/integration/targets/postgresql_info/tasks/main.yml</span></code> file and add the following code to it:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Test postgresql_info module</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">become_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+  <span class="nt">postgresql_info</span><span class="p">:</span>
+    <span class="nt">login_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+    <span class="nt">login_db</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Check the module returns what we expect</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result is not changed</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result.version.major == 12</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result.version.minor == 8</span>
+</pre></div>
+</div>
+<p>In the first task, we run the <code class="docutils literal notranslate"><span class="pre">postgresql_info</span></code> module to fetch information from the database we installed and launched with the <code class="docutils literal notranslate"><span class="pre">setup_postgresql_db</span></code> target. We are saving the values returned by the module into the <code class="docutils literal notranslate"><span class="pre">result</span></code> variable.</p>
+<p>In the second task, we check the <code class="docutils literal notranslate"><span class="pre">result</span></code> variable, which is what the first task returned, with the <code class="docutils literal notranslate"><span class="pre">assert</span></code> module. We expect that, among other things, the result has the version and reports that the system state has not been changed.</p>
+<ol class="arabic simple" start="13">
+<li><p>Run the tests in the Ubuntu 20.04 docker container:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-test integration postgresql_info --docker ubuntu2004 -vvv
+</pre></div>
+</div>
+<p>The tests should pass. If we look at the output, we should see something like the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>TASK <span class="o">[</span>postgresql_info : Check the module returns what we expect<span class="o">]</span> ***************
+ok: <span class="o">[</span>testhost<span class="o">]</span> <span class="o">=</span>&gt; <span class="o">{</span>
+  <span class="s2">&quot;changed&quot;</span>: false,
+  <span class="s2">&quot;msg&quot;</span>: <span class="s2">&quot;All assertions passed&quot;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>If your tests fail when you are working on your project, examine the output to see at which step the failure occurred. Investigate the reason, fix, and run again. Repeat the cycle until the test passes. If the test succeeds, write more tests. Refer to the <a class="reference internal" href="collection_integration_about.html#collection-integration-recommendations"><span class="std std-ref">Recommendations on coverage</span></a> section for details.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="collection_integration_running.html" class="btn btn-neutral float-left" title="Running integration tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="collection_reviewing.html" class="btn btn-neutral float-right" title="Review checklist for collection PRs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jul 06, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>
