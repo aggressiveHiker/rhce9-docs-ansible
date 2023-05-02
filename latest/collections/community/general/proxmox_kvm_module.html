@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>community.general.proxmox_kvm – Management of Qemu(KVM) Virtual Machines in Proxmox VE cluster. &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_kvm_module.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="community.general.proxmox_nic – Management of a NIC of a Qemu(KVM) VM in a Proxmox VE cluster." href="proxmox_nic_module.html" />
+    <link rel="prev" title="community.general.proxmox_group_info – Retrieve information about one or more Proxmox VE groups" href="proxmox_group_info_module.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ansible/index.html">Collections in the Ansible Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Community Namespace</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../aws/index.html">Community.Aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../azure/index.html">Community.Azure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ciscosmb/index.html">Community.Ciscosmb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../crypto/index.html">Community.Crypto</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../digitalocean/index.html">Community.Digitalocean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dns/index.html">Community.Dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docker/index.html">Community.Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../fortios/index.html">Community.Fortios</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Community.General</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#guides">Guides</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../google/index.html">Community.Google</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../grafana/index.html">Community.Grafana</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hashi_vault/index.html">Community.Hashi_Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hrobot/index.html">Community.Hrobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kubernetes/index.html">Community.Kubernetes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kubevirt/index.html">Community.Kubevirt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../libvirt/index.html">Community.Libvirt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mongodb/index.html">Community.Mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Community.Mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../network/index.html">Community.Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../okd/index.html">Community.Okd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../skydive/index.html">Community.Skydive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sops/index.html">Community.Sops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vmware/index.html">Community.Vmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../windows/index.html">Community.Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zabbix/index.html">Community.Zabbix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Collection Index</a> &raquo;</li>
+          <li><a href="../index.html">Collections in the Community Namespace</a> &raquo;</li>
+          <li><a href="index.html">Community.General</a> &raquo;</li>
+      <li>community.general.proxmox_kvm – Management of Qemu(KVM) Virtual Machines in Proxmox VE cluster.</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+            <!--  <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a> -->
+              <br>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-community-general-proxmox-kvm-module"></span><div class="section" id="community-general-proxmox-kvm-management-of-qemu-kvm-virtual-machines-in-proxmox-ve-cluster">
+<h1>community.general.proxmox_kvm – Management of Qemu(KVM) Virtual Machines in Proxmox VE cluster.<a class="headerlink" href="#community-general-proxmox-kvm-management-of-qemu-kvm-virtual-machines-in-proxmox-ve-cluster" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/community/general">community.general collection</a> (version 4.2.0).</p>
+<p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
+It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
+To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.general</span></code>.</p>
+<p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.general.proxmox_kvm</span></code>.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id4">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id5">Return Values</a></p></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Allows you to create/delete/stop Qemu(KVM) Virtual Machines in Proxmox VE cluster.</p></li>
+<li><p>Since community.general 4.0.0 on, there are no more default values, see <em>proxmox_default_behavior</em>.</p></li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li><p>proxmoxer</p></li>
+<li><p>requests</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline"></a></h2>
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-acpi"></div>
+                <b>acpi</b>
+                <a class="ansibleOptionLink" href="#parameter-acpi" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if ACPI should be enabled/disabled.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>yes</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-agent"></div>
+                <b>agent</b>
+                <a class="ansibleOptionLink" href="#parameter-agent" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if the QEMU Guest Agent should be enabled/disabled.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-api_host"></div>
+                <b>api_host</b>
+                <a class="ansibleOptionLink" href="#parameter-api_host" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                             / <span style="color: red">required</span>                    </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the target host of the Proxmox VE cluster.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-api_password"></div>
+                <b>api_password</b>
+                <a class="ansibleOptionLink" href="#parameter-api_password" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the password to authenticate with.</div>
+                                        <div>You can use <code>PROXMOX_PASSWORD</code> environment variable.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-api_token_id"></div>
+                <b>api_token_id</b>
+                <a class="ansibleOptionLink" href="#parameter-api_token_id" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the token ID.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-api_token_secret"></div>
+                <b>api_token_secret</b>
+                <a class="ansibleOptionLink" href="#parameter-api_token_secret" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the token secret.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-api_user"></div>
+                <b>api_user</b>
+                <a class="ansibleOptionLink" href="#parameter-api_user" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                             / <span style="color: red">required</span>                    </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the user to authenticate with.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-args"></div>
+                <b>args</b>
+                <a class="ansibleOptionLink" href="#parameter-args" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Pass arbitrary arguments to kvm.</div>
+                                        <div>This option is for experts only!</div>
+                                        <div>If <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>, this option has a default of <code>-serial unix:/var/run/qemu-server/&lt;vmid&gt;.serial,server,nowait</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-autostart"></div>
+                <b>autostart</b>
+                <a class="ansibleOptionLink" href="#parameter-autostart" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if the VM should be automatically restarted after crash (currently ignored in PVE API).</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>no</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-balloon"></div>
+                <b>balloon</b>
+                <a class="ansibleOptionLink" href="#parameter-balloon" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the amount of RAM for the VM in MB.</div>
+                                        <div>Using zero disables the balloon driver.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>0</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-bios"></div>
+                <b>bios</b>
+                <a class="ansibleOptionLink" href="#parameter-bios" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>seabios</li>
+                                                                                                                                                                                            <li>ovmf</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify the BIOS implementation.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-boot"></div>
+                <b>boot</b>
+                <a class="ansibleOptionLink" href="#parameter-boot" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the boot order -&gt; boot on floppy <code>a</code>, hard disk <code>c</code>, CD-ROM <code>d</code>, or network <code>n</code>.</div>
+                                        <div>You can combine to set order.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>cnd</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-bootdisk"></div>
+                <b>bootdisk</b>
+                <a class="ansibleOptionLink" href="#parameter-bootdisk" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Enable booting from specified disk. <code>(ide|sata|scsi|virtio</code>\d+)</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cicustom"></div>
+                <b>cicustom</b>
+                <a class="ansibleOptionLink" href="#parameter-cicustom" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: Specify custom files to replace the automatically generated ones at start.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cipassword"></div>
+                <b>cipassword</b>
+                <a class="ansibleOptionLink" href="#parameter-cipassword" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: password of default user to create.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-citype"></div>
+                <b>citype</b>
+                <a class="ansibleOptionLink" href="#parameter-citype" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>nocloud</li>
+                                                                                                                                                                                            <li>configdrive2</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: Specifies the cloud-init configuration format.</div>
+                                        <div>The default depends on the configured operating system type (<code>ostype</code>).</div>
+                                        <div>We use the <code>nocloud</code> format for Linux, and <code>configdrive2</code> for Windows.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-ciuser"></div>
+                <b>ciuser</b>
+                <a class="ansibleOptionLink" href="#parameter-ciuser" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: username of default user to create.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-clone"></div>
+                <b>clone</b>
+                <a class="ansibleOptionLink" href="#parameter-clone" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Name of VM to be cloned. If <code>vmid</code> is setted, <code>clone</code> can take arbitrary value but required for initiating the clone.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cores"></div>
+                <b>cores</b>
+                <a class="ansibleOptionLink" href="#parameter-cores" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify number of cores per socket.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>1</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cpu"></div>
+                <b>cpu</b>
+                <a class="ansibleOptionLink" href="#parameter-cpu" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify emulated CPU type.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>kvm64</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cpulimit"></div>
+                <b>cpulimit</b>
+                <a class="ansibleOptionLink" href="#parameter-cpulimit" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify if CPU usage will be limited. Value 0 indicates no CPU limit.</div>
+                                        <div>If the computer has 2 CPUs, it has total of &#x27;2&#x27; CPU time</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cpuunits"></div>
+                <b>cpuunits</b>
+                <a class="ansibleOptionLink" href="#parameter-cpuunits" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify CPU weight for a VM.</div>
+                                        <div>You can disable fair-scheduler configuration by setting this to 0</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>1000</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-delete"></div>
+                <b>delete</b>
+                <a class="ansibleOptionLink" href="#parameter-delete" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify a list of settings you want to delete.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-description"></div>
+                <b>description</b>
+                <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the description for the VM. Only used on the configuration web interface.</div>
+                                        <div>This is saved as comment inside the configuration file.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-digest"></div>
+                <b>digest</b>
+                <a class="ansibleOptionLink" href="#parameter-digest" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify if to prevent changes if current configuration file has different SHA1 digest.</div>
+                                        <div>This can be used to prevent concurrent modifications.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-force"></div>
+                <b>force</b>
+                <a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Allow to force stop VM.</div>
+                                        <div>Can be used with states <code>stopped</code>, <code>restarted</code> and <code>absent</code>.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>no</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-format"></div>
+                <b>format</b>
+                <a class="ansibleOptionLink" href="#parameter-format" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>cloop</li>
+                                                                                                                                                                                            <li>cow</li>
+                                                                                                                                                                                            <li>qcow</li>
+                                                                                                                                                                                            <li>qcow2</li>
+                                                                                                                                                                                            <li>qed</li>
+                                                                                                                                                                                            <li>raw</li>
+                                                                                                                                                                                            <li>vmdk</li>
+                                                                                                                                                                                            <li>unspecified</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Target drive&#x27;s backing file&#x27;s data format.</div>
+                                        <div>Used only with clone</div>
+                                        <div>Use <em>format=unspecified</em> and <em>full=false</em> for a linked clone.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>qcow2</code>. If <em>proxmox_default_behavior</em> is set to <code>no_defaults</code>, not specifying this option is equivalent to setting it to <code>unspecified</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-freeze"></div>
+                <b>freeze</b>
+                <a class="ansibleOptionLink" href="#parameter-freeze" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if PVE should freeze CPU at startup (use &#x27;c&#x27; monitor command to start execution).</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-full"></div>
+                <b>full</b>
+                <a class="ansibleOptionLink" href="#parameter-full" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Create a full copy of all disk. This is always done when you clone a normal VM.</div>
+                                        <div>For VM templates, we try to create a linked clone by default.</div>
+                                        <div>Used only with clone</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-hostpci"></div>
+                <b>hostpci</b>
+                <a class="ansibleOptionLink" href="#parameter-hostpci" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify a hash/dictionary of map host pci devices into guest. <code>hostpci=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>hostpci[n]</code> where 0 ≤ n ≤ N.</div>
+                                        <div>Values allowed are -  <code>&quot;host=&quot;HOSTPCIID[;HOSTPCIID2...]&quot;,pcie=&quot;1|0&quot;,rombar=&quot;1|0&quot;,x-vga=&quot;1|0&quot;&quot;</code>.</div>
+                                        <div>The <code>host</code> parameter is Host PCI device pass through. HOSTPCIID syntax is <code>bus:dev.func</code> (hexadecimal numbers).</div>
+                                        <div><code>pcie=boolean</code> <em>default=0</em> Choose the PCI-express bus (needs the q35 machine model).</div>
+                                        <div><code>rombar=boolean</code> <em>default=1</em> Specify whether or not the device&#x27;s ROM will be visible in the guest&#x27;s memory map.</div>
+                                        <div><code>x-vga=boolean</code> <em>default=0</em> Enable vfio-vga device support.</div>
+                                        <div>/!\ This option allows direct access to host hardware. So it is no longer possible to migrate such machines - use with special care.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-hotplug"></div>
+                <b>hotplug</b>
+                <a class="ansibleOptionLink" href="#parameter-hotplug" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Selectively enable hotplug features.</div>
+                                        <div>This is a comma separated list of hotplug features <code>&#x27;network&#x27;, &#x27;disk&#x27;, &#x27;cpu&#x27;, &#x27;memory&#x27; and &#x27;usb&#x27;</code>.</div>
+                                        <div>Value 0 disables hotplug completely and value 1 is an alias for the default <code>&#x27;network,disk,usb&#x27;</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-hugepages"></div>
+                <b>hugepages</b>
+                <a class="ansibleOptionLink" href="#parameter-hugepages" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>any</li>
+                                                                                                                                                                                            <li>2</li>
+                                                                                                                                                                                            <li>1024</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enable/disable hugepages memory.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-ide"></div>
+                <b>ide</b>
+                <a class="ansibleOptionLink" href="#parameter-ide" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as IDE hard disk or CD-ROM. <code>ide=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>ide[n]</code> where 0 ≤ n ≤ 3.</div>
+                                        <div>Values allowed are - <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-ipconfig"></div>
+                <b>ipconfig</b>
+                <a class="ansibleOptionLink" href="#parameter-ipconfig" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: Set the IP configuration.</div>
+                                        <div>A hash/dictionary of network ip configurations. <code>ipconfig=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>ipconfig[n]</code> where 0 ≤ n ≤ network interfaces.</div>
+                                        <div>Values allowed are -  <code>&quot;[gw=&lt;GatewayIPv4&gt;] [,gw6=&lt;GatewayIPv6&gt;] [,ip=&lt;IPv4Format/CIDR&gt;] [,ip6=&lt;IPv6Format/CIDR&gt;]&quot;</code>.</div>
+                                        <div>cloud-init: Specify IP addresses and gateways for the corresponding interface.</div>
+                                        <div>IP addresses use CIDR notation, gateways are optional but they should be in the same subnet of specified IP address.</div>
+                                        <div>The special string &#x27;dhcp&#x27; can be used for IP addresses to use DHCP, in which case no explicit gateway should be provided.</div>
+                                        <div>For IPv6 the special string &#x27;auto&#x27; can be used to use stateless autoconfiguration.</div>
+                                        <div>If cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using dhcp on IPv4.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-keyboard"></div>
+                <b>keyboard</b>
+                <a class="ansibleOptionLink" href="#parameter-keyboard" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets the keyboard layout for VNC server.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-kvm"></div>
+                <b>kvm</b>
+                <a class="ansibleOptionLink" href="#parameter-kvm" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enable/disable KVM hardware virtualization.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>yes</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-localtime"></div>
+                <b>localtime</b>
+                <a class="ansibleOptionLink" href="#parameter-localtime" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Sets the real time clock to local time.</div>
+                                        <div>This is enabled by default if ostype indicates a Microsoft OS.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-lock"></div>
+                <b>lock</b>
+                <a class="ansibleOptionLink" href="#parameter-lock" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>migrate</li>
+                                                                                                                                                                                            <li>backup</li>
+                                                                                                                                                                                            <li>snapshot</li>
+                                                                                                                                                                                            <li>rollback</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Lock/unlock the VM.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-machine"></div>
+                <b>machine</b>
+                <a class="ansibleOptionLink" href="#parameter-machine" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the Qemu machine type.</div>
+                                        <div>type =&gt; <code>(pc|pc(-i440fx</code>?-\d+\.\d+(\.pxe)?|q35|pc-q35-\d+\.\d+(\.pxe)?))</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-memory"></div>
+                <b>memory</b>
+                <a class="ansibleOptionLink" href="#parameter-memory" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Memory size in MB for instance.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>512</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-migrate_downtime"></div>
+                <b>migrate_downtime</b>
+                <a class="ansibleOptionLink" href="#parameter-migrate_downtime" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets maximum tolerated downtime (in seconds) for migrations.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-migrate_speed"></div>
+                <b>migrate_speed</b>
+                <a class="ansibleOptionLink" href="#parameter-migrate_speed" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets maximum speed (in MB/s) for migrations.</div>
+                                        <div>A value of 0 is no limit.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-name"></div>
+                <b>name</b>
+                <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the VM name. Only used on the configuration web interface.</div>
+                                        <div>Required only for <code>state=present</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-nameservers"></div>
+                <b>nameservers</b>
+                <a class="ansibleOptionLink" href="#parameter-nameservers" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">list</span>
+                     / <span style="color: purple">elements=string</span>                                            </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: DNS server IP address(es).</div>
+                                        <div>If unset, PVE host settings are used.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-net"></div>
+                <b>net</b>
+                <a class="ansibleOptionLink" href="#parameter-net" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of network interfaces for the VM. <code>net=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>net[n]</code> where 0 ≤ n ≤ N.</div>
+                                        <div>Values allowed are - <code>&quot;model=&quot;XX:XX:XX:XX:XX:XX&quot;,bridge=&quot;value&quot;,rate=&quot;value&quot;,tag=&quot;value&quot;,firewall=&quot;1|0&quot;,trunks=&quot;vlanid&quot;&quot;</code>.</div>
+                                        <div>Model is one of <code>e1000 e1000-82540em e1000-82544gc e1000-82545em i82551 i82557b i82559er ne2k_isa ne2k_pci pcnet rtl8139 virtio vmxnet3</code>.</div>
+                                        <div><code>XX:XX:XX:XX:XX:XX</code> should be an unique MAC address. This is automatically generated if not specified.</div>
+                                        <div>The <code>bridge</code> parameter can be used to automatically add the interface to a bridge device. The Proxmox VE standard bridge is called &#x27;vmbr0&#x27;.</div>
+                                        <div>Option <code>rate</code> is used to limit traffic bandwidth from and to this interface. It is specified as floating point number, unit is &#x27;Megabytes per second&#x27;.</div>
+                                        <div>If you specify no bridge, we create a kvm &#x27;user&#x27; (NATed) network device, which provides DHCP and DNS services.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-newid"></div>
+                <b>newid</b>
+                <a class="ansibleOptionLink" href="#parameter-newid" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>VMID for the clone. Used only with clone.</div>
+                                        <div>If newid is not set, the next available VM ID will be fetched from ProxmoxAPI.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-node"></div>
+                <b>node</b>
+                <a class="ansibleOptionLink" href="#parameter-node" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Proxmox VE node on which to operate.</div>
+                                        <div>Only required for <em>state=present</em>.</div>
+                                        <div>For every other states it will be autodiscovered.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-numa"></div>
+                <b>numa</b>
+                <a class="ansibleOptionLink" href="#parameter-numa" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionaries of NUMA topology. <code>numa=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>numa[n]</code> where 0 ≤ n ≤ N.</div>
+                                        <div>Values allowed are - <code>&quot;cpu=&quot;&lt;id[-id];...&gt;&quot;,hostnodes=&quot;&lt;id[-id];...&gt;&quot;,memory=&quot;number&quot;,policy=&quot;(bind|interleave|preferred</code>&quot;&quot;).</div>
+                                        <div><code>cpus</code> CPUs accessing this NUMA node.</div>
+                                        <div><code>hostnodes</code> Host NUMA nodes to use.</div>
+                                        <div><code>memory</code> Amount of memory this NUMA node provides.</div>
+                                        <div><code>policy</code> NUMA allocation policy.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-numa_enabled"></div>
+                <b>numa_enabled</b>
+                <a class="ansibleOptionLink" href="#parameter-numa_enabled" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enables NUMA.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-onboot"></div>
+                <b>onboot</b>
+                <a class="ansibleOptionLink" href="#parameter-onboot" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specifies whether a VM will be started during system bootup.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>yes</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-ostype"></div>
+                <b>ostype</b>
+                <a class="ansibleOptionLink" href="#parameter-ostype" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>other</li>
+                                                                                                                                                                                            <li>wxp</li>
+                                                                                                                                                                                            <li>w2k</li>
+                                                                                                                                                                                            <li>w2k3</li>
+                                                                                                                                                                                            <li>w2k8</li>
+                                                                                                                                                                                            <li>wvista</li>
+                                                                                                                                                                                            <li>win7</li>
+                                                                                                                                                                                            <li>win8</li>
+                                                                                                                                                                                            <li>win10</li>
+                                                                                                                                                                                            <li>l24</li>
+                                                                                                                                                                                            <li>l26</li>
+                                                                                                                                                                                            <li>solaris</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specifies guest operating system. This is used to enable special optimization/features for specific operating systems.</div>
+                                        <div>The l26 is Linux 2.6/3.X Kernel.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>l26</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-parallel"></div>
+                <b>parallel</b>
+                <a class="ansibleOptionLink" href="#parameter-parallel" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of map host parallel devices. <code>parallel=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - (parallel[n]) where 0 ≤ n ≤ 2.</div>
+                                        <div>Values allowed are - <code>&quot;/dev/parport\d+|/dev/usb/lp\d+&quot;</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-pool"></div>
+                <b>pool</b>
+                <a class="ansibleOptionLink" href="#parameter-pool" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Add the new VM to the specified pool.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-protection"></div>
+                <b>protection</b>
+                <a class="ansibleOptionLink" href="#parameter-protection" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enable/disable the protection flag of the VM. This will enable/disable the remove VM and remove disk operations.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-proxmox_default_behavior"></div>
+                <b>proxmox_default_behavior</b>
+                <a class="ansibleOptionLink" href="#parameter-proxmox_default_behavior" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>compatibility</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>no_defaults</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>As of community.general 4.0.0, various options no longer have default values. These default values caused problems when users expected different behavior from Proxmox by default or filled options which caused problems when set. - The value <code>compatibility</code> (default before community.general 4.0.0) will ensure that the default values are used when the values are not explicitly specified by the user. The new default is <code>no_defaults</code>, which makes sure these options have no defaults. - This affects the <em>acpi</em>, <em>autostart</em>, <em>balloon</em>, <em>boot</em>, <em>cores</em>, <em>cpu</em>, <em>cpuunits</em>, <em>force</em>, <em>format</em>, <em>kvm</em>, <em>memory</em>, <em>onboot</em>, <em>ostype</em>, <em>sockets</em>, <em>tablet</em>, <em>template</em>, <em>vga</em>, options.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-reboot"></div>
+                <b>reboot</b>
+                <a class="ansibleOptionLink" href="#parameter-reboot" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Allow reboot. If set to <code>yes</code>, the VM exit on reboot.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-revert"></div>
+                <b>revert</b>
+                <a class="ansibleOptionLink" href="#parameter-revert" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Revert a pending change.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-sata"></div>
+                <b>sata</b>
+                <a class="ansibleOptionLink" href="#parameter-sata" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as sata hard disk or CD-ROM. <code>sata=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>sata[n]</code> where 0 ≤ n ≤ 5.</div>
+                                        <div>Values allowed are -  <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-scsi"></div>
+                <b>scsi</b>
+                <a class="ansibleOptionLink" href="#parameter-scsi" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as SCSI hard disk or CD-ROM. <code>scsi=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>sata[n]</code> where 0 ≤ n ≤ 13.</div>
+                                        <div>Values allowed are -  <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-scsihw"></div>
+                <b>scsihw</b>
+                <a class="ansibleOptionLink" href="#parameter-scsihw" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>lsi</li>
+                                                                                                                                                                                            <li>lsi53c810</li>
+                                                                                                                                                                                            <li>virtio-scsi-pci</li>
+                                                                                                                                                                                            <li>virtio-scsi-single</li>
+                                                                                                                                                                                            <li>megasas</li>
+                                                                                                                                                                                            <li>pvscsi</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the SCSI controller model.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-searchdomains"></div>
+                <b>searchdomains</b>
+                <a class="ansibleOptionLink" href="#parameter-searchdomains" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">list</span>
+                     / <span style="color: purple">elements=string</span>                                            </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: Sets DNS search domain(s).</div>
+                                        <div>If unset, PVE host settings are used.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-serial"></div>
+                <b>serial</b>
+                <a class="ansibleOptionLink" href="#parameter-serial" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of serial device to create inside the VM. <code>&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - serial[n](str; required) where 0 ≤ n ≤ 3.</div>
+                                        <div>Values allowed are - <code>(/dev/.+|socket</code>).</div>
+                                        <div>/!\ If you pass through a host serial device, it is no longer possible to migrate such machines - use with special care.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-shares"></div>
+                <b>shares</b>
+                <a class="ansibleOptionLink" href="#parameter-shares" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Rets amount of memory shares for auto-ballooning. (0 - 50000).</div>
+                                        <div>The larger the number is, the more memory this VM gets.</div>
+                                        <div>The number is relative to weights of all other running VMs.</div>
+                                        <div>Using 0 disables auto-ballooning, this means no limit.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-skiplock"></div>
+                <b>skiplock</b>
+                <a class="ansibleOptionLink" href="#parameter-skiplock" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Ignore locks</div>
+                                        <div>Only root is allowed to use this option.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-smbios"></div>
+                <b>smbios</b>
+                <a class="ansibleOptionLink" href="#parameter-smbios" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies SMBIOS type 1 fields.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-snapname"></div>
+                <b>snapname</b>
+                <a class="ansibleOptionLink" href="#parameter-snapname" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The name of the snapshot. Used only with clone.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-sockets"></div>
+                <b>sockets</b>
+                <a class="ansibleOptionLink" href="#parameter-sockets" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets the number of CPU sockets. (1 - N).</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>1</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-sshkeys"></div>
+                <b>sshkeys</b>
+                <a class="ansibleOptionLink" href="#parameter-sshkeys" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 1.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>cloud-init: SSH key to assign to the default user. NOT TESTED with multiple keys but a multi-line value should work.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-startdate"></div>
+                <b>startdate</b>
+                <a class="ansibleOptionLink" href="#parameter-startdate" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets the initial date of the real time clock.</div>
+                                        <div>Valid format for date are <code>&#x27;now&#x27;</code> or <code>&#x27;2016-09-25T16:01:21&#x27;</code> or <code>&#x27;2016-09-25&#x27;</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-startup"></div>
+                <b>startup</b>
+                <a class="ansibleOptionLink" href="#parameter-startup" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Startup and shutdown behavior. <code>[[order=]\d+] [,up=\d+] [,down=\d+]</code>.</div>
+                                        <div>Order is a non-negative number defining the general startup order.</div>
+                                        <div>Shutdown in done with reverse ordering.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-state"></div>
+                <b>state</b>
+                <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>started</li>
+                                                                                                                                                                                            <li>absent</li>
+                                                                                                                                                                                            <li>stopped</li>
+                                                                                                                                                                                            <li>restarted</li>
+                                                                                                                                                                                            <li>current</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Indicates desired state of the instance.</div>
+                                        <div>If <code>current</code>, the current state of the VM will be fetched. You can access it with <code>results.status</code></div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-storage"></div>
+                <b>storage</b>
+                <a class="ansibleOptionLink" href="#parameter-storage" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Target storage for full clone.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-tablet"></div>
+                <b>tablet</b>
+                <a class="ansibleOptionLink" href="#parameter-tablet" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enables/disables the USB tablet device.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>no</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-tags"></div>
+                <b>tags</b>
+                <a class="ansibleOptionLink" href="#parameter-tags" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">list</span>
+                     / <span style="color: purple">elements=string</span>                                            </div>
+                                      <div style="font-style: italic; font-size: small; color: darkgreen">
+                    added in 2.3.0 of community.general
+                  </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>List of tags to apply to the VM instance.</div>
+                                        <div>Tags must start with <code>[a-z0-9_]</code> followed by zero or more of the following characters <code>[a-z0-9_-+.]</code>.</div>
+                                        <div>Tags are only available in Proxmox 6+.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-target"></div>
+                <b>target</b>
+                <a class="ansibleOptionLink" href="#parameter-target" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Target node. Only allowed if the original VM is on shared storage.</div>
+                                        <div>Used only with clone</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-tdf"></div>
+                <b>tdf</b>
+                <a class="ansibleOptionLink" href="#parameter-tdf" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enables/disables time drift fix.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-template"></div>
+                <b>template</b>
+                <a class="ansibleOptionLink" href="#parameter-template" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enables/disables the template.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>no</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-timeout"></div>
+                <b>timeout</b>
+                <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">30</div>
+                                </td>
+                                                            <td>
+                                        <div>Timeout for operations.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-update"></div>
+                <b>update</b>
+                <a class="ansibleOptionLink" href="#parameter-update" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>If <code>yes</code>, the VM will be updated with new value.</div>
+                                        <div>Cause of the operations of the API and security reasons, I have disabled the update of the following parameters</div>
+                                        <div><code>net, virtio, ide, sata, scsi</code>. Per example updating <code>net</code> update the MAC address and <code>virtio</code> create always new disk...</div>
+                                        <div>Update of <code>pool</code> is disabled. It needs an additional API endpoint not covered by this module.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+                <b>validate_certs</b>
+                <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>If <code>no</code>, SSL certificates will not be validated.</div>
+                                        <div>This should only be used on personally controlled sites using self-signed certificates.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-vcpus"></div>
+                <b>vcpus</b>
+                <a class="ansibleOptionLink" href="#parameter-vcpus" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets number of hotplugged vcpus.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-vga"></div>
+                <b>vga</b>
+                <a class="ansibleOptionLink" href="#parameter-vga" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>std</li>
+                                                                                                                                                                                            <li>cirrus</li>
+                                                                                                                                                                                            <li>vmware</li>
+                                                                                                                                                                                            <li>qxl</li>
+                                                                                                                                                                                            <li>serial0</li>
+                                                                                                                                                                                            <li>serial1</li>
+                                                                                                                                                                                            <li>serial2</li>
+                                                                                                                                                                                            <li>serial3</li>
+                                                                                                                                                                                            <li>qxl2</li>
+                                                                                                                                                                                            <li>qxl3</li>
+                                                                                                                                                                                            <li>qxl4</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Select VGA type. If you want to use high resolution modes (&gt;= 1280x1024x16) then you should use option &#x27;std&#x27; or &#x27;vmware&#x27;.</div>
+                                        <div>This option has no default unless <em>proxmox_default_behavior</em> is set to <code>compatiblity</code>; then the default is <code>std</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-virtio"></div>
+                <b>virtio</b>
+                <a class="ansibleOptionLink" href="#parameter-virtio" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as VIRTIO hard disk. <code>virtio=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>virto[n]</code> where 0 ≤ n ≤ 15.</div>
+                                        <div>Values allowed are -  <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-vmid"></div>
+                <b>vmid</b>
+                <a class="ansibleOptionLink" href="#parameter-vmid" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the instance ID.</div>
+                                        <div>If not set the next available ID will be fetched from ProxmoxAPI.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-watchdog"></div>
+                <b>watchdog</b>
+                <a class="ansibleOptionLink" href="#parameter-watchdog" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                                    </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Creates a virtual hardware watchdog device.</div>
+                                                    </td>
+        </tr>
+                    </table>
+<br/></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM with minimal options</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d3f2222390d3d2c20">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM with minimal options and given vmid</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="32405d5d467242535f">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">vmid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM with two network interface options</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81f3eeeef5c1f1e0ec">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">net</span><span class="p">:</span>
+      <span class="nt">net0</span><span class="p">:</span> <span class="s">&#39;virtio,bridge=vmbr1,rate=200&#39;</span>
+      <span class="nt">net1</span><span class="p">:</span> <span class="s">&#39;e1000,bridge=vmbr2&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM with one network interface, three virto hard disk, 4 cores, and 2 vcpus</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f5879a9a81b5859498">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">net</span><span class="p">:</span>
+      <span class="nt">net0</span><span class="p">:</span> <span class="s">&#39;virtio,bridge=vmbr1,rate=200&#39;</span>
+    <span class="nt">virtio</span><span class="p">:</span>
+      <span class="nt">virtio0</span><span class="p">:</span> <span class="s">&#39;VMs_LVM:10&#39;</span>
+      <span class="nt">virtio1</span><span class="p">:</span> <span class="s">&#39;VMs:2,format=qcow2&#39;</span>
+      <span class="nt">virtio2</span><span class="p">:</span> <span class="s">&#39;VMs:5,format=raw&#39;</span>
+    <span class="nt">cores</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+    <span class="nt">vcpus</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="p p-Indicator">&gt;</span>
+    <span class="no">Clone VM with only source VM name.</span>
+    <span class="no">The VM source is spynal.</span>
+    <span class="no">The target VM name is zavala</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6e1c01011a2e1e0f03">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">clone</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zavala</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VMs</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">qcow2</span>
+    <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">500</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="p p-Indicator">&gt;</span>
+    <span class="no">Create linked clone VM with only source VM name.</span>
+    <span class="no">The VM source is spynal.</span>
+    <span class="no">The target VM name is zavala</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6b4a9a9b286b6a7ab">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">clone</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zavala</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VMs</span>
+    <span class="nt">full</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">unspecified</span>
+    <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">500</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Clone VM with source vmid and target newid and raw format</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dcaeb3b3a89cacbdb1">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">clone</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arbitrary_name</span>
+    <span class="nt">vmid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">108</span>
+    <span class="nt">newid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">152</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zavala</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">storage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LVM_STO</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">raw</span>
+    <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">300</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM and lock it for snapshot</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7e0c11110a3e0e1f13">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">lock</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">snapshot</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM and set protection to disable the remove VM and remove disk operations</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="02706d6d764272636f">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">protection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM using cloud-init with a username and password</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2d5f4242596d5d4c40">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">ide</span><span class="p">:</span>
+      <span class="nt">ide2</span><span class="p">:</span> <span class="s">&#39;local:cloudinit,format=qcow2&#39;</span>
+    <span class="nt">ciuser</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mylinuxuser</span>
+    <span class="nt">cipassword</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">supersecret</span>
+    <span class="nt">searchdomains</span><span class="p">:</span> <span class="s">&#39;mydomain.internal&#39;</span>
+    <span class="nt">nameservers</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.1.1.1</span>
+    <span class="nt">net</span><span class="p">:</span>
+      <span class="nt">net0</span><span class="p">:</span> <span class="s">&#39;virtio,bridge=vmbr1,tag=77&#39;</span>
+    <span class="nt">ipconfig</span><span class="p">:</span>
+      <span class="nt">ipconfig0</span><span class="p">:</span> <span class="s">&#39;ip=192.168.1.1/24,gw=192.168.1.1&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new VM using Cloud-Init with an ssh key</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="76041919023606171b">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">ide</span><span class="p">:</span>
+      <span class="nt">ide2</span><span class="p">:</span> <span class="s">&#39;local:cloudinit,format=qcow2&#39;</span>
+    <span class="nt">sshkeys</span><span class="p">:</span> <span class="s">&#39;ssh-ed25519</span><span class="nv"> </span><span class="s">AAAAC3NzaC1lZDI1NTE5AAAAILJkVm98B71lD5XHfihwcYHE9TVpsJmK1vR1JcaU82L+&#39;</span>
+    <span class="nt">searchdomains</span><span class="p">:</span> <span class="s">&#39;mydomain.internal&#39;</span>
+    <span class="nt">nameservers</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;1.1.1.1&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;8.8.8.8&#39;</span>
+    <span class="nt">net</span><span class="p">:</span>
+      <span class="nt">net0</span><span class="p">:</span> <span class="s">&#39;virtio,bridge=vmbr1,tag=77&#39;</span>
+    <span class="nt">ipconfig</span><span class="p">:</span>
+      <span class="nt">ipconfig0</span><span class="p">:</span> <span class="s">&#39;ip=192.168.1.1/24&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Start VM</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="16647979625666777b">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Stop VM</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="780a17170c38081915">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">stopped</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Stop VM with force</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="66140909122616070b">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">stopped</span>
+    <span class="nt">force</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Restart VM</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5b2934342f1b2b3a36">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restarted</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Remove VM</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5a7babaa195a5b4b8">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Get VM current state</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e4c51514a7e4e5f53">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">current</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Update VM configuration</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5a2835352e1a2a3b37">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">cores</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8</span>
+    <span class="nt">memory</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">16384</span>
+    <span class="nt">update</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Delete QEMU parameters</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e1938e8e95a191808c">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">delete</span><span class="p">:</span> <span class="s">&#39;args,template,cpulimit&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Revert a pending change</span>
+  <span class="nt">community.general.proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="04766b6b7044746569">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">revert</span><span class="p">:</span> <span class="s">&#39;template,cpulimit&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id5">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline"></a></h2>
+<p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Key</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                <tr>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-msg"></div>
+                <b>msg</b>
+                <a class="ansibleOptionLink" href="#return-msg" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>always</td>
+            <td>
+                                        <div>A short message</div>
+                                    <br/>
+                                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">VM kropta with vmid = 110 is running</div>
+                                </td>
+        </tr>
+                            <tr>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-status"></div>
+                <b>status</b>
+                <a class="ansibleOptionLink" href="#return-status" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, not clone, not absent, not update</td>
+            <td>
+                                        <div>The current virtual machine status.</div>
+                                    <br/>
+                                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">running</div>
+                                </td>
+        </tr>
+                            <tr>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-vmid"></div>
+                <b>vmid</b>
+                <a class="ansibleOptionLink" href="#return-vmid" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success</td>
+            <td>
+                                        <div>The VM vmid.</div>
+                                    <br/>
+                                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">115</div>
+                                </td>
+        </tr>
+                    </table>
+<br/><br/><div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Abdoul Bah (&#64;helldorado) &lt;bahabdoul at gmail.com&gt;</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="proxmox_group_info_module.html" class="btn btn-neutral float-left" title="community.general.proxmox_group_info – Retrieve information about one or more Proxmox VE groups" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="proxmox_nic_module.html" class="btn btn-neutral float-right" title="community.general.proxmox_nic – Management of a NIC of a Qemu(KVM) VM in a Proxmox VE cluster." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Dec 21, 2021.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

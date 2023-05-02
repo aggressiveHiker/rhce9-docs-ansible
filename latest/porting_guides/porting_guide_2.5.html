@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansible 2.5 Porting Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/porting_guides/porting_guide_2.5.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Ansible 2.5 Porting Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/porting_guides/porting_guide_2.5.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="ansible-2-5-porting-guide">
+<span id="porting-2-5-guide"></span><h1><a class="toc-backref" href="#id1">Ansible 2.5 Porting Guide</a><a class="headerlink" href="#ansible-2-5-porting-guide" title="Permalink to this headline"></a></h1>
+<p>This section discusses the behavioral changes between Ansible 2.4 and Ansible 2.5.</p>
+<p>It is intended to assist in updating your playbooks, plugins and other parts of your Ansible infrastructure so they will work with this version of Ansible.</p>
+<p>We suggest you read this page along with <a class="reference external" href="https://github.com/ansible/ansible/blob/stable-2.5/changelogs/CHANGELOG-v2.5.rst">Ansible Changelog for 2.5</a> to understand what updates you may need to make.</p>
+<p>This document is part of a collection on porting. The complete list of porting guides can be found at <a class="reference internal" href="porting_guides.html#porting-guides"><span class="std std-ref">porting guides</span></a>.</p>
+<div class="contents topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ansible-2-5-porting-guide" id="id1">Ansible 2.5 Porting Guide</a></p>
+<ul>
+<li><p><a class="reference internal" href="#playbook" id="id2">Playbook</a></p>
+<ul>
+<li><p><a class="reference internal" href="#dynamic-includes-and-attribute-inheritance" id="id3">Dynamic includes and attribute inheritance</a></p></li>
+<li><p><a class="reference internal" href="#fixed-handling-of-keywords-and-inline-variables" id="id4">Fixed handling of keywords and inline variables</a></p></li>
+<li><p><a class="reference internal" href="#migrating-from-with-x-to-loop" id="id5">Migrating from with_X to loop</a></p></li>
+<li><p><a class="reference internal" href="#with-list" id="id6">with_list</a></p></li>
+<li><p><a class="reference internal" href="#with-items" id="id7">with_items</a></p></li>
+<li><p><a class="reference internal" href="#with-indexed-items" id="id8">with_indexed_items</a></p></li>
+<li><p><a class="reference internal" href="#with-flattened" id="id9">with_flattened</a></p></li>
+<li><p><a class="reference internal" href="#with-together" id="id10">with_together</a></p></li>
+<li><p><a class="reference internal" href="#with-dict" id="id11">with_dict</a></p></li>
+<li><p><a class="reference internal" href="#with-sequence" id="id12">with_sequence</a></p></li>
+<li><p><a class="reference internal" href="#with-subelements" id="id13">with_subelements</a></p></li>
+<li><p><a class="reference internal" href="#with-nested-with-cartesian" id="id14">with_nested/with_cartesian</a></p></li>
+<li><p><a class="reference internal" href="#with-random-choice" id="id15">with_random_choice</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#deprecated" id="id16">Deprecated</a></p>
+<ul>
+<li><p><a class="reference internal" href="#jinja-tests-used-as-filters" id="id17">Jinja tests used as filters</a></p></li>
+<li><p><a class="reference internal" href="#ansible-fact-namespacing" id="id18">Ansible fact namespacing</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#modules" id="id19">Modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#github-release" id="id20">github_release</a></p></li>
+<li><p><a class="reference internal" href="#modules-removed" id="id21">Modules removed</a></p></li>
+<li><p><a class="reference internal" href="#deprecation-notices" id="id22">Deprecation notices</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id23">Noteworthy module changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#plugins" id="id24">Plugins</a></p>
+<ul>
+<li><p><a class="reference internal" href="#inventory" id="id25">Inventory</a></p></li>
+<li><p><a class="reference internal" href="#shell" id="id26">Shell</a></p></li>
+<li><p><a class="reference internal" href="#filter" id="id27">Filter</a></p></li>
+<li><p><a class="reference internal" href="#lookup" id="id28">Lookup</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id29">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#network" id="id30">Network</a></p>
+<ul>
+<li><p><a class="reference internal" href="#expanding-documentation" id="id31">Expanding documentation</a></p></li>
+<li><p><a class="reference internal" href="#top-level-connection-arguments-will-be-removed-in-2-9" id="id32">Top-level connection arguments will be removed in 2.9</a></p></li>
+<li><p><a class="reference internal" href="#adding-persistent-connection-types-network-cli-and-netconf" id="id33">Adding persistent connection types <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> and <code class="docutils literal notranslate"><span class="pre">netconf</span></code></a></p></li>
+<li><p><a class="reference internal" href="#developers-shared-module-utilities-moved" id="id34">Developers: Shared Module Utilities Moved</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="playbook">
+<h2><a class="toc-backref" href="#id2">Playbook</a><a class="headerlink" href="#playbook" title="Permalink to this headline"></a></h2>
+<div class="section" id="dynamic-includes-and-attribute-inheritance">
+<h3><a class="toc-backref" href="#id3">Dynamic includes and attribute inheritance</a><a class="headerlink" href="#dynamic-includes-and-attribute-inheritance" title="Permalink to this headline"></a></h3>
+<p>In Ansible version 2.4, the concept of dynamic includes (<code class="docutils literal notranslate"><span class="pre">include_tasks</span></code>), as opposed to static imports (<code class="docutils literal notranslate"><span class="pre">import_tasks</span></code>), was introduced to clearly define the differences in how <code class="docutils literal notranslate"><span class="pre">include</span></code> works between dynamic and static includes.</p>
+<p>All attributes applied to a dynamic <code class="docutils literal notranslate"><span class="pre">include_*</span></code> would only apply to the include itself, while attributes applied to a
+static <code class="docutils literal notranslate"><span class="pre">import_*</span></code> would be inherited by the tasks within.</p>
+<p>This separation was only partially implemented in Ansible version 2.4. As of Ansible version 2.5, this work is complete and the separation now behaves as designed; attributes applied to an <code class="docutils literal notranslate"><span class="pre">include_*</span></code> task will not be inherited by the tasks within.</p>
+<p>To achieve an outcome similar to how Ansible worked prior to version 2.5, playbooks should use an explicit application of the attribute on the needed tasks, or use blocks to apply the attribute to many tasks. Another option is to use a static <code class="docutils literal notranslate"><span class="pre">import_*</span></code> when possible instead of a dynamic task.</p>
+<p><strong>OLD</strong> In Ansible 2.4:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">include_tasks</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">ansible_distribution</span><span class="nv"> </span><span class="s">}}.yml&quot;</span>
+  <span class="nt">tags</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">distro_include</span>
+</pre></div>
+</div>
+<p>Included file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">block</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;In</span><span class="nv"> </span><span class="s">included</span><span class="nv"> </span><span class="s">file&quot;</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">apt</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nginx</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+</pre></div>
+</div>
+<p><strong>NEW</strong> In Ansible 2.5:</p>
+<p>Including task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">include_tasks</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">ansible_distribution</span><span class="nv"> </span><span class="s">}}.yml&quot;</span>
+  <span class="nt">tags</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">distro_include</span>
+</pre></div>
+</div>
+<p>Included file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">block</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;In</span><span class="nv"> </span><span class="s">included</span><span class="nv"> </span><span class="s">file&quot;</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">apt</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nginx</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+  <span class="nt">tags</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">distro_include</span>
+</pre></div>
+</div>
+<p>The relevant change in those examples is, that in Ansible 2.5, the included file defines the tag <code class="docutils literal notranslate"><span class="pre">distro_include</span></code> again. The tag is not inherited automatically.</p>
+</div>
+<div class="section" id="fixed-handling-of-keywords-and-inline-variables">
+<h3><a class="toc-backref" href="#id4">Fixed handling of keywords and inline variables</a><a class="headerlink" href="#fixed-handling-of-keywords-and-inline-variables" title="Permalink to this headline"></a></h3>
+<p>We made several fixes to how we handle keywords and ‘inline variables’, to avoid conflating the two. Unfortunately these changes mean you must specify whether <cite>name</cite> is a keyword or a variable when calling roles. If you have playbooks that look like this:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span> <span class="nv">myrole</span><span class="p p-Indicator">,</span><span class="nt"> name</span><span class="p">:</span> <span class="nv">Justin</span><span class="p p-Indicator">,</span><span class="nt"> othervar</span><span class="p">:</span> <span class="nv">othervalue</span><span class="p p-Indicator">,</span><span class="nt"> become</span><span class="p">:</span> <span class="nv">True</span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>You will run into errors because Ansible reads name in this context as a keyword. Beginning in 2.5, if you want to use a variable name that is also a keyword, you must explicitly declare it as a variable for the role:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span> <span class="nv">myrole</span><span class="p p-Indicator">,</span><span class="nt"> vars</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span> <span class="nv">Justin</span><span class="p p-Indicator">,</span><span class="nt"> othervar</span><span class="p">:</span> <span class="nv">othervalue</span><span class="p p-Indicator">},</span><span class="nt"> become</span><span class="p">:</span> <span class="nv">True</span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>For a full list of keywords see <a class="reference internal" href="../reference_appendices/playbooks_keywords.html#playbook-keywords"><span class="std std-ref">Playbook Keywords</span></a>.</p>
+</div>
+<div class="section" id="migrating-from-with-x-to-loop">
+<h3><a class="toc-backref" href="#id5">Migrating from with_X to loop</a><a class="headerlink" href="#migrating-from-with-x-to-loop" title="Permalink to this headline"></a></h3>
+<p>In most cases, loops work best with the <code class="docutils literal notranslate"><span class="pre">loop</span></code> keyword instead of <code class="docutils literal notranslate"><span class="pre">with_X</span></code> style loops. The <code class="docutils literal notranslate"><span class="pre">loop</span></code> syntax is usually best expressed using filters instead of more complex use of <code class="docutils literal notranslate"><span class="pre">query</span></code> or <code class="docutils literal notranslate"><span class="pre">lookup</span></code>.</p>
+<p>These examples show how to convert many common <code class="docutils literal notranslate"><span class="pre">with_</span></code> style loops to <code class="docutils literal notranslate"><span class="pre">loop</span></code> and filters.</p>
+</div>
+<div class="section" id="with-list">
+<h3><a class="toc-backref" href="#id6">with_list</a><a class="headerlink" href="#with-list" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_list</span></code> is directly replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code>.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_list</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_list</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">one</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">two</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_list -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">one</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">two</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-items">
+<h3><a class="toc-backref" href="#id7">with_items</a><a class="headerlink" href="#with-items" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_items</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_items</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_items</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_items -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span><span class="o">|</span><span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-indexed-items">
+<h3><a class="toc-backref" href="#id8">with_indexed_items</a><a class="headerlink" href="#with-indexed-items" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_indexed_items</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code>, the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> filter and <code class="docutils literal notranslate"><span class="pre">loop_control.index_var</span></code>.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_indexed_items</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_indexed_items</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_indexed_items -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">index</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span><span class="o">|</span><span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">index_var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">index</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-flattened">
+<h3><a class="toc-backref" href="#id9">with_flattened</a><a class="headerlink" href="#with-flattened" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_flattened</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_flattened</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_flattened</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_flattened -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span><span class="o">|</span><span class="nf">flatten</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-together">
+<h3><a class="toc-backref" href="#id10">with_together</a><a class="headerlink" href="#with-together" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_together</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">zip</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_together</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_together</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_two</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_together -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span><span class="o">|</span><span class="nf">zip</span><span class="o">(</span><span class="nv">list_two</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>Another example with complex data</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_together -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.2</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">data</span><span class="o">[</span><span class="m">0</span><span class="o">]|</span><span class="nf">zip</span><span class="o">(*</span><span class="nv">data</span><span class="o">[</span><span class="m">1</span><span class="o">:])|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">data</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;a&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;b&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;c&#39;</span><span class="p p-Indicator">]</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;d&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;e&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;f&#39;</span><span class="p p-Indicator">]</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;g&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;h&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;i&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-dict">
+<h3><a class="toc-backref" href="#id11">with_dict</a><a class="headerlink" href="#with-dict" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_dict</span></code> can be substituted by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and either the <code class="docutils literal notranslate"><span class="pre">dictsort</span></code> or <code class="docutils literal notranslate"><span class="pre">dict2items</span></code> filters.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_dict</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.key</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.value</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_dict</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dictionary</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_dict -&gt; loop (option 1)</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.key</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.value</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dictionary</span><span class="o">|</span><span class="nf">dict2items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_dict -&gt; loop (option 2)</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dictionary</span><span class="o">|</span><span class="nf">dictsort</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-sequence">
+<h3><a class="toc-backref" href="#id12">with_sequence</a><a class="headerlink" href="#with-sequence" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_sequence</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">range</span></code> function, and potentially the <code class="docutils literal notranslate"><span class="pre">format</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_sequence</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_sequence</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start=0 end=4 stride=2 format=testuser%02x</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_sequence -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;testuser%02x&#39;</span> <span class="o">|</span> <span class="nf">format</span><span class="o">(</span><span class="nv">item</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="c1"># range is exclusive of the end point</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">range</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">4</span> <span class="o">+</span> <span class="m">1</span><span class="o">,</span> <span class="m">2</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-subelements">
+<h3><a class="toc-backref" href="#id13">with_subelements</a><a class="headerlink" href="#with-subelements" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_subelements</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">subelements</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_subelements</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0.name</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_subelements</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">users</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mysql.hosts</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_subelements -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0.name</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">users</span><span class="o">|</span><span class="nf">subelements</span><span class="o">(</span><span class="s1">&#39;mysql.hosts&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-nested-with-cartesian">
+<h3><a class="toc-backref" href="#id14">with_nested/with_cartesian</a><a class="headerlink" href="#with-nested-with-cartesian" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_nested</span></code> and <code class="docutils literal notranslate"><span class="pre">with_cartesian</span></code> are replaced by loop and the <code class="docutils literal notranslate"><span class="pre">product</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_nested</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_nested</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_two</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_nested -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span><span class="o">|</span><span class="nf">product</span><span class="o">(</span><span class="nv">list_two</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-random-choice">
+<h3><a class="toc-backref" href="#id15">with_random_choice</a><a class="headerlink" href="#with-random-choice" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_random_choice</span></code> is replaced by just use of the <code class="docutils literal notranslate"><span class="pre">random</span></code> filter, without need of <code class="docutils literal notranslate"><span class="pre">loop</span></code>.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_random_choice</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_random_choice</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_random_choice -&gt; loop (No loop is needed here)</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_list</span><span class="o">|</span><span class="nf">random</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">tags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">random</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="deprecated">
+<h2><a class="toc-backref" href="#id16">Deprecated</a><a class="headerlink" href="#deprecated" title="Permalink to this headline"></a></h2>
+<div class="section" id="jinja-tests-used-as-filters">
+<h3><a class="toc-backref" href="#id17">Jinja tests used as filters</a><a class="headerlink" href="#jinja-tests-used-as-filters" title="Permalink to this headline"></a></h3>
+<p>Using Ansible-provided jinja tests as filters will be removed in Ansible 2.9.</p>
+<p>Prior to Ansible 2.5, jinja tests included within Ansible were most often used as filters. The large difference in use is that filters are referenced as <code class="docutils literal notranslate"><span class="pre">variable</span> <span class="pre">|</span> <span class="pre">filter_name</span></code> while jinja tests are referenced as <code class="docutils literal notranslate"><span class="pre">variable</span> <span class="pre">is</span> <span class="pre">test_name</span></code>.</p>
+<p>Jinja tests are used for comparisons, while filters are used for data manipulation and have different applications in jinja. This change is to help differentiate the concepts for a better understanding of jinja, and where each can be appropriately used.</p>
+<p>As of Ansible 2.5, using an Ansible provided jinja test with filter syntax, will display a deprecation error.</p>
+<p><strong>OLD</strong> In Ansible 2.4 (and earlier) the use of an Ansible included jinja test would likely look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">when</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result | failed</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">not result | success</span>
+</pre></div>
+</div>
+<p><strong>NEW</strong> In Ansible 2.5 it should be changed to look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">when</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">result is failed</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">results is not successful</span>
+</pre></div>
+</div>
+<p>In addition to the deprecation warnings, many new tests have been introduced that are aliases of the old tests. These new tests make more sense grammatically with the jinja test syntax, such as the new <code class="docutils literal notranslate"><span class="pre">successful</span></code> test which aliases <code class="docutils literal notranslate"><span class="pre">success</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is successful</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../user_guide/playbooks_tests.html#playbooks-tests"><span class="std std-ref">Tests</span></a> for more information.</p>
+<p>Additionally, a script was created to assist in the conversion for tests using filter syntax to proper jinja test syntax. This script has been used to convert all of the Ansible integration tests to the correct format. There are a few limitations documented, and all changes made by this script should be evaluated for correctness before executing the modified playbooks. The script can be found at <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/hacking/fix_test_syntax.py">https://github.com/ansible/ansible/blob/devel/hacking/fix_test_syntax.py</a>.</p>
+</div>
+<div class="section" id="ansible-fact-namespacing">
+<h3><a class="toc-backref" href="#id18">Ansible fact namespacing</a><a class="headerlink" href="#ansible-fact-namespacing" title="Permalink to this headline"></a></h3>
+<p>Ansible facts, which have historically been written to names like <code class="docutils literal notranslate"><span class="pre">ansible_*</span></code>
+in the main facts namespace, have been placed in their own new namespace,
+<code class="docutils literal notranslate"><span class="pre">ansible_facts.*</span></code> For example, the fact <code class="docutils literal notranslate"><span class="pre">ansible_distribution</span></code> is now best
+queried through the variable structure <code class="docutils literal notranslate"><span class="pre">ansible_facts.distribution</span></code>.</p>
+<p>A new configuration variable, <code class="docutils literal notranslate"><span class="pre">inject_facts_as_vars</span></code>, has been added to
+ansible.cfg. Its default setting, ‘True’, keeps the 2.4 behavior of facts
+variables being set in the old <code class="docutils literal notranslate"><span class="pre">ansible_*</span></code> locations (while also writing them
+to the new namespace). This variable is expected to be set to ‘False’ in a
+future release. When <code class="docutils literal notranslate"><span class="pre">inject_facts_as_vars</span></code> is set to False, you must
+refer to ansible_facts through the new <code class="docutils literal notranslate"><span class="pre">ansible_facts.*</span></code> namespace.</p>
+</div>
+</div>
+<div class="section" id="modules">
+<h2><a class="toc-backref" href="#id19">Modules</a><a class="headerlink" href="#modules" title="Permalink to this headline"></a></h2>
+<p>Major changes in popular modules are detailed here.</p>
+<div class="section" id="github-release">
+<h3><a class="toc-backref" href="#id20">github_release</a><a class="headerlink" href="#github-release" title="Permalink to this headline"></a></h3>
+<p>In Ansible versions 2.4 and older, after creating a GitHub release using the <code class="docutils literal notranslate"><span class="pre">create_release</span></code> state, the <code class="docutils literal notranslate"><span class="pre">github_release</span></code> module reported state as <code class="docutils literal notranslate"><span class="pre">skipped</span></code>.
+In Ansible version 2.5 and later, after creating a GitHub release using the <code class="docutils literal notranslate"><span class="pre">create_release</span></code> state, the <code class="docutils literal notranslate"><span class="pre">github_release</span></code> module now reports state as <code class="docutils literal notranslate"><span class="pre">changed</span></code>.</p>
+</div>
+<div class="section" id="modules-removed">
+<h3><a class="toc-backref" href="#id21">Modules removed</a><a class="headerlink" href="#modules-removed" title="Permalink to this headline"></a></h3>
+<p>The following modules no longer exist:</p>
+<ul class="simple">
+<li><p>nxos_mtu use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nxos_system_module.html#nxos-system-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nxos_system</span></a>’s <code class="docutils literal notranslate"><span class="pre">system_mtu</span></code> option or <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nxos_interface_module.html#nxos-interface-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nxos_interface</span></a> instead</p></li>
+<li><p>cl_interface_policy use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nclu_module.html#nclu-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nclu</span></a> instead</p></li>
+<li><p>cl_bridge use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nclu_module.html#nclu-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nclu</span></a> instead</p></li>
+<li><p>cl_img_install use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nclu_module.html#nclu-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nclu</span></a> instead</p></li>
+<li><p>cl_ports use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nclu_module.html#nclu-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nclu</span></a> instead</p></li>
+<li><p>cl_license use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nclu_module.html#nclu-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nclu</span></a> instead</p></li>
+<li><p>cl_interface use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nclu_module.html#nclu-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nclu</span></a> instead</p></li>
+<li><p>cl_bond use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nclu_module.html#nclu-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nclu</span></a> instead</p></li>
+<li><p>ec2_vpc use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_vpc_net_module.html#ec2-vpc-net-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_vpc_net</span></a> along with supporting modules <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_vpc_igw_module.html#ec2-vpc-igw-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_vpc_igw</span></a>, <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_vpc_route_table_module.html#ec2-vpc-route-table-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_vpc_route_table</span></a>, <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_vpc_subnet_module.html#ec2-vpc-subnet-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_vpc_subnet</span></a>, <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_vpc_dhcp_option_module.html#ec2-vpc-dhcp-option-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_vpc_dhcp_option</span></a>, <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_vpc_nat_gateway_module.html#ec2-vpc-nat-gateway-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_vpc_nat_gateway</span></a>, <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_vpc_nacl_module.html#ec2-vpc-nacl-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_vpc_nacl</span></a> instead.</p></li>
+<li><p>ec2_ami_search use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/ec2_ami_facts_module.html#ec2-ami-facts-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">ec2_ami_facts</span></a> instead</p></li>
+<li><p>docker use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/docker_container_module.html#docker-container-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">docker_container</span></a> and <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/docker_image_module.html#docker-image-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">docker_image</span></a> instead</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These modules may no longer have documentation in the current release.  Please see the
+<a class="reference external" href="https://docs.ansible.com/ansible/2.4/list_of_all_modules.html">Ansible 2.4 module documentation</a> if you need
+to know how they worked for porting your playbooks.</p>
+</div>
+</div>
+<div class="section" id="deprecation-notices">
+<h3><a class="toc-backref" href="#id22">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Permalink to this headline"></a></h3>
+<p>The following modules will be removed in Ansible 2.9. Please update your playbooks accordingly.</p>
+<ul class="simple">
+<li><p>Apstra’s <code class="docutils literal notranslate"><span class="pre">aos_*</span></code> modules are deprecated as they do not work with AOS 2.1 or higher. See new modules at <a class="reference external" href="https://github.com/apstra">https://github.com/apstra</a>.</p></li>
+<li><p>nxos_ip_interface use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nxos_l3_interface_module.html#nxos-l3-interface-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nxos_l3_interface</span></a> instead.</p></li>
+<li><p>nxos_portchannel use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nxos_linkagg_module.html#nxos-linkagg-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nxos_linkagg</span></a> instead.</p></li>
+<li><p>nxos_switchport use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/nxos_l2_interface_module.html#nxos-l2-interface-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">nxos_l2_interface</span></a> instead.</p></li>
+<li><p>panos_security_policy use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/panos_security_rule_module.html#panos-security-rule-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">panos_security_rule</span></a> instead.</p></li>
+<li><p>panos_nat_policy use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/panos_nat_rule_module.html#panos-nat-rule-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">panos_nat_rule</span></a> instead.</p></li>
+<li><p>vsphere_guest use <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/vmware_guest_module.html#vmware-guest-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">vmware_guest</span></a> instead.</p></li>
+</ul>
+</div>
+<div class="section" id="noteworthy-module-changes">
+<h3><a class="toc-backref" href="#id23">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>The <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/stat_module.html#stat-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">stat</span></a> and <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/win_stat_module.html#win-stat-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">win_stat</span></a> modules have changed the default of the option <code class="docutils literal notranslate"><span class="pre">get_md5</span></code> from <code class="docutils literal notranslate"><span class="pre">true</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+</ul>
+<p>This option will be removed starting with Ansible version 2.9. The options <code class="docutils literal notranslate"><span class="pre">get_checksum:</span> <span class="pre">True</span></code>
+and <code class="docutils literal notranslate"><span class="pre">checksum_algorithm:</span> <span class="pre">md5</span></code> can still be used if an MD5 checksum is
+desired.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">osx_say</span></code> module was renamed into <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/say_module.html#say-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">say</span></a>.</p></li>
+<li><p>Several modules which could deal with symlinks had the default value of their <code class="docutils literal notranslate"><span class="pre">follow</span></code> option
+changed as part of a feature to <a class="reference external" href="https://github.com/ansible/proposals/issues/69">standardize the behavior of follow</a>:</p>
+<ul>
+<li><p>The <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/file_module.html#file-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">file module</span></a> changed from <code class="docutils literal notranslate"><span class="pre">follow=False</span></code> to <code class="docutils literal notranslate"><span class="pre">follow=True</span></code> because
+its purpose is to modify the attributes of a file and most systems do not allow attributes to be
+applied to symlinks, only to real files.</p></li>
+<li><p>The <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/replace_module.html#replace-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">replace module</span></a> had its <code class="docutils literal notranslate"><span class="pre">follow</span></code> parameter removed because it
+inherently modifies the content of an existing file so it makes no sense to operate on the link
+itself.</p></li>
+<li><p>The <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/blockinfile_module.html#blockinfile-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">blockinfile module</span></a> had its <code class="docutils literal notranslate"><span class="pre">follow</span></code> parameter removed because
+it inherently modifies the content of an existing file so it makes no sense to operate on the
+link itself.</p></li>
+<li><p>In Ansible-2.5.3, the <a class="reference external" href="https://docs.ansible.com/ansible/2.5/modules/template_module.html#template-module" title="(in Ansible Documentation v2.5)"><span class="xref std std-ref">template module</span></a> became more strict about its
+<code class="docutils literal notranslate"><span class="pre">src</span></code> file being proper utf-8.  Previously, non-utf8 contents in a template module src file
+would result in a mangled output file (the non-utf8 characters would be replaced with a unicode
+replacement character).  Now, on Python2, the module will error out with the message, “Template
+source files must be utf-8 encoded”.  On Python3, the module will first attempt to pass the
+non-utf8 characters through verbatim and fail if that does not succeed.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="plugins">
+<h2><a class="toc-backref" href="#id24">Plugins</a><a class="headerlink" href="#plugins" title="Permalink to this headline"></a></h2>
+<p>As a developer, you can now use ‘doc fragments’ for common configuration options on plugin types that support the new plugin configuration system.</p>
+<div class="section" id="inventory">
+<h3><a class="toc-backref" href="#id25">Inventory</a><a class="headerlink" href="#inventory" title="Permalink to this headline"></a></h3>
+<p>Inventory plugins have been fine tuned, and we have started to add some common features:</p>
+<ul class="simple">
+<li><p>The ability to use a cache plugin to avoid costly API/DB queries is disabled by default.
+If using inventory scripts, some may already support a cache, but it is outside of Ansible’s knowledge and control.
+Moving to the internal cache will allow you to use Ansible’s existing cache refresh/invalidation mechanisms.</p></li>
+<li><p>A new ‘auto’ plugin, enabled by default, that can automatically detect the correct plugin to use IF that plugin is using our ‘common YAML configuration format’.
+The previous host_list, script, yaml and ini plugins still work as they did, the auto plugin is now the last one we attempt to use.
+If you had customized the enabled plugins you should revise the setting to include the new auto plugin.</p></li>
+</ul>
+</div>
+<div class="section" id="shell">
+<h3><a class="toc-backref" href="#id26">Shell</a><a class="headerlink" href="#shell" title="Permalink to this headline"></a></h3>
+<p>Shell plugins have been migrated to the new plugin configuration framework. It is now possible to customize more settings, and settings which were previously ‘global’ can now also be overridden using host specific variables.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">system_temps</span></code> is a new setting that allows you to control what Ansible will consider a ‘system temporary dir’. This is used when escalating privileges for a non-administrative user. Previously this was hardcoded to ‘/tmp’, which some systems cannot use for privilege escalation. This setting now defaults to <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">'/var/tmp',</span> <span class="pre">'/tmp']</span></code>.</p>
+<p>Another new setting is <code class="docutils literal notranslate"><span class="pre">admin_users</span></code> which allows you to specify a list of users to be considered ‘administrators’. Previously this was hardcoded to <code class="docutils literal notranslate"><span class="pre">root</span></code>. It now it defaults to <code class="docutils literal notranslate"><span class="pre">[root,</span> <span class="pre">toor,</span> <span class="pre">admin]</span></code>.  This information is used when choosing between your <code class="docutils literal notranslate"><span class="pre">remote_temp</span></code> and <code class="docutils literal notranslate"><span class="pre">system_temps</span></code> directory.</p>
+<p>For a full list, check the shell plugin you are using, the default shell plugin is <code class="docutils literal notranslate"><span class="pre">sh</span></code>.</p>
+<p>Those that had to work around the global configuration limitations can now migrate to a per host/group settings,
+but also note that the new defaults might conflict with existing usage if the assumptions don’t correlate to your environment.</p>
+</div>
+<div class="section" id="filter">
+<h3><a class="toc-backref" href="#id27">Filter</a><a class="headerlink" href="#filter" title="Permalink to this headline"></a></h3>
+<p>The lookup plugin API now throws an error if a non-iterable value is returned from a plugin. Previously, numbers or
+other non-iterable types returned by a plugin were accepted without error or warning. This change was made because plugins should always return a list. Please note that plugins that return strings and other non-list iterable values will not throw an error, but may cause unpredictable behavior. If you have a custom lookup plugin that does not return a list, you should modify it to wrap the return values in a list.</p>
+</div>
+<div class="section" id="lookup">
+<h3><a class="toc-backref" href="#id28">Lookup</a><a class="headerlink" href="#lookup" title="Permalink to this headline"></a></h3>
+<p>A new option was added to lookup plugins globally named <code class="docutils literal notranslate"><span class="pre">error</span></code> which allows you to control how errors produced by the lookup are handled, before this option they were always fatal. Valid values for this option are <code class="docutils literal notranslate"><span class="pre">warn</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code> and <code class="docutils literal notranslate"><span class="pre">strict</span></code>. See the <a class="reference internal" href="../plugins/lookup.html#lookup-plugins"><span class="std std-ref">lookup</span></a> page for more details.</p>
+</div>
+</div>
+<div class="section" id="porting-custom-scripts">
+<h2><a class="toc-backref" href="#id29">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Permalink to this headline"></a></h2>
+<p>No notable changes.</p>
+</div>
+<div class="section" id="network">
+<h2><a class="toc-backref" href="#id30">Network</a><a class="headerlink" href="#network" title="Permalink to this headline"></a></h2>
+<div class="section" id="expanding-documentation">
+<h3><a class="toc-backref" href="#id31">Expanding documentation</a><a class="headerlink" href="#expanding-documentation" title="Permalink to this headline"></a></h3>
+<p>We’re expanding the network documentation. There’s new content and a <a class="reference internal" href="../network/index.html#network-guide"><span class="std std-ref">new Ansible Network landing page</span></a>. We will continue to build the network-related documentation moving forward.</p>
+</div>
+<div class="section" id="top-level-connection-arguments-will-be-removed-in-2-9">
+<h3><a class="toc-backref" href="#id32">Top-level connection arguments will be removed in 2.9</a><a class="headerlink" href="#top-level-connection-arguments-will-be-removed-in-2-9" title="Permalink to this headline"></a></h3>
+<p>Top-level connection arguments like <code class="docutils literal notranslate"><span class="pre">username</span></code>, <code class="docutils literal notranslate"><span class="pre">host</span></code>, and <code class="docutils literal notranslate"><span class="pre">password</span></code> are deprecated and will be removed in version 2.9.</p>
+<p><strong>OLD</strong> In Ansible &lt; 2.4</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">example of using top-level options for connection properties</span>
+  <span class="nt">ios_command</span><span class="p">:</span>
+    <span class="nt">commands</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">show version</span>
+    <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cisco</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cisco</span>
+    <span class="nt">authorize</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">auth_pass</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cisco</span>
+</pre></div>
+</div>
+<p>The deprecation warnings reflect this schedule. The task above, run in Ansible 2.5, will result in:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">[</span><span class="nv">DEPRECATION WARNING</span><span class="p p-Indicator">]:</span> <span class="l l-Scalar l-Scalar-Plain">Param &#39;username&#39; is deprecated. See the module docs for more information. This feature will be removed in version</span>
+<span class="l l-Scalar l-Scalar-Plain">2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.</span>
+<span class="p p-Indicator">[</span><span class="nv">DEPRECATION WARNING</span><span class="p p-Indicator">]:</span> <span class="l l-Scalar l-Scalar-Plain">Param &#39;password&#39; is deprecated. See the module docs for more information. This feature will be removed in version</span>
+<span class="l l-Scalar l-Scalar-Plain">2.9. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.</span>
+<span class="p p-Indicator">[</span><span class="nv">DEPRECATION WARNING</span><span class="p p-Indicator">]:</span> <span class="l l-Scalar l-Scalar-Plain">Param &#39;host&#39; is deprecated. See the module docs for more information. This feature will be removed in version 2.9.</span>
+<span class="l l-Scalar l-Scalar-Plain">Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.</span>
+</pre></div>
+</div>
+<p>We recommend using the new connection types <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> and <code class="docutils literal notranslate"><span class="pre">netconf</span></code> (see below), using standard Ansible connection properties, and setting those properties in inventory by group. As you update your playbooks and inventory files, you can easily make the change to <code class="docutils literal notranslate"><span class="pre">become</span></code> for privilege escalation (on platforms that support it). For more information, see the <a class="reference internal" href="../user_guide/become.html#become-network"><span class="std std-ref">using become with network modules</span></a> guide and the <a class="reference internal" href="../network/user_guide/platform_index.html#platform-options"><span class="std std-ref">platform documentation</span></a>.</p>
+</div>
+<div class="section" id="adding-persistent-connection-types-network-cli-and-netconf">
+<h3><a class="toc-backref" href="#id33">Adding persistent connection types <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> and <code class="docutils literal notranslate"><span class="pre">netconf</span></code></a><a class="headerlink" href="#adding-persistent-connection-types-network-cli-and-netconf" title="Permalink to this headline"></a></h3>
+<p>Ansible 2.5 introduces two top-level persistent connection types, <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> and <code class="docutils literal notranslate"><span class="pre">netconf</span></code>. With <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">local</span></code>, each task passed the connection parameters, which had to be stored in your playbooks. With <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> and <code class="docutils literal notranslate"><span class="pre">netconf</span></code> the playbook passes the connection parameters once, so you can pass them at the command line if you prefer. We recommend you use <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> and <code class="docutils literal notranslate"><span class="pre">netconf</span></code> whenever possible.
+Note that eAPI and NX-API still require <code class="docutils literal notranslate"><span class="pre">local</span></code> connections with <code class="docutils literal notranslate"><span class="pre">provider</span></code> dictionaries. See the <a class="reference internal" href="../network/user_guide/platform_index.html#platform-options"><span class="std std-ref">platform documentation</span></a> for more information. Unless you need a <code class="docutils literal notranslate"><span class="pre">local</span></code> connection, update your playbooks to use <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> or <code class="docutils literal notranslate"><span class="pre">netconf</span></code> and to specify your connection variables with standard Ansible connection variables:</p>
+<p><strong>OLD</strong> In Ansible 2.4</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">cli</span><span class="p">:</span>
+       <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}&quot;</span>
+       <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">operator</span>
+       <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+       <span class="nt">transport</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cli</span>
+
+<span class="nt">tasks</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">nxos_config</span><span class="p">:</span>
+    <span class="nt">src</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config.j2</span>
+    <span class="nt">provider</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">cli</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+</pre></div>
+</div>
+<p><strong>NEW</strong> In Ansible 2.5</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[nxos:vars]</span>
+<span class="na">ansible_connection</span><span class="o">=</span><span class="s">network_cli</span>
+<span class="na">ansible_network_os</span><span class="o">=</span><span class="s">nxos</span>
+<span class="na">ansible_user</span><span class="o">=</span><span class="s">operator</span>
+<span class="na">ansible_password</span><span class="o">=</span><span class="s">secret</span>
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">nxos_config</span><span class="p">:</span>
+    <span class="nt">src</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config.j2</span>
+</pre></div>
+</div>
+<p>Using a provider dictionary with either <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> or <code class="docutils literal notranslate"><span class="pre">netconf</span></code> will result in a warning.</p>
+</div>
+<div class="section" id="developers-shared-module-utilities-moved">
+<h3><a class="toc-backref" href="#id34">Developers: Shared Module Utilities Moved</a><a class="headerlink" href="#developers-shared-module-utilities-moved" title="Permalink to this headline"></a></h3>
+<p>Beginning with Ansible 2.5, shared module utilities for network modules moved to <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.network</span></code>.</p>
+<ul class="simple">
+<li><p>Platform-independent utilities are found in <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.network.common</span></code></p></li>
+<li><p>Platform-specific utilities are found in <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.network.{{</span> <span class="pre">platform</span> <span class="pre">}}</span></code></p></li>
+</ul>
+<p>If your module uses shared module utilities, you must update all references. For example, change:</p>
+<p><strong>OLD</strong> In Ansible 2.4</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.vyos</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">load_config</span>
+</pre></div>
+</div>
+<p><strong>NEW</strong> In Ansible 2.5</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.network.vyos.vyos</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">load_config</span>
+</pre></div>
+</div>
+<p>See the module utilities developer guide see <a class="reference internal" href="../dev_guide/developing_module_utilities.html#developing-module-utilities"><span class="std std-ref">Using and developing module utilities</span></a> for more information.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 06, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

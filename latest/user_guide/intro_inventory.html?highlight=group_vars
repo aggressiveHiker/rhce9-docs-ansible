@@ -1,0 +1,1198 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How to build your inventory &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'2.9',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Working with dynamic inventory" href="intro_dynamic_inventory.html" />
+    <link rel="prev" title="Getting Started" href="intro_getting_started.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="2.9">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.9
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9_ja";
+            if ( "2.9_ja" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.9_ja");
+            } else {
+              option.value = current_url.replace("latest","2.9_ja");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.8";
+            if ( "2.8" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.8");
+            } else {
+              option.value = current_url.replace("latest","2.8");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.7";
+            if ( "2.7" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.7");
+            } else {
+              option.value = current_url.replace("latest","2.7");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+<!--  <form id="rtd-search-form" class="wy-form" action="../search.html" -->
+  <form id="rtd-search-form" class="wy-form"  method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">How to build your inventory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#inventory-basics-formats-hosts-and-groups">Inventory basics: formats, hosts, and groups</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#default-groups">Default groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hosts-in-multiple-groups">Hosts in multiple groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adding-ranges-of-hosts">Adding ranges of hosts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-variables-to-inventory">Adding variables to inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assigning-a-variable-to-one-machine-host-variables">Assigning a variable to one machine: host variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inventory-aliases">Inventory aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#assigning-a-variable-to-many-machines-group-variables">Assigning a variable to many machines: group variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inheriting-variable-values-group-variables-for-groups-of-groups">Inheriting variable values: group variables for groups of groups</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#organizing-host-and-group-variables">Organizing host and group variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-variables-are-merged">How variables are merged</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-multiple-inventory-sources">Using multiple inventory sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-to-hosts-behavioral-inventory-parameters">Connecting to hosts: behavioral inventory parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#non-ssh-connection-types">Non-SSH connection types</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#inventory-setup-examples">Inventory setup examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-one-inventory-per-environment">Example: One inventory per environment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-group-by-function">Example: Group by function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-group-by-location">Example: Group by location</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_adhoc.html">Introduction to ad-hoc commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html">Working With Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vault.html">Ansible Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/plugins.html">Working With Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+        
+      <li>How to build your inventory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/intro_inventory.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+  <script>
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("This is a testing site. For the official docs go to https://docs.ansible.com/");
+      para.appendChild(banner_text);
+      element = document.getElementById('testing_banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    }
+
+    // Create a banner if we're not the latest version
+    current_url = window.location.href;
+    if ((current_url.search("latest") > -1) || (current_url.search("/2.9/") > -1)) {
+     // no banner for latest release
+    } else if (current_url.search("devel") > -1) {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading the *devel* version of the Ansible documentation - most module documentation is currently missing as the modules have moved to collections. Until docs catches up to this change, use the version selection to the left if you want module documentation or the latest stable release version. The *devel* version is not guaranteed stable.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    } else {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    }
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-build-your-inventory">
+<span id="inventory"></span><span id="intro-inventory"></span><h1>How to build your inventory<a class="headerlink" href="#how-to-build-your-inventory" title="Permalink to this headline">¶</a></h1>
+<p>Ansible works against multiple managed nodes or “hosts” in your infrastructure at the same time, using a list or group of lists know as inventory. Once your inventory is defined, you use <a class="reference internal" href="intro_patterns.html#intro-patterns"><span class="std std-ref">patterns</span></a> to select the hosts or groups you want Ansible to run against.</p>
+<p>The default location for inventory is a file called <code class="docutils literal notranslate"><span class="pre">/etc/ansible/hosts</span></code>. You can specify a different inventory file at the command line using the <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path&gt;</span></code> option. You can also use multiple inventory files at the same time, and/or pull inventory from dynamic or cloud sources or different formats (YAML, ini, etc), as described in <a class="reference internal" href="intro_dynamic_inventory.html#intro-dynamic-inventory"><span class="std std-ref">Working with dynamic inventory</span></a>.
+Introduced in version 2.4, Ansible has <a class="reference internal" href="../plugins/inventory.html#inventory-plugins"><span class="std std-ref">Inventory Plugins</span></a> to make this flexible and customizable.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#inventory-basics-formats-hosts-and-groups" id="id5">Inventory basics: formats, hosts, and groups</a><ul>
+<li><a class="reference internal" href="#default-groups" id="id6">Default groups</a></li>
+<li><a class="reference internal" href="#hosts-in-multiple-groups" id="id7">Hosts in multiple groups</a></li>
+<li><a class="reference internal" href="#adding-ranges-of-hosts" id="id8">Adding ranges of hosts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-variables-to-inventory" id="id9">Adding variables to inventory</a></li>
+<li><a class="reference internal" href="#assigning-a-variable-to-one-machine-host-variables" id="id10">Assigning a variable to one machine: host variables</a><ul>
+<li><a class="reference internal" href="#inventory-aliases" id="id11">Inventory aliases</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#assigning-a-variable-to-many-machines-group-variables" id="id12">Assigning a variable to many machines: group variables</a><ul>
+<li><a class="reference internal" href="#inheriting-variable-values-group-variables-for-groups-of-groups" id="id13">Inheriting variable values: group variables for groups of groups</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#organizing-host-and-group-variables" id="id14">Organizing host and group variables</a></li>
+<li><a class="reference internal" href="#how-variables-are-merged" id="id15">How variables are merged</a></li>
+<li><a class="reference internal" href="#using-multiple-inventory-sources" id="id16">Using multiple inventory sources</a></li>
+<li><a class="reference internal" href="#connecting-to-hosts-behavioral-inventory-parameters" id="id17">Connecting to hosts: behavioral inventory parameters</a><ul>
+<li><a class="reference internal" href="#non-ssh-connection-types" id="id18">Non-SSH connection types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inventory-setup-examples" id="id19">Inventory setup examples</a><ul>
+<li><a class="reference internal" href="#example-one-inventory-per-environment" id="id20">Example: One inventory per environment</a></li>
+<li><a class="reference internal" href="#example-group-by-function" id="id21">Example: Group by function</a></li>
+<li><a class="reference internal" href="#example-group-by-location" id="id22">Example: Group by location</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="inventory-basics-formats-hosts-and-groups">
+<span id="inventoryformat"></span><h2><a class="toc-backref" href="#id5">Inventory basics: formats, hosts, and groups</a><a class="headerlink" href="#inventory-basics-formats-hosts-and-groups" title="Permalink to this headline">¶</a></h2>
+<p>The inventory file can be in one of many formats, depending on the inventory plugins you have.
+The most common formats are INI and YAML. A basic INI <code class="docutils literal notranslate"><span class="pre">etc/ansible/hosts</span></code> might look like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mail.example.com
+
+[webservers]
+foo.example.com
+bar.example.com
+
+[dbservers]
+one.example.com
+two.example.com
+three.example.com
+</pre></div>
+</div>
+<p>The headings in brackets are group names, which are used in classifying hosts
+and deciding what hosts you are controlling at what times and for what purpose.</p>
+<p>Here’s that same basic inventory file in YAML format:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">all</span><span class="p">:</span>
+  <span class="nt">hosts</span><span class="p">:</span>
+    <span class="nt">mail.example.com</span><span class="p">:</span>
+  <span class="nt">children</span><span class="p">:</span>
+    <span class="nt">webservers</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">foo.example.com</span><span class="p">:</span>
+        <span class="nt">bar.example.com</span><span class="p">:</span>
+    <span class="nt">dbservers</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">one.example.com</span><span class="p">:</span>
+        <span class="nt">two.example.com</span><span class="p">:</span>
+        <span class="nt">three.example.com</span><span class="p">:</span>
+</pre></div>
+</div>
+<div class="section" id="default-groups">
+<span id="id1"></span><h3><a class="toc-backref" href="#id6">Default groups</a><a class="headerlink" href="#default-groups" title="Permalink to this headline">¶</a></h3>
+<p>There are two default groups: <code class="docutils literal notranslate"><span class="pre">all</span></code> and <code class="docutils literal notranslate"><span class="pre">ungrouped</span></code>. The <code class="docutils literal notranslate"><span class="pre">all</span></code> group contains every host.
+The <code class="docutils literal notranslate"><span class="pre">ungrouped</span></code> group contains all hosts that don’t have another group aside from <code class="docutils literal notranslate"><span class="pre">all</span></code>.
+Every host will always belong to at least 2 groups (<code class="docutils literal notranslate"><span class="pre">all</span></code> and <code class="docutils literal notranslate"><span class="pre">ungrouped</span></code> or <code class="docutils literal notranslate"><span class="pre">all</span></code> and some other group). Though <code class="docutils literal notranslate"><span class="pre">all</span></code> and <code class="docutils literal notranslate"><span class="pre">ungrouped</span></code> are always present, they can be implicit and not appear in group listings like <code class="docutils literal notranslate"><span class="pre">group_names</span></code>.</p>
+</div>
+<div class="section" id="hosts-in-multiple-groups">
+<span id="host-multiple-groups"></span><h3><a class="toc-backref" href="#id7">Hosts in multiple groups</a><a class="headerlink" href="#hosts-in-multiple-groups" title="Permalink to this headline">¶</a></h3>
+<p>You can (and probably will) put each host in more than one group. For example a production webserver in a datacenter in Atlanta might be included in groups called [prod] and [atlanta] and [webservers]. You can create groups that track:</p>
+<ul class="simple">
+<li>What - An application, stack or microservice. (For example, database servers, web servers, etc).</li>
+<li>Where - A datacenter or region, to talk to local DNS, storage, etc. (For example, east, west).</li>
+<li>When - The development stage, to avoid testing on production resources. (For example, prod, test).</li>
+</ul>
+<p>Extending the previous YAML inventory to include what, when, and where would look like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">all</span><span class="p">:</span>
+  <span class="nt">hosts</span><span class="p">:</span>
+    <span class="nt">mail.example.com</span><span class="p">:</span>
+  <span class="nt">children</span><span class="p">:</span>
+    <span class="nt">webservers</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">foo.example.com</span><span class="p">:</span>
+        <span class="nt">bar.example.com</span><span class="p">:</span>
+    <span class="nt">dbservers</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">one.example.com</span><span class="p">:</span>
+        <span class="nt">two.example.com</span><span class="p">:</span>
+        <span class="nt">three.example.com</span><span class="p">:</span>
+    <span class="nt">east</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">foo.example.com</span><span class="p">:</span>
+        <span class="nt">one.example.com</span><span class="p">:</span>
+        <span class="nt">two.example.com</span><span class="p">:</span>
+    <span class="nt">west</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">bar.example.com</span><span class="p">:</span>
+        <span class="nt">three.example.com</span><span class="p">:</span>
+    <span class="nt">prod</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">foo.example.com</span><span class="p">:</span>
+        <span class="nt">one.example.com</span><span class="p">:</span>
+        <span class="nt">two.example.com</span><span class="p">:</span>
+    <span class="nt">test</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">bar.example.com</span><span class="p">:</span>
+        <span class="nt">three.example.com</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>You can see that <code class="docutils literal notranslate"><span class="pre">one.example.com</span></code> exists in the <code class="docutils literal notranslate"><span class="pre">dbservers</span></code>, <code class="docutils literal notranslate"><span class="pre">east</span></code>, and <code class="docutils literal notranslate"><span class="pre">prod</span></code> groups.</p>
+<p>You can also use nested groups to simplify <code class="docutils literal notranslate"><span class="pre">prod</span></code> and <code class="docutils literal notranslate"><span class="pre">test</span></code> in this inventory, for the same result:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">all</span><span class="p">:</span>
+  <span class="nt">hosts</span><span class="p">:</span>
+    <span class="nt">mail.example.com</span><span class="p">:</span>
+  <span class="nt">children</span><span class="p">:</span>
+    <span class="nt">webservers</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">foo.example.com</span><span class="p">:</span>
+        <span class="nt">bar.example.com</span><span class="p">:</span>
+    <span class="nt">dbservers</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">one.example.com</span><span class="p">:</span>
+        <span class="nt">two.example.com</span><span class="p">:</span>
+        <span class="nt">three.example.com</span><span class="p">:</span>
+    <span class="nt">east</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">foo.example.com</span><span class="p">:</span>
+        <span class="nt">one.example.com</span><span class="p">:</span>
+        <span class="nt">two.example.com</span><span class="p">:</span>
+    <span class="nt">west</span><span class="p">:</span>
+      <span class="nt">hosts</span><span class="p">:</span>
+        <span class="nt">bar.example.com</span><span class="p">:</span>
+        <span class="nt">three.example.com</span><span class="p">:</span>
+    <span class="nt">prod</span><span class="p">:</span>
+      <span class="nt">children</span><span class="p">:</span>
+        <span class="nt">east</span><span class="p">:</span>
+    <span class="nt">test</span><span class="p">:</span>
+      <span class="nt">children</span><span class="p">:</span>
+        <span class="nt">west</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>You can find more examples on how to organize your inventories and group your hosts in <a class="reference internal" href="#inventory-setup-examples"><span class="std std-ref">Inventory setup examples</span></a>.</p>
+</div>
+<div class="section" id="adding-ranges-of-hosts">
+<h3><a class="toc-backref" href="#id8">Adding ranges of hosts</a><a class="headerlink" href="#adding-ranges-of-hosts" title="Permalink to this headline">¶</a></h3>
+<p>If you have a lot of hosts with a similar pattern, you can add them as a range rather than listing each hostname separately:</p>
+<p>In INI:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[webservers]
+www[01:50].example.com
+</pre></div>
+</div>
+<p>In YAML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+  <span class="nt">webservers</span><span class="p">:</span>
+    <span class="nt">hosts</span><span class="p">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">www[01:50].example.com</span><span class="p p-Indicator">:</span>
+</pre></div>
+</div>
+<p>For numeric patterns, leading zeros can be included or removed, as desired. Ranges are inclusive. You can also define alphabetic ranges:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[databases]
+db-[a:f].example.com
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="adding-variables-to-inventory">
+<h2><a class="toc-backref" href="#id9">Adding variables to inventory</a><a class="headerlink" href="#adding-variables-to-inventory" title="Permalink to this headline">¶</a></h2>
+<p>You can store variable values that relate to a specific host or group in inventory. To start with, you may add variables directly to the hosts and groups in your main inventory file. As you add more and more managed nodes to your Ansible inventory, however, you will likely want to store variables in separate host and group variable files.</p>
+</div>
+<div class="section" id="assigning-a-variable-to-one-machine-host-variables">
+<span id="host-variables"></span><h2><a class="toc-backref" href="#id10">Assigning a variable to one machine: host variables</a><a class="headerlink" href="#assigning-a-variable-to-one-machine-host-variables" title="Permalink to this headline">¶</a></h2>
+<p>You can easily assign a variable to a single host, then use it later in playbooks. In INI:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[atlanta]
+host1 http_port=80 maxRequestsPerChild=808
+host2 http_port=303 maxRequestsPerChild=909
+</pre></div>
+</div>
+<p>In YAML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">atlanta</span><span class="p">:</span>
+  <span class="nt">host1</span><span class="p">:</span>
+    <span class="nt">http_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+    <span class="nt">maxRequestsPerChild</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">808</span>
+  <span class="nt">host2</span><span class="p">:</span>
+    <span class="nt">http_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">303</span>
+    <span class="nt">maxRequestsPerChild</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">909</span>
+</pre></div>
+</div>
+<p>Unique values like non-standard SSH ports work well as host variables. You can add them to your Ansible inventory by adding the port number after the hostname with a colon:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>badwolf.example.com:5309
+</pre></div>
+</div>
+<p>Connection variables also work well as host variables:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[targets]
+
+localhost              ansible_connection=local
+other1.example.com     ansible_connection=ssh        ansible_user=myuser
+other2.example.com     ansible_connection=ssh        ansible_user=myotheruser
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you list non-standard SSH ports in your SSH config file, the <code class="docutils literal notranslate"><span class="pre">openssh</span></code> connection will find and use them, but the <code class="docutils literal notranslate"><span class="pre">paramiko</span></code> connection will not.</p>
+</div>
+<div class="section" id="inventory-aliases">
+<span id="id2"></span><h3><a class="toc-backref" href="#id11">Inventory aliases</a><a class="headerlink" href="#inventory-aliases" title="Permalink to this headline">¶</a></h3>
+<p>You can also define aliases in your inventory:</p>
+<p>In INI:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>jumper ansible_port=5555 ansible_host=192.0.2.50
+</pre></div>
+</div>
+<p>In YAML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+  <span class="nt">hosts</span><span class="p">:</span>
+    <span class="nt">jumper</span><span class="p">:</span>
+      <span class="nt">ansible_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5555</span>
+      <span class="nt">ansible_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.0.2.50</span>
+</pre></div>
+</div>
+<p>In the above example, running Ansible against the host alias “jumper” will connect to 192.0.2.50 on port 5555.
+This only works for hosts with static IPs, or when you are connecting through tunnels.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Values passed in the INI format using the <code class="docutils literal notranslate"><span class="pre">key=value</span></code> syntax are interpreted differently depending on where they are declared:</p>
+<ul class="last simple">
+<li>When declared inline with the host, INI values are interpreted as Python literal structures           (strings, numbers, tuples, lists, dicts, booleans, None). Host lines accept multiple <code class="docutils literal notranslate"><span class="pre">key=value</span></code> parameters per line. Therefore they need a way to indicate that a space is part of a value rather than a separator.</li>
+<li>When declared in a <code class="docutils literal notranslate"><span class="pre">:vars</span></code> section, INI values are interpreted as strings. For example <code class="docutils literal notranslate"><span class="pre">var=FALSE</span></code> would create a string equal to ‘FALSE’. Unlike host lines, <code class="docutils literal notranslate"><span class="pre">:vars</span></code> sections accept only a single entry per line, so everything after the <code class="docutils literal notranslate"><span class="pre">=</span></code> must be the value for the entry.</li>
+<li>If a variable value set in an INI inventory must be a certain type (for example, a string or a boolean value), always specify the type with a filter in your task. Do not rely on types set in INI inventories when consuming variables.</li>
+<li>Consider using YAML format for inventory sources to avoid confusion on the actual type of a variable. The YAML inventory plugin processes variable values consistently and correctly.</li>
+</ul>
+</div>
+<p>Generally speaking, this is not the best way to define variables that describe your system policy. Setting variables in the main inventory file is only a shorthand. See <a class="reference internal" href="#splitting-out-vars"><span class="std std-ref">Organizing host and group variables</span></a> for guidelines on storing variable values in individual files in the ‘host_vars’ directory.</p>
+</div>
+</div>
+<div class="section" id="assigning-a-variable-to-many-machines-group-variables">
+<span id="group-variables"></span><h2><a class="toc-backref" href="#id12">Assigning a variable to many machines: group variables</a><a class="headerlink" href="#assigning-a-variable-to-many-machines-group-variables" title="Permalink to this headline">¶</a></h2>
+<p>If all hosts in a group share a variable value, you can apply that variable to an entire group at once. In INI:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[atlanta]
+host1
+host2
+
+[atlanta:vars]
+ntp_server=ntp.atlanta.example.com
+proxy=proxy.atlanta.example.com
+</pre></div>
+</div>
+<p>In YAML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">atlanta</span><span class="p">:</span>
+  <span class="nt">hosts</span><span class="p">:</span>
+    <span class="nt">host1</span><span class="p">:</span>
+    <span class="nt">host2</span><span class="p">:</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">ntp_server</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ntp.atlanta.example.com</span>
+    <span class="nt">proxy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">proxy.atlanta.example.com</span>
+</pre></div>
+</div>
+<p>Group variables are a convenient way to apply variables to multiple hosts at once. Before executing, however, Ansible always flattens variables, including inventory variables, to the host level. If a host is a member of multiple groups, Ansible reads variable values from all of those groups. If you assign different values to the same variable in different groups, Ansible chooses which value to use based on internal <a class="reference internal" href="#how-we-merge"><span class="std std-ref">rules for merging</span></a>.</p>
+<div class="section" id="inheriting-variable-values-group-variables-for-groups-of-groups">
+<span id="subgroups"></span><h3><a class="toc-backref" href="#id13">Inheriting variable values: group variables for groups of groups</a><a class="headerlink" href="#inheriting-variable-values-group-variables-for-groups-of-groups" title="Permalink to this headline">¶</a></h3>
+<p>You can make groups of groups using the <code class="docutils literal notranslate"><span class="pre">:children</span></code> suffix in INI or the <code class="docutils literal notranslate"><span class="pre">children:</span></code> entry in YAML.
+You can apply variables to these groups of groups using <code class="docutils literal notranslate"><span class="pre">:vars</span></code> or <code class="docutils literal notranslate"><span class="pre">vars:</span></code>:</p>
+<p>In INI:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[atlanta]
+host1
+host2
+
+[raleigh]
+host2
+host3
+
+[southeast:children]
+atlanta
+raleigh
+
+[southeast:vars]
+some_server=foo.southeast.example.com
+halon_system_timeout=30
+self_destruct_countdown=60
+escape_pods=2
+
+[usa:children]
+southeast
+northeast
+southwest
+northwest
+</pre></div>
+</div>
+<p>In YAML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">all</span><span class="p">:</span>
+  <span class="nt">children</span><span class="p">:</span>
+    <span class="nt">usa</span><span class="p">:</span>
+      <span class="nt">children</span><span class="p">:</span>
+        <span class="nt">southeast</span><span class="p">:</span>
+          <span class="nt">children</span><span class="p">:</span>
+            <span class="nt">atlanta</span><span class="p">:</span>
+              <span class="nt">hosts</span><span class="p">:</span>
+                <span class="nt">host1</span><span class="p">:</span>
+                <span class="nt">host2</span><span class="p">:</span>
+            <span class="nt">raleigh</span><span class="p">:</span>
+              <span class="nt">hosts</span><span class="p">:</span>
+                <span class="nt">host2</span><span class="p">:</span>
+                <span class="nt">host3</span><span class="p">:</span>
+          <span class="nt">vars</span><span class="p">:</span>
+            <span class="nt">some_server</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo.southeast.example.com</span>
+            <span class="nt">halon_system_timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
+            <span class="nt">self_destruct_countdown</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+            <span class="nt">escape_pods</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+        <span class="nt">northeast</span><span class="p">:</span>
+        <span class="nt">northwest</span><span class="p">:</span>
+        <span class="nt">southwest</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>If you need to store lists or hash data, or prefer to keep host and group specific variables separate from the inventory file, see <a class="reference internal" href="#splitting-out-vars"><span class="std std-ref">Organizing host and group variables</span></a>.</p>
+<p>Child groups have a couple of properties to note:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Any host that is member of a child group is automatically a member of the parent group.</li>
+<li>A child group’s variables will have higher precedence (override) a parent group’s variables.</li>
+<li>Groups can have multiple parents and children, but not circular relationships.</li>
+<li>Hosts can also be in multiple groups, but there will only be <strong>one</strong> instance of a host, merging the data from the multiple groups.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="organizing-host-and-group-variables">
+<span id="splitting-out-vars"></span><h2><a class="toc-backref" href="#id14">Organizing host and group variables</a><a class="headerlink" href="#organizing-host-and-group-variables" title="Permalink to this headline">¶</a></h2>
+<p>Although you can store variables in the main inventory file, storing separate host and group variables files may help you organize your variable values more easily. Host and group variable files must use YAML syntax. Valid file extensions include ‘.yml’, ‘.yaml’, ‘.json’, or no file extension.
+See <a class="reference internal" href="../reference_appendices/YAMLSyntax.html#yaml-syntax"><span class="std std-ref">YAML Syntax</span></a> if you are new to YAML.</p>
+<p>Ansible loads host and group variable files by searching paths relative to the inventory file or the playbook file. If your inventory file at <code class="docutils literal notranslate"><span class="pre">/etc/ansible/hosts</span></code> contains a host named ‘foosball’ that belongs to two groups, ‘raleigh’ and ‘webservers’, that host will use variables in YAML files at the following locations:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/etc/ansible/group_vars/raleigh <span class="c1"># can optionally end in &#39;.yml&#39;, &#39;.yaml&#39;, or &#39;.json&#39;</span>
+/etc/ansible/group_vars/webservers
+/etc/ansible/host_vars/foosball
+</pre></div>
+</div>
+<p>For example, if you group hosts in your inventory by datacenter, and each datacenter uses its own NTP server and database server, you can create a file called <code class="docutils literal notranslate"><span class="pre">/etc/ansible/group_vars/raleigh</span></code> to store the variables for the <code class="docutils literal notranslate"><span class="pre">raleigh</span></code> group:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">ntp_server</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">acme.example.org</span>
+<span class="nt">database_server</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">storage.example.org</span>
+</pre></div>
+</div>
+<p>You can also create <em>directories</em> named after your groups or hosts. Ansible will read all the files in these directories in lexicographical order. An example with the ‘raleigh’ group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/etc/ansible/group_vars/raleigh/db_settings
+/etc/ansible/group_vars/raleigh/cluster_settings
+</pre></div>
+</div>
+<p>All hosts in the ‘raleigh’ group will have the variables defined in these files
+available to them. This can be very useful to keep your variables organized when a single
+file gets too big, or when you want to use <a class="reference internal" href="playbooks_vault.html#playbooks-vault"><span class="std std-ref">Ansible Vault</span></a> on some group variables.</p>
+<p>You can also add <code class="docutils literal notranslate"><span class="pre">group_vars/</span></code> and <code class="docutils literal notranslate"><span class="pre">host_vars/</span></code> directories to your playbook directory. The <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> command looks for these directories in the current working directory by default. Other Ansible commands (for example, <code class="docutils literal notranslate"><span class="pre">ansible</span></code>, <code class="docutils literal notranslate"><span class="pre">ansible-console</span></code>, etc.) will only look for <code class="docutils literal notranslate"><span class="pre">group_vars/</span></code> and <code class="docutils literal notranslate"><span class="pre">host_vars/</span></code> in the inventory directory. If you want other commands to load group and host variables from a playbook directory, you must provide the <code class="docutils literal notranslate"><span class="pre">--playbook-dir</span></code> option on the command line.
+If you load inventory files from both the playbook directory and the inventory directory, variables in the playbook directory will override variables set in the inventory directory.</p>
+<p>Keeping your inventory file and variables in a git repo (or other version control)
+is an excellent way to track changes to your inventory and host variables.</p>
+</div>
+<div class="section" id="how-variables-are-merged">
+<span id="how-we-merge"></span><h2><a class="toc-backref" href="#id15">How variables are merged</a><a class="headerlink" href="#how-variables-are-merged" title="Permalink to this headline">¶</a></h2>
+<p>By default variables are merged/flattened to the specific host before a play is run. This keeps Ansible focused on the Host and Task, so groups don’t really survive outside of inventory and host matching. By default, Ansible overwrites variables including the ones defined for a group and/or host (see <a class="reference internal" href="../reference_appendices/config.html#default-hash-behaviour"><span class="std std-ref">DEFAULT_HASH_BEHAVIOUR</span></a>). The order/precedence is (from lowest to highest):</p>
+<ul class="simple">
+<li>all group (because it is the ‘parent’ of all other groups)</li>
+<li>parent group</li>
+<li>child group</li>
+<li>host</li>
+</ul>
+<p>By default Ansible merges groups at the same parent/child level alphabetically, and the last group loaded overwrites the previous groups. For example, an a_group will be merged with b_group and b_group vars that match will overwrite the ones in a_group.</p>
+<p>You can change this behavior by setting the group variable <code class="docutils literal notranslate"><span class="pre">ansible_group_priority</span></code> to change the merge order for groups of the same level (after the parent/child order is resolved). The larger the number, the later it will be merged, giving it higher priority. This variable defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code> if not set. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">a_group</span><span class="p">:</span>
+    <span class="nt">testvar</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">a</span>
+    <span class="nt">ansible_group_priority</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="nt">b_group</span><span class="p">:</span>
+    <span class="nt">testvar</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">b</span>
+</pre></div>
+</div>
+<p>In this example, if both groups have the same priority, the result would normally have been <code class="docutils literal notranslate"><span class="pre">testvar</span> <span class="pre">==</span> <span class="pre">b</span></code>, but since we are giving the <code class="docutils literal notranslate"><span class="pre">a_group</span></code> a higher priority the result will be <code class="docutils literal notranslate"><span class="pre">testvar</span> <span class="pre">==</span> <span class="pre">a</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">ansible_group_priority</span></code> can only be set in the inventory source and not in group_vars/, as the variable is used in the loading of group_vars.</p>
+</div>
+</div>
+<div class="section" id="using-multiple-inventory-sources">
+<span id="id3"></span><h2><a class="toc-backref" href="#id16">Using multiple inventory sources</a><a class="headerlink" href="#using-multiple-inventory-sources" title="Permalink to this headline">¶</a></h2>
+<p>You can target multiple inventory sources (directories, dynamic inventory scripts
+or files supported by inventory plugins) at the same time by giving multiple inventory parameters from the command
+line or by configuring <span class="target" id="index-0"></span><a class="reference internal" href="../reference_appendices/config.html#envvar-ANSIBLE_INVENTORY"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_INVENTORY</span></code></a>. This can be useful when you want to target normally
+separate environments, like staging and production, at the same time for a specific action.</p>
+<p>Target two sources from the command line like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook get_logs.yml -i staging -i production
+</pre></div>
+</div>
+<p>Keep in mind that if there are variable conflicts in the inventories, they are resolved according
+to the rules described in <a class="reference internal" href="#how-we-merge"><span class="std std-ref">How variables are merged</span></a> and <a class="reference internal" href="playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: Where should I put a variable?</span></a>.
+The merging order is controlled by the order of the inventory source parameters.
+If <code class="docutils literal notranslate"><span class="pre">[all:vars]</span></code> in staging inventory defines <code class="docutils literal notranslate"><span class="pre">myvar</span> <span class="pre">=</span> <span class="pre">1</span></code>, but production inventory defines <code class="docutils literal notranslate"><span class="pre">myvar</span> <span class="pre">=</span> <span class="pre">2</span></code>,
+the playbook will be run with <code class="docutils literal notranslate"><span class="pre">myvar</span> <span class="pre">=</span> <span class="pre">2</span></code>. The result would be reversed if the playbook was run with
+<code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">production</span> <span class="pre">-i</span> <span class="pre">staging</span></code>.</p>
+<p><strong>Aggregating inventory sources with a directory</strong></p>
+<p>You can also create an inventory by combining multiple inventory sources and source types under a directory.
+This can be useful for combining static and dynamic hosts and managing them as one inventory.
+The following inventory combines an inventory plugin source, a dynamic inventory script,
+and a file with static hosts:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>inventory/
+  openstack.yml          # configure inventory plugin to get hosts from Openstack cloud
+  dynamic-inventory.py   # add additional hosts with dynamic inventory script
+  static-inventory       # add static hosts and groups
+  group_vars/
+    all.yml              # assign variables to all hosts
+</pre></div>
+</div>
+<p>You can target this inventory directory simply like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook example.yml -i inventory
+</pre></div>
+</div>
+<p>It can be useful to control the merging order of the inventory sources if there’s variable
+conflicts or group of groups dependencies to the other inventory sources. The inventories
+are merged in alphabetical order according to the filenames so the result can
+be controlled by adding prefixes to the files:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>inventory/
+  01-openstack.yml          # configure inventory plugin to get hosts from Openstack cloud
+  02-dynamic-inventory.py   # add additional hosts with dynamic inventory script
+  03-static-inventory       # add static hosts
+  group_vars/
+    all.yml                 # assign variables to all hosts
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">01-openstack.yml</span></code> defines <code class="docutils literal notranslate"><span class="pre">myvar</span> <span class="pre">=</span> <span class="pre">1</span></code> for the group <code class="docutils literal notranslate"><span class="pre">all</span></code>, <code class="docutils literal notranslate"><span class="pre">02-dynamic-inventory.py</span></code> defines <code class="docutils literal notranslate"><span class="pre">myvar</span> <span class="pre">=</span> <span class="pre">2</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">03-static-inventory</span></code> defines <code class="docutils literal notranslate"><span class="pre">myvar</span> <span class="pre">=</span> <span class="pre">3</span></code>, the playbook will be run with <code class="docutils literal notranslate"><span class="pre">myvar</span> <span class="pre">=</span> <span class="pre">3</span></code>.</p>
+<p>For more details on inventory plugins and dynamic inventory scripts see <a class="reference internal" href="../plugins/inventory.html#inventory-plugins"><span class="std std-ref">Inventory Plugins</span></a> and <a class="reference internal" href="intro_dynamic_inventory.html#intro-dynamic-inventory"><span class="std std-ref">Working with dynamic inventory</span></a>.</p>
+</div>
+<div class="section" id="connecting-to-hosts-behavioral-inventory-parameters">
+<span id="behavioral-parameters"></span><h2><a class="toc-backref" href="#id17">Connecting to hosts: behavioral inventory parameters</a><a class="headerlink" href="#connecting-to-hosts-behavioral-inventory-parameters" title="Permalink to this headline">¶</a></h2>
+<p>As described above, setting the following variables control how Ansible interacts with remote hosts.</p>
+<p>Host connection:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ansible does not expose a channel to allow communication between the user and the ssh process to accept a password manually to decrypt an ssh key when using the ssh connection plugin (which is the default). The use of <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> is highly recommended.</p>
+</div>
+<dl class="docutils">
+<dt>ansible_connection</dt>
+<dd>Connection type to the host. This can be the name of any of ansible’s connection plugins. SSH protocol types are <code class="docutils literal notranslate"><span class="pre">smart</span></code>, <code class="docutils literal notranslate"><span class="pre">ssh</span></code> or <code class="docutils literal notranslate"><span class="pre">paramiko</span></code>.  The default is smart. Non-SSH based types are described in the next section.</dd>
+</dl>
+<p>General for all connections:</p>
+<dl class="docutils">
+<dt>ansible_host</dt>
+<dd>The name of the host to connect to, if different from the alias you wish to give to it.</dd>
+<dt>ansible_port</dt>
+<dd>The connection port number, if not the default (22 for ssh)</dd>
+<dt>ansible_user</dt>
+<dd>The user name to use when connecting to the host</dd>
+<dt>ansible_password</dt>
+<dd>The password to use to authenticate to the host (never store this variable in plain text; always use a vault. See <a class="reference internal" href="playbooks_best_practices.html#best-practices-for-variables-and-vaults"><span class="std std-ref">Variables and Vaults</span></a>)</dd>
+</dl>
+<p>Specific to the SSH connection:</p>
+<dl class="docutils">
+<dt>ansible_ssh_private_key_file</dt>
+<dd>Private key file used by ssh.  Useful if using multiple keys and you don’t want to use SSH agent.</dd>
+<dt>ansible_ssh_common_args</dt>
+<dd>This setting is always appended to the default command line for <strong class="command">sftp</strong>, <strong class="command">scp</strong>,
+and <strong class="command">ssh</strong>. Useful to configure a <code class="docutils literal notranslate"><span class="pre">ProxyCommand</span></code> for a certain host (or
+group).</dd>
+<dt>ansible_sftp_extra_args</dt>
+<dd>This setting is always appended to the default <strong class="command">sftp</strong> command line.</dd>
+<dt>ansible_scp_extra_args</dt>
+<dd>This setting is always appended to the default <strong class="command">scp</strong> command line.</dd>
+<dt>ansible_ssh_extra_args</dt>
+<dd>This setting is always appended to the default <strong class="command">ssh</strong> command line.</dd>
+<dt>ansible_ssh_pipelining</dt>
+<dd>Determines whether or not to use SSH pipelining. This can override the <code class="docutils literal notranslate"><span class="pre">pipelining</span></code> setting in <code class="file docutils literal notranslate"><span class="pre">ansible.cfg</span></code>.</dd>
+<dt>ansible_ssh_executable (added in version 2.2)</dt>
+<dd>This setting overrides the default behavior to use the system <strong class="command">ssh</strong>. This can override the <code class="docutils literal notranslate"><span class="pre">ssh_executable</span></code> setting in <code class="file docutils literal notranslate"><span class="pre">ansible.cfg</span></code>.</dd>
+</dl>
+<p>Privilege escalation (see <a class="reference internal" href="become.html#become"><span class="std std-ref">Ansible Privilege Escalation</span></a> for further details):</p>
+<dl class="docutils">
+<dt>ansible_become</dt>
+<dd>Equivalent to <code class="docutils literal notranslate"><span class="pre">ansible_sudo</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible_su</span></code>, allows to force privilege escalation</dd>
+<dt>ansible_become_method</dt>
+<dd>Allows to set privilege escalation method</dd>
+<dt>ansible_become_user</dt>
+<dd>Equivalent to <code class="docutils literal notranslate"><span class="pre">ansible_sudo_user</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible_su_user</span></code>, allows to set the user you become through privilege escalation</dd>
+<dt>ansible_become_password</dt>
+<dd>Equivalent to <code class="docutils literal notranslate"><span class="pre">ansible_sudo_password</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible_su_password</span></code>, allows you to set the privilege escalation password (never store this variable in plain text; always use a vault. See <a class="reference internal" href="playbooks_best_practices.html#best-practices-for-variables-and-vaults"><span class="std std-ref">Variables and Vaults</span></a>)</dd>
+<dt>ansible_become_exe</dt>
+<dd>Equivalent to <code class="docutils literal notranslate"><span class="pre">ansible_sudo_exe</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible_su_exe</span></code>, allows you to set the executable for the escalation method selected</dd>
+<dt>ansible_become_flags</dt>
+<dd>Equivalent to <code class="docutils literal notranslate"><span class="pre">ansible_sudo_flags</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible_su_flags</span></code>, allows you to set the flags passed to the selected escalation method. This can be also set globally in <code class="file docutils literal notranslate"><span class="pre">ansible.cfg</span></code> in the <code class="docutils literal notranslate"><span class="pre">sudo_flags</span></code> option</dd>
+</dl>
+<p>Remote host environment parameters:</p>
+<dl class="docutils" id="ansible-shell-type">
+<dt>ansible_shell_type</dt>
+<dd>The shell type of the target system. You should not use this setting unless you have set the
+<a class="reference internal" href="#ansible-shell-executable"><span class="std std-ref">ansible_shell_executable</span></a> to a non-Bourne (sh) compatible shell.  By default commands are
+formatted using <code class="docutils literal notranslate"><span class="pre">sh</span></code>-style syntax.  Setting this to <code class="docutils literal notranslate"><span class="pre">csh</span></code> or <code class="docutils literal notranslate"><span class="pre">fish</span></code> will cause commands
+executed on target systems to follow those shell’s syntax instead.</dd>
+</dl>
+<dl class="docutils" id="ansible-python-interpreter">
+<dt>ansible_python_interpreter</dt>
+<dd>The target host python path. This is useful for systems with more
+than one Python or not located at <strong class="command">/usr/bin/python</strong> such as *BSD, or where <strong class="command">/usr/bin/python</strong>
+is not a 2.X series Python.  We do not use the <strong class="command">/usr/bin/env</strong> mechanism as that requires the remote user’s
+path to be set right and also assumes the <strong class="program">python</strong> executable is named python, where the executable might
+be named something like <strong class="program">python2.6</strong>.</dd>
+<dt>ansible_*_interpreter</dt>
+<dd>Works for anything such as ruby or perl and works just like <a class="reference internal" href="#ansible-python-interpreter"><span class="std std-ref">ansible_python_interpreter</span></a>.
+This replaces shebang of modules which will run on that host.</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.1.</span></p>
+</div>
+<dl class="docutils" id="ansible-shell-executable">
+<dt>ansible_shell_executable</dt>
+<dd>This sets the shell the ansible controller will use on the target machine,
+overrides <code class="docutils literal notranslate"><span class="pre">executable</span></code> in <code class="file docutils literal notranslate"><span class="pre">ansible.cfg</span></code> which defaults to
+<strong class="command">/bin/sh</strong>.  You should really only change it if is not possible
+to use <strong class="command">/bin/sh</strong> (i.e. <strong class="command">/bin/sh</strong> is not installed on the target
+machine or cannot be run from sudo.).</dd>
+</dl>
+<p>Examples from an Ansible-INI host file:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>some_host         ansible_port=2222     ansible_user=manager
+aws_host          ansible_ssh_private_key_file=/home/example/.ssh/aws.pem
+freebsd_host      ansible_python_interpreter=/usr/local/bin/python
+ruby_module_host  ansible_ruby_interpreter=/usr/bin/ruby.1.9.3
+</pre></div>
+</div>
+<div class="section" id="non-ssh-connection-types">
+<h3><a class="toc-backref" href="#id18">Non-SSH connection types</a><a class="headerlink" href="#non-ssh-connection-types" title="Permalink to this headline">¶</a></h3>
+<p>As stated in the previous section, Ansible executes playbooks over SSH but it is not limited to this connection type.
+With the host specific parameter <code class="docutils literal notranslate"><span class="pre">ansible_connection=&lt;connector&gt;</span></code>, the connection type can be changed.
+The following non-SSH based connectors are available:</p>
+<p><strong>local</strong></p>
+<p>This connector can be used to deploy the playbook to the control machine itself.</p>
+<p><strong>docker</strong></p>
+<p>This connector deploys the playbook directly into Docker containers using the local Docker client. The following parameters are processed by this connector:</p>
+<dl class="docutils">
+<dt>ansible_host</dt>
+<dd>The name of the Docker container to connect to.</dd>
+<dt>ansible_user</dt>
+<dd>The user name to operate within the container. The user must exist inside the container.</dd>
+<dt>ansible_become</dt>
+<dd>If set to <code class="docutils literal notranslate"><span class="pre">true</span></code> the <code class="docutils literal notranslate"><span class="pre">become_user</span></code> will be used to operate within the container.</dd>
+<dt>ansible_docker_extra_args</dt>
+<dd>Could be a string with any additional arguments understood by Docker, which are not command specific. This parameter is mainly used to configure a remote Docker daemon to use.</dd>
+</dl>
+<p>Here is an example of how to instantly deploy to created containers:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create jenkins container</span>
+  <span class="nt">docker_container</span><span class="p">:</span>
+    <span class="nt">docker_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myserver.net:4243</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_jenkins</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add container to inventory</span>
+  <span class="nt">add_host</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_jenkins</span>
+    <span class="nt">ansible_connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>
+    <span class="nt">ansible_docker_extra_args</span><span class="p">:</span> <span class="s">&quot;--tlsverify</span><span class="nv"> </span><span class="s">--tlscacert=/path/to/ca.pem</span><span class="nv"> </span><span class="s">--tlscert=/path/to/client-cert.pem</span><span class="nv"> </span><span class="s">--tlskey=/path/to/client-key.pem</span><span class="nv"> </span><span class="s">-H=tcp://myserver.net:4243&quot;</span>
+    <span class="nt">ansible_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
+  <span class="nt">changed_when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create directory for ssh keys</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_jenkins</span>
+  <span class="nt">file</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;/var/jenkins_home/.ssh/jupiter&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">directory</span>
+</pre></div>
+</div>
+<p>For a full list with available plugins and examples, see <a class="reference internal" href="../plugins/connection.html#connection-plugin-list"><span class="std std-ref">Plugin List</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you’re reading the docs from the beginning, this may be the first example you’ve seen of an Ansible playbook. This is not an inventory file.
+Playbooks will be covered in great detail later in the docs.</p>
+</div>
+</div>
+</div>
+<div class="section" id="inventory-setup-examples">
+<span id="id4"></span><h2><a class="toc-backref" href="#id19">Inventory setup examples</a><a class="headerlink" href="#inventory-setup-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-one-inventory-per-environment">
+<span id="inventory-setup-per-environment"></span><h3><a class="toc-backref" href="#id20">Example: One inventory per environment</a><a class="headerlink" href="#example-one-inventory-per-environment" title="Permalink to this headline">¶</a></h3>
+<p>If you need to manage multiple environments it’s sometimes prudent to
+have only hosts of a single environment defined per inventory. This
+way, it is harder to, for instance, accidentally change the state of
+nodes inside the “test” environment when you actually wanted to update
+some “staging” servers.</p>
+<p>For the example mentioned above you could have an
+<code class="file docutils literal notranslate"><span class="pre">inventory_test</span></code> file:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[dbservers]</span>
+<span class="na">db01.test.example.com</span>
+<span class="na">db02.test.example.com</span>
+
+<span class="k">[appservers]</span>
+<span class="na">app01.test.example.com</span>
+<span class="na">app02.test.example.com</span>
+<span class="na">app03.test.example.com</span>
+</pre></div>
+</div>
+<p>That file only includes hosts that are part of the “test”
+environment. Define the “staging” machines in another file
+called <code class="file docutils literal notranslate"><span class="pre">inventory_staging</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[dbservers]</span>
+<span class="na">db01.staging.example.com</span>
+<span class="na">db02.staging.example.com</span>
+
+<span class="k">[appservers]</span>
+<span class="na">app01.staging.example.com</span>
+<span class="na">app02.staging.example.com</span>
+<span class="na">app03.staging.example.com</span>
+</pre></div>
+</div>
+<p>To apply a playbook called <code class="file docutils literal notranslate"><span class="pre">site.yml</span></code>
+to all the app servers in the test environment, use the
+following command:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ansible-playbook -i inventory_test site.yml -l appservers</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-group-by-function">
+<span id="inventory-setup-per-function"></span><h3><a class="toc-backref" href="#id21">Example: Group by function</a><a class="headerlink" href="#example-group-by-function" title="Permalink to this headline">¶</a></h3>
+<p>In the previous section you already saw an example for using groups in
+order to cluster hosts that have the same function. This allows you,
+for instance, to define firewall rules inside a playbook or role
+without affecting database servers:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dbservers</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">allow access from 10.0.0.1</span>
+    <span class="nt">iptables</span><span class="p">:</span>
+      <span class="nt">chain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT</span>
+      <span class="nt">jump</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ACCEPT</span>
+      <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.0.0.1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-group-by-location">
+<span id="inventory-setup-per-location"></span><h3><a class="toc-backref" href="#id22">Example: Group by location</a><a class="headerlink" href="#example-group-by-location" title="Permalink to this headline">¶</a></h3>
+<p>Other tasks might be focused on where a certain host is located. Let’s
+say that <code class="docutils literal notranslate"><span class="pre">db01.test.example.com</span></code> and <code class="docutils literal notranslate"><span class="pre">app01.test.example.com</span></code> are
+located in DC1 while <code class="docutils literal notranslate"><span class="pre">db02.test.example.com</span></code> is in DC2:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[dc1]</span>
+<span class="na">db01.test.example.com</span>
+<span class="na">app01.test.example.com</span>
+
+<span class="k">[dc2]</span>
+<span class="na">db02.test.example.com</span>
+</pre></div>
+</div>
+<p>In practice, you might even end up mixing all these setups as you
+might need to, on one day, update all nodes in a specific data center
+while, on another day, update all the application servers no matter
+their location.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="../plugins/inventory.html#inventory-plugins"><span class="std std-ref">Inventory Plugins</span></a></dt>
+<dd>Pulling inventory from dynamic or static sources</dd>
+<dt><a class="reference internal" href="intro_dynamic_inventory.html#intro-dynamic-inventory"><span class="std std-ref">Working with dynamic inventory</span></a></dt>
+<dd>Pulling inventory from dynamic sources, such as cloud providers</dd>
+<dt><a class="reference internal" href="intro_adhoc.html#intro-adhoc"><span class="std std-ref">Introduction to ad-hoc commands</span></a></dt>
+<dd>Examples of basic commands</dd>
+<dt><a class="reference internal" href="playbooks.html#working-with-playbooks"><span class="std std-ref">Working With Playbooks</span></a></dt>
+<dd>Learning Ansible’s configuration, deployment, and orchestration language.</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-project">Mailing List</a></dt>
+<dd>Questions? Help? Ideas?  Stop by the list on Google Groups</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+        <a href="intro_dynamic_inventory.html" class="btn btn-neutral float-right" title="Working with dynamic inventory"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="intro_getting_started.html" class="btn btn-neutral" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Jul 21, 2020.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

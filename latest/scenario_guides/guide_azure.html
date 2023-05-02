@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Microsoft Azure Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/guide_azure.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Online.net Guide" href="guide_online.html" />
+    <link rel="prev" title="Google Cloud Platform Guide" href="guide_gce.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cloud_guides.html">Legacy Public Cloud Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide_alicloud.html">Alibaba Cloud Compute Services Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_cloudstack.html">CloudStack Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_gce.html">Google Cloud Platform Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Microsoft Azure Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authenticating-with-azure">Authenticating with Azure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-service-principal">Using Service Principal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-active-directory-username-password">Using Active Directory Username/Password</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#providing-credentials-to-azure-modules">Providing Credentials to Azure Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#other-cloud-environments">Other Cloud Environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-virtual-machines">Creating Virtual Machines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creating-individual-components">Creating Individual Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-virtual-machine-with-default-options">Creating a Virtual Machine with Default Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-virtual-machine-in-availability-zones">Creating a Virtual Machine in Availability Zones</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dynamic-inventory-script">Dynamic Inventory Script</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#host-groups">Host Groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#disabling-certificate-validation-on-azure-endpoints">Disabling certificate validation on Azure endpoints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide_online.html">Online.net Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_oracle.html">Oracle Cloud Infrastructure Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_packet.html">Packet.net Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_rax.html">Rackspace Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_scaleway.html">Scaleway Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_vultr.html">Vultr Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cloud_guides.html">Legacy Public Cloud Guides</a> &raquo;</li>
+      <li>Microsoft Azure Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/scenario_guides/guide_azure.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="microsoft-azure-guide">
+<h1>Microsoft Azure Guide<a class="headerlink" href="#microsoft-azure-guide" title="Permalink to this headline"></a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Red Hat Ansible Automation Platform will soon be available on Microsoft Azure. <a class="reference external" href="https://www.redhat.com/en/engage/ansible-microsoft-azure-e-202110220735">Sign up to preview the experience</a>.</p>
+</div>
+<p>Ansible includes a suite of modules for interacting with Azure Resource Manager, giving you the tools to easily create
+and orchestrate infrastructure on the Microsoft Azure Cloud.</p>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
+<p>Using the Azure Resource Manager modules requires having specific Azure SDK modules
+installed on the host running Ansible.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install <span class="s1">&#39;ansible[azure]&#39;</span>
+</pre></div>
+</div>
+<p>If you are running Ansible from source, you can install the dependencies from the
+root directory of the Ansible repo.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install .<span class="o">[</span>azure<span class="o">]</span>
+</pre></div>
+</div>
+<p>You can also directly run Ansible in <a class="reference external" href="https://shell.azure.com">Azure Cloud Shell</a>, where Ansible is pre-installed.</p>
+</div>
+<div class="section" id="authenticating-with-azure">
+<h2>Authenticating with Azure<a class="headerlink" href="#authenticating-with-azure" title="Permalink to this headline"></a></h2>
+<p>Using the Azure Resource Manager modules requires authenticating with the Azure API. You can choose from two authentication strategies:</p>
+<ul class="simple">
+<li><p>Active Directory Username/Password</p></li>
+<li><p>Service Principal Credentials</p></li>
+</ul>
+<p>Follow the directions for the strategy you wish to use, then proceed to <a class="reference internal" href="#providing-credentials-to-azure-modules">Providing Credentials to Azure Modules</a> for
+instructions on how to actually use the modules and authenticate with the Azure API.</p>
+<div class="section" id="using-service-principal">
+<h3>Using Service Principal<a class="headerlink" href="#using-service-principal" title="Permalink to this headline"></a></h3>
+<p>There is now a detailed official tutorial describing <a class="reference external" href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal">how to create a service principal</a>.</p>
+<p>After stepping through the tutorial you will have:</p>
+<ul class="simple">
+<li><p>Your Client ID, which is found in the “client id” box in the “Configure” page of your application in the Azure portal</p></li>
+<li><p>Your Secret key, generated when you created the application. You cannot show the key after creation.
+If you lost the key, you must create a new one in the “Configure” page of your application.</p></li>
+<li><p>And finally, a tenant ID. It’s a UUID (for example, ABCDEFGH-1234-ABCD-1234-ABCDEFGHIJKL) pointing to the AD containing your
+application. You will find it in the URL from within the Azure portal, or in the “view endpoints” of any given URL.</p></li>
+</ul>
+</div>
+<div class="section" id="using-active-directory-username-password">
+<h3>Using Active Directory Username/Password<a class="headerlink" href="#using-active-directory-username-password" title="Permalink to this headline"></a></h3>
+<p>To create an Active Directory username/password:</p>
+<ul class="simple">
+<li><p>Connect to the Azure Classic Portal with your admin account</p></li>
+<li><p>Create a user in your default AAD. You must NOT activate Multi-Factor Authentication</p></li>
+<li><p>Go to Settings - Administrators</p></li>
+<li><p>Click on Add and enter the email of the new user.</p></li>
+<li><p>Check the checkbox of the subscription you want to test with this user.</p></li>
+<li><p>Login to Azure Portal with this new user to change the temporary password to a new one. You will not be able to use the
+temporary password for OAuth login.</p></li>
+</ul>
+</div>
+<div class="section" id="providing-credentials-to-azure-modules">
+<h3>Providing Credentials to Azure Modules<a class="headerlink" href="#providing-credentials-to-azure-modules" title="Permalink to this headline"></a></h3>
+<p>The modules offer several ways to provide your credentials. For a CI/CD tool such as Ansible AWX or Jenkins, you will
+most likely want to use environment variables. For local development you may wish to store your credentials in a file
+within your home directory. And of course, you can always pass credentials as parameters to a task within a playbook. The
+order of precedence is parameters, then environment variables, and finally a file found in your home directory.</p>
+<div class="section" id="using-environment-variables">
+<h4>Using Environment Variables<a class="headerlink" href="#using-environment-variables" title="Permalink to this headline"></a></h4>
+<p>To pass service principal credentials via the environment, define the following variables:</p>
+<ul class="simple">
+<li><p>AZURE_CLIENT_ID</p></li>
+<li><p>AZURE_SECRET</p></li>
+<li><p>AZURE_SUBSCRIPTION_ID</p></li>
+<li><p>AZURE_TENANT</p></li>
+</ul>
+<p>To pass Active Directory username/password via the environment, define the following variables:</p>
+<ul class="simple">
+<li><p>AZURE_AD_USER</p></li>
+<li><p>AZURE_PASSWORD</p></li>
+<li><p>AZURE_SUBSCRIPTION_ID</p></li>
+</ul>
+<p>To pass Active Directory username/password in ADFS via the environment, define the following variables:</p>
+<ul class="simple">
+<li><p>AZURE_AD_USER</p></li>
+<li><p>AZURE_PASSWORD</p></li>
+<li><p>AZURE_CLIENT_ID</p></li>
+<li><p>AZURE_TENANT</p></li>
+<li><p>AZURE_ADFS_AUTHORITY_URL</p></li>
+</ul>
+<p>“AZURE_ADFS_AUTHORITY_URL” is optional. It’s necessary only when you have own ADFS authority like <a class="reference external" href="https://yourdomain.com/adfs">https://yourdomain.com/adfs</a>.</p>
+</div>
+<div class="section" id="storing-in-a-file">
+<h4>Storing in a File<a class="headerlink" href="#storing-in-a-file" title="Permalink to this headline"></a></h4>
+<p>When working in a development environment, it may be desirable to store credentials in a file. The modules will look
+for credentials in <code class="docutils literal notranslate"><span class="pre">$HOME/.azure/credentials</span></code>. This file is an ini style file. It will look as follows:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[default]</span>
+<span class="na">subscription_id</span><span class="o">=</span><span class="s">xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+<span class="na">client_id</span><span class="o">=</span><span class="s">xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+<span class="na">secret</span><span class="o">=</span><span class="s">xxxxxxxxxxxxxxxxx</span>
+<span class="na">tenant</span><span class="o">=</span><span class="s">xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your secret values contain non-ASCII characters, you must <a class="reference external" href="https://www.w3schools.com/tags/ref_urlencode.asp">URL Encode</a> them to avoid login errors.</p>
+</div>
+<p>It is possible to store multiple sets of credentials within the credentials file by creating multiple sections. Each
+section is considered a profile. The modules look for the [default] profile automatically. Define AZURE_PROFILE in the
+environment or pass a profile parameter to specify a specific profile.</p>
+</div>
+<div class="section" id="passing-as-parameters">
+<h4>Passing as Parameters<a class="headerlink" href="#passing-as-parameters" title="Permalink to this headline"></a></h4>
+<p>If you wish to pass credentials as parameters to a task, use the following parameters for service principal:</p>
+<ul class="simple">
+<li><p>client_id</p></li>
+<li><p>secret</p></li>
+<li><p>subscription_id</p></li>
+<li><p>tenant</p></li>
+</ul>
+<p>Or, pass the following parameters for Active Directory username/password:</p>
+<ul class="simple">
+<li><p>ad_user</p></li>
+<li><p>password</p></li>
+<li><p>subscription_id</p></li>
+</ul>
+<p>Or, pass the following parameters for ADFS username/password:</p>
+<ul class="simple">
+<li><p>ad_user</p></li>
+<li><p>password</p></li>
+<li><p>client_id</p></li>
+<li><p>tenant</p></li>
+<li><p>adfs_authority_url</p></li>
+</ul>
+<p>“adfs_authority_url” is optional. It’s necessary only when you have own ADFS authority like <a class="reference external" href="https://yourdomain.com/adfs">https://yourdomain.com/adfs</a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="other-cloud-environments">
+<h2>Other Cloud Environments<a class="headerlink" href="#other-cloud-environments" title="Permalink to this headline"></a></h2>
+<p>To use an Azure Cloud other than the default public cloud (for example, Azure China Cloud, Azure US Government Cloud, Azure Stack),
+pass the “cloud_environment” argument to modules, configure it in a credential profile, or set the “AZURE_CLOUD_ENVIRONMENT”
+environment variable. The value is either a cloud name as defined by the Azure Python SDK (for example, “AzureChinaCloud”,
+“AzureUSGovernment”; defaults to “AzureCloud”) or an Azure metadata discovery URL (for Azure Stack).</p>
+</div>
+<div class="section" id="creating-virtual-machines">
+<h2>Creating Virtual Machines<a class="headerlink" href="#creating-virtual-machines" title="Permalink to this headline"></a></h2>
+<p>There are two ways to create a virtual machine, both involving the azure_rm_virtualmachine module. We can either create
+a storage account, network interface, security group and public IP address and pass the names of these objects to the
+module as parameters, or we can let the module do the work for us and accept the defaults it chooses.</p>
+<div class="section" id="creating-individual-components">
+<h3>Creating Individual Components<a class="headerlink" href="#creating-individual-components" title="Permalink to this headline"></a></h3>
+<p>An Azure module is available to help you create a storage account, virtual network, subnet, network interface,
+security group and public IP. Here is a full example of creating each of these and passing the names to the
+<code class="docutils literal notranslate"><span class="pre">azure.azcollection.azure_rm_virtualmachine</span></code> module at the end:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create storage account</span>
+  <span class="nt">azure.azcollection.azure_rm_storageaccount</span><span class="p">:</span>
+    <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testaccount001</span>
+    <span class="nt">account_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Standard_LRS</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create virtual network</span>
+  <span class="nt">azure.azcollection.azure_rm_virtualnetwork</span><span class="p">:</span>
+    <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvn001</span>
+    <span class="nt">address_prefixes</span><span class="p">:</span> <span class="s">&quot;10.10.0.0/16&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add subnet</span>
+  <span class="nt">azure.azcollection.azure_rm_subnet</span><span class="p">:</span>
+    <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">subnet001</span>
+    <span class="nt">address_prefix</span><span class="p">:</span> <span class="s">&quot;10.10.0.0/24&quot;</span>
+    <span class="nt">virtual_network</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvn001</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create public ip</span>
+  <span class="nt">azure.azcollection.azure_rm_publicipaddress</span><span class="p">:</span>
+    <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+    <span class="nt">allocation_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Static</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">publicip001</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create security group that allows SSH</span>
+  <span class="nt">azure.azcollection.azure_rm_securitygroup</span><span class="p">:</span>
+    <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secgroup001</span>
+    <span class="nt">rules</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SSH</span>
+        <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Tcp</span>
+        <span class="nt">destination_port_range</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+        <span class="nt">access</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Allow</span>
+        <span class="nt">priority</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">101</span>
+        <span class="nt">direction</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Inbound</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create NIC</span>
+  <span class="nt">azure.azcollection.azure_rm_networkinterface</span><span class="p">:</span>
+    <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testnic001</span>
+    <span class="nt">virtual_network</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvn001</span>
+    <span class="nt">subnet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">subnet001</span>
+    <span class="nt">public_ip_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">publicip001</span>
+    <span class="nt">security_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secgroup001</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create virtual machine</span>
+  <span class="nt">azure.azcollection.azure_rm_virtualmachine</span><span class="p">:</span>
+    <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm001</span>
+    <span class="nt">vm_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Standard_D1</span>
+    <span class="nt">storage_account</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testaccount001</span>
+    <span class="nt">storage_container</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm001</span>
+    <span class="nt">storage_blob</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm001.vhd</span>
+    <span class="nt">admin_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+    <span class="nt">admin_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Password!</span>
+    <span class="nt">network_interfaces</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testnic001</span>
+    <span class="nt">image</span><span class="p">:</span>
+      <span class="nt">offer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CentOS</span>
+      <span class="nt">publisher</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OpenLogic</span>
+      <span class="nt">sku</span><span class="p">:</span> <span class="s">&#39;7.1&#39;</span>
+      <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+</pre></div>
+</div>
+<p>Each of the Azure modules offers a variety of parameter options. Not all options are demonstrated in the above example.
+See each individual module for further details and examples.</p>
+</div>
+<div class="section" id="creating-a-virtual-machine-with-default-options">
+<h3>Creating a Virtual Machine with Default Options<a class="headerlink" href="#creating-a-virtual-machine-with-default-options" title="Permalink to this headline"></a></h3>
+<p>If you simply want to create a virtual machine without specifying all the details, you can do that as well. The only
+caveat is that you will need a virtual network with one subnet already in your resource group. Assuming you have a
+virtual network already with an existing subnet, you can run the following to create a VM:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">azure.azcollection.azure_rm_virtualmachine</span><span class="p">:</span>
+  <span class="nt">resource_group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Testing</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm10</span>
+  <span class="nt">vm_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Standard_D1</span>
+  <span class="nt">admin_username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">chouseknecht</span>
+  <span class="nt">ssh_password_enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">ssh_public_keys</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">ssh_keys</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">image</span><span class="p">:</span>
+    <span class="nt">offer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CentOS</span>
+    <span class="nt">publisher</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OpenLogic</span>
+    <span class="nt">sku</span><span class="p">:</span> <span class="s">&#39;7.1&#39;</span>
+    <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-virtual-machine-in-availability-zones">
+<h3>Creating a Virtual Machine in Availability Zones<a class="headerlink" href="#creating-a-virtual-machine-in-availability-zones" title="Permalink to this headline"></a></h3>
+<p>If you want to create a VM in an availability zone,
+consider the following:</p>
+<ul class="simple">
+<li><p>Both OS disk and data disk must be a ‘managed disk’, not an ‘unmanaged disk’.</p></li>
+<li><p>When creating a VM with the <code class="docutils literal notranslate"><span class="pre">azure.azcollection.azure_rm_virtualmachine</span></code> module,
+you need to explicitly set the <code class="docutils literal notranslate"><span class="pre">managed_disk_type</span></code> parameter
+to change the OS disk to a managed disk.
+Otherwise, the OS disk becomes an unmanaged disk.</p></li>
+<li><p>When you create a data disk with the <code class="docutils literal notranslate"><span class="pre">azure.azcollection.azure_rm_manageddisk</span></code> module,
+you need to explicitly specify the <code class="docutils literal notranslate"><span class="pre">storage_account_type</span></code> parameter
+to make it a managed disk.
+Otherwise, the data disk will be an unmanaged disk.</p></li>
+<li><p>A managed disk does not require a storage account or a storage container,
+unlike an unmanaged disk.
+In particular, note that once a VM is created on an unmanaged disk,
+an unnecessary storage container named “vhds” is automatically created.</p></li>
+<li><p>When you create an IP address with the <code class="docutils literal notranslate"><span class="pre">azure.azcollection.azure_rm_publicipaddress</span></code> module,
+you must set the  <code class="docutils literal notranslate"><span class="pre">sku</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">standard</span></code>.
+Otherwise, the IP address cannot be used in an availability zone.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="dynamic-inventory-script">
+<h2>Dynamic Inventory Script<a class="headerlink" href="#dynamic-inventory-script" title="Permalink to this headline"></a></h2>
+<p>If you are not familiar with Ansible’s dynamic inventory scripts, check out <a class="reference internal" href="../user_guide/intro_dynamic_inventory.html#intro-dynamic-inventory"><span class="std std-ref">Intro to Dynamic Inventory</span></a>.</p>
+<p>The Azure Resource Manager inventory script is called  <a class="reference external" href="https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/azure_rm.py">azure_rm.py</a>. It authenticates with the Azure API exactly the same as the
+Azure modules, which means you will either define the same environment variables described above in <a class="reference internal" href="#using-environment-variables">Using Environment Variables</a>,
+create a <code class="docutils literal notranslate"><span class="pre">$HOME/.azure/credentials</span></code> file (also described above in <a class="reference internal" href="#storing-in-a-file">Storing in a File</a>), or pass command line parameters. To see available command
+line options execute the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wget https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/azure_rm.py
+$ ./azure_rm.py --help
+</pre></div>
+</div>
+<p>As with all dynamic inventory scripts, the script can be executed directly, passed as a parameter to the ansible command,
+or passed directly to ansible-playbook using the -i option. No matter how it is executed the script produces JSON representing
+all of the hosts found in your Azure subscription. You can narrow this down to just hosts found in a specific set of
+Azure resource groups, or even down to a specific host.</p>
+<p>For a given host, the inventory script provides the following host variables:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;ansible_host&quot;</span><span class="p">:</span> <span class="s2">&quot;XXX.XXX.XXX.XXX&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;computer_name&quot;</span><span class="p">:</span> <span class="s2">&quot;computer_name2&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;fqdn&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;/subscriptions/subscription-id/resourceGroups/galaxy-production/providers/Microsoft.Compute/virtualMachines/object-name&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;image&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;offer&quot;</span><span class="p">:</span> <span class="s2">&quot;CentOS&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;publisher&quot;</span><span class="p">:</span> <span class="s2">&quot;OpenLogic&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;7.1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;latest&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;westus&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;mac_address&quot;</span><span class="p">:</span> <span class="s2">&quot;00-00-5E-00-53-FE&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;object-name&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;network_interface&quot;</span><span class="p">:</span> <span class="s2">&quot;interface-name&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;network_interface_id&quot;</span><span class="p">:</span> <span class="s2">&quot;/subscriptions/subscription-id/resourceGroups/galaxy-production/providers/Microsoft.Network/networkInterfaces/object-name1&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;network_security_group&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;network_security_group_id&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;os_disk&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;object-name&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;operating_system_type&quot;</span><span class="p">:</span> <span class="s2">&quot;Linux&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;plan&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;powerstate&quot;</span><span class="p">:</span> <span class="s2">&quot;running&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;private_ip&quot;</span><span class="p">:</span> <span class="s2">&quot;172.26.3.6&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;private_ip_alloc_method&quot;</span><span class="p">:</span> <span class="s2">&quot;Static&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;provisioning_state&quot;</span><span class="p">:</span> <span class="s2">&quot;Succeeded&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;public_ip&quot;</span><span class="p">:</span> <span class="s2">&quot;XXX.XXX.XXX.XXX&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;public_ip_alloc_method&quot;</span><span class="p">:</span> <span class="s2">&quot;Static&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;public_ip_id&quot;</span><span class="p">:</span> <span class="s2">&quot;/subscriptions/subscription-id/resourceGroups/galaxy-production/providers/Microsoft.Network/publicIPAddresses/object-name&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;public_ip_name&quot;</span><span class="p">:</span> <span class="s2">&quot;object-name&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;resource_group&quot;</span><span class="p">:</span> <span class="s2">&quot;galaxy-production&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;security_group&quot;</span><span class="p">:</span> <span class="s2">&quot;object-name&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;security_group_id&quot;</span><span class="p">:</span> <span class="s2">&quot;/subscriptions/subscription-id/resourceGroups/galaxy-production/providers/Microsoft.Network/networkSecurityGroups/object-name&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;db&quot;</span><span class="p">:</span> <span class="s2">&quot;mysql&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Microsoft.Compute/virtualMachines&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;virtual_machine_size&quot;</span><span class="p">:</span> <span class="s2">&quot;Standard_DS4&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="host-groups">
+<h3>Host Groups<a class="headerlink" href="#host-groups" title="Permalink to this headline"></a></h3>
+<p>By default hosts are grouped by:</p>
+<ul class="simple">
+<li><p>azure (all hosts)</p></li>
+<li><p>location name</p></li>
+<li><p>resource group name</p></li>
+<li><p>security group name</p></li>
+<li><p>tag key</p></li>
+<li><p>tag key_value</p></li>
+<li><p>os_disk operating_system_type (Windows/Linux)</p></li>
+</ul>
+<p>You can control host groupings and host selection by either defining environment variables or creating an
+azure_rm.ini file in your current working directory.</p>
+<p>NOTE: An .ini file will take precedence over environment variables.</p>
+<p>NOTE: The name of the .ini file is the basename of the inventory script (in other words, ‘azure_rm’) with a ‘.ini’
+extension. This allows you to copy, rename and customize the inventory script and have matching .ini files all in
+the same directory.</p>
+<p>Control grouping using the following variables defined in the environment:</p>
+<ul class="simple">
+<li><p>AZURE_GROUP_BY_RESOURCE_GROUP=yes</p></li>
+<li><p>AZURE_GROUP_BY_LOCATION=yes</p></li>
+<li><p>AZURE_GROUP_BY_SECURITY_GROUP=yes</p></li>
+<li><p>AZURE_GROUP_BY_TAG=yes</p></li>
+<li><p>AZURE_GROUP_BY_OS_FAMILY=yes</p></li>
+</ul>
+<p>Select hosts within specific resource groups by assigning a comma separated list to:</p>
+<ul class="simple">
+<li><p>AZURE_RESOURCE_GROUPS=resource_group_a,resource_group_b</p></li>
+</ul>
+<p>Select hosts for specific tag key by assigning a comma separated list of tag keys to:</p>
+<ul class="simple">
+<li><p>AZURE_TAGS=key1,key2,key3</p></li>
+</ul>
+<p>Select hosts for specific locations by assigning a comma separated list of locations to:</p>
+<ul class="simple">
+<li><p>AZURE_LOCATIONS=eastus,eastus2,westus</p></li>
+</ul>
+<p>Or, select hosts for specific tag key:value pairs by assigning a comma separated list key:value pairs to:</p>
+<ul class="simple">
+<li><p>AZURE_TAGS=key1:value1,key2:value2</p></li>
+</ul>
+<p>If you don’t need the powerstate, you can improve performance by turning off powerstate fetching:</p>
+<ul class="simple">
+<li><p>AZURE_INCLUDE_POWERSTATE=no</p></li>
+</ul>
+<p>A sample azure_rm.ini file is included along with the inventory script in
+<a class="reference external" href="https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/azure_rm.ini">here</a>.
+An .ini file will contain the following:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[azure]</span>
+<span class="c1"># Control which resource groups are included. By default all resources groups are included.</span>
+<span class="c1"># Set resource_groups to a comma separated list of resource groups names.</span>
+<span class="c1">#resource_groups=</span>
+
+<span class="c1"># Control which tags are included. Set tags to a comma separated list of keys or key:value pairs</span>
+<span class="c1">#tags=</span>
+
+<span class="c1"># Control which locations are included. Set locations to a comma separated list of locations.</span>
+<span class="c1">#locations=</span>
+
+<span class="c1"># Include powerstate. If you don&#39;t need powerstate information, turning it off improves runtime performance.</span>
+<span class="c1"># Valid values: yes, no, true, false, True, False, 0, 1.</span>
+<span class="na">include_powerstate</span><span class="o">=</span><span class="s">yes</span>
+
+<span class="c1"># Control grouping with the following boolean flags. Valid values: yes, no, true, false, True, False, 0, 1.</span>
+<span class="na">group_by_resource_group</span><span class="o">=</span><span class="s">yes</span>
+<span class="na">group_by_location</span><span class="o">=</span><span class="s">yes</span>
+<span class="na">group_by_security_group</span><span class="o">=</span><span class="s">yes</span>
+<span class="na">group_by_tag</span><span class="o">=</span><span class="s">yes</span>
+<span class="na">group_by_os_family</span><span class="o">=</span><span class="s">yes</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h3>
+<p>Here are some examples using the inventory script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download inventory script</span>
+$ wget https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/azure_rm.py
+
+<span class="c1"># Execute /bin/uname on all instances in the Testing resource group</span>
+$ ansible -i azure_rm.py Testing -m shell -a <span class="s2">&quot;/bin/uname -a&quot;</span>
+
+<span class="c1"># Execute win_ping on all Windows instances</span>
+$ ansible -i azure_rm.py windows -m win_ping
+
+<span class="c1"># Execute ping on all Linux instances</span>
+$ ansible -i azure_rm.py linux -m ping
+
+<span class="c1"># Use the inventory script to print instance specific information</span>
+$ ./azure_rm.py --host my_instance_host_name --resource-groups<span class="o">=</span>Testing --pretty
+
+<span class="c1"># Use the inventory script with ansible-playbook</span>
+$ ansible-playbook -i ./azure_rm.py test_playbook.yml
+</pre></div>
+</div>
+<p>Here is a simple playbook to exercise the Azure inventory script:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Test the inventory script</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+        <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">powerstate</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">powerstate</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<p>You can execute the playbook with something like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible-playbook -i ./azure_rm.py test_azure_inventory.yml
+</pre></div>
+</div>
+</div>
+<div class="section" id="disabling-certificate-validation-on-azure-endpoints">
+<h3>Disabling certificate validation on Azure endpoints<a class="headerlink" href="#disabling-certificate-validation-on-azure-endpoints" title="Permalink to this headline"></a></h3>
+<p>When an HTTPS proxy is present, or when using Azure Stack, it may be necessary to disable certificate validation for
+Azure endpoints in the Azure modules. This is not a recommended security practice, but may be necessary when the system
+CA store cannot be altered to include the necessary CA certificate. Certificate validation can be controlled by setting
+the “cert_validation_mode” value in a credential profile, via the “AZURE_CERT_VALIDATION_MODE” environment variable, or
+by passing the “cert_validation_mode” argument to any Azure module. The default value is “validate”; setting the value
+to “ignore” will prevent all certificate validation. The module argument takes precedence over a credential profile value,
+which takes precedence over the environment value.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guide_gce.html" class="btn btn-neutral float-left" title="Google Cloud Platform Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guide_online.html" class="btn btn-neutral float-right" title="Online.net Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on May 19, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

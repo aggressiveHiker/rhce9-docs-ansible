@@ -1,0 +1,1218 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Loops &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Controlling where tasks run: delegation and local actions" href="playbooks_delegation.html" />
+    <link rel="prev" title="Understanding privilege escalation: become" href="become.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="4">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "4" ) {
+              option.selected = true;
+            }
+            if (current_url.search("/4/") > -1) {
+              option.value = current_url.replace("/4/","/latest/");
+            } else {
+              option.value = current_url.replace("/latest/","/latest/");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9";
+            if ( "2.9" == "4" ) {
+              option.selected = true;
+            }
+            if (current_url.search("/4/") > -1) {
+              option.value = current_url.replace("/4/","/2.9/");
+            } else {
+              option.value = current_url.replace("/latest/","/2.9/");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "4" ) {
+              option.selected = true;
+            }
+            if (current_url.search("/4/") > -1) {
+              option.value = current_url.replace("/4/","/devel/");
+            } else {
+              option.value = current_url.replace("/latest/","/devel/");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+<!--  <form id="rtd-search-form" class="wy-form" action="../search.html" -->
+  <form id="rtd-search-form" class="wy-form"  method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#traditional-table-of-contents">Traditional Table of Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Loops</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#comparing-loop-and-with">Comparing <code class="docutils literal notranslate"><span class="pre">loop</span></code> and <code class="docutils literal notranslate"><span class="pre">with_*</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#standard-loops">Standard loops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#registering-variables-with-a-loop">Registering variables with a loop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#complex-loops">Complex loops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ensuring-list-input-for-loop-using-query-rather-than-lookup">Ensuring list input for <code class="docutils literal notranslate"><span class="pre">loop</span></code>: using <code class="docutils literal notranslate"><span class="pre">query</span></code> rather than <code class="docutils literal notranslate"><span class="pre">lookup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adding-controls-to-loops">Adding controls to loops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#migrating-from-with-x-to-loop">Migrating from with_X to loop</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working With Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+        
+      <li>Loops</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/playbooks_loops.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+  <script>
+    startsWith = function(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">');
+      document.write('<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>');
+      document.write('</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        document.write('<div id="core_banner_id" class="admonition caution">');
+        document.write('<p>You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/ansible/latest">the latest documentation</a>.</p>');
+        document.write('</div>');
+
+      } else if (startsWith(current_url_path, "/ansible/latest/") || startsWith(current_url_path, "/ansible/4/")) {
+        /* temp banner to advertise GalaxyNG survey */
+        document.write('<div id="latest_survey_banner_id" class="admonition important">');
+        document.write('<br><p>Please take our <a href="https://www.surveymonkey.co.uk/r/2VWVJY3">survey</a> to help us improve support for collections and roles in GalaxyNG.</p><br>');
+        document.write('</div>');
+
+        document.write('<div id="latest_banner_id" class="admonition caution">');
+        document.write('<p>You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.</p>');
+        document.write('</div>');
+
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        document.write('<div id="2dot9_banner_id" class="admonition caution">');
+        document.write('<p>You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.</p>');
+        document.write('</div>');
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp banner to advertise GalaxyNG survey */
+        document.write('<div id="devel_survey_banner_id" class="admonition important">');
+        document.write('<br><p>Please take our <a href="https://www.surveymonkey.co.uk/r/2VWVJY3">survey</a> to help us improve support for collections and roles in GalaxyNG.</p><br>');
+        document.write('</div>');
+        /* temp banner to advertise survey
+        document.write('<div id="devel_survey_banner_id" class="admonition important">');
+        document.write('<br><p>Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.</p><br>');
+        document.write('</div>'); */
+
+        document.write('<div id="devel_banner_id" class="admonition caution">');
+        document.write('<p>You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+
+      } else {
+        document.write('<div id="EOL_banner_id" class="admonition caution">');
+        document.write('<p>You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+      }
+    
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="loops">
+<span id="playbooks-loops"></span><h1>Loops<a class="headerlink" href="#loops" title="Permalink to this headline">¶</a></h1>
+<p>Ansible offers the <code class="docutils literal notranslate"><span class="pre">loop</span></code>, <code class="docutils literal notranslate"><span class="pre">with_&lt;lookup&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">until</span></code> keywords to execute a task multiple times. Examples of commonly-used loops include changing ownership on several files and/or directories with the <a class="reference internal" href="../collections/ansible/builtin/file_module.html#file-module"><span class="std std-ref">file module</span></a>, creating multiple users with the <a class="reference internal" href="../collections/ansible/builtin/user_module.html#user-module"><span class="std std-ref">user module</span></a>, and
+repeating a polling step until a certain result is reached.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>We added <code class="docutils literal notranslate"><span class="pre">loop</span></code> in Ansible 2.5. It is not yet a full replacement for <code class="docutils literal notranslate"><span class="pre">with_&lt;lookup&gt;</span></code>, but we recommend it for most use cases.</p></li>
+<li><p>We have not deprecated the use of <code class="docutils literal notranslate"><span class="pre">with_&lt;lookup&gt;</span></code> - that syntax will still be valid for the foreseeable future.</p></li>
+<li><p>We are looking to improve <code class="docutils literal notranslate"><span class="pre">loop</span></code> syntax - watch this page and the <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/changelogs">changelog</a> for updates.</p></li>
+</ul>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#comparing-loop-and-with" id="id3">Comparing <code class="docutils literal notranslate"><span class="pre">loop</span></code> and <code class="docutils literal notranslate"><span class="pre">with_*</span></code></a></p></li>
+<li><p><a class="reference internal" href="#standard-loops" id="id4">Standard loops</a></p>
+<ul>
+<li><p><a class="reference internal" href="#iterating-over-a-simple-list" id="id5">Iterating over a simple list</a></p></li>
+<li><p><a class="reference internal" href="#iterating-over-a-list-of-hashes" id="id6">Iterating over a list of hashes</a></p></li>
+<li><p><a class="reference internal" href="#iterating-over-a-dictionary" id="id7">Iterating over a dictionary</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#registering-variables-with-a-loop" id="id8">Registering variables with a loop</a></p></li>
+<li><p><a class="reference internal" href="#complex-loops" id="id9">Complex loops</a></p>
+<ul>
+<li><p><a class="reference internal" href="#iterating-over-nested-lists" id="id10">Iterating over nested lists</a></p></li>
+<li><p><a class="reference internal" href="#retrying-a-task-until-a-condition-is-met" id="id11">Retrying a task until a condition is met</a></p></li>
+<li><p><a class="reference internal" href="#looping-over-inventory" id="id12">Looping over inventory</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ensuring-list-input-for-loop-using-query-rather-than-lookup" id="id13">Ensuring list input for <code class="docutils literal notranslate"><span class="pre">loop</span></code>: using <code class="docutils literal notranslate"><span class="pre">query</span></code> rather than <code class="docutils literal notranslate"><span class="pre">lookup</span></code></a></p></li>
+<li><p><a class="reference internal" href="#adding-controls-to-loops" id="id14">Adding controls to loops</a></p>
+<ul>
+<li><p><a class="reference internal" href="#limiting-loop-output-with-label" id="id15">Limiting loop output with <code class="docutils literal notranslate"><span class="pre">label</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pausing-within-a-loop" id="id16">Pausing within a loop</a></p></li>
+<li><p><a class="reference internal" href="#tracking-progress-through-a-loop-with-index-var" id="id17">Tracking progress through a loop with <code class="docutils literal notranslate"><span class="pre">index_var</span></code></a></p></li>
+<li><p><a class="reference internal" href="#defining-inner-and-outer-variable-names-with-loop-var" id="id18">Defining inner and outer variable names with <code class="docutils literal notranslate"><span class="pre">loop_var</span></code></a></p></li>
+<li><p><a class="reference internal" href="#extended-loop-variables" id="id19">Extended loop variables</a></p></li>
+<li><p><a class="reference internal" href="#accessing-the-name-of-your-loop-var" id="id20">Accessing the name of your loop_var</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#migrating-from-with-x-to-loop" id="id21">Migrating from with_X to loop</a></p>
+<ul>
+<li><p><a class="reference internal" href="#with-list" id="id22">with_list</a></p></li>
+<li><p><a class="reference internal" href="#with-items" id="id23">with_items</a></p></li>
+<li><p><a class="reference internal" href="#with-indexed-items" id="id24">with_indexed_items</a></p></li>
+<li><p><a class="reference internal" href="#with-flattened" id="id25">with_flattened</a></p></li>
+<li><p><a class="reference internal" href="#with-together" id="id26">with_together</a></p></li>
+<li><p><a class="reference internal" href="#with-dict" id="id27">with_dict</a></p></li>
+<li><p><a class="reference internal" href="#with-sequence" id="id28">with_sequence</a></p></li>
+<li><p><a class="reference internal" href="#with-subelements" id="id29">with_subelements</a></p></li>
+<li><p><a class="reference internal" href="#with-nested-with-cartesian" id="id30">with_nested/with_cartesian</a></p></li>
+<li><p><a class="reference internal" href="#with-random-choice" id="id31">with_random_choice</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="comparing-loop-and-with">
+<h2><a class="toc-backref" href="#id3">Comparing <code class="docutils literal notranslate"><span class="pre">loop</span></code> and <code class="docutils literal notranslate"><span class="pre">with_*</span></code></a><a class="headerlink" href="#comparing-loop-and-with" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">with_&lt;lookup&gt;</span></code> keywords rely on <a class="reference internal" href="../plugins/lookup.html#lookup-plugins"><span class="std std-ref">Lookup Plugins</span></a> - even  <code class="docutils literal notranslate"><span class="pre">items</span></code> is a lookup.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">loop</span></code> keyword is equivalent to <code class="docutils literal notranslate"><span class="pre">with_list</span></code>, and is the best choice for simple loops.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">loop</span></code> keyword will not accept a string as input, see <a class="reference internal" href="#query-vs-lookup"><span class="std std-ref">Ensuring list input for loop: using query rather than lookup</span></a>.</p></li>
+<li><p>Generally speaking, any use of <code class="docutils literal notranslate"><span class="pre">with_*</span></code> covered in <a class="reference internal" href="#migrating-to-loop"><span class="std std-ref">Migrating from with_X to loop</span></a> can be updated to use <code class="docutils literal notranslate"><span class="pre">loop</span></code>.</p></li>
+<li><p>Be careful when changing <code class="docutils literal notranslate"><span class="pre">with_items</span></code> to <code class="docutils literal notranslate"><span class="pre">loop</span></code>, as <code class="docutils literal notranslate"><span class="pre">with_items</span></code> performed implicit single-level flattening. You may need to use <code class="docutils literal notranslate"><span class="pre">flatten(1)</span></code> with <code class="docutils literal notranslate"><span class="pre">loop</span></code> to match the exact outcome. For example, to get the same output as:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">with_items</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+</pre></div>
+</div>
+<p>you would need:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="o">[</span><span class="m">1</span><span class="o">,</span> <span class="o">[</span><span class="m">2</span><span class="o">,</span><span class="m">3</span><span class="o">]</span> <span class="o">,</span><span class="m">4</span><span class="o">]</span> <span class="o">|</span> <span class="nf">flatten</span><span class="o">(</span><span class="m">1</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Any <code class="docutils literal notranslate"><span class="pre">with_*</span></code> statement that requires using <code class="docutils literal notranslate"><span class="pre">lookup</span></code> within a loop should not be converted to use the <code class="docutils literal notranslate"><span class="pre">loop</span></code> keyword. For example, instead of doing:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;fileglob&#39;,</span><span class="nv"> </span><span class="s">&#39;*.txt&#39;,</span><span class="nv"> </span><span class="s">wantlist=True)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<p>it’s cleaner to keep:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">with_fileglob</span><span class="p">:</span> <span class="s">&#39;*.txt&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="standard-loops">
+<span id="id1"></span><h2><a class="toc-backref" href="#id4">Standard loops</a><a class="headerlink" href="#standard-loops" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="iterating-over-a-simple-list">
+<h3><a class="toc-backref" href="#id5">Iterating over a simple list</a><a class="headerlink" href="#iterating-over-a-simple-list" title="Permalink to this headline">¶</a></h3>
+<p>Repeated tasks can be written as standard loops over a simple list of strings. You can define the list directly in the task:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add several users</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">groups</span><span class="p">:</span> <span class="s">&quot;wheel&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">testuser1</span>
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">testuser2</span>
+</pre></div>
+</div>
+<p>You can define the list in a variables file, or in the ‘vars’ section of your play, then refer to the name of the list in the task:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">somelist</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>Either of these examples would be the equivalent of:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add user testuser1</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;testuser1&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">groups</span><span class="p">:</span> <span class="s">&quot;wheel&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add user testuser2</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;testuser2&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">groups</span><span class="p">:</span> <span class="s">&quot;wheel&quot;</span>
+</pre></div>
+</div>
+<p>You can pass a list directly to a parameter for some plugins. Most of the packaging modules, like <a class="reference internal" href="../collections/ansible/builtin/yum_module.html#yum-module"><span class="std std-ref">yum</span></a> and <a class="reference internal" href="../collections/ansible/builtin/apt_module.html#apt-module"><span class="std std-ref">apt</span></a>, have this capability. When available, passing the list to a parameter is better than looping over the task. For example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Optimal yum</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span>  <span class="nv">list_of_packages</span>  <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Non-optimal yum, slower and may cause issues with interdependencies</span>
+  <span class="nt">ansible.builtin.yum</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span>  <span class="nv">item</span>  <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span>  <span class="nv">list_of_packages</span>  <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>Check the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/modules/modules_by_category.html#modules-by-category" title="(in Ansible v2.9)"><span class="xref std std-ref">module documentation</span></a> to see if you can pass a list to any particular module’s parameter(s).</p>
+</div>
+<div class="section" id="iterating-over-a-list-of-hashes">
+<h3><a class="toc-backref" href="#id6">Iterating over a list of hashes</a><a class="headerlink" href="#iterating-over-a-list-of-hashes" title="Permalink to this headline">¶</a></h3>
+<p>If you have a list of hashes, you can reference subkeys in a loop. For example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add several users</span>
+  <span class="nt">ansible.builtin.user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">groups</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.groups</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span> <span class="s">&#39;testuser1&#39;</span><span class="p p-Indicator">,</span><span class="nt"> groups</span><span class="p">:</span> <span class="s">&#39;wheel&#39;</span> <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span> <span class="s">&#39;testuser2&#39;</span><span class="p p-Indicator">,</span><span class="nt"> groups</span><span class="p">:</span> <span class="s">&#39;root&#39;</span> <span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>When combining <a class="reference internal" href="playbooks_conditionals.html#playbooks-conditionals"><span class="std std-ref">conditionals</span></a> with a loop, the <code class="docutils literal notranslate"><span class="pre">when:</span></code> statement is processed separately for each item.
+See <a class="reference internal" href="playbooks_conditionals.html#the-when-statement"><span class="std std-ref">Basic conditionals with when</span></a> for examples.</p>
+</div>
+<div class="section" id="iterating-over-a-dictionary">
+<h3><a class="toc-backref" href="#id7">Iterating over a dictionary</a><a class="headerlink" href="#iterating-over-a-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>To loop over a dict, use the  <a class="reference internal" href="playbooks_filters.html#dict-filter"><span class="std std-ref">dict2items</span></a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Using dict2items</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.key</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">item.value</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">tag_data</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">dict2items</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">tag_data</span><span class="p">:</span>
+      <span class="nt">Environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dev</span>
+      <span class="nt">Application</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">payment</span>
+</pre></div>
+</div>
+<p>Here, we are iterating over <cite>tag_data</cite> and printing the key and the value from it.</p>
+</div>
+</div>
+<div class="section" id="registering-variables-with-a-loop">
+<h2><a class="toc-backref" href="#id8">Registering variables with a loop</a><a class="headerlink" href="#registering-variables-with-a-loop" title="Permalink to this headline">¶</a></h2>
+<p>You can register the output of a loop as a variable. For example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Register loop output as a variable</span>
+  <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="s">&quot;echo</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;one&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;two&quot;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo</span>
+</pre></div>
+</div>
+<p>When you use <code class="docutils literal notranslate"><span class="pre">register</span></code> with a loop, the data structure placed in the variable will contain a <code class="docutils literal notranslate"><span class="pre">results</span></code> attribute that is a list of all responses from the module. This differs from the data structure returned when using <code class="docutils literal notranslate"><span class="pre">register</span></code> without a loop:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;msg&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;All</span><span class="nv"> </span><span class="s">items</span><span class="nv"> </span><span class="s">completed&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;results&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
+        <span class="p p-Indicator">{</span>
+            <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;cmd&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;echo</span><span class="nv"> </span><span class="s">\&quot;one\&quot;</span><span class="nv"> </span><span class="s">&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;delta&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;0:00:00.003110&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;end&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;2013-12-19</span><span class="nv"> </span><span class="s">12:00:05.187153&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;invocation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+                <span class="s">&quot;module_args&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;echo</span><span class="nv"> </span><span class="s">\&quot;one\&quot;&quot;</span><span class="p p-Indicator">,</span>
+                <span class="s">&quot;module_name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;shell&quot;</span>
+            <span class="p p-Indicator">},</span>
+            <span class="s">&quot;item&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;one&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;rc&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;start&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;2013-12-19</span><span class="nv"> </span><span class="s">12:00:05.184043&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;stderr&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;stdout&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;one&quot;</span>
+        <span class="p p-Indicator">},</span>
+        <span class="p p-Indicator">{</span>
+            <span class="s">&quot;changed&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;cmd&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;echo</span><span class="nv"> </span><span class="s">\&quot;two\&quot;</span><span class="nv"> </span><span class="s">&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;delta&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;0:00:00.002920&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;end&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;2013-12-19</span><span class="nv"> </span><span class="s">12:00:05.245502&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;invocation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+                <span class="s">&quot;module_args&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;echo</span><span class="nv"> </span><span class="s">\&quot;two\&quot;&quot;</span><span class="p p-Indicator">,</span>
+                <span class="s">&quot;module_name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;shell&quot;</span>
+            <span class="p p-Indicator">},</span>
+            <span class="s">&quot;item&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;two&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;rc&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;start&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;2013-12-19</span><span class="nv"> </span><span class="s">12:00:05.242582&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;stderr&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;stdout&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;two&quot;</span>
+        <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">]</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>Subsequent loops over the registered variable to inspect the results may look like:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fail if return code is not 0</span>
+  <span class="nt">ansible.builtin.fail</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;The</span><span class="nv"> </span><span class="s">command</span><span class="nv"> </span><span class="s">(</span><span class="cp">{{</span> <span class="nv">item.cmd</span> <span class="cp">}}</span><span class="s">)</span><span class="nv"> </span><span class="s">did</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">have</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">return</span><span class="nv"> </span><span class="s">code&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">item.rc != 0</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">echo.results</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>During iteration, the result of the current item will be placed in the variable:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Place the result of the current item in the variable</span>
+  <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">one</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">two</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo</span>
+  <span class="nt">changed_when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo.stdout != &quot;one&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="complex-loops">
+<span id="id2"></span><h2><a class="toc-backref" href="#id9">Complex loops</a><a class="headerlink" href="#complex-loops" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="iterating-over-nested-lists">
+<h3><a class="toc-backref" href="#id10">Iterating over nested lists</a><a class="headerlink" href="#iterating-over-nested-lists" title="Permalink to this headline">¶</a></h3>
+<p>You can use Jinja2 expressions to iterate over complex lists. For example, a loop can combine nested lists:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Give users access to multiple databases</span>
+  <span class="nt">community.mysql.mysql_user</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">priv</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="cp">}}</span><span class="s">.*:ALL&quot;</span>
+    <span class="nt">append_privs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;foo&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;alice&#39;</span><span class="o">,</span> <span class="s1">&#39;bob&#39;</span><span class="o">]</span> <span class="o">|</span><span class="nf">product</span><span class="o">([</span><span class="s1">&#39;clientdb&#39;</span><span class="o">,</span> <span class="s1">&#39;employeedb&#39;</span><span class="o">,</span> <span class="s1">&#39;providerdb&#39;</span><span class="o">])|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrying-a-task-until-a-condition-is-met">
+<span id="do-until-loops"></span><h3><a class="toc-backref" href="#id11">Retrying a task until a condition is met</a><a class="headerlink" href="#retrying-a-task-until-a-condition-is-met" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4.</span></p>
+</div>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">until</span></code> keyword to retry a task until a certain condition is met.  Here’s an example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Retry a task until a certain condition is met</span>
+  <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/foo</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+  <span class="nt">until</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result.stdout.find(&quot;all systems go&quot;) != -1</span>
+  <span class="nt">retries</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+  <span class="nt">delay</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+</pre></div>
+</div>
+<p>This task runs up to 5 times with a delay of 10 seconds between each attempt. If the result of any attempt has “all systems go” in its stdout, the task succeeds. The default value for “retries” is 3 and “delay” is 5.</p>
+<p>To see the results of individual retries, run the play with <code class="docutils literal notranslate"><span class="pre">-vv</span></code>.</p>
+<p>When you run a task with <code class="docutils literal notranslate"><span class="pre">until</span></code> and register the result as a variable, the registered variable will include a key called “attempts”, which records the number of the retries for the task.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You must set the <code class="docutils literal notranslate"><span class="pre">until</span></code> parameter if you want a task to retry. If <code class="docutils literal notranslate"><span class="pre">until</span></code> is not defined, the value for the <code class="docutils literal notranslate"><span class="pre">retries</span></code> parameter is forced to 1.</p>
+</div>
+</div>
+<div class="section" id="looping-over-inventory">
+<h3><a class="toc-backref" href="#id12">Looping over inventory</a><a class="headerlink" href="#looping-over-inventory" title="Permalink to this headline">¶</a></h3>
+<p>To loop over your inventory, or just a subset of it, you can use a regular <code class="docutils literal notranslate"><span class="pre">loop</span></code> with the <code class="docutils literal notranslate"><span class="pre">ansible_play_batch</span></code> or <code class="docutils literal notranslate"><span class="pre">groups</span></code> variables:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show all the hosts in the inventory</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;all&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show all the hosts in the current play</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">ansible_play_batch</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>There is also a specific lookup plugin <code class="docutils literal notranslate"><span class="pre">inventory_hostnames</span></code> that can be used like this:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show all the hosts in the inventory</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">query</span><span class="o">(</span><span class="s1">&#39;inventory_hostnames&#39;</span><span class="o">,</span> <span class="s1">&#39;all&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show all the hosts matching the pattern, ie all but the group www</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">query</span><span class="o">(</span><span class="s1">&#39;inventory_hostnames&#39;</span><span class="o">,</span> <span class="s1">&#39;all:!www&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>More information on the patterns can be found in <a class="reference internal" href="intro_patterns.html#intro-patterns"><span class="std std-ref">Patterns: targeting hosts and groups</span></a>.</p>
+</div>
+</div>
+<div class="section" id="ensuring-list-input-for-loop-using-query-rather-than-lookup">
+<span id="query-vs-lookup"></span><h2><a class="toc-backref" href="#id13">Ensuring list input for <code class="docutils literal notranslate"><span class="pre">loop</span></code>: using <code class="docutils literal notranslate"><span class="pre">query</span></code> rather than <code class="docutils literal notranslate"><span class="pre">lookup</span></code></a><a class="headerlink" href="#ensuring-list-input-for-loop-using-query-rather-than-lookup" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">loop</span></code> keyword requires a list as input, but the <code class="docutils literal notranslate"><span class="pre">lookup</span></code> keyword returns a string of comma-separated values by default. Ansible 2.5 introduced a new Jinja2 function named <a class="reference internal" href="../plugins/lookup.html#query"><span class="std std-ref">query</span></a> that always returns a list, offering a simpler interface and more predictable output from lookup plugins when using the <code class="docutils literal notranslate"><span class="pre">loop</span></code> keyword.</p>
+<p>You can force <code class="docutils literal notranslate"><span class="pre">lookup</span></code> to return a list to <code class="docutils literal notranslate"><span class="pre">loop</span></code> by using <code class="docutils literal notranslate"><span class="pre">wantlist=True</span></code>, or you can use <code class="docutils literal notranslate"><span class="pre">query</span></code> instead.</p>
+<p>These examples do the same thing:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">query</span><span class="o">(</span><span class="s1">&#39;inventory_hostnames&#39;</span><span class="o">,</span> <span class="s1">&#39;all&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;inventory_hostnames&#39;</span><span class="o">,</span> <span class="s1">&#39;all&#39;</span><span class="o">,</span> <span class="nv">wantlist</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-controls-to-loops">
+<span id="loop-control"></span><h2><a class="toc-backref" href="#id14">Adding controls to loops</a><a class="headerlink" href="#adding-controls-to-loops" title="Permalink to this headline">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.1.</span></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">loop_control</span></code> keyword lets you manage your loops in useful ways.</p>
+<div class="section" id="limiting-loop-output-with-label">
+<h3><a class="toc-backref" href="#id15">Limiting loop output with <code class="docutils literal notranslate"><span class="pre">label</span></code></a><a class="headerlink" href="#limiting-loop-output-with-label" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+<p>When looping over complex data structures, the console output of your task can be enormous. To limit the displayed output, use the <code class="docutils literal notranslate"><span class="pre">label</span></code> directive with <code class="docutils literal notranslate"><span class="pre">loop_control</span></code>:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create servers</span>
+  <span class="nt">digital_ocean</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">server1</span>
+      <span class="nt">disks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3gb</span>
+      <span class="nt">ram</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">15Gb</span>
+      <span class="nt">network</span><span class="p">:</span>
+        <span class="nt">nic01</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100Gb</span>
+        <span class="nt">nic02</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10Gb</span>
+        <span class="l l-Scalar l-Scalar-Plain">...</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">label</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>The output of this task will display just the <code class="docutils literal notranslate"><span class="pre">name</span></code> field for each <code class="docutils literal notranslate"><span class="pre">item</span></code> instead of the entire contents of the multi-line <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">item</span> <span class="pre">}}</span></code> variable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is for making console output more readable, not protecting sensitive data. If there is sensitive data in <code class="docutils literal notranslate"><span class="pre">loop</span></code>, set <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">yes</span></code> on the task to prevent disclosure.</p>
+</div>
+</div>
+<div class="section" id="pausing-within-a-loop">
+<h3><a class="toc-backref" href="#id16">Pausing within a loop</a><a class="headerlink" href="#pausing-within-a-loop" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.2.</span></p>
+</div>
+<p>To control the time (in seconds) between the execution of each item in a task loop, use the <code class="docutils literal notranslate"><span class="pre">pause</span></code> directive with <code class="docutils literal notranslate"><span class="pre">loop_control</span></code>:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># main.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create servers, pause 3s before creating next</span>
+  <span class="nt">community.digitalocean.digital_ocean</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">server1</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">server2</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">pause</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tracking-progress-through-a-loop-with-index-var">
+<h3><a class="toc-backref" href="#id17">Tracking progress through a loop with <code class="docutils literal notranslate"><span class="pre">index_var</span></code></a><a class="headerlink" href="#tracking-progress-through-a-loop-with-index-var" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.5.</span></p>
+</div>
+<p>To keep track of where you are in a loop, use the <code class="docutils literal notranslate"><span class="pre">index_var</span></code> directive with <code class="docutils literal notranslate"><span class="pre">loop_control</span></code>. This directive specifies a variable name to contain the current loop index:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Count our fruit</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">index</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">my_idx</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">apple</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">banana</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">pear</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">index_var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_idx</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>index_var</cite> is 0 indexed.</p>
+</div>
+</div>
+<div class="section" id="defining-inner-and-outer-variable-names-with-loop-var">
+<h3><a class="toc-backref" href="#id18">Defining inner and outer variable names with <code class="docutils literal notranslate"><span class="pre">loop_var</span></code></a><a class="headerlink" href="#defining-inner-and-outer-variable-names-with-loop-var" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.1.</span></p>
+</div>
+<p>You can nest two looping tasks using <code class="docutils literal notranslate"><span class="pre">include_tasks</span></code>. However, by default Ansible sets the loop variable <code class="docutils literal notranslate"><span class="pre">item</span></code> for each loop. This means the inner, nested loop will overwrite the value of <code class="docutils literal notranslate"><span class="pre">item</span></code> from the outer loop.
+You can specify the name of the variable for each loop using <code class="docutils literal notranslate"><span class="pre">loop_var</span></code> with <code class="docutils literal notranslate"><span class="pre">loop_control</span></code>:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># main.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">include_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">inner.yml</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">loop_var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">outer_item</span>
+
+<span class="c1"># inner.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Print outer and inner items</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;outer</span><span class="nv"> </span><span class="s">item=</span><span class="cp">{{</span> <span class="nv">outer_item</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">inner</span><span class="nv"> </span><span class="s">item=</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">b</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">c</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If Ansible detects that the current loop is using a variable which has already been defined, it will raise an error to fail the task.</p>
+</div>
+</div>
+<div class="section" id="extended-loop-variables">
+<h3><a class="toc-backref" href="#id19">Extended loop variables</a><a class="headerlink" href="#extended-loop-variables" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.8.</span></p>
+</div>
+<p>As of Ansible 2.8 you can get extended loop information using the <code class="docutils literal notranslate"><span class="pre">extended</span></code> option to loop control. This option will expose the following information.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 77%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Variable</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.allitems</span></code></p></td>
+<td><p>The list of all items in the loop</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.index</span></code></p></td>
+<td><p>The current iteration of the loop. (1 indexed)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.index0</span></code></p></td>
+<td><p>The current iteration of the loop. (0 indexed)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.revindex</span></code></p></td>
+<td><p>The number of iterations from the end of the loop (1 indexed)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.revindex0</span></code></p></td>
+<td><p>The number of iterations from the end of the loop (0 indexed)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.first</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if first iteration</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.last</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if last iteration</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.length</span></code></p></td>
+<td><p>The number of items in the loop</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.previtem</span></code></p></td>
+<td><p>The item from the previous iteration of the loop. Undefined during the first iteration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_loop.nextitem</span></code></p></td>
+<td><p>The item from the following iteration of the loop. Undefined during the last iteration.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">loop_control</span><span class="p">:</span>
+  <span class="nt">extended</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accessing-the-name-of-your-loop-var">
+<h3><a class="toc-backref" href="#id20">Accessing the name of your loop_var</a><a class="headerlink" href="#accessing-the-name-of-your-loop-var" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.8.</span></p>
+</div>
+<p>As of Ansible 2.8 you can get the name of the value provided to <code class="docutils literal notranslate"><span class="pre">loop_control.loop_var</span></code> using the <code class="docutils literal notranslate"><span class="pre">ansible_loop_var</span></code> variable</p>
+<p>For role authors, writing roles that allow loops, instead of dictating the required <code class="docutils literal notranslate"><span class="pre">loop_var</span></code> value, you can gather the value via:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;vars&#39;</span><span class="o">,</span> <span class="nv">ansible_loop_var</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="migrating-from-with-x-to-loop">
+<span id="migrating-to-loop"></span><h2><a class="toc-backref" href="#id21">Migrating from with_X to loop</a><a class="headerlink" href="#migrating-from-with-x-to-loop" title="Permalink to this headline">¶</a></h2>
+<p>In most cases, loops work best with the <code class="docutils literal notranslate"><span class="pre">loop</span></code> keyword instead of <code class="docutils literal notranslate"><span class="pre">with_X</span></code> style loops. The <code class="docutils literal notranslate"><span class="pre">loop</span></code> syntax is usually best expressed using filters instead of more complex use of <code class="docutils literal notranslate"><span class="pre">query</span></code> or <code class="docutils literal notranslate"><span class="pre">lookup</span></code>.</p>
+<p>These examples show how to convert many common <code class="docutils literal notranslate"><span class="pre">with_</span></code> style loops to <code class="docutils literal notranslate"><span class="pre">loop</span></code> and filters.</p>
+<div class="section" id="with-list">
+<h3><a class="toc-backref" href="#id22">with_list</a><a class="headerlink" href="#with-list" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_list</span></code> is directly replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code>.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_list</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_list</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">one</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">two</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_list -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">one</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">two</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-items">
+<h3><a class="toc-backref" href="#id23">with_items</a><a class="headerlink" href="#with-items" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_items</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_items</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_items</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_items -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span><span class="o">|</span><span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-indexed-items">
+<h3><a class="toc-backref" href="#id24">with_indexed_items</a><a class="headerlink" href="#with-indexed-items" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_indexed_items</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code>, the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> filter and <code class="docutils literal notranslate"><span class="pre">loop_control.index_var</span></code>.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_indexed_items</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_indexed_items</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_indexed_items -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">index</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span><span class="o">|</span><span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop_control</span><span class="p">:</span>
+    <span class="nt">index_var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">index</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-flattened">
+<h3><a class="toc-backref" href="#id25">with_flattened</a><a class="headerlink" href="#with-flattened" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_flattened</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_flattened</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_flattened</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_flattened -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">items</span><span class="o">|</span><span class="nf">flatten</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-together">
+<h3><a class="toc-backref" href="#id26">with_together</a><a class="headerlink" href="#with-together" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_together</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">zip</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_together</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_together</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_two</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_together -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span><span class="o">|</span><span class="nf">zip</span><span class="o">(</span><span class="nv">list_two</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>Another example with complex data</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_together -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.2</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">data</span><span class="o">[</span><span class="m">0</span><span class="o">]|</span><span class="nf">zip</span><span class="o">(*</span><span class="nv">data</span><span class="o">[</span><span class="m">1</span><span class="o">:])|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">data</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;a&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;b&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;c&#39;</span><span class="p p-Indicator">]</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;d&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;e&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;f&#39;</span><span class="p p-Indicator">]</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;g&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;h&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;i&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-dict">
+<h3><a class="toc-backref" href="#id27">with_dict</a><a class="headerlink" href="#with-dict" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_dict</span></code> can be substituted by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and either the <code class="docutils literal notranslate"><span class="pre">dictsort</span></code> or <code class="docutils literal notranslate"><span class="pre">dict2items</span></code> filters.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_dict</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.key</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.value</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_dict</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dictionary</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_dict -&gt; loop (option 1)</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.key</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.value</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dictionary</span><span class="o">|</span><span class="nf">dict2items</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_dict -&gt; loop (option 2)</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dictionary</span><span class="o">|</span><span class="nf">dictsort</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-sequence">
+<h3><a class="toc-backref" href="#id28">with_sequence</a><a class="headerlink" href="#with-sequence" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_sequence</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">range</span></code> function, and potentially the <code class="docutils literal notranslate"><span class="pre">format</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_sequence</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_sequence</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start=0 end=4 stride=2 format=testuser%02x</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_sequence -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;testuser%02x&#39;</span> <span class="o">|</span> <span class="nf">format</span><span class="o">(</span><span class="nv">item</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="c1"># range is exclusive of the end point</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">range</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">4</span> <span class="o">+</span> <span class="m">1</span><span class="o">,</span> <span class="m">2</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-subelements">
+<h3><a class="toc-backref" href="#id29">with_subelements</a><a class="headerlink" href="#with-subelements" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_subelements</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">loop</span></code> and the <code class="docutils literal notranslate"><span class="pre">subelements</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_subelements</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0.name</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_subelements</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">users</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mysql.hosts</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_subelements -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0.name</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">users</span><span class="o">|</span><span class="nf">subelements</span><span class="o">(</span><span class="s1">&#39;mysql.hosts&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-nested-with-cartesian">
+<h3><a class="toc-backref" href="#id30">with_nested/with_cartesian</a><a class="headerlink" href="#with-nested-with-cartesian" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_nested</span></code> and <code class="docutils literal notranslate"><span class="pre">with_cartesian</span></code> are replaced by loop and the <code class="docutils literal notranslate"><span class="pre">product</span></code> filter.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_nested</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_nested</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_two</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_nested -&gt; loop</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.0</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item.1</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">list_one</span><span class="o">|</span><span class="nf">product</span><span class="o">(</span><span class="nv">list_two</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with-random-choice">
+<h3><a class="toc-backref" href="#id31">with_random_choice</a><a class="headerlink" href="#with-random-choice" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">with_random_choice</span></code> is replaced by just use of the <code class="docutils literal notranslate"><span class="pre">random</span></code> filter, without need of <code class="docutils literal notranslate"><span class="pre">loop</span></code>.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_random_choice</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">with_random_choice</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">with_random_choice -&gt; loop (No loop is needed here)</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_list</span><span class="o">|</span><span class="nf">random</span> <span class="cp">}}</span><span class="s">&quot;</span>
+  <span class="nt">tags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">random</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="playbooks_intro.html#about-playbooks"><span class="std std-ref">Intro to playbooks</span></a></dt><dd><p>An introduction to playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Roles</span></a></dt><dd><p>Playbook organization by roles</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_best_practices.html#playbooks-best-practices"><span class="std std-ref">Tips and tricks</span></a></dt><dd><p>Tips and tricks for playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_conditionals.html#playbooks-conditionals"><span class="std std-ref">Conditionals</span></a></dt><dd><p>Conditional statements in playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a></dt><dd><p>All about variables</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-devel">User Mailing List</a></dt><dd><p>Have a question?  Stop by the google group!</p>
+</dd>
+<dt><a class="reference external" href="https://libera.chat/">irc.libera.chat</a></dt><dd><p>#ansible IRC chat channel</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+        <a href="playbooks_delegation.html" class="btn btn-neutral float-right" title="Controlling where tasks run: delegation and local actions"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="become.html" class="btn btn-neutral" title="Understanding privilege escalation: become"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Ansible project contributors.
+      <span class="lastupdated">
+        Last updated on Jun 14, 2021.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

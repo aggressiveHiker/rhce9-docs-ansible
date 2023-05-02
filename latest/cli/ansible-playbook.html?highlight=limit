@@ -1,0 +1,820 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ansible-playbook &mdash; Ansible Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.svg"/>
+  
+
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html"/>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ansible-pull" href="ansible-pull.html" />
+    <link rel="prev" title="ansible-inventory" href="ansible-inventory.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="4">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+  <!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/4/") > -1
+            ? "/4/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+  
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../user_guide/index.html#traditional-table-of-contents">Traditional Table of Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../user_guide/command_line_tools.html">Working with command line tools</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ansible.html">ansible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible-config.html">ansible-config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible-console.html">ansible-console</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible-doc.html">ansible-doc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible-galaxy.html">ansible-galaxy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible-inventory.html">ansible-inventory</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ansible-playbook</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible-pull.html">ansible-pull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible-vault.html">ansible-vault</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working With Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../user_guide/index.html">User Guide</a> &raquo;</li>
+        
+          <li><a href="../user_guide/command_line_tools.html">Working with command line tools</a> &raquo;</li>
+        
+      <li>ansible-playbook</li>
+    
+    
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/cli/playbook.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+    //use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>';
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/4/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ansible-playbook">
+<span id="id1"></span><h1>ansible-playbook<a class="headerlink" href="#ansible-playbook" title="Permalink to this headline">¶</a></h1>
+<p><strong>Runs Ansible playbooks, executing the defined tasks on the targeted hosts.</strong></p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id2">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id3">Description</a></p></li>
+<li><p><a class="reference internal" href="#common-options" id="id4">Common Options</a></p></li>
+<li><p><a class="reference internal" href="#environment" id="id5">Environment</a></p></li>
+<li><p><a class="reference internal" href="#files" id="id6">Files</a></p></li>
+<li><p><a class="reference internal" href="#author" id="id7">Author</a></p></li>
+<li><p><a class="reference internal" href="#license" id="id8">License</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id9">See also</a></p></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id2">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage: ansible-playbook <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> <span class="o">[</span>-k<span class="o">]</span>
+                     <span class="o">[</span>--private-key PRIVATE_KEY_FILE<span class="o">]</span> <span class="o">[</span>-u REMOTE_USER<span class="o">]</span>
+                     <span class="o">[</span>-c CONNECTION<span class="o">]</span> <span class="o">[</span>-T TIMEOUT<span class="o">]</span>
+                     <span class="o">[</span>--ssh-common-args SSH_COMMON_ARGS<span class="o">]</span>
+                     <span class="o">[</span>--sftp-extra-args SFTP_EXTRA_ARGS<span class="o">]</span>
+                     <span class="o">[</span>--scp-extra-args SCP_EXTRA_ARGS<span class="o">]</span>
+                     <span class="o">[</span>--ssh-extra-args SSH_EXTRA_ARGS<span class="o">]</span> <span class="o">[</span>--force-handlers<span class="o">]</span>
+                     <span class="o">[</span>--flush-cache<span class="o">]</span> <span class="o">[</span>-b<span class="o">]</span> <span class="o">[</span>--become-method BECOME_METHOD<span class="o">]</span>
+                     <span class="o">[</span>--become-user BECOME_USER<span class="o">]</span> <span class="o">[</span>-K<span class="o">]</span> <span class="o">[</span>-t TAGS<span class="o">]</span>
+                     <span class="o">[</span>--skip-tags SKIP_TAGS<span class="o">]</span> <span class="o">[</span>-C<span class="o">]</span> <span class="o">[</span>--syntax-check<span class="o">]</span> <span class="o">[</span>-D<span class="o">]</span>
+                     <span class="o">[</span>-i INVENTORY<span class="o">]</span> <span class="o">[</span>--list-hosts<span class="o">]</span> <span class="o">[</span>-l SUBSET<span class="o">]</span>
+                     <span class="o">[</span>-e EXTRA_VARS<span class="o">]</span> <span class="o">[</span>--vault-id VAULT_IDS<span class="o">]</span>
+                     <span class="o">[</span>--ask-vault-password <span class="p">|</span> --vault-password-file VAULT_PASSWORD_FILES<span class="o">]</span>
+                     <span class="o">[</span>-f FORKS<span class="o">]</span> <span class="o">[</span>-M MODULE_PATH<span class="o">]</span> <span class="o">[</span>--list-tasks<span class="o">]</span>
+                     <span class="o">[</span>--list-tags<span class="o">]</span> <span class="o">[</span>--step<span class="o">]</span> <span class="o">[</span>--start-at-task START_AT_TASK<span class="o">]</span>
+                     playbook <span class="o">[</span>playbook ...<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>the tool to run <em>Ansible playbooks</em>, which are a configuration and multinode deployment system.
+See the project home page (<a class="reference external" href="https://docs.ansible.com">https://docs.ansible.com</a>) for more information.</p>
+</div>
+<div class="section" id="common-options">
+<h2><a class="toc-backref" href="#id4">Common Options</a><a class="headerlink" href="#common-options" title="Permalink to this headline">¶</a></h2>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-ask-vault-password">
+<span id="cmdoption-ansible-playbook-ask-vault-pass"></span><span class="sig-name descname"><span class="pre">--ask-vault-password</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--ask-vault-pass</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-ask-vault-password" title="Permalink to this definition">¶</a></dt>
+<dd><p>ask for vault password</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-become-method">
+<span class="sig-name descname"><span class="pre">--become-method</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;BECOME_METHOD&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-become-method" title="Permalink to this definition">¶</a></dt>
+<dd><p>privilege escalation method to use (default=sudo), use <cite>ansible-doc -t become -l</cite> to list valid choices.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-become-user">
+<span class="sig-name descname"><span class="pre">--become-user</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;BECOME_USER&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-become-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>run operations as this user (default=root)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-flush-cache">
+<span class="sig-name descname"><span class="pre">--flush-cache</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-flush-cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>clear the fact cache for every host in inventory</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-force-handlers">
+<span class="sig-name descname"><span class="pre">--force-handlers</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-force-handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>run handlers even if a task fails</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-list-hosts">
+<span class="sig-name descname"><span class="pre">--list-hosts</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-list-hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>outputs a list of matching hosts; does not execute anything else</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-list-tags">
+<span class="sig-name descname"><span class="pre">--list-tags</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-list-tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>list all available tags</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-list-tasks">
+<span class="sig-name descname"><span class="pre">--list-tasks</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-list-tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>list all tasks that would be executed</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-private-key">
+<span id="cmdoption-ansible-playbook-key-file"></span><span class="sig-name descname"><span class="pre">--private-key</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PRIVATE_KEY_FILE&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--key-file</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;PRIVATE_KEY_FILE&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-private-key" title="Permalink to this definition">¶</a></dt>
+<dd><p>use this file to authenticate the connection</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-scp-extra-args">
+<span class="sig-name descname"><span class="pre">--scp-extra-args</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SCP_EXTRA_ARGS&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-scp-extra-args" title="Permalink to this definition">¶</a></dt>
+<dd><p>specify extra arguments to pass to scp only (e.g. -l)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-sftp-extra-args">
+<span class="sig-name descname"><span class="pre">--sftp-extra-args</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SFTP_EXTRA_ARGS&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-sftp-extra-args" title="Permalink to this definition">¶</a></dt>
+<dd><p>specify extra arguments to pass to sftp only (e.g. -f, -l)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-skip-tags">
+<span class="sig-name descname"><span class="pre">--skip-tags</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-skip-tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>only run plays and tasks whose tags do not match these values</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-ssh-common-args">
+<span class="sig-name descname"><span class="pre">--ssh-common-args</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SSH_COMMON_ARGS&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-ssh-common-args" title="Permalink to this definition">¶</a></dt>
+<dd><p>specify common arguments to pass to sftp/scp/ssh (e.g. ProxyCommand)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-ssh-extra-args">
+<span class="sig-name descname"><span class="pre">--ssh-extra-args</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SSH_EXTRA_ARGS&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-ssh-extra-args" title="Permalink to this definition">¶</a></dt>
+<dd><p>specify extra arguments to pass to ssh only (e.g. -R)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-start-at-task">
+<span class="sig-name descname"><span class="pre">--start-at-task</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;START_AT_TASK&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-start-at-task" title="Permalink to this definition">¶</a></dt>
+<dd><p>start the playbook at the task matching this name</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-step">
+<span class="sig-name descname"><span class="pre">--step</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-step" title="Permalink to this definition">¶</a></dt>
+<dd><p>one-step-at-a-time: confirm each task before running</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-syntax-check">
+<span class="sig-name descname"><span class="pre">--syntax-check</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-syntax-check" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform a syntax check on the playbook, but do not execute it</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-vault-id">
+<span class="sig-name descname"><span class="pre">--vault-id</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-vault-id" title="Permalink to this definition">¶</a></dt>
+<dd><p>the vault identity to use</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-vault-password-file">
+<span id="cmdoption-ansible-playbook-vault-pass-file"></span><span class="sig-name descname"><span class="pre">--vault-password-file</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--vault-pass-file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-vault-password-file" title="Permalink to this definition">¶</a></dt>
+<dd><p>vault password file</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-version">
+<span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-version" title="Permalink to this definition">¶</a></dt>
+<dd><p>show program’s version number, config file location, configured module search path, module location, executable location and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-C">
+<span id="cmdoption-ansible-playbook-c"></span><span id="cmdoption-ansible-playbook-check"></span><span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--check</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-C" title="Permalink to this definition">¶</a></dt>
+<dd><p>don’t make any changes; instead, try to predict some of the changes that may occur</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-D">
+<span id="cmdoption-ansible-playbook-d"></span><span id="cmdoption-ansible-playbook-diff"></span><span class="sig-name descname"><span class="pre">-D</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--diff</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-D" title="Permalink to this definition">¶</a></dt>
+<dd><p>when changing (small) files and templates, show the differences in those files; works great with –check</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-K">
+<span id="cmdoption-ansible-playbook-k"></span><span id="cmdoption-ansible-playbook-ask-become-pass"></span><span class="sig-name descname"><span class="pre">-K</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--ask-become-pass</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-K" title="Permalink to this definition">¶</a></dt>
+<dd><p>ask for privilege escalation password</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-M">
+<span id="cmdoption-ansible-playbook-m"></span><span id="cmdoption-ansible-playbook-module-path"></span><span class="sig-name descname"><span class="pre">-M</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--module-path</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-M" title="Permalink to this definition">¶</a></dt>
+<dd><p>prepend colon-separated path(s) to module library (default=~/.ansible/plugins/modules:/usr/share/ansible/plugins/modules)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-T">
+<span id="cmdoption-ansible-playbook-t"></span><span id="cmdoption-ansible-playbook-timeout"></span><span class="sig-name descname"><span class="pre">-T</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;TIMEOUT&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--timeout</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;TIMEOUT&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-T" title="Permalink to this definition">¶</a></dt>
+<dd><p>override the connection timeout in seconds (default=10)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-b">
+<span id="cmdoption-ansible-playbook-become"></span><span class="sig-name descname"><span class="pre">-b</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--become</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-b" title="Permalink to this definition">¶</a></dt>
+<dd><p>run operations with become (does not imply password prompting)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-0">
+<span id="cmdoption-ansible-playbook-connection"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;CONNECTION&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--connection</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;CONNECTION&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-0" title="Permalink to this definition">¶</a></dt>
+<dd><p>connection type to use (default=smart)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-e">
+<span id="cmdoption-ansible-playbook-extra-vars"></span><span class="sig-name descname"><span class="pre">-e</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--extra-vars</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-e" title="Permalink to this definition">¶</a></dt>
+<dd><p>set additional variables as key=value or YAML/JSON, if filename prepend with &#64;</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-f">
+<span id="cmdoption-ansible-playbook-forks"></span><span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;FORKS&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--forks</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;FORKS&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>specify number of parallel processes to use (default=5)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-h">
+<span id="cmdoption-ansible-playbook-help"></span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>show this help message and exit</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-i">
+<span id="cmdoption-ansible-playbook-inventory"></span><span id="cmdoption-ansible-playbook-inventory-file"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--inventory</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--inventory-file</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-i" title="Permalink to this definition">¶</a></dt>
+<dd><p>specify inventory host path or comma separated host list. –inventory-file is deprecated</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-1">
+<span id="cmdoption-ansible-playbook-ask-pass"></span><span class="sig-name descname"><span class="pre">-k</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--ask-pass</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-1" title="Permalink to this definition">¶</a></dt>
+<dd><p>ask for connection password</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-l">
+<span id="cmdoption-ansible-playbook-limit"></span><span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SUBSET&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--limit</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;SUBSET&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-l" title="Permalink to this definition">¶</a></dt>
+<dd><p>further limit selected hosts to an additional pattern</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-2">
+<span id="cmdoption-ansible-playbook-tags"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--tags</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-2" title="Permalink to this definition">¶</a></dt>
+<dd><p>only run plays and tasks tagged with these values</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-u">
+<span id="cmdoption-ansible-playbook-user"></span><span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;REMOTE_USER&gt;</span></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--user</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;REMOTE_USER&gt;</span></span><a class="headerlink" href="#cmdoption-ansible-playbook-u" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect as this user (default=None)</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-ansible-playbook-v">
+<span id="cmdoption-ansible-playbook-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-ansible-playbook-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>verbose mode (-vvv for more, -vvvv to enable connection debugging)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="environment">
+<h2><a class="toc-backref" href="#id5">Environment</a><a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
+<p>The following environment variables may be specified.</p>
+<p><span class="target" id="index-0"></span><a class="reference internal" href="../reference_appendices/config.html#envvar-ANSIBLE_CONFIG"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_CONFIG</span></code></a> – Override the default ansible config file</p>
+<p>Many more are available for most options in ansible.cfg</p>
+</div>
+<div class="section" id="files">
+<h2><a class="toc-backref" href="#id6">Files</a><a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<p><code class="file docutils literal notranslate"><span class="pre">/etc/ansible/ansible.cfg</span></code> – Config file, used if present</p>
+<p><code class="file docutils literal notranslate"><span class="pre">~/.ansible.cfg</span></code> – User config file, overrides the default config if present</p>
+</div>
+<div class="section" id="author">
+<h2><a class="toc-backref" href="#id7">Author</a><a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
+<p>Ansible was originally written by Michael DeHaan.</p>
+<p>See the <cite>AUTHORS</cite> file for a complete list of contributors.</p>
+</div>
+<div class="section" id="license">
+<h2><a class="toc-backref" href="#id8">License</a><a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Ansible is released under the terms of the GPLv3+ License.</p>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id9">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p><em class="manpage">ansible(1)</em>,  <em class="manpage">ansible-config(1)</em>,  <em class="manpage">ansible-console(1)</em>,  <em class="manpage">ansible-doc(1)</em>,  <em class="manpage">ansible-galaxy(1)</em>,  <em class="manpage">ansible-inventory(1)</em>,  <em class="manpage">ansible-playbook(1)</em>,  <em class="manpage">ansible-pull(1)</em>,  <em class="manpage">ansible-vault(1)</em>,</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          
+
+<footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ansible-pull.html" class="btn btn-neutral float-right" title="ansible-pull" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ansible-inventory.html" class="btn btn-neutral float-left" title="ansible-inventory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Ansible project contributors.
+      <span class="lastupdated">
+        Last updated on Sep 02, 2021.
+      </span>
+
+    </p>
+  </div>
+   
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

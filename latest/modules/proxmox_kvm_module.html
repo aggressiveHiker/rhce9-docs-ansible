@@ -1,0 +1,1890 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>proxmox_kvm – Management of Qemu(KVM) Virtual Machines in Proxmox VE cluster &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/modules/proxmox_kvm_module.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'2.9',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Ansible Documentation"
+          href="../_static/opensearch.xml"/>
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" />
+<meta class="swiftype" name="version" data-type="string" content="3.2.2">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.9
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.8";
+            if ( "2.8" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.8");
+            } else {
+              option.value = current_url.replace("latest","2.8");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.7";
+            if ( "2.7" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.7");
+            } else {
+              option.value = current_url.replace("latest","2.7");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>proxmox_kvm – Management of Qemu(KVM) Virtual Machines in Proxmox VE cluster</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/cloud/misc/proxmox_kvm.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+
+  <script>
+    current_url = window.location.href;
+    if ((current_url.search("latest") > -1) || (current_url.search("/2.9/") > -1)) {
+     // no banner for latest release
+    } else if (current_url.search("devel") > -1) {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading the *devel* version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    } else {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    }
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="proxmox-kvm-management-of-qemu-kvm-virtual-machines-in-proxmox-ve-cluster">
+<span id="proxmox-kvm-module"></span><h1>proxmox_kvm – Management of Qemu(KVM) Virtual Machines in Proxmox VE cluster<a class="headerlink" href="#proxmox-kvm-management-of-qemu-kvm-virtual-machines-in-proxmox-ve-cluster" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#requirements" id="id2">Requirements</a></li>
+<li><a class="reference internal" href="#parameters" id="id3">Parameters</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#return-values" id="id5">Return Values</a></li>
+<li><a class="reference internal" href="#status" id="id6">Status</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Allows you to create/delete/stop Qemu(KVM) Virtual Machines in Proxmox VE cluster.</li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li>proxmoxer</li>
+<li>requests</li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <b>acpi</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if ACPI should be enabled/disabled.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>agent</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if the QEMU Guest Agent should be enabled/disabled.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>api_host</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                             / <span style="color: red">required</span>                    </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the target host of the Proxmox VE cluster.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>api_password</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the password to authenticate with.</div>
+                                        <div>You can use <code>PROXMOX_PASSWORD</code> environment variable.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>api_user</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                             / <span style="color: red">required</span>                    </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the user to authenticate with.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>args</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"-serial unix:/var/run/qemu-server/VMID.serial,server,nowait"</div>
+                                </td>
+                                                            <td>
+                                        <div>Pass arbitrary arguments to kvm.</div>
+                                        <div>This option is for experts only!</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>autostart</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if the VM should be automatically restarted after crash (currently ignored in PVE API).</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>balloon</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
+                                                            <td>
+                                        <div>Specify the amount of RAM for the VM in MB.</div>
+                                        <div>Using zero disables the balloon driver.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>bios</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>seabios</li>
+                                                                                                                                                                                            <li>ovmf</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify the BIOS implementation.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>boot</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"cnd"</div>
+                                </td>
+                                                            <td>
+                                        <div>Specify the boot order -&gt; boot on floppy <code>a</code>, hard disk <code>c</code>, CD-ROM <code>d</code>, or network <code>n</code>.</div>
+                                        <div>You can combine to set order.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>bootdisk</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Enable booting from specified disk. <code>(ide|sata|scsi|virtio</code>\d+)</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>clone</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Name of VM to be cloned. If <code>vmid</code> is setted, <code>clone</code> can take arbitrary value but required for initiating the clone.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>cores</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">1</div>
+                                </td>
+                                                            <td>
+                                        <div>Specify number of cores per socket.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>cpu</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"kvm64"</div>
+                                </td>
+                                                            <td>
+                                        <div>Specify emulated CPU type.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>cpulimit</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify if CPU usage will be limited. Value 0 indicates no CPU limit.</div>
+                                        <div>If the computer has 2 CPUs, it has total of &#x27;2&#x27; CPU time</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>cpuunits</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">1000</div>
+                                </td>
+                                                            <td>
+                                        <div>Specify CPU weight for a VM.</div>
+                                        <div>You can disable fair-scheduler configuration by setting this to 0</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>delete</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify a list of settings you want to delete.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>description</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify the description for the VM. Only used on the configuration web interface.</div>
+                                        <div>This is saved as comment inside the configuration file.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>digest</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify if to prevent changes if current configuration file has different SHA1 digest.</div>
+                                        <div>This can be used to prevent concurrent modifications.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>force</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Allow to force stop VM.</div>
+                                        <div>Can be used only with states <code>stopped</code>, <code>restarted</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>format</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>cloop</li>
+                                                                                                                                                                                            <li>cow</li>
+                                                                                                                                                                                            <li>qcow</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>qcow2</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>qed</li>
+                                                                                                                                                                                            <li>raw</li>
+                                                                                                                                                                                            <li>vmdk</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Target drive&#x27;s backing file&#x27;s data format.</div>
+                                        <div>Used only with clone</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>freeze</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify if PVE should freeze CPU at startup (use &#x27;c&#x27; monitor command to start execution).</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>full</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Create a full copy of all disk. This is always done when you clone a normal VM.</div>
+                                        <div>For VM templates, we try to create a linked clone by default.</div>
+                                        <div>Used only with clone</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>hostpci</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify a hash/dictionary of map host pci devices into guest. <code>hostpci=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>hostpci[n]</code> where 0 ≤ n ≤ N.</div>
+                                        <div>Values allowed are -  <code>&quot;host=&quot;HOSTPCIID[;HOSTPCIID2...]&quot;,pcie=&quot;1|0&quot;,rombar=&quot;1|0&quot;,x-vga=&quot;1|0&quot;&quot;</code>.</div>
+                                        <div>The <code>host</code> parameter is Host PCI device pass through. HOSTPCIID syntax is <code>bus:dev.func</code> (hexadecimal numbers).</div>
+                                        <div><code>pcie=boolean</code> <em>default=0</em> Choose the PCI-express bus (needs the q35 machine model).</div>
+                                        <div><code>rombar=boolean</code> <em>default=1</em> Specify whether or not the device&#x27;s ROM will be visible in the guest&#x27;s memory map.</div>
+                                        <div><code>x-vga=boolean</code> <em>default=0</em> Enable vfio-vga device support.</div>
+                                        <div>/!\ This option allows direct access to host hardware. So it is no longer possible to migrate such machines - use with special care.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>hotplug</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Selectively enable hotplug features.</div>
+                                        <div>This is a comma separated list of hotplug features <code>&#x27;network&#x27;, &#x27;disk&#x27;, &#x27;cpu&#x27;, &#x27;memory&#x27; and &#x27;usb&#x27;</code>.</div>
+                                        <div>Value 0 disables hotplug completely and value 1 is an alias for the default <code>&#x27;network,disk,usb&#x27;</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>hugepages</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>any</li>
+                                                                                                                                                                                            <li>2</li>
+                                                                                                                                                                                            <li>1024</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enable/disable hugepages memory.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>ide</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as IDE hard disk or CD-ROM. <code>ide=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>ide[n]</code> where 0 ≤ n ≤ 3.</div>
+                                        <div>Values allowed are - <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>keyboard</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets the keyboard layout for VNC server.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>kvm</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enable/disable KVM hardware virtualization.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>localtime</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Sets the real time clock to local time.</div>
+                                        <div>This is enabled by default if ostype indicates a Microsoft OS.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>lock</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>migrate</li>
+                                                                                                                                                                                            <li>backup</li>
+                                                                                                                                                                                            <li>snapshot</li>
+                                                                                                                                                                                            <li>rollback</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Lock/unlock the VM.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>machine</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the Qemu machine type.</div>
+                                        <div>type =&gt; <code>(pc|pc(-i440fx</code>?-\d+\.\d+(\.pxe)?|q35|pc-q35-\d+\.\d+(\.pxe)?))</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>memory</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">512</div>
+                                </td>
+                                                            <td>
+                                        <div>Memory size in MB for instance.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>migrate_downtime</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets maximum tolerated downtime (in seconds) for migrations.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>migrate_speed</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets maximum speed (in MB/s) for migrations.</div>
+                                        <div>A value of 0 is no limit.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>name</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the VM name. Only used on the configuration web interface.</div>
+                                        <div>Required only for <code>state=present</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>net</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of network interfaces for the VM. <code>net=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>net[n]</code> where 0 ≤ n ≤ N.</div>
+                                        <div>Values allowed are - <code>&quot;model=&quot;XX:XX:XX:XX:XX:XX&quot;,bridge=&quot;value&quot;,rate=&quot;value&quot;,tag=&quot;value&quot;,firewall=&quot;1|0&quot;,trunks=&quot;vlanid&quot;&quot;</code>.</div>
+                                        <div>Model is one of <code>e1000 e1000-82540em e1000-82544gc e1000-82545em i82551 i82557b i82559er ne2k_isa ne2k_pci pcnet rtl8139 virtio vmxnet3</code>.</div>
+                                        <div><code>XX:XX:XX:XX:XX:XX</code> should be an unique MAC address. This is automatically generated if not specified.</div>
+                                        <div>The <code>bridge</code> parameter can be used to automatically add the interface to a bridge device. The Proxmox VE standard bridge is called &#x27;vmbr0&#x27;.</div>
+                                        <div>Option <code>rate</code> is used to limit traffic bandwidth from and to this interface. It is specified as floating point number, unit is &#x27;Megabytes per second&#x27;.</div>
+                                        <div>If you specify no bridge, we create a kvm &#x27;user&#x27; (NATed) network device, which provides DHCP and DNS services.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>newid</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>VMID for the clone. Used only with clone.</div>
+                                        <div>If newid is not set, the next available VM ID will be fetched from ProxmoxAPI.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>node</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Proxmox VE node, where the new VM will be created.</div>
+                                        <div>Only required for <code>state=present</code>.</div>
+                                        <div>For other states, it will be autodiscovered.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>numa</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionaries of NUMA topology. <code>numa=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>numa[n]</code> where 0 ≤ n ≤ N.</div>
+                                        <div>Values allowed are - <code>&quot;cpu=&quot;&lt;id[-id];...&gt;&quot;,hostnodes=&quot;&lt;id[-id];...&gt;&quot;,memory=&quot;number&quot;,policy=&quot;(bind|interleave|preferred</code>&quot;&quot;).</div>
+                                        <div><code>cpus</code> CPUs accessing this NUMA node.</div>
+                                        <div><code>hostnodes</code> Host NUMA nodes to use.</div>
+                                        <div><code>memory</code> Amount of memory this NUMA node provides.</div>
+                                        <div><code>policy</code> NUMA allocation policy.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>onboot</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specifies whether a VM will be started during system bootup.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>ostype</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>other</li>
+                                                                                                                                                                                            <li>wxp</li>
+                                                                                                                                                                                            <li>w2k</li>
+                                                                                                                                                                                            <li>w2k3</li>
+                                                                                                                                                                                            <li>w2k8</li>
+                                                                                                                                                                                            <li>wvista</li>
+                                                                                                                                                                                            <li>win7</li>
+                                                                                                                                                                                            <li>win8</li>
+                                                                                                                                                                                            <li>l24</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>l26</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>solaris</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specifies guest operating system. This is used to enable special optimization/features for specific operating systems.</div>
+                                        <div>The l26 is Linux 2.6/3.X Kernel.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>parallel</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of map host parallel devices. <code>parallel=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - (parallel[n]) where 0 ≤ n ≤ 2.</div>
+                                        <div>Values allowed are - <code>&quot;/dev/parport\d+|/dev/usb/lp\d+&quot;</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>pool</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Add the new VM to the specified pool.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>protection</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enable/disable the protection flag of the VM. This will enable/disable the remove VM and remove disk operations.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>reboot</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Allow reboot. If set to <code>yes</code>, the VM exit on reboot.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>revert</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Revert a pending change.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>sata</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as sata hard disk or CD-ROM. <code>sata=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>sata[n]</code> where 0 ≤ n ≤ 5.</div>
+                                        <div>Values allowed are -  <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>scsi</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as SCSI hard disk or CD-ROM. <code>scsi=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>sata[n]</code> where 0 ≤ n ≤ 13.</div>
+                                        <div>Values allowed are -  <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>scsihw</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>lsi</li>
+                                                                                                                                                                                            <li>lsi53c810</li>
+                                                                                                                                                                                            <li>virtio-scsi-pci</li>
+                                                                                                                                                                                            <li>virtio-scsi-single</li>
+                                                                                                                                                                                            <li>megasas</li>
+                                                                                                                                                                                            <li>pvscsi</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the SCSI controller model.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>serial</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of serial device to create inside the VM. <code>&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - serial[n](str; required) where 0 ≤ n ≤ 3.</div>
+                                        <div>Values allowed are - <code>(/dev/.+|socket</code>).</div>
+                                        <div>/!\ If you pass through a host serial device, it is no longer possible to migrate such machines - use with special care.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>shares</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Rets amount of memory shares for auto-ballooning. (0 - 50000).</div>
+                                        <div>The larger the number is, the more memory this VM gets.</div>
+                                        <div>The number is relative to weights of all other running VMs.</div>
+                                        <div>Using 0 disables auto-ballooning, this means no limit.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>skiplock</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Ignore locks</div>
+                                        <div>Only root is allowed to use this option.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>smbios</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies SMBIOS type 1 fields.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>snapname</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The name of the snapshot. Used only with clone.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>sockets</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">1</div>
+                                </td>
+                                                            <td>
+                                        <div>Sets the number of CPU sockets. (1 - N).</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>startdate</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets the initial date of the real time clock.</div>
+                                        <div>Valid format for date are <code>&#x27;now&#x27;</code> or <code>&#x27;2016-09-25T16:01:21&#x27;</code> or <code>&#x27;2016-09-25&#x27;</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>startup</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Startup and shutdown behavior. <code>[[order=]\d+] [,up=\d+] [,down=\d+]</code>.</div>
+                                        <div>Order is a non-negative number defining the general startup order.</div>
+                                        <div>Shutdown in done with reverse ordering.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>state</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>started</li>
+                                                                                                                                                                                            <li>absent</li>
+                                                                                                                                                                                            <li>stopped</li>
+                                                                                                                                                                                            <li>restarted</li>
+                                                                                                                                                                                            <li>current</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Indicates desired state of the instance.</div>
+                                        <div>If <code>current</code>, the current state of the VM will be fetched. You can access it with <code>results.status</code></div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>storage</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Target storage for full clone.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>tablet</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enables/disables the USB tablet device.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>target</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Target node. Only allowed if the original VM is on shared storage.</div>
+                                        <div>Used only with clone</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>tdf</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enables/disables time drift fix.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>template</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Enables/disables the template.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>timeout</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">30</div>
+                                </td>
+                                                            <td>
+                                        <div>Timeout for operations.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>update</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>If <code>yes</code>, the VM will be update with new value.</div>
+                                        <div>Cause of the operations of the API and security reasons, I have disabled the update of the following parameters</div>
+                                        <div><code>net, virtio, ide, sata, scsi</code>. Per example updating <code>net</code> update the MAC address and <code>virtio</code> create always new disk...</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>validate_certs</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>If <code>no</code>, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>vcpus</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Sets number of hotplugged vcpus.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>vga</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>std</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>cirrus</li>
+                                                                                                                                                                                            <li>vmware</li>
+                                                                                                                                                                                            <li>qxl</li>
+                                                                                                                                                                                            <li>serial0</li>
+                                                                                                                                                                                            <li>serial1</li>
+                                                                                                                                                                                            <li>serial2</li>
+                                                                                                                                                                                            <li>serial3</li>
+                                                                                                                                                                                            <li>qxl2</li>
+                                                                                                                                                                                            <li>qxl3</li>
+                                                                                                                                                                                            <li>qxl4</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Select VGA type. If you want to use high resolution modes (&gt;= 1280x1024x16) then you should use option &#x27;std&#x27; or &#x27;vmware&#x27;.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>virtio</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A hash/dictionary of volume used as VIRTIO hard disk. <code>virtio=&#x27;{&quot;key&quot;:&quot;value&quot;, &quot;key&quot;:&quot;value&quot;}&#x27;</code>.</div>
+                                        <div>Keys allowed are - <code>virto[n]</code> where 0 ≤ n ≤ 15.</div>
+                                        <div>Values allowed are -  <code>&quot;storage:size,format=value&quot;</code>.</div>
+                                        <div><code>storage</code> is the storage identifier where to create the disk.</div>
+                                        <div><code>size</code> is the size of the disk in GB.</div>
+                                        <div><code>format</code> is the drive&#x27;s backing file&#x27;s data format. <code>qcow2|raw|subvol</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>vmid</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specifies the VM ID. Instead use <em>name</em> parameter.</div>
+                                        <div>If vmid is not set, the next available VM ID will be fetched from ProxmoxAPI.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>watchdog</b>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Creates a virtual hardware watchdog device.</div>
+                                                    </td>
+        </tr>
+                    </table>
+<br/></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create new VM with minimal options</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cbb9a4a4bf8bbbaaa6">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+
+<span class="c1"># Create new VM with minimal options and given vmid</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fe8c91918abe8e9f93">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">vmid        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100</span>
+
+<span class="c1"># Create new VM with two network interface options.</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="90e2ffffe4d0e0f1fd">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">net         </span><span class="p">:</span> <span class="s">&#39;{&quot;net0&quot;:&quot;virtio,bridge=vmbr1,rate=200&quot;,</span><span class="nv"> </span><span class="s">&quot;net1&quot;:&quot;e1000,bridge=vmbr2,&quot;}&#39;</span>
+
+<span class="c1"># Create new VM with one network interface, three virto hard disk, 4 cores, and 2 vcpus.</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a0815150e3a0a1b17">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">net         </span><span class="p">:</span> <span class="s">&#39;{&quot;net0&quot;:&quot;virtio,bridge=vmbr1,rate=200&quot;}&#39;</span>
+    <span class="nt">virtio      </span><span class="p">:</span> <span class="s">&#39;{&quot;virtio0&quot;:&quot;VMs_LVM:10&quot;,</span><span class="nv"> </span><span class="s">&quot;virtio1&quot;:&quot;VMs:2,format=qcow2&quot;,</span><span class="nv"> </span><span class="s">&quot;virtio2&quot;:&quot;VMs:5,format=raw&quot;}&#39;</span>
+    <span class="nt">cores       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+    <span class="nt">vcpus       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+
+<span class="c1"># Clone VM with only source VM name</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a4d6cbcbd0e4d4c5c9">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">clone       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>   <span class="c1"># The VM source</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zavala</span>  <span class="c1"># The target VM name</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">storage     </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VMs</span>
+    <span class="nt">format      </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">qcow2</span>
+    <span class="nt">timeout     </span><span class="p">:</span> <span class="nt">500  # Note</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The task can take a while. Adapt</span>
+
+<span class="c1"># Clone VM with source vmid and target newid and raw format</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f785989883b787969a">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">clone       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arbitrary_name</span>
+    <span class="nt">vmid        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">108</span>
+    <span class="nt">newid       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">152</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zavala</span>  <span class="c1"># The target VM name</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">storage     </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LVM_STO</span>
+    <span class="nt">format      </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">raw</span>
+    <span class="nt">timeout     </span><span class="p">:</span> <span class="nt">300  # Note</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The task can take a while. Adapt</span>
+
+<span class="c1"># Create new VM and lock it for snapashot.</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="62100d0d162212030f">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">lock        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">snapshot</span>
+
+<span class="c1"># Create new VM and set protection to disable the remove VM and remove disk operations</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f7d60607b4f7f6e62">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">protection  </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="c1"># Start VM</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b3924243f0b3b2a26">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+
+<span class="c1"># Stop VM</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e5978a8a91a5958488">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">stopped</span>
+
+<span class="c1"># Stop VM with force</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80f2efeff4c0f0e1ed">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">stopped</span>
+    <span class="nt">force       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="c1"># Restart VM</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="76041919023606171b">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restarted</span>
+
+<span class="c1"># Remove VM</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2f5d40405b6f5f4e42">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="c1"># Get VM current state</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f88a97978cb8889995">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">state       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">current</span>
+
+<span class="c1"># Update VM configuration</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cab8a5a5be8abaaba7">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">cores       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8</span>
+    <span class="nt">memory      </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">16384</span>
+    <span class="nt">update      </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="c1"># Delete QEMU parameters</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f98b96968db9899894">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">delete      </span><span class="p">:</span> <span class="s">&#39;args,template,cpulimit&#39;</span>
+
+<span class="c1"># Revert a pending change</span>
+<span class="p p-Indicator">-</span> <span class="nt">proxmox_kvm</span><span class="p">:</span>
+    <span class="nt">api_user    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ff8d90908bbf8f9e92">[email&#160;protected]</a></span>
+    <span class="nt">api_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">api_host    </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helldorado</span>
+    <span class="nt">name        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spynal</span>
+    <span class="nt">node        </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sabrewulf</span>
+    <span class="nt">revert      </span><span class="p">:</span> <span class="s">&#39;template,cpulimit&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id5">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
+<p>Common return values are documented <a class="reference internal" href="../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Key</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                <tr>
+                            <td colspan="1">
+                <b>devices</b>
+                <div style="font-size: small">
+                  <span style="color: purple">dictionary</span>
+                                      </div>
+                                </td>
+            <td>success</td>
+            <td>
+                                        <div>The list of devices created or used.</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{ &quot;ide0&quot;: &quot;VMS_LVM:vm-115-disk-1&quot;, &quot;ide1&quot;: &quot;VMs:115/vm-115-disk-3.raw&quot;, &quot;virtio0&quot;: &quot;VMS_LVM:vm-115-disk-2&quot;, &quot;virtio1&quot;: &quot;VMs:115/vm-115-disk-1.qcow2&quot;, &quot;virtio2&quot;: &quot;VMs:115/vm-115-disk-2.raw&quot; }</div>
+                                </td>
+        </tr>
+                            <tr>
+                            <td colspan="1">
+                <b>mac</b>
+                <div style="font-size: small">
+                  <span style="color: purple">dictionary</span>
+                                      </div>
+                                </td>
+            <td>success</td>
+            <td>
+                                        <div>List of mac address created and net[n] attached. Useful when you want to use provision systems like Foreman via PXE.</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{ &quot;net0&quot;: &quot;3E:6E:97:D2:31:9F&quot;, &quot;net1&quot;: &quot;B6:A1:FC:EF:78:A4&quot; }</div>
+                                </td>
+        </tr>
+                            <tr>
+                            <td colspan="1">
+                <b>status</b>
+                <div style="font-size: small">
+                  <span style="color: purple">dictionary</span>
+                                      </div>
+                                </td>
+            <td>success</td>
+            <td>
+                                                                    <div>The current virtual machine status.</div>
+                                                <div>Returned only when <code>state=current</code></div>
+                                                            <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{ &quot;changed&quot;: false, &quot;msg&quot;: &quot;VM kropta with vmid = 110 is running&quot;, &quot;status&quot;: &quot;running&quot; }</div>
+                                </td>
+        </tr>
+                            <tr>
+                            <td colspan="1">
+                <b>vmid</b>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success</td>
+            <td>
+                                        <div>The VM vmid.</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">115</div>
+                                </td>
+        </tr>
+                    </table>
+<br/><br/></div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id6">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This module is not guaranteed to have a backwards compatible interface. <em>[preview]</em></li>
+<li>This module is <a class="reference internal" href="../user_guide/modules_support.html#modules-support"><span class="std std-ref">maintained by the Ansible Community</span></a>. <em>[community]</em></li>
+</ul>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Abdoul Bah (&#64;helldorado) &lt;bahabdoul at gmail.com&gt;</li>
+</ul>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you notice any issues in this documentation, you can <a class="reference external" href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/cloud/misc/proxmox_kvm.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr">edit this document</a> to improve it.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Nov 08, 2019.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

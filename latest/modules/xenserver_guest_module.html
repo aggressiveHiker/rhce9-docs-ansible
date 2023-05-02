@@ -1,0 +1,1027 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>xenserver_guest – Manages virtual machines running on Citrix Hypervisor/XenServer host or pool &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/modules/xenserver_guest_module.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'2.9',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Ansible Documentation"
+          href="../_static/opensearch.xml"/>
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" />
+<meta class="swiftype" name="version" data-type="string" content="3.2.2">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.9
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.8";
+            if ( "2.8" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.8");
+            } else {
+              option.value = current_url.replace("latest","2.8");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.7";
+            if ( "2.7" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.7");
+            } else {
+              option.value = current_url.replace("latest","2.7");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>xenserver_guest – Manages virtual machines running on Citrix Hypervisor/XenServer host or pool</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/cloud/xenserver/xenserver_guest.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+
+  <script>
+    current_url = window.location.href;
+    if ((current_url.search("latest") > -1) || (current_url.search("/2.9/") > -1)) {
+     // no banner for latest release
+    } else if (current_url.search("devel") > -1) {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading the *devel* version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    } else {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    }
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="xenserver-guest-manages-virtual-machines-running-on-citrix-hypervisor-xenserver-host-or-pool">
+<span id="xenserver-guest-module"></span><h1>xenserver_guest – Manages virtual machines running on Citrix Hypervisor/XenServer host or pool<a class="headerlink" href="#xenserver-guest-manages-virtual-machines-running-on-citrix-hypervisor-xenserver-host-or-pool" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.8.</span></p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#requirements" id="id2">Requirements</a></li>
+<li><a class="reference internal" href="#parameters" id="id3">Parameters</a></li>
+<li><a class="reference internal" href="#notes" id="id4">Notes</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#return-values" id="id6">Return Values</a></li>
+<li><a class="reference internal" href="#status" id="id7">Status</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This module can be used to create new virtual machines from templates or other virtual machines, modify various virtual machine components like network and disk, rename a virtual machine and remove a virtual machine with associated components.</li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li>python &gt;= 2.6</li>
+<li>XenAPI</li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <b>cdrom</b>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A CD-ROM configuration for the VM.</div>
+                                        <div>All parameters are case sensitive.</div>
+                                        <div>Valid parameters are:</div>
+                                        <div>- <code>type</code> (string): The type of CD-ROM, valid options are <code>none</code> or <code>iso</code>. With <code>none</code> the CD-ROM device will be present but empty.</div>
+                                        <div>- <code>iso_name</code> (string): The file name of an ISO image from one of the XenServer ISO Libraries (implies <code>type: iso</code>). Required if <code>type</code> is set to <code>iso</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>custom_params</b>
+                <div style="font-size: small">
+                    <span style="color: purple">list</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Define a list of custom VM params to set on VM.</div>
+                                        <div>Useful for advanced users familiar with managing VM params trough xe CLI.</div>
+                                        <div>A custom value object takes two fields <code>key</code> and <code>value</code> (see example below).</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>disks</b>
+                <div style="font-size: small">
+                    <span style="color: purple">list</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A list of disks to add to VM.</div>
+                                        <div>All parameters are case sensitive.</div>
+                                        <div>Removing or detaching existing disks of VM is not supported.</div>
+                                        <div>Required parameters per entry:</div>
+                                        <div>- <code>size_[tb,gb,mb,kb,b]</code> (integer): Disk storage size in specified unit. VM needs to be shut down to reconfigure this parameter.</div>
+                                        <div>Optional parameters per entry:</div>
+                                        <div>- <code>name</code> (string): Disk name. You can also use <code>name_label</code> as an alias.</div>
+                                        <div>- <code>name_desc</code> (string): Disk description.</div>
+                                        <div>- <code>sr</code> (string): Storage Repository to create disk on. If not specified, will use default SR. Cannot be used for moving disk to other SR.</div>
+                                        <div>- <code>sr_uuid</code> (string): UUID of a SR to create disk on. Use if SR name is not unique.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: disk</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>folder</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Destination folder for VM.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>Example:</div>
+                                        <div>folder: /folder1/folder2</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>force</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Ignore warnings and complete the actions.</div>
+                                        <div>This parameter is useful for removing VM in running state or reconfiguring VM params that require VM to be shut down.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>hardware</b>
+                <div style="font-size: small">
+                    <span style="color: purple">dictionary</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Manage VM&#x27;s hardware parameters. VM needs to be shut down to reconfigure these parameters.</div>
+                                        <div>Valid parameters are:</div>
+                                        <div>- <code>num_cpus</code> (integer): Number of CPUs.</div>
+                                        <div>- <code>num_cpu_cores_per_socket</code> (integer): Number of Cores Per Socket. <code>num_cpus</code> has to be a multiple of <code>num_cpu_cores_per_socket</code>.</div>
+                                        <div>- <code>memory_mb</code> (integer): Amount of memory in MB.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>home_server</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Name of a XenServer host that will be a Home Server for the VM.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>hostname</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"localhost"</div>
+                                </td>
+                                                            <td>
+                                        <div>The hostname or IP address of the XenServer host or XenServer pool master.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>XENSERVER_HOST</code> will be used instead.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: host, pool</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>is_template</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Convert VM to template.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>linked_clone</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Whether to create a Linked Clone from the template, existing VM or snapshot. If no, will create a full copy.</div>
+                                        <div>This is equivalent to <code>Use storage-level fast disk clone</code> option in XenCenter.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>name</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                             / <span style="color: red">required</span>                    </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Name of the VM to work with.</div>
+                                        <div>VMs running on XenServer do not necessarily have unique names. The module will fail if multiple VMs with same name are found.</div>
+                                        <div>In case of multiple VMs with same name, use <code>uuid</code> to uniquely specify VM to manage.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: name_label</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>name_desc</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>VM description.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>networks</b>
+                <div style="font-size: small">
+                    <span style="color: purple">list</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A list of networks (in the order of the NICs).</div>
+                                        <div>All parameters are case sensitive.</div>
+                                        <div>Required parameters per entry:</div>
+                                        <div>- <code>name</code> (string): Name of a XenServer network to attach the network interface to. You can also use <code>name_label</code> as an alias.</div>
+                                        <div>Optional parameters per entry (used for VM hardware):</div>
+                                        <div>- <code>mac</code> (string): Customize MAC address of the interface.</div>
+                                        <div>Optional parameters per entry (used for OS customization):</div>
+                                        <div>- <code>type</code> (string): Type of IPv4 assignment, valid options are <code>none</code>, <code>dhcp</code> or <code>static</code>. Value <code>none</code> means whatever is default for OS. On some operating systems it could be DHCP configured (e.g. Windows) or unconfigured interface (e.g. Linux).</div>
+                                        <div>- <code>ip</code> (string): Static IPv4 address (implies <code>type: static</code>). Can include prefix in format &lt;IPv4 address&gt;/&lt;prefix&gt; instead of using <code>netmask</code>.</div>
+                                        <div>- <code>netmask</code> (string): Static IPv4 netmask required for <code>ip</code> if prefix is not specified.</div>
+                                        <div>- <code>gateway</code> (string): Static IPv4 gateway.</div>
+                                        <div>- <code>type6</code> (string): Type of IPv6 assignment, valid options are <code>none</code>, <code>dhcp</code> or <code>static</code>. Value <code>none</code> means whatever is default for OS. On some operating systems it could be DHCP configured (e.g. Windows) or unconfigured interface (e.g. Linux).</div>
+                                        <div>- <code>ip6</code> (string): Static IPv6 address (implies <code>type6: static</code>) with prefix in format &lt;IPv6 address&gt;/&lt;prefix&gt;.</div>
+                                        <div>- <code>gateway6</code> (string): Static IPv6 gateway.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: network</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>password</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The password to use for connecting to XenServer.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>XENSERVER_PASSWORD</code> will be used instead.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>state</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>absent</li>
+                                                                                                                                                                                            <li>poweredon</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify the state VM should be in.</div>
+                                        <div>If <code>state</code> is set to <code>present</code> and VM exists, ensure the VM configuration conforms to given parameters.</div>
+                                        <div>If <code>state</code> is set to <code>present</code> and VM does not exist, then VM is deployed with given parameters.</div>
+                                        <div>If <code>state</code> is set to <code>absent</code> and VM exists, then VM is removed with its associated components.</div>
+                                        <div>If <code>state</code> is set to <code>poweredon</code> and VM does not exist, then VM is deployed with given parameters and powered on automatically.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>state_change_timeout</b>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
+                                                            <td>
+                                        <div>By default, module will wait indefinitely for VM to accquire an IP address if <code>wait_for_ip_address: yes</code>.</div>
+                                        <div>If this parameter is set to positive value, the module will instead wait specified number of seconds for the state change.</div>
+                                        <div>In case of timeout, module will generate an error message.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>template</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Name of a template, an existing VM (must be shut down) or a snapshot that should be used to create VM.</div>
+                                        <div>Templates/VMs/snapshots on XenServer do not necessarily have unique names. The module will fail if multiple templates with same name are found.</div>
+                                        <div>In case of multiple templates/VMs/snapshots with same name, use <code>template_uuid</code> to uniquely specify source template.</div>
+                                        <div>If VM already exists, this setting will be ignored.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: template_src</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>template_uuid</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>UUID of a template, an existing VM or a snapshot that should be used to create VM.</div>
+                                        <div>It is required if template name is not unique.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>username</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"root"</div>
+                                </td>
+                                                            <td>
+                                        <div>The username to use for connecting to XenServer.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>XENSERVER_USER</code> will be used instead.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>uuid</b>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>UUID of the VM to manage if known. This is XenServer&#x27;s unique identifier.</div>
+                                        <div>It is required if name is not unique.</div>
+                                        <div>Please note that a supplied UUID will be ignored on VM creation, as XenServer creates the UUID internally.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>validate_certs</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>XENSERVER_VALIDATE_CERTS</code> will be used instead.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>wait_for_ip_address</b>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Wait until XenServer detects an IP address for the VM. If <code>state</code> is set to <code>absent</code>, this parameter is ignored.</div>
+                                        <div>This requires XenServer Tools to be preinstalled on the VM to work properly.</div>
+                                                    </td>
+        </tr>
+                    </table>
+<br/></div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id4">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Minimal supported version of XenServer is 5.6.</li>
+<li>Module was tested with XenServer 6.5, 7.1, 7.2, 7.6, Citrix Hypervisor 8.0, XCP-ng 7.6 and 8.0.</li>
+<li>To acquire XenAPI Python library, just run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">XenAPI</span></code> on your Ansible Control Node. The library can also be found inside Citrix Hypervisor/XenServer SDK (downloadable from Citrix website). Copy the XenAPI.py file from the SDK to your Python site-packages on your Ansible Control Node to use it. Latest version of the library can also be acquired from GitHub: <a class="reference external" href="https://raw.githubusercontent.com/xapi-project/xen-api/master/scripts/examples/python/XenAPI.py">https://raw.githubusercontent.com/xapi-project/xen-api/master/scripts/examples/python/XenAPI.py</a></li>
+<li>If no scheme is specified in <code class="docutils literal notranslate"><span class="pre">hostname</span></code>, module defaults to <code class="docutils literal notranslate"><span class="pre">http://</span></code> because <code class="docutils literal notranslate"><span class="pre">https://</span></code> is problematic in most setups. Make sure you are accessing XenServer host in trusted environment or use <code class="docutils literal notranslate"><span class="pre">https://</span></code> scheme explicitly.</li>
+<li>To use <code class="docutils literal notranslate"><span class="pre">https://</span></code> scheme for <code class="docutils literal notranslate"><span class="pre">hostname</span></code> you have to either import host certificate to your OS certificate store or use <code class="docutils literal notranslate"><span class="pre">validate_certs:</span> <span class="pre">no</span></code> which requires XenAPI library from XenServer 7.2 SDK or newer and Python 2.7.9 or newer.</li>
+<li>Network configuration inside a guest OS, by using <code class="docutils literal notranslate"><span class="pre">networks.type</span></code>, <code class="docutils literal notranslate"><span class="pre">networks.ip</span></code>, <code class="docutils literal notranslate"><span class="pre">networks.gateway</span></code> etc. parameters, is supported on XenServer 7.0 or newer for Windows guests by using official XenServer Guest agent support for network configuration. The module will try to detect if such support is available and utilize it, else it will use a custom method of configuration via xenstore. Since XenServer Guest agent only support None and Static types of network configuration, where None means DHCP configured interface, <code class="docutils literal notranslate"><span class="pre">networks.type</span></code> and <code class="docutils literal notranslate"><span class="pre">networks.type6</span></code> values <code class="docutils literal notranslate"><span class="pre">none</span></code> and <code class="docutils literal notranslate"><span class="pre">dhcp</span></code> have same effect. More info here: <a class="reference external" href="https://www.citrix.com/community/citrix-developer/citrix-hypervisor-developer/citrix-hypervisor-developing-products/citrix-hypervisor-staticip.html">https://www.citrix.com/community/citrix-developer/citrix-hypervisor-developer/citrix-hypervisor-developing-products/citrix-hypervisor-staticip.html</a></li>
+<li>On platforms without official support for network configuration inside a guest OS, network parameters will be written to xenstore <code class="docutils literal notranslate"><span class="pre">vm-data/networks/&lt;vif_device&gt;</span></code> key. Parameters can be inspected by using <code class="docutils literal notranslate"><span class="pre">xenstore</span> <span class="pre">ls</span></code> and <code class="docutils literal notranslate"><span class="pre">xenstore</span> <span class="pre">read</span></code> tools on *nix guests or trough WMI interface on Windows guests. They can also be found in VM facts <code class="docutils literal notranslate"><span class="pre">instance.xenstore_data</span></code> key as returned by the module. It is up to the user to implement a boot time scripts or custom agent that will read the parameters from xenstore and configure network with given parameters. Take note that for xenstore data to become available inside a guest, a VM restart is needed hence module will require VM restart if any parameter is changed. This is a limitation of XenAPI and xenstore. Considering these limitations, network configuration trough xenstore is most useful for bootstraping newly deployed VMs, much less for reconfiguring existing ones. More info here: <a class="reference external" href="https://support.citrix.com/article/CTX226713">https://support.citrix.com/article/CTX226713</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a VM from a template</span>
+  <span class="nt">xenserver_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">folder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/testvms</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm_2</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">poweredon</span>
+    <span class="nt">template</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CentOS 7</span>
+    <span class="nt">disks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">size_gb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+      <span class="nt">sr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_sr</span>
+    <span class="nt">hardware</span><span class="p">:</span>
+      <span class="nt">num_cpus</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">6</span>
+      <span class="nt">num_cpu_cores_per_socket</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+      <span class="nt">memory_mb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">512</span>
+    <span class="nt">cdrom</span><span class="p">:</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">iso</span>
+      <span class="nt">iso_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">guest-tools.iso</span>
+    <span class="nt">networks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VM Network</span>
+      <span class="nt">mac</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">aa:bb:dd:aa:00:14</span>
+    <span class="nt">wait_for_ip_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">deploy</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a VM template</span>
+  <span class="nt">xenserver_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">folder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/testvms</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm_6</span>
+    <span class="nt">is_template</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">disk</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">size_gb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+      <span class="nt">sr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_sr</span>
+    <span class="nt">hardware</span><span class="p">:</span>
+      <span class="nt">memory_mb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">512</span>
+      <span class="nt">num_cpus</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">deploy</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Rename a VM (requires the VM&#39;s UUID)</span>
+  <span class="nt">xenserver_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">uuid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">421e4592-c069-924d-ce20-7e7533fab926</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">new_name</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Remove a VM by UUID</span>
+  <span class="nt">xenserver_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">uuid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">421e4592-c069-924d-ce20-7e7533fab926</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Modify custom params (boot order)</span>
+  <span class="nt">xenserver_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm_8</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">custom_params</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">HVM_boot_params</span>
+      <span class="nt">value</span><span class="p">:</span> <span class="p p-Indicator">{</span> <span class="s">&quot;order&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ndc&quot;</span> <span class="p p-Indicator">}</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Customize network parameters</span>
+  <span class="nt">xenserver_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">xenserver_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm_10</span>
+    <span class="nt">networks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VM Network</span>
+      <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.100/24</span>
+      <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dhcp</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id6">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
+<p>Common return values are documented <a class="reference internal" href="../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Key</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                <tr>
+                            <td colspan="1">
+                <b>changes</b>
+                <div style="font-size: small">
+                  <span style="color: purple">list</span>
+                                      </div>
+                                </td>
+            <td>always</td>
+            <td>
+                                        <div>Detected or made changes to VM</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;hardware&#x27;: [&#x27;num_cpus&#x27;]}, {&#x27;disks_changed&#x27;: [[], [&#x27;size&#x27;]]}, {&#x27;disks_new&#x27;: [{&#x27;name&#x27;: &#x27;new-disk&#x27;, &#x27;name_desc&#x27;: &#x27;&#x27;, &#x27;position&#x27;: 2, &#x27;size_gb&#x27;: &#x27;4&#x27;, &#x27;vbd_userdevice&#x27;: &#x27;2&#x27;}]}, {&#x27;cdrom&#x27;: [&#x27;type&#x27;, &#x27;iso_name&#x27;]}, {&#x27;networks_changed&#x27;: [[&#x27;mac&#x27;]]}, {&#x27;networks_new&#x27;: [{&#x27;name&#x27;: &#x27;Pool-wide network associated with eth2&#x27;, &#x27;position&#x27;: 1, &#x27;vif_device&#x27;: &#x27;1&#x27;}]}, &#x27;need_poweredoff&#x27;]</div>
+                                </td>
+        </tr>
+                            <tr>
+                            <td colspan="1">
+                <b>instance</b>
+                <div style="font-size: small">
+                  <span style="color: purple">dictionary</span>
+                                      </div>
+                                </td>
+            <td>always</td>
+            <td>
+                                        <div>Metadata about the VM</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;cdrom&#x27;: {&#x27;type&#x27;: &#x27;none&#x27;}, &#x27;customization_agent&#x27;: &#x27;native&#x27;, &#x27;disks&#x27;: [{&#x27;name&#x27;: &#x27;testvm_11-0&#x27;, &#x27;name_desc&#x27;: &#x27;&#x27;, &#x27;os_device&#x27;: &#x27;xvda&#x27;, &#x27;size&#x27;: 42949672960, &#x27;sr&#x27;: &#x27;Local storage&#x27;, &#x27;sr_uuid&#x27;: &#x27;0af1245e-bdb0-ba33-1446-57a962ec4075&#x27;, &#x27;vbd_userdevice&#x27;: &#x27;0&#x27;}, {&#x27;name&#x27;: &#x27;testvm_11-1&#x27;, &#x27;name_desc&#x27;: &#x27;&#x27;, &#x27;os_device&#x27;: &#x27;xvdb&#x27;, &#x27;size&#x27;: 42949672960, &#x27;sr&#x27;: &#x27;Local storage&#x27;, &#x27;sr_uuid&#x27;: &#x27;0af1245e-bdb0-ba33-1446-57a962ec4075&#x27;, &#x27;vbd_userdevice&#x27;: &#x27;1&#x27;}], &#x27;domid&#x27;: &#x27;56&#x27;, &#x27;folder&#x27;: &#x27;&#x27;, &#x27;hardware&#x27;: {&#x27;memory_mb&#x27;: 8192, &#x27;num_cpu_cores_per_socket&#x27;: 2, &#x27;num_cpus&#x27;: 4}, &#x27;home_server&#x27;: &#x27;&#x27;, &#x27;is_template&#x27;: False, &#x27;name&#x27;: &#x27;testvm_11&#x27;, &#x27;name_desc&#x27;: &#x27;&#x27;, &#x27;networks&#x27;: [{&#x27;gateway&#x27;: &#x27;192.168.0.254&#x27;, &#x27;gateway6&#x27;: &#x27;fc00::fffe&#x27;, &#x27;ip&#x27;: &#x27;192.168.0.200&#x27;, &#x27;ip6&#x27;: [&#x27;fe80:0000:0000:0000:e9cb:625a:32c5:c291&#x27;, &#x27;fc00:0000:0000:0000:0000:0000:0000:0001&#x27;], &#x27;mac&#x27;: &#x27;ba:91:3a:48:20:76&#x27;, &#x27;mtu&#x27;: &#x27;1500&#x27;, &#x27;name&#x27;: &#x27;Pool-wide network associated with eth1&#x27;, &#x27;netmask&#x27;: &#x27;255.255.255.128&#x27;, &#x27;prefix&#x27;: &#x27;25&#x27;, &#x27;prefix6&#x27;: &#x27;64&#x27;, &#x27;vif_device&#x27;: &#x27;0&#x27;}], &#x27;other_config&#x27;: {&#x27;base_template_name&#x27;: &#x27;Windows Server 2016 (64-bit)&#x27;, &#x27;import_task&#x27;: &#x27;OpaqueRef:e43eb71c-45d6-5351-09ff-96e4fb7d0fa5&#x27;, &#x27;install-methods&#x27;: &#x27;cdrom&#x27;, &#x27;instant&#x27;: &#x27;true&#x27;, &#x27;mac_seed&#x27;: &#x27;f83e8d8a-cfdc-b105-b054-ef5cb416b77e&#x27;}, &#x27;platform&#x27;: {&#x27;acpi&#x27;: &#x27;1&#x27;, &#x27;apic&#x27;: &#x27;true&#x27;, &#x27;cores-per-socket&#x27;: &#x27;2&#x27;, &#x27;device_id&#x27;: &#x27;0002&#x27;, &#x27;hpet&#x27;: &#x27;true&#x27;, &#x27;nx&#x27;: &#x27;true&#x27;, &#x27;pae&#x27;: &#x27;true&#x27;, &#x27;timeoffset&#x27;: &#x27;-25200&#x27;, &#x27;vga&#x27;: &#x27;std&#x27;, &#x27;videoram&#x27;: &#x27;8&#x27;, &#x27;viridian&#x27;: &#x27;true&#x27;, &#x27;viridian_reference_tsc&#x27;: &#x27;true&#x27;, &#x27;viridian_time_ref_count&#x27;: &#x27;true&#x27;}, &#x27;state&#x27;: &#x27;poweredon&#x27;, &#x27;uuid&#x27;: &#x27;e3c0b2d5-5f05-424e-479c-d3df8b3e7cda&#x27;, &#x27;xenstore_data&#x27;: {&#x27;vm-data&#x27;: &#x27;&#x27;}}</div>
+                                </td>
+        </tr>
+                    </table>
+<br/><br/></div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id7">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This module is not guaranteed to have a backwards compatible interface. <em>[preview]</em></li>
+<li>This module is <a class="reference internal" href="../user_guide/modules_support.html#modules-support"><span class="std std-ref">maintained by the Ansible Community</span></a>. <em>[community]</em></li>
+</ul>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Bojan Vitnik (&#64;bvitnik) &lt;<a class="reference external" href="/cdn-cgi/l/email-protection#4725312e33292e2c616474707c616472757c6164737f7c2a262e2934333522262a616473717c3534">bvitnik<span>&#64;</span>mainstream<span>&#46;</span>rs</a>&gt;</li>
+</ul>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you notice any issues in this documentation, you can <a class="reference external" href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/cloud/xenserver/xenserver_guest.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr">edit this document</a> to improve it.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Nov 15, 2019.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

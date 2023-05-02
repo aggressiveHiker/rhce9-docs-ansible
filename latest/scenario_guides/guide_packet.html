@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Packet.net Guide &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/guide_packet.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Rackspace Cloud Guide" href="guide_rax.html" />
+    <link rel="prev" title="Oracle Cloud Infrastructure Guide" href="guide_oracle.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cloud_guides.html">Legacy Public Cloud Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="guide_alicloud.html">Alibaba Cloud Compute Services Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_cloudstack.html">CloudStack Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_gce.html">Google Cloud Platform Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_azure.html">Microsoft Azure Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_online.html">Online.net Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_oracle.html">Oracle Cloud Infrastructure Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Packet.net Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device-creation">Device Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updating-devices">Updating Devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-complex-playbooks">More Complex Playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dynamic-inventory-script">Dynamic Inventory Script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide_rax.html">Rackspace Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_scaleway.html">Scaleway Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide_vultr.html">Vultr Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cloud_guides.html">Legacy Public Cloud Guides</a> &raquo;</li>
+      <li>Packet.net Guide</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/scenario_guides/guide_packet.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="packet-net-guide">
+<h1>Packet.net Guide<a class="headerlink" href="#packet-net-guide" title="Permalink to this headline"></a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="https://packet.net">Packet.net</a> is a bare metal infrastructure host that’s supported by Ansible (&gt;=2.3) via a dynamic inventory script and two cloud modules. The two modules are:</p>
+<ul class="simple">
+<li><p>packet_sshkey: adds a public SSH key from file or value to the Packet infrastructure. Every subsequently-created device will have this public key installed in .ssh/authorized_keys.</p></li>
+<li><p>packet_device: manages servers on Packet. You can use this module to create, restart and delete devices.</p></li>
+</ul>
+<p>Note, this guide assumes you are familiar with Ansible and how it works. If you’re not, have a look at their <a class="reference internal" href="../index.html#ansible-documentation"><span class="std std-ref">docs</span></a> before getting started.</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
+<p>The Packet modules and inventory script connect to the Packet API using the packet-python package. You can install it with pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install packet-python
+</pre></div>
+</div>
+<p>In order to check the state of devices created by Ansible on Packet, it’s a good idea to install one of the <a class="reference external" href="https://www.packet.net/developers/integrations/">Packet CLI clients</a>. Otherwise you can check them via the <a class="reference external" href="https://app.packet.net/portal">Packet portal</a>.</p>
+<p>To use the modules and inventory script you’ll need a Packet API token. You can generate an API token via the Packet portal <a class="reference external" href="https://app.packet.net/portal#/api-keys">here</a>. The simplest way to authenticate yourself is to set the Packet API token in an environment variable:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">PACKET_API_TOKEN</span><span class="o">=</span>Bfse9F24SFtfs423Gsd3ifGsd43sSdfs
+</pre></div>
+</div>
+<p>If you’re not comfortable exporting your API token, you can pass it as a parameter to the modules.</p>
+<p>On Packet, devices and reserved IP addresses belong to <a class="reference external" href="https://www.packet.com/developers/api/#projects">projects</a>. In order to use the packet_device module, you need to specify the UUID of the project in which you want to create or manage devices. You can find a project’s UUID in the Packet portal <a class="reference external" href="https://app.packet.net/portal#/projects/list/table/">here</a> (it’s just under the project table) or via one of the available <a class="reference external" href="https://www.packet.net/developers/integrations/">CLIs</a>.</p>
+<p>If you want to use a new SSH keypair in this tutorial, you can generate it to <code class="docutils literal notranslate"><span class="pre">./id_rsa</span></code> and <code class="docutils literal notranslate"><span class="pre">./id_rsa.pub</span></code> as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -t rsa -f ./id_rsa
+</pre></div>
+</div>
+<p>If you want to use an existing keypair, just copy the private and public key over to the playbook directory.</p>
+</div>
+<div class="section" id="device-creation">
+<h2>Device Creation<a class="headerlink" href="#device-creation" title="Permalink to this headline"></a></h2>
+<p>The following code block is a simple playbook that creates one <a class="reference external" href="https://www.packet.com/cloud/servers/t1-small/">Type 0</a> server (the ‘plan’ parameter). You have to supply ‘plan’ and ‘operating_system’. ‘location’ defaults to ‘ewr1’ (Parsippany, NJ). You can find all the possible values for the parameters via a <a class="reference external" href="https://www.packet.net/developers/integrations/">CLI client</a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># playbook_create.yml</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create ubuntu device</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">packet_sshkey</span><span class="p">:</span>
+      <span class="nt">key_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./id_rsa.pub</span>
+      <span class="nt">label</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tutorial key</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">packet_device</span><span class="p">:</span>
+      <span class="nt">project_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your_project_id&gt;</span>
+      <span class="nt">hostnames</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myserver</span>
+      <span class="nt">operating_system</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu_16_04</span>
+      <span class="nt">plan</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">baremetal_0</span>
+      <span class="nt">facility</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sjc1</span>
+</pre></div>
+</div>
+<p>After running <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span> <span class="pre">playbook_create.yml</span></code>, you should have a server provisioned on Packet. You can verify via a CLI or in the <a class="reference external" href="https://app.packet.net/portal#/projects/list/table">Packet portal</a>.</p>
+<p>If you get an error with the message “failed to set machine state present, error: Error 404: Not Found”, please verify your project UUID.</p>
+</div>
+<div class="section" id="updating-devices">
+<h2>Updating Devices<a class="headerlink" href="#updating-devices" title="Permalink to this headline"></a></h2>
+<p>The two parameters used to uniquely identify Packet devices are: “device_ids” and “hostnames”. Both parameters accept either a single string (later converted to a one-element list), or a list of strings.</p>
+<p>The ‘device_ids’ and ‘hostnames’ parameters are mutually exclusive. The following values are all acceptable:</p>
+<ul class="simple">
+<li><p>device_ids: a27b7a83-fc93-435b-a128-47a5b04f2dcf</p></li>
+<li><p>hostnames: mydev1</p></li>
+<li><p>device_ids: [a27b7a83-fc93-435b-a128-47a5b04f2dcf, 4887130f-0ccd-49a0-99b0-323c1ceb527b]</p></li>
+<li><p>hostnames: [mydev1, mydev2]</p></li>
+</ul>
+<p>In addition, hostnames can contain a special ‘%d’ formatter along with a ‘count’ parameter that lets you easily expand hostnames that follow a simple name and number pattern; in other words, <code class="docutils literal notranslate"><span class="pre">hostnames:</span> <span class="pre">&quot;mydev%d&quot;,</span> <span class="pre">count:</span> <span class="pre">2</span></code> will expand to [mydev1, mydev2].</p>
+<p>If your playbook acts on existing Packet devices, you can only pass the ‘hostname’ and ‘device_ids’ parameters. The following playbook shows how you can reboot a specific Packet device by setting the ‘hostname’ parameter:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># playbook_reboot.yml</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">reboot myserver</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">packet_device</span><span class="p">:</span>
+      <span class="nt">project_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your_project_id&gt;</span>
+      <span class="nt">hostnames</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myserver</span>
+      <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">rebooted</span>
+</pre></div>
+</div>
+<p>You can also identify specific Packet devices with the ‘device_ids’ parameter. The device’s UUID can be found in the <a class="reference external" href="https://app.packet.net/portal">Packet Portal</a> or by using a <a class="reference external" href="https://www.packet.net/developers/integrations/">CLI</a>. The following playbook removes a Packet device using the ‘device_ids’ field:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># playbook_remove.yml</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove a device</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">packet_device</span><span class="p">:</span>
+      <span class="nt">project_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your_project_id&gt;</span>
+      <span class="nt">device_ids</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;myserver_device_id&gt;</span>
+      <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="more-complex-playbooks">
+<h2>More Complex Playbooks<a class="headerlink" href="#more-complex-playbooks" title="Permalink to this headline"></a></h2>
+<p>In this example, we’ll create a CoreOS cluster with <a class="reference external" href="https://packet.com/developers/docs/servers/key-features/user-data/">user data</a>.</p>
+<p>The CoreOS cluster will use <a class="reference external" href="https://etcd.io/">etcd</a> for discovery of other servers in the cluster. Before provisioning your servers, you’ll need to generate a discovery token for your cluster:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -w <span class="s2">&quot;\n&quot;</span> <span class="s1">&#39;https://discovery.etcd.io/new?size=3&#39;</span>
+</pre></div>
+</div>
+<p>The following playbook will create an SSH key, 3 Packet servers, and then wait until SSH is ready (or until 5 minutes passed). Make sure to substitute the discovery token URL in ‘user_data’, and the ‘project_id’ before running <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>. Also, feel free to change ‘plan’ and ‘facility’.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># playbook_coreos.yml</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Start 3 CoreOS nodes in Packet and wait until SSH is ready</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">packet_sshkey</span><span class="p">:</span>
+      <span class="nt">key_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./id_rsa.pub</span>
+      <span class="nt">label</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">new</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">packet_device</span><span class="p">:</span>
+      <span class="nt">hostnames</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">coreos-one</span><span class="p p-Indicator">,</span> <span class="nv">coreos-two</span><span class="p p-Indicator">,</span> <span class="nv">coreos-three</span><span class="p p-Indicator">]</span>
+      <span class="nt">operating_system</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">coreos_beta</span>
+      <span class="nt">plan</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">baremetal_0</span>
+      <span class="nt">facility</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ewr1</span>
+      <span class="nt">project_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your_project_id&gt;</span>
+      <span class="nt">wait_for_public_IPv</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+      <span class="nt">user_data</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">#cloud-config</span>
+        <span class="no">coreos:</span>
+          <span class="no">etcd2:</span>
+            <span class="no">discovery: https://discovery.etcd.io/&lt;token&gt;</span>
+            <span class="no">advertise-client-urls: http://$private_ipv4:2379,http://$private_ipv4:4001</span>
+            <span class="no">initial-advertise-peer-urls: http://$private_ipv4:2380</span>
+            <span class="no">listen-client-urls: http://0.0.0.0:2379,http://0.0.0.0:4001</span>
+            <span class="no">listen-peer-urls: http://$private_ipv4:2380</span>
+          <span class="no">fleet:</span>
+            <span class="no">public-ip: $private_ipv4</span>
+          <span class="no">units:</span>
+            <span class="no">- name: etcd2.service</span>
+              <span class="no">command: start</span>
+            <span class="no">- name: fleet.service</span>
+              <span class="no">command: start</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">newhosts</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wait for ssh</span>
+    <span class="nt">wait_for</span><span class="p">:</span>
+      <span class="nt">delay</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+      <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.public_ipv4</span><span class="nv"> </span><span class="s">}}&quot;</span>
+      <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+      <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+      <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">500</span>
+    <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">newhosts.results[0].devices</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<p>As with most Ansible modules, the default states of the Packet modules are idempotent, meaning the resources in your project will remain the same after re-runs of a playbook. Thus, we can keep the <code class="docutils literal notranslate"><span class="pre">packet_sshkey</span></code> module call in our playbook. If the public key is already in your Packet account, the call will have no effect.</p>
+<p>The second module call provisions 3 Packet Type 0 (specified using the ‘plan’ parameter) servers in the project identified via the ‘project_id’ parameter. The servers are all provisioned with CoreOS beta (the ‘operating_system’ parameter) and are customized with cloud-config user data passed to the ‘user_data’ parameter.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">packet_device</span></code> module has a <code class="docutils literal notranslate"><span class="pre">wait_for_public_IPv</span></code> that is used to specify the version of the IP address to wait for (valid values are <code class="docutils literal notranslate"><span class="pre">4</span></code> or <code class="docutils literal notranslate"><span class="pre">6</span></code> for IPv4 or IPv6). If specified, Ansible will wait until the GET API call for a device contains an Internet-routeable IP address of the specified version. When referring to an IP address of a created device in subsequent module calls, it’s wise to use the <code class="docutils literal notranslate"><span class="pre">wait_for_public_IPv</span></code> parameter, or <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">active</span></code> in the packet_device module call.</p>
+<p>Run the playbook:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible-playbook playbook_coreos.yml
+</pre></div>
+</div>
+<p>Once the playbook quits, your new devices should be reachable via SSH. Try to connect to one and check if etcd has started properly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a7d3c8cacce7d0c8d5cc">[email&#160;protected]</a> $ ssh -i id_rsa <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dfbcb0adba9f">[email&#160;protected]</a><span class="nv">$one_of_the_servers_ip</span>
+<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9cac6dbcce9cac6dbccc6da84c6c7cc">[email&#160;protected]</a> ~ $ etcdctl cluster-health
+</pre></div>
+</div>
+<p>Once you create a couple of devices, you might appreciate the dynamic inventory script…</p>
+</div>
+<div class="section" id="dynamic-inventory-script">
+<h2>Dynamic Inventory Script<a class="headerlink" href="#dynamic-inventory-script" title="Permalink to this headline"></a></h2>
+<p>The dynamic inventory script queries the Packet API for a list of hosts, and exposes it to Ansible so you can easily identify and act on Packet devices.</p>
+<p>You can find it in Ansible Community General Collection’s git repo at <a class="reference external" href="https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/packet_net.py">scripts/inventory/packet_net.py</a>.</p>
+<p>The inventory script is configurable via a <a class="reference external" href="https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/packet_net.ini">ini file</a>.</p>
+<p>If you want to use the inventory script, you must first export your Packet API token to a PACKET_API_TOKEN environment variable.</p>
+<p>You can either copy the inventory and ini config out from the cloned git repo, or you can download it to your working directory like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ wget https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/packet_net.py
+$ chmod +x packet_net.py
+$ wget https://raw.githubusercontent.com/ansible-community/contrib-scripts/main/inventory/packet_net.ini
+</pre></div>
+</div>
+<p>In order to understand what the inventory script gives to Ansible you can run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./packet_net.py --list
+</pre></div>
+</div>
+<p>It should print a JSON document looking similar to following trimmed dictionary:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;hostvars&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;147.75.64.169&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;packet_billing_cycle&quot;</span><span class="p">:</span> <span class="s2">&quot;hourly&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-02-09T17:11:26Z&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_facility&quot;</span><span class="p">:</span> <span class="s2">&quot;ewr1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_hostname&quot;</span><span class="p">:</span> <span class="s2">&quot;coreos-two&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_href&quot;</span><span class="p">:</span> <span class="s2">&quot;/devices/d0ab8972-54a8-4bff-832b-28549d1bec96&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_id&quot;</span><span class="p">:</span> <span class="s2">&quot;d0ab8972-54a8-4bff-832b-28549d1bec96&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_locked&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;packet_operating_system&quot;</span><span class="p">:</span> <span class="s2">&quot;coreos_beta&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_plan&quot;</span><span class="p">:</span> <span class="s2">&quot;baremetal_0&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_state&quot;</span><span class="p">:</span> <span class="s2">&quot;active&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_updated_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-02-09T17:16:35Z&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_user&quot;</span><span class="p">:</span> <span class="s2">&quot;core&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;packet_userdata&quot;</span><span class="p">:</span> <span class="s2">&quot;#cloud-config\ncoreos:\n  etcd2:\n    discovery: https://discovery.etcd.io/e0c8a4a9b8fe61acd51ec599e2a4f68e\n    advertise-client-urls: http://$private_ipv4:2379,http://$private_ipv4:4001\n    initial-advertise-peer-urls: http://$private_ipv4:2380\n    listen-client-urls: http://0.0.0.0:2379,http://0.0.0.0:4001\n    listen-peer-urls: http://$private_ipv4:2380\n  fleet:\n    public-ip: $private_ipv4\n  units:\n    - name: etcd2.service\n      command: start\n    - name: fleet.service\n      command: start&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;baremetal_0&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;147.75.202.255&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.202.251&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.202.249&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.64.129&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.192.51&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.64.169&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;coreos_beta&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;147.75.202.255&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.202.251&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.202.249&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.64.129&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.192.51&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.64.169&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;ewr1&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;147.75.64.129&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.192.51&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.64.169&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;sjc1&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;147.75.202.255&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.202.251&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;147.75.202.249&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;coreos-two&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;147.75.64.169&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;d0ab8972-54a8-4bff-832b-28549d1bec96&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;147.75.64.169&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the <code class="docutils literal notranslate"><span class="pre">['_meta']['hostvars']</span></code> key, there is a list of devices (uniquely identified by their public IPv4 address) with their parameters. The other keys under <code class="docutils literal notranslate"><span class="pre">['_meta']</span></code> are lists of devices grouped by some parameter. Here, it is type (all devices are of type baremetal_0), operating system, and facility (ewr1 and sjc1).</p>
+<p>In addition to the parameter groups, there are also one-item groups with the UUID or hostname of the device.</p>
+<p>You can now target groups in playbooks! The following playbook will install a role that supplies resources for an Ansible target into all devices in the “coreos_beta” group:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># playbook_bootstrap.yml</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">coreos_beta</span>
+  <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">roles</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">defunctzombie.coreos-boostrap</span>
+</pre></div>
+</div>
+<p>Don’t forget to supply the dynamic inventory in the <code class="docutils literal notranslate"><span class="pre">-i</span></code> argument!</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible-playbook -u core -i packet_net.py playbook_bootstrap.yml
+</pre></div>
+</div>
+<p>If you have any questions or comments let us know! <a class="reference external" href="/cdn-cgi/l/email-protection#a5cdc0c9d5838696929e838690979e8386919d9ed5c4c6cec0d1838691939ecbc0d1">help<span>&#64;</span>packet<span>&#46;</span>net</a></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guide_oracle.html" class="btn btn-neutral float-left" title="Oracle Cloud Infrastructure Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guide_rax.html" class="btn btn-neutral float-right" title="Rackspace Cloud Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on May 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

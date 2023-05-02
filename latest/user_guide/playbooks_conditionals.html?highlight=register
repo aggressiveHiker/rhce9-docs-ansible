@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conditionals &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Blocks" href="playbooks_blocks.html" />
+    <link rel="prev" title="Controlling where tasks run: delegation and local actions" href="playbooks_delegation.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#traditional-table-of-contents">Traditional Table of Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Conditionals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-conditionals-with-when">Basic conditionals with <code class="docutils literal notranslate"><span class="pre">when</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonly-used-facts">Commonly-used facts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Conditionals</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/playbooks_conditionals.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="conditionals">
+<span id="playbooks-conditionals"></span><h1>Conditionals<a class="headerlink" href="#conditionals" title="Permalink to this headline"></a></h1>
+<p>In a playbook, you may want to execute different tasks, or have different goals, depending on the value of a fact (data about the remote system), a variable, or the result of a previous task. You may want the value of some variables to depend on the value of other variables. Or you may want to create additional groups of hosts based on whether the hosts match other criteria. You can do all of these things with conditionals.</p>
+<p>Ansible uses Jinja2 <a class="reference internal" href="playbooks_tests.html#playbooks-tests"><span class="std std-ref">tests</span></a> and <a class="reference internal" href="playbooks_filters.html#playbooks-filters"><span class="std std-ref">filters</span></a> in conditionals. Ansible supports all the standard tests and filters, and adds some unique ones as well.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are many options to control execution flow in Ansible. You can find more examples of supported conditionals at <a class="reference external" href="https://jinja.palletsprojects.com/en/latest/templates/#comparisons">https://jinja.palletsprojects.com/en/latest/templates/#comparisons</a>.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#basic-conditionals-with-when" id="id2">Basic conditionals with <code class="docutils literal notranslate"><span class="pre">when</span></code></a></p>
+<ul>
+<li><p><a class="reference internal" href="#conditionals-based-on-ansible-facts" id="id3">Conditionals based on ansible_facts</a></p></li>
+<li><p><a class="reference internal" href="#conditions-based-on-registered-variables" id="id4">Conditions based on registered variables</a></p></li>
+<li><p><a class="reference internal" href="#conditionals-based-on-variables" id="id5">Conditionals based on variables</a></p></li>
+<li><p><a class="reference internal" href="#using-conditionals-in-loops" id="id6">Using conditionals in loops</a></p></li>
+<li><p><a class="reference internal" href="#loading-custom-facts" id="id7">Loading custom facts</a></p></li>
+<li><p><a class="reference internal" href="#conditionals-with-re-use" id="id8">Conditionals with re-use</a></p>
+<ul>
+<li><p><a class="reference internal" href="#conditionals-with-imports" id="id9">Conditionals with imports</a></p></li>
+<li><p><a class="reference internal" href="#conditionals-with-includes" id="id10">Conditionals with includes</a></p></li>
+<li><p><a class="reference internal" href="#conditionals-with-roles" id="id11">Conditionals with roles</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#selecting-variables-files-or-templates-based-on-facts" id="id12">Selecting variables, files, or templates based on facts</a></p>
+<ul>
+<li><p><a class="reference internal" href="#selecting-variables-files-based-on-facts" id="id13">Selecting variables files based on facts</a></p></li>
+<li><p><a class="reference internal" href="#selecting-files-and-templates-based-on-facts" id="id14">Selecting files and templates based on facts</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#commonly-used-facts" id="id15">Commonly-used facts</a></p>
+<ul>
+<li><p><a class="reference internal" href="#ansible-facts-distribution" id="id16">ansible_facts[‘distribution’]</a></p></li>
+<li><p><a class="reference internal" href="#ansible-facts-distribution-major-version" id="id17">ansible_facts[‘distribution_major_version’]</a></p></li>
+<li><p><a class="reference internal" href="#ansible-facts-os-family" id="id18">ansible_facts[‘os_family’]</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="basic-conditionals-with-when">
+<span id="the-when-statement"></span><h2><a class="toc-backref" href="#id2">Basic conditionals with <code class="docutils literal notranslate"><span class="pre">when</span></code></a><a class="headerlink" href="#basic-conditionals-with-when" title="Permalink to this headline"></a></h2>
+<p>The simplest conditional statement applies to a single task. Create the task, then add a <code class="docutils literal notranslate"><span class="pre">when</span></code> statement that applies a test. The <code class="docutils literal notranslate"><span class="pre">when</span></code> clause is a raw Jinja2 expression without double curly braces (see <a class="reference external" href="https://docs.ansible.com/ansible/5/collections/ansible/builtin/group_by_module.html#group-by-module" title="(in Ansible v5)"><span class="xref std std-ref">group_by_module</span></a>). When you run the task or playbook, Ansible evaluates the test for all hosts. On any host where the test passes (returns a value of True), Ansible runs that task. For example, if you are installing mysql on multiple machines, some of which have SELinux enabled, you might have a task to configure SELinux to allow mysql to run. You would only want that task to run on machines that have SELinux enabled:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Configure SELinux to start mysql on any port</span>
+    <span class="nt">ansible.posix.seboolean</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mysql_connect_any</span>
+      <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">persistent</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_selinux.status == &quot;enabled&quot;</span>
+    <span class="c1"># all variables can be used directly in conditionals without double curly braces</span>
+</pre></div>
+</div>
+<div class="section" id="conditionals-based-on-ansible-facts">
+<h3><a class="toc-backref" href="#id3">Conditionals based on ansible_facts</a><a class="headerlink" href="#conditionals-based-on-ansible-facts" title="Permalink to this headline"></a></h3>
+<p>Often you want to execute or skip a task based on facts. Facts are attributes of individual hosts, including IP address, operating system, the status of a filesystem, and many more. With conditionals based on facts:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>You can install a certain package only when the operating system is a particular version.</p></li>
+<li><p>You can skip configuring a firewall on hosts with internal IP addresses.</p></li>
+<li><p>You can perform cleanup tasks only when a filesystem is getting full.</p></li>
+</ul>
+</div></blockquote>
+<p>See <a class="reference internal" href="#commonly-used-facts"><span class="std std-ref">Commonly-used facts</span></a> for a list of facts that frequently appear in conditional statements. Not all facts exist for all hosts. For example, the ‘lsb_major_release’ fact used in an example below only exists when the lsb_release package is installed on the target host. To see what facts are available on your systems, add a debug task to your playbook:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show facts available on the system</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts</span>
+</pre></div>
+</div>
+<p>Here is a sample conditional based on a fact:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Shut down Debian flavored systems</span>
+    <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/sbin/shutdown -t now</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &quot;Debian&quot;</span>
+</pre></div>
+</div>
+<p>If you have multiple conditions, you can group them with parentheses:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Shut down CentOS 6 and Debian 7 systems</span>
+    <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/sbin/shutdown -t now</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(ansible_facts[&#39;distribution&#39;] == &quot;CentOS&quot; and ansible_facts[&#39;distribution_major_version&#39;] == &quot;6&quot;) or</span>
+          <span class="l l-Scalar l-Scalar-Plain">(ansible_facts[&#39;distribution&#39;] == &quot;Debian&quot; and ansible_facts[&#39;distribution_major_version&#39;] == &quot;7&quot;)</span>
+</pre></div>
+</div>
+<p>You can use <a class="reference external" href="https://jinja.palletsprojects.com/en/latest/templates/#logic">logical operators</a> to combine conditions. When you have multiple conditions that all need to be true (that is, a logical <code class="docutils literal notranslate"><span class="pre">and</span></code>), you can specify them as a list:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Shut down CentOS 6 systems</span>
+    <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/sbin/shutdown -t now</span>
+    <span class="nt">when</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;distribution&#39;] == &quot;CentOS&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;distribution_major_version&#39;] == &quot;6&quot;</span>
+</pre></div>
+</div>
+<p>If a fact or variable is a string, and you need to run a mathematical comparison on it, use a filter to ensure that Ansible reads the value as an integer:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &quot;only on Red Hat 6, derivatives, and later&quot;</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &quot;RedHat&quot; and ansible_facts[&#39;lsb&#39;][&#39;major_release&#39;] | int &gt;= 6</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conditions-based-on-registered-variables">
+<span id="conditionals-registered-vars"></span><h3><a class="toc-backref" href="#id4">Conditions based on registered variables</a><a class="headerlink" href="#conditions-based-on-registered-variables" title="Permalink to this headline"></a></h3>
+<p>Often in a playbook you want to execute or skip a task based on the outcome of an earlier task. For example, you might want to configure a service after it is upgraded by an earlier task. To create a conditional based on a registered variable:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Register the outcome of the earlier task as a variable.</p></li>
+<li><p>Create a conditional test based on the registered variable.</p></li>
+</ol>
+</div></blockquote>
+<p>You create the name of the registered variable using the <code class="docutils literal notranslate"><span class="pre">register</span></code> keyword. A registered variable always contains the status of the task that created it as well as any output that task generated. You can use registered variables in templates and action lines as well as in conditional <code class="docutils literal notranslate"><span class="pre">when</span></code> statements. You can access the string contents of the registered variable using <code class="docutils literal notranslate"><span class="pre">variable.stdout</span></code>. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Test play</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Register a variable</span>
+        <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cat /etc/motd</span>
+        <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">motd_contents</span>
+
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Use the variable in conditional statement</span>
+        <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &quot;motd contains the word hi&quot;</span>
+        <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">motd_contents.stdout.find(&#39;hi&#39;) != -1</span>
+</pre></div>
+</div>
+<p>You can use registered results in the loop of a task if the variable is a list. If the variable is not a list, you can convert it into a list, with either <code class="docutils literal notranslate"><span class="pre">stdout_lines</span></code> or with <code class="docutils literal notranslate"><span class="pre">variable.stdout.split()</span></code>. You can also split the lines by other fields:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Registered variable usage as a loop list</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Retrieve the list of home directories</span>
+      <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ls /home</span>
+      <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">home_dirs</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Add home dirs to the backup spooler</span>
+      <span class="nt">ansible.builtin.file</span><span class="p">:</span>
+        <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/mnt/bkspool/{{ item }}</span>
+        <span class="nt">src</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/home/{{ item }}</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">link</span>
+      <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">home_dirs.stdout_lines</span><span class="nv"> </span><span class="s">}}&quot;</span>
+      <span class="c1"># same as loop: &quot;{{ home_dirs.stdout.split() }}&quot;</span>
+</pre></div>
+</div>
+<p>The string content of a registered variable can be empty. If you want to run another task only on hosts where the stdout of your registered variable is empty, check the registered variable’s string contents for emptiness:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">check registered variable for emptiness</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">List contents of directory</span>
+        <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ls mydir</span>
+        <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">contents</span>
+
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Check contents for emptiness</span>
+        <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+          <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Directory</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">empty&quot;</span>
+        <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">contents.stdout == &quot;&quot;</span>
+</pre></div>
+</div>
+<p>Ansible always registers something in a registered variable for every host, even on hosts where a task fails or Ansible skips a task because a condition is not met. To run a follow-up task on these hosts, query the registered variable for <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">skipped</span></code> (not for “undefined” or “default”). See <a class="reference internal" href="playbooks_variables.html#registered-variables"><span class="std std-ref">Registering variables</span></a> for more information. Here are sample conditionals based on the success or failure of a task. Remember to ignore errors if you want Ansible to continue executing on a host when a failure occurs:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Register a variable, ignore errors and continue</span>
+    <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/false</span>
+    <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+    <span class="nt">ignore_errors</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the &quot;result&quot; variable fails</span>
+    <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/something</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is failed</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the &quot;result&quot; variable succeeds</span>
+    <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/something_else</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is succeeded</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the &quot;result&quot; variable is skipped</span>
+    <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/still/something_else</span>
+    <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result is skipped</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Older versions of Ansible used <code class="docutils literal notranslate"><span class="pre">success</span></code> and <code class="docutils literal notranslate"><span class="pre">fail</span></code>, but <code class="docutils literal notranslate"><span class="pre">succeeded</span></code> and <code class="docutils literal notranslate"><span class="pre">failed</span></code> use the correct tense. All of these options are now valid.</p>
+</div>
+</div>
+<div class="section" id="conditionals-based-on-variables">
+<h3><a class="toc-backref" href="#id5">Conditionals based on variables</a><a class="headerlink" href="#conditionals-based-on-variables" title="Permalink to this headline"></a></h3>
+<p>You can also create conditionals based on variables defined in the playbooks or inventory. Because conditionals require boolean input (a test must evaluate as True to trigger the condition), you must apply the <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">bool</span></code> filter to non boolean variables, such as string variables with content like ‘yes’, ‘on’, ‘1’, or ‘true’. You can define variables like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+  <span class="nt">epic</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">monumental</span><span class="p">:</span> <span class="s">&quot;yes&quot;</span>
+</pre></div>
+</div>
+<p>With the variables above, Ansible would run one of these tasks and skip the other:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run the command if &quot;epic&quot; or &quot;monumental&quot; is true</span>
+      <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &quot;This certainly is epic!&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">epic or monumental | bool</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run the command if &quot;epic&quot; is false</span>
+      <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &quot;This certainly isn&#39;t epic!&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">not epic</span>
+</pre></div>
+</div>
+<p>If a required variable has not been set, you can skip or fail using Jinja2’s <cite>defined</cite> test. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run the command if &quot;foo&quot; is defined</span>
+      <span class="nt">ansible.builtin.shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &quot;I&#39;ve got &#39;{{ foo }}&#39; and am not afraid to use it!&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo is defined</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fail if &quot;bar&quot; is undefined</span>
+      <span class="nt">ansible.builtin.fail</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">msg=&quot;Bailing out. This play requires &#39;bar&#39;&quot;</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bar is undefined</span>
+</pre></div>
+</div>
+<p>This is especially useful in combination with the conditional import of vars files (see below).
+As the examples show, you do not need to use <cite>{{ }}</cite> to use variables inside conditionals, as these are already implied.</p>
+</div>
+<div class="section" id="using-conditionals-in-loops">
+<span id="loops-and-conditionals"></span><h3><a class="toc-backref" href="#id6">Using conditionals in loops</a><a class="headerlink" href="#using-conditionals-in-loops" title="Permalink to this headline"></a></h3>
+<p>If you combine a <code class="docutils literal notranslate"><span class="pre">when</span></code> statement with a <a class="reference internal" href="playbooks_loops.html#playbooks-loops"><span class="std std-ref">loop</span></a>, Ansible processes the condition separately for each item. This is by design, so you can execute the task on some items in the loop and skip it on other items. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run with items greater than 5</span>
+      <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo {{ item }}</span>
+      <span class="nt">loop</span><span class="p">:</span> <span class="p p-Indicator">[</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">6</span><span class="p p-Indicator">,</span> <span class="nv">8</span><span class="p p-Indicator">,</span> <span class="nv">10</span> <span class="p p-Indicator">]</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">item &gt; 5</span>
+</pre></div>
+</div>
+<p>If you need to skip the whole task when the loop variable is undefined, use the <cite>|default</cite> filter to provide an empty iterator. For example, when looping over a list:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Skip the whole task when a loop variable is undefined</span>
+  <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo {{ item }}</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mylist|default([])</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">item &gt; 5</span>
+</pre></div>
+</div>
+<p>You can do the same thing when looping over a dict:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The same as above using a dict</span>
+  <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo {{ item.key }}</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">query(&#39;dict&#39;,</span><span class="nv"> </span><span class="s">mydict|default({}))</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">item.value &gt; 5</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-custom-facts">
+<span id="loading-in-custom-facts"></span><h3><a class="toc-backref" href="#id7">Loading custom facts</a><a class="headerlink" href="#loading-custom-facts" title="Permalink to this headline"></a></h3>
+<p>You can provide your own facts, as described in <a class="reference internal" href="../dev_guide/developing_modules.html#developing-modules"><span class="std std-ref">Should you develop a module?</span></a>.  To run them, just make a call to your own custom fact gathering module at the top of your list of tasks, and variables returned there will be accessible to future tasks:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Gather site specific fact data</span>
+      <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">site_facts</span>
+
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Use a custom fact</span>
+      <span class="nt">ansible.builtin.command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/thingy</span>
+      <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_custom_fact_just_retrieved_from_the_remote_system == &#39;1234&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conditionals-with-re-use">
+<span id="when-with-reuse"></span><h3><a class="toc-backref" href="#id8">Conditionals with re-use</a><a class="headerlink" href="#conditionals-with-re-use" title="Permalink to this headline"></a></h3>
+<p>You can use conditionals with re-usable tasks files, playbooks, or roles. Ansible executes these conditional statements differently for dynamic re-use (includes) and for static re-use (imports). See <a class="reference internal" href="playbooks_reuse.html#playbooks-reuse"><span class="std std-ref">Re-using Ansible artifacts</span></a> for more information on re-use in Ansible.</p>
+<div class="section" id="conditionals-with-imports">
+<span id="conditional-imports"></span><h4><a class="toc-backref" href="#id9">Conditionals with imports</a><a class="headerlink" href="#conditionals-with-imports" title="Permalink to this headline"></a></h4>
+<p>When you add a conditional to an import statement, Ansible applies the condition to all tasks within the imported file. This behavior is the equivalent of <a class="reference internal" href="playbooks_tags.html#tag-inheritance"><span class="std std-ref">Tag inheritance: adding tags to multiple tasks</span></a>. Ansible applies the condition to every task, and evaluates each task separately. For example, you might have a playbook called <code class="docutils literal notranslate"><span class="pre">main.yml</span></code> and a tasks file called <code class="docutils literal notranslate"><span class="pre">other_tasks.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># all tasks within an imported file inherit the condition from the import statement</span>
+<span class="c1"># main.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">import_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">other_tasks.yml</span> <span class="c1"># note &quot;import&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
+
+<span class="c1"># other_tasks.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set a variable</span>
+  <span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
+    <span class="nt">x</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Print a variable</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x</span>
+</pre></div>
+</div>
+<p>Ansible expands this at execution time to the equivalent of:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set a variable if not defined</span>
+  <span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
+    <span class="nt">x</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
+  <span class="c1"># this task sets a value for x</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Do the task if &quot;x&quot; is not defined</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
+  <span class="c1"># Ansible skips this task, because x is now defined</span>
+</pre></div>
+</div>
+<p>Thus if <code class="docutils literal notranslate"><span class="pre">x</span></code> is initially undefined, the <code class="docutils literal notranslate"><span class="pre">debug</span></code> task will be skipped. If this is not the behavior you want, use an <code class="docutils literal notranslate"><span class="pre">include_*</span></code> statement to apply a condition only to that statement itself.</p>
+<p>You can apply conditions to <code class="docutils literal notranslate"><span class="pre">import_playbook</span></code> as well as to the other <code class="docutils literal notranslate"><span class="pre">import_*</span></code> statements. When you use this approach, Ansible returns a ‘skipped’ message for every task on every host that does not match the criteria, creating repetitive output. In many cases the <a class="reference internal" href="../collections/ansible/builtin/group_by_module.html#group-by-module"><span class="std std-ref">group_by module</span></a> can be a more streamlined way to accomplish the same objective; see <a class="reference internal" href="playbooks_best_practices.html#os-variance"><span class="std std-ref">Handling OS and distro differences</span></a>.</p>
+</div>
+<div class="section" id="conditionals-with-includes">
+<span id="conditional-includes"></span><h4><a class="toc-backref" href="#id10">Conditionals with includes</a><a class="headerlink" href="#conditionals-with-includes" title="Permalink to this headline"></a></h4>
+<p>When you use a conditional on an <code class="docutils literal notranslate"><span class="pre">include_*</span></code> statement, the condition is applied only to the include task itself and not to any other tasks within the included file(s). To contrast with the example used for conditionals on imports above, look at the same playbook and tasks file, but using an include instead of an import:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Includes let you re-use a file to define a variable when it is not already defined</span>
+
+<span class="c1"># main.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">include_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">other_tasks.yml</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
+
+<span class="c1"># other_tasks.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set a variable</span>
+  <span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
+    <span class="nt">x</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Print a variable</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x</span>
+</pre></div>
+</div>
+<p>Ansible expands this at execution time to the equivalent of:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># main.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">include_tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">other_tasks.yml</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
+  <span class="c1"># if condition is met, Ansible includes other_tasks.yml</span>
+
+<span class="c1"># other_tasks.yml</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set a variable</span>
+  <span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
+    <span class="nt">x</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+  <span class="c1"># no condition applied to this task, Ansible sets the value of x to foo</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Print a variable</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+    <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">x</span>
+  <span class="c1"># no condition applied to this task, Ansible prints the debug statement</span>
+</pre></div>
+</div>
+<p>By using <code class="docutils literal notranslate"><span class="pre">include_tasks</span></code> instead of <code class="docutils literal notranslate"><span class="pre">import_tasks</span></code>, both tasks from <code class="docutils literal notranslate"><span class="pre">other_tasks.yml</span></code> will be executed as expected. For more information on the differences between <code class="docutils literal notranslate"><span class="pre">include</span></code> v <code class="docutils literal notranslate"><span class="pre">import</span></code> see <a class="reference internal" href="playbooks_reuse.html#playbooks-reuse"><span class="std std-ref">Re-using Ansible artifacts</span></a>.</p>
+</div>
+<div class="section" id="conditionals-with-roles">
+<h4><a class="toc-backref" href="#id11">Conditionals with roles</a><a class="headerlink" href="#conditionals-with-roles" title="Permalink to this headline"></a></h4>
+<p>There are three ways to apply conditions to roles:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Add the same condition or conditions to all tasks in the role by placing your <code class="docutils literal notranslate"><span class="pre">when</span></code> statement under the <code class="docutils literal notranslate"><span class="pre">roles</span></code> keyword. See the example in this section.</p></li>
+<li><p>Add the same condition or conditions to all tasks in the role by placing your <code class="docutils literal notranslate"><span class="pre">when</span></code> statement on a static <code class="docutils literal notranslate"><span class="pre">import_role</span></code> in your playbook.</p></li>
+<li><p>Add a condition or conditions to individual tasks or blocks within the role itself. This is the only approach that allows you to select or skip some tasks within the role based on your <code class="docutils literal notranslate"><span class="pre">when</span></code> statement. To select or skip tasks within the role, you must have conditions set on individual tasks or blocks, use the dynamic <code class="docutils literal notranslate"><span class="pre">include_role</span></code> in your playbook, and add the condition or conditions to the include. When you use this approach, Ansible applies the condition to the include itself plus any tasks in the role that also have that <code class="docutils literal notranslate"><span class="pre">when</span></code> statement.</p></li>
+</ul>
+</div></blockquote>
+<p>When you incorporate a role in your playbook statically with the <code class="docutils literal notranslate"><span class="pre">roles</span></code> keyword, Ansible adds the conditions you define to all the tasks in the role. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">roles</span><span class="p">:</span>
+     <span class="p p-Indicator">-</span> <span class="nt">role</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">debian_stock_config</span>
+       <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &#39;Debian&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="selecting-variables-files-or-templates-based-on-facts">
+<span id="conditional-variable-and-files"></span><h3><a class="toc-backref" href="#id12">Selecting variables, files, or templates based on facts</a><a class="headerlink" href="#selecting-variables-files-or-templates-based-on-facts" title="Permalink to this headline"></a></h3>
+<p>Sometimes the facts about a host determine the values you want to use for certain variables or even the file or template you want to select for that host. For example, the names of packages are different on CentOS and on Debian. The configuration files for common services are also different on different OS flavors and versions. To load different variables file, templates, or other files based on a fact about the hosts:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>name your vars files, templates, or files to match the Ansible fact that differentiates them</p></li>
+<li><p>select the correct vars file, template, or file for each host with a variable based on that Ansible fact</p></li>
+</ol>
+</div></blockquote>
+<p>Ansible separates variables from tasks, keeping your playbooks from turning into arbitrary code with nested conditionals. This approach results in more streamlined and auditable configuration rules because there are fewer decision points to track.</p>
+<div class="section" id="selecting-variables-files-based-on-facts">
+<h4><a class="toc-backref" href="#id13">Selecting variables files based on facts</a><a class="headerlink" href="#selecting-variables-files-based-on-facts" title="Permalink to this headline"></a></h4>
+<p>You can create a playbook that works on multiple platforms and OS versions with a minimum of syntax by placing your variable values in vars files and conditionally importing them. If you want to install Apache on some CentOS and some Debian servers, create variables files with YAML keys and values. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># for vars/RedHat.yml</span>
+<span class="nt">apache</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httpd</span>
+<span class="nt">somethingelse</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">42</span>
+</pre></div>
+</div>
+<p>Then import those variables files based on the facts you gather on the hosts in your playbook:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">webservers</span>
+  <span class="nt">remote_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root</span>
+  <span class="nt">vars_files</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;vars/common.yml&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span> <span class="s">&quot;vars/{{</span><span class="nv"> </span><span class="s">ansible_facts[&#39;os_family&#39;]</span><span class="nv"> </span><span class="s">}}.yml&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;vars/os_defaults.yml&quot;</span> <span class="p p-Indicator">]</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Make sure apache is started</span>
+    <span class="nt">ansible.builtin.service</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="s">&#39;{{</span><span class="nv"> </span><span class="s">apache</span><span class="nv"> </span><span class="s">}}&#39;</span>
+      <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+</pre></div>
+</div>
+<p>Ansible gathers facts on the hosts in the webservers group, then interpolates the variable “ansible_facts[‘os_family’]” into a list of filenames. If you have hosts with Red Hat operating systems (CentOS, for example), Ansible looks for ‘vars/RedHat.yml’. If that file does not exist, Ansible attempts to load ‘vars/os_defaults.yml’. For Debian hosts, Ansible first looks for ‘vars/Debian.yml’, before falling back on ‘vars/os_defaults.yml’. If no files in the list are found, Ansible raises an error.</p>
+</div>
+<div class="section" id="selecting-files-and-templates-based-on-facts">
+<h4><a class="toc-backref" href="#id14">Selecting files and templates based on facts</a><a class="headerlink" href="#selecting-files-and-templates-based-on-facts" title="Permalink to this headline"></a></h4>
+<p>You can use the same approach when different OS flavors or versions require different configuration files or templates. Select the appropriate file or template based on the variables assigned to each host. This approach is often much cleaner than putting a lot of conditionals into a single template to cover multiple OS or package versions.</p>
+<p>For example, you can template out a configuration file that is very different between, say, CentOS and Debian:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Template a file</span>
+  <span class="nt">ansible.builtin.template</span><span class="p">:</span>
+    <span class="nt">src</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/myapp/foo.conf</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">query(&#39;first_found&#39;,</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">&#39;files&#39;:</span><span class="nv"> </span><span class="s">myfiles,</span><span class="nv"> </span><span class="s">&#39;paths&#39;:</span><span class="nv"> </span><span class="s">mypaths})</span><span class="nv"> </span><span class="s">}}&quot;</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">myfiles</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">ansible_facts[&#39;distribution&#39;]</span><span class="nv"> </span><span class="s">}}.conf&quot;</span>
+      <span class="p p-Indicator">-</span>  <span class="l l-Scalar l-Scalar-Plain">default.conf</span>
+    <span class="nt">mypaths</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;search_location_one/somedir/&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;/opt/other_location/somedir/&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="commonly-used-facts">
+<span id="id1"></span><h2><a class="toc-backref" href="#id15">Commonly-used facts</a><a class="headerlink" href="#commonly-used-facts" title="Permalink to this headline"></a></h2>
+<p>The following Ansible facts are frequently used in conditionals.</p>
+<div class="section" id="ansible-facts-distribution">
+<span id="ansible-distribution"></span><h3><a class="toc-backref" href="#id16">ansible_facts[‘distribution’]</a><a class="headerlink" href="#ansible-facts-distribution" title="Permalink to this headline"></a></h3>
+<p>Possible values (sample, not complete list):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Alpine
+Altlinux
+Amazon
+Archlinux
+ClearLinux
+Coreos
+CentOS
+Debian
+Fedora
+Gentoo
+Mandriva
+NA
+OpenWrt
+OracleLinux
+RedHat
+Slackware
+SLES
+SMGL
+SUSE
+Ubuntu
+VMwareESX
+</pre></div>
+</div>
+</div>
+<div class="section" id="ansible-facts-distribution-major-version">
+<span id="ansible-distribution-major-version"></span><h3><a class="toc-backref" href="#id17">ansible_facts[‘distribution_major_version’]</a><a class="headerlink" href="#ansible-facts-distribution-major-version" title="Permalink to this headline"></a></h3>
+<p>The major version of the operating system. For example, the value is <cite>16</cite> for Ubuntu 16.04.</p>
+</div>
+<div class="section" id="ansible-facts-os-family">
+<span id="ansible-os-family"></span><h3><a class="toc-backref" href="#id18">ansible_facts[‘os_family’]</a><a class="headerlink" href="#ansible-facts-os-family" title="Permalink to this headline"></a></h3>
+<p>Possible values (sample, not complete list):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>AIX
+Alpine
+Altlinux
+Archlinux
+Darwin
+Debian
+FreeBSD
+Gentoo
+HP-UX
+Mandrake
+RedHat
+SGML
+Slackware
+Solaris
+Suse
+Windows
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="playbooks.html#working-with-playbooks"><span class="std std-ref">Working with playbooks</span></a></dt><dd><p>An introduction to playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Roles</span></a></dt><dd><p>Playbook organization by roles</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_best_practices.html#playbooks-best-practices"><span class="std std-ref">Tips and tricks</span></a></dt><dd><p>Tips and tricks for playbooks</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a></dt><dd><p>All about variables</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-devel">User Mailing List</a></dt><dd><p>Have a question?  Stop by the google group!</p>
+</dd>
+<dt><a class="reference internal" href="../community/communication.html#communication-irc"><span class="std std-ref">Real-time chat</span></a></dt><dd><p>How to join Ansible chat channels</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_delegation.html" class="btn btn-neutral float-left" title="Controlling where tasks run: delegation and local actions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_blocks.html" class="btn btn-neutral float-right" title="Blocks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on May 05, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

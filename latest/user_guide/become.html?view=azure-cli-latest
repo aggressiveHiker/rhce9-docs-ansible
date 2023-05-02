@@ -1,0 +1,1179 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Understanding privilege escalation: become &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/become.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Loops" href="playbooks_loops.html" />
+    <link rel="prev" title="Tips and tricks" href="playbooks_best_practices.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="3">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "3" ) {
+              option.selected = true;
+            }
+            if (current_url.search("3") > -1) {
+              option.value = current_url.replace("3","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9";
+            if ( "2.9" == "3" ) {
+              option.selected = true;
+            }
+            if (current_url.search("3") > -1) {
+              option.value = current_url.replace("3","2.9");
+            } else {
+              option.value = current_url.replace("latest","2.9");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "3" ) {
+              option.selected = true;
+            }
+            if (current_url.search("3") > -1) {
+              option.value = current_url.replace("3","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+<!--  <form id="rtd-search-form" class="wy-form" action="../search.html" -->
+  <form id="rtd-search-form" class="wy-form"  method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#traditional-table-of-contents">Traditional Table of Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad-hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Understanding privilege escalation: become</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-become">Using become</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#risks-and-limitations-of-become">Risks and limitations of become</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#become-and-network-automation">Become and network automation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#become-and-windows">Become and Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Blacklisting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working With Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+        
+      <li>Understanding privilege escalation: become</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/become.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+  <script>
+    startsWith = function(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">');
+      document.write('<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>');
+      document.write('</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+      if (startsWith(current_url_path, "/ansible/latest/") || startsWith(current_url_path, "/ansible/3/")) {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.</p>');
+        document.write('</div>');
+
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this, or select any version in version selection to the left, including <b>latest</b> for the most recent community version.</p>');
+        document.write('</div>');
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp banner to advertise survey
+        document.write('<div id="banner_id" class="admonition important">');
+        document.write('<br><p>Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.</p><br>');
+        document.write('</div>'); */
+
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+
+      } else {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+      }
+    
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="understanding-privilege-escalation-become">
+<span id="become"></span><h1>Understanding privilege escalation: become<a class="headerlink" href="#understanding-privilege-escalation-become" title="Permalink to this headline">¶</a></h1>
+<p>Ansible uses existing privilege escalation systems to execute tasks with root privileges or with another user’s permissions. Because this feature allows you to ‘become’ another user, different from the user that logged into the machine (remote user), we call it <code class="docutils literal notranslate"><span class="pre">become</span></code>. The <code class="docutils literal notranslate"><span class="pre">become</span></code> keyword leverages existing privilege escalation tools like <cite>sudo</cite>, <cite>su</cite>, <cite>pfexec</cite>, <cite>doas</cite>, <cite>pbrun</cite>, <cite>dzdo</cite>, <cite>ksu</cite>, <cite>runas</cite>, <cite>machinectl</cite> and others.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#using-become" id="id1">Using become</a></p>
+<ul>
+<li><p><a class="reference internal" href="#become-directives" id="id2">Become directives</a></p></li>
+<li><p><a class="reference internal" href="#become-connection-variables" id="id3">Become connection variables</a></p></li>
+<li><p><a class="reference internal" href="#become-command-line-options" id="id4">Become command-line options</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#risks-and-limitations-of-become" id="id5">Risks and limitations of become</a></p>
+<ul>
+<li><p><a class="reference internal" href="#risks-of-becoming-an-unprivileged-user" id="id6">Risks of becoming an unprivileged user</a></p></li>
+<li><p><a class="reference internal" href="#not-supported-by-all-connection-plugins" id="id7">Not supported by all connection plugins</a></p></li>
+<li><p><a class="reference internal" href="#only-one-method-may-be-enabled-per-host" id="id8">Only one method may be enabled per host</a></p></li>
+<li><p><a class="reference internal" href="#privilege-escalation-must-be-general" id="id9">Privilege escalation must be general</a></p></li>
+<li><p><a class="reference internal" href="#may-not-access-environment-variables-populated-by-pamd-systemd" id="id10">May not access environment variables populated by pamd_systemd</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#become-and-network-automation" id="id11">Become and network automation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#setting-enable-mode-for-all-tasks" id="id12">Setting enable mode for all tasks</a></p>
+<ul>
+<li><p><a class="reference internal" href="#passwords-for-enable-mode" id="id13">Passwords for enable mode</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#authorize-and-auth-pass" id="id14">authorize and auth_pass</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#become-and-windows" id="id15">Become and Windows</a></p>
+<ul>
+<li><p><a class="reference internal" href="#administrative-rights" id="id16">Administrative rights</a></p></li>
+<li><p><a class="reference internal" href="#local-service-accounts" id="id17">Local service accounts</a></p></li>
+<li><p><a class="reference internal" href="#become-without-setting-a-password" id="id18">Become without setting a password</a></p></li>
+<li><p><a class="reference internal" href="#accounts-without-a-password" id="id19">Accounts without a password</a></p></li>
+<li><p><a class="reference internal" href="#become-flags-for-windows" id="id20">Become flags for Windows</a></p></li>
+<li><p><a class="reference internal" href="#limitations-of-become-on-windows" id="id21">Limitations of become on Windows</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="using-become">
+<h2><a class="toc-backref" href="#id1">Using become</a><a class="headerlink" href="#using-become" title="Permalink to this headline">¶</a></h2>
+<p>You can control the use of <code class="docutils literal notranslate"><span class="pre">become</span></code> with play or task directives, connection variables, or at the command line. If you set privilege escalation properties in multiple ways, review the <a class="reference internal" href="../reference_appendices/general_precedence.html#general-precedence-rules"><span class="std std-ref">general precedence rules</span></a> to understand which settings will be used.</p>
+<p>A full list of all become plugins that are included in Ansible can be found in the <a class="reference internal" href="../plugins/become.html#become-plugin-list"><span class="std std-ref">Plugin List</span></a>.</p>
+<div class="section" id="become-directives">
+<h3><a class="toc-backref" href="#id2">Become directives</a><a class="headerlink" href="#become-directives" title="Permalink to this headline">¶</a></h3>
+<p>You can set the directives that control <code class="docutils literal notranslate"><span class="pre">become</span></code> at the play or task level. You can override these by setting connection variables, which often differ from one host to another. These variables and directives are independent. For example, setting <code class="docutils literal notranslate"><span class="pre">become_user</span></code> does not set <code class="docutils literal notranslate"><span class="pre">become</span></code>.</p>
+<dl class="simple">
+<dt>become</dt><dd><p>set to <code class="docutils literal notranslate"><span class="pre">yes</span></code> to activate privilege escalation.</p>
+</dd>
+<dt>become_user</dt><dd><p>set to user with desired privileges — the user you <cite>become</cite>, NOT the user you login as. Does NOT imply <code class="docutils literal notranslate"><span class="pre">become:</span> <span class="pre">yes</span></code>, to allow it to be set at host level. Default value is <code class="docutils literal notranslate"><span class="pre">root</span></code>.</p>
+</dd>
+<dt>become_method</dt><dd><p>(at play or task level) overrides the default method set in ansible.cfg, set to use any of the <a class="reference internal" href="../plugins/become.html#become-plugins"><span class="std std-ref">Become Plugins</span></a>.</p>
+</dd>
+<dt>become_flags</dt><dd><p>(at play or task level) permit the use of specific flags for the tasks or role. One common use is to change the user to nobody when the shell is set to nologin. Added in Ansible 2.2.</p>
+</dd>
+</dl>
+<p>For example, to manage a system service (which requires <code class="docutils literal notranslate"><span class="pre">root</span></code> privileges) when connected as a non-<code class="docutils literal notranslate"><span class="pre">root</span></code> user, you can use the default value of <code class="docutils literal notranslate"><span class="pre">become_user</span></code> (<code class="docutils literal notranslate"><span class="pre">root</span></code>):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Ensure the httpd service is running</span>
+  <span class="nt">service</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httpd</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">started</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+</pre></div>
+</div>
+<p>To run a command as the <code class="docutils literal notranslate"><span class="pre">apache</span></code> user:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run a command as the apache user</span>
+  <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">somecommand</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">become_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">apache</span>
+</pre></div>
+</div>
+<p>To do something as the <code class="docutils literal notranslate"><span class="pre">nobody</span></code> user when the shell is nologin:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run a command as nobody</span>
+  <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">somecommand</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">become_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">su</span>
+  <span class="nt">become_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nobody</span>
+  <span class="nt">become_flags</span><span class="p">:</span> <span class="s">&#39;-s</span><span class="nv"> </span><span class="s">/bin/sh&#39;</span>
+</pre></div>
+</div>
+<p>To specify a password for sudo, run <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> with <code class="docutils literal notranslate"><span class="pre">--ask-become-pass</span></code> (<code class="docutils literal notranslate"><span class="pre">-K</span></code> for short).
+If you run a playbook utilizing <code class="docutils literal notranslate"><span class="pre">become</span></code> and the playbook seems to hang, most likely it is stuck at the privilege escalation prompt. Stop it with <cite>CTRL-c</cite>, then execute the playbook with <code class="docutils literal notranslate"><span class="pre">-K</span></code> and the appropriate password.</p>
+</div>
+<div class="section" id="become-connection-variables">
+<h3><a class="toc-backref" href="#id3">Become connection variables</a><a class="headerlink" href="#become-connection-variables" title="Permalink to this headline">¶</a></h3>
+<p>You can define different <code class="docutils literal notranslate"><span class="pre">become</span></code> options for each managed node or group. You can define these variables in inventory or use them as normal variables.</p>
+<dl class="simple">
+<dt>ansible_become</dt><dd><p>equivalent of the become directive, decides if privilege escalation is used or not.</p>
+</dd>
+<dt>ansible_become_method</dt><dd><p>which privilege escalation method should be used</p>
+</dd>
+<dt>ansible_become_user</dt><dd><p>set the user you become through privilege escalation; does not imply <code class="docutils literal notranslate"><span class="pre">ansible_become:</span> <span class="pre">yes</span></code></p>
+</dd>
+<dt>ansible_become_password</dt><dd><p>set the privilege escalation password. See <a class="reference internal" href="vault.html#playbooks-vault"><span class="std std-ref">Using encrypted variables and files</span></a> for details on how to avoid having secrets in plain text</p>
+</dd>
+</dl>
+<p>For example, if you want to run all tasks as <code class="docutils literal notranslate"><span class="pre">root</span></code> on a server named <code class="docutils literal notranslate"><span class="pre">webserver</span></code>, but you can only connect as the <code class="docutils literal notranslate"><span class="pre">manager</span></code> user, you could use an inventory entry like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>webserver ansible_user=manager ansible_become=yes
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The variables defined above are generic for all become plugins but plugin specific ones can also be set instead.
+Please see the documentation for each plugin for a list of all options the plugin has and how they can be defined.
+A full list of become plugins in Ansible can be found at <a class="reference internal" href="../plugins/become.html#become-plugins"><span class="std std-ref">Become Plugins</span></a>.</p>
+</div>
+</div>
+<div class="section" id="become-command-line-options">
+<h3><a class="toc-backref" href="#id4">Become command-line options</a><a class="headerlink" href="#become-command-line-options" title="Permalink to this headline">¶</a></h3>
+<dl class="option-list">
+<dt><kbd><span class="option">--ask-become-pass</span>, <span class="option">-K</span></kbd></dt>
+<dd><p>ask for privilege escalation password; does not imply become will be used. Note that this password will be used for all hosts.</p>
+</dd>
+<dt><kbd><span class="option">--become</span>, <span class="option">-b</span></kbd></dt>
+<dd><p>run operations with become (no password implied)</p>
+</dd>
+<dt><kbd><span class="option">--become-method=<var>BECOME_METHOD</var></span></kbd></dt>
+<dd><p>privilege escalation method to use (default=sudo),
+valid choices: [ sudo | su | pbrun | pfexec | doas | dzdo | ksu | runas | machinectl ]</p>
+</dd>
+<dt><kbd><span class="option">--become-user=<var>BECOME_USER</var></span></kbd></dt>
+<dd><p>run operations as this user (default=root), does not imply –become/-b</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="risks-and-limitations-of-become">
+<h2><a class="toc-backref" href="#id5">Risks and limitations of become</a><a class="headerlink" href="#risks-and-limitations-of-become" title="Permalink to this headline">¶</a></h2>
+<p>Although privilege escalation is mostly intuitive, there are a few limitations
+on how it works.  Users should be aware of these to avoid surprises.</p>
+<div class="section" id="risks-of-becoming-an-unprivileged-user">
+<h3><a class="toc-backref" href="#id6">Risks of becoming an unprivileged user</a><a class="headerlink" href="#risks-of-becoming-an-unprivileged-user" title="Permalink to this headline">¶</a></h3>
+<p>Ansible modules are executed on the remote machine by first substituting the
+parameters into the module file, then copying the file to the remote machine,
+and finally executing it there.</p>
+<p>Everything is fine if the module file is executed without using <code class="docutils literal notranslate"><span class="pre">become</span></code>,
+when the <code class="docutils literal notranslate"><span class="pre">become_user</span></code> is root, or when the connection to the remote machine
+is made as root.  In these cases Ansible creates the module file with permissions
+that only allow reading by the user and root, or only allow reading by the unprivileged
+user being switched to.</p>
+<p>However, when both the connection user and the <code class="docutils literal notranslate"><span class="pre">become_user</span></code> are unprivileged,
+the module file is written as the user that Ansible connects as, but the file needs to
+be readable by the user Ansible is set to <code class="docutils literal notranslate"><span class="pre">become</span></code>. In this case, Ansible makes
+the module file world-readable for the duration of the Ansible module execution.
+Once the module is done executing, Ansible deletes the temporary file.</p>
+<p>If any of the parameters passed to the module are sensitive in nature, and you do
+not trust the client machines, then this is a potential danger.</p>
+<p>Ways to resolve this include:</p>
+<ul class="simple">
+<li><p>Use <cite>pipelining</cite>.  When pipelining is enabled, Ansible does not save the
+module to a temporary file on the client.  Instead it pipes the module to
+the remote python interpreter’s stdin. Pipelining does not work for
+python modules involving file transfer (for example: <a class="reference internal" href="../collections/ansible/builtin/copy_module.html#copy-module"><span class="std std-ref">copy</span></a>,
+<a class="reference internal" href="../collections/ansible/builtin/fetch_module.html#fetch-module"><span class="std std-ref">fetch</span></a>, <a class="reference internal" href="../collections/ansible/builtin/template_module.html#template-module"><span class="std std-ref">template</span></a>), or for non-python modules.</p></li>
+<li><p>Install POSIX.1e filesystem acl support on the
+managed host.  If the temporary directory on the remote host is mounted with
+POSIX acls enabled and the <strong class="command">setfacl</strong> tool is in the remote <code class="docutils literal notranslate"><span class="pre">PATH</span></code>
+then Ansible will use POSIX acls to share the module file with the second
+unprivileged user instead of having to make the file readable by everyone.</p></li>
+<li><p>Avoid becoming an unprivileged
+user.  Temporary files are protected by UNIX file permissions when you
+<code class="docutils literal notranslate"><span class="pre">become</span></code> root or do not use <code class="docutils literal notranslate"><span class="pre">become</span></code>.  In Ansible 2.1 and above, UNIX
+file permissions are also secure if you make the connection to the managed
+machine as root and then use <code class="docutils literal notranslate"><span class="pre">become</span></code> to access an unprivileged account.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Although the Solaris ZFS filesystem has filesystem ACLs, the ACLs
+are not POSIX.1e filesystem acls (they are NFSv4 ACLs instead).  Ansible
+cannot use these ACLs to manage its temp file permissions so you may have
+to resort to <code class="docutils literal notranslate"><span class="pre">allow_world_readable_tmpfiles</span></code> if the remote machines use ZFS.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.1.</span></p>
+</div>
+<p>Ansible makes it hard to unknowingly use <code class="docutils literal notranslate"><span class="pre">become</span></code> insecurely. Starting in Ansible 2.1,
+Ansible defaults to issuing an error if it cannot execute securely with <code class="docutils literal notranslate"><span class="pre">become</span></code>.
+If you cannot use pipelining or POSIX ACLs, you must connect as an unprivileged user,
+you must use <code class="docutils literal notranslate"><span class="pre">become</span></code> to execute as a different unprivileged user,
+and you decide that your managed nodes are secure enough for the
+modules you want to run there to be world readable, you can turn on
+<code class="docutils literal notranslate"><span class="pre">allow_world_readable_tmpfiles</span></code> in the <code class="file docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file.  Setting
+<code class="docutils literal notranslate"><span class="pre">allow_world_readable_tmpfiles</span></code> will change this from an error into
+a warning and allow the task to run as it did prior to 2.1.</p>
+</div>
+<div class="section" id="not-supported-by-all-connection-plugins">
+<h3><a class="toc-backref" href="#id7">Not supported by all connection plugins</a><a class="headerlink" href="#not-supported-by-all-connection-plugins" title="Permalink to this headline">¶</a></h3>
+<p>Privilege escalation methods must also be supported by the connection plugin
+used. Most connection plugins will warn if they do not support become. Some
+will just ignore it as they always run as root (jail, chroot, and so on).</p>
+</div>
+<div class="section" id="only-one-method-may-be-enabled-per-host">
+<h3><a class="toc-backref" href="#id8">Only one method may be enabled per host</a><a class="headerlink" href="#only-one-method-may-be-enabled-per-host" title="Permalink to this headline">¶</a></h3>
+<p>Methods cannot be chained. You cannot use <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/bin/su</span> <span class="pre">-</span></code> to become a user,
+you need to have privileges to run the command as that user in sudo or be able
+to su directly to it (the same for pbrun, pfexec or other supported methods).</p>
+</div>
+<div class="section" id="privilege-escalation-must-be-general">
+<h3><a class="toc-backref" href="#id9">Privilege escalation must be general</a><a class="headerlink" href="#privilege-escalation-must-be-general" title="Permalink to this headline">¶</a></h3>
+<p>You cannot limit privilege escalation permissions to certain commands.
+Ansible does not always
+use a specific command to do something but runs modules (code) from
+a temporary file name which changes every time.  If you have ‘/sbin/service’
+or ‘/bin/chmod’ as the allowed commands this will fail with ansible as those
+paths won’t match with the temporary file that Ansible creates to run the
+module. If you have security rules that constrain your sudo/pbrun/doas environment
+to running specific command paths only, use Ansible from a special account that
+does not have this constraint, or use <a class="reference internal" href="../reference_appendices/tower.html#ansible-tower"><span class="std std-ref">Red Hat Ansible Tower</span></a> to manage indirect access to SSH credentials.</p>
+</div>
+<div class="section" id="may-not-access-environment-variables-populated-by-pamd-systemd">
+<h3><a class="toc-backref" href="#id10">May not access environment variables populated by pamd_systemd</a><a class="headerlink" href="#may-not-access-environment-variables-populated-by-pamd-systemd" title="Permalink to this headline">¶</a></h3>
+<p>For most Linux distributions using <code class="docutils literal notranslate"><span class="pre">systemd</span></code> as their init, the default
+methods used by <code class="docutils literal notranslate"><span class="pre">become</span></code> do not open a new “session”, in the sense of
+systemd. Because the <code class="docutils literal notranslate"><span class="pre">pam_systemd</span></code> module will not fully initialize a new
+session, you might have surprises compared to a normal session opened through
+ssh: some environment variables set by <code class="docutils literal notranslate"><span class="pre">pam_systemd</span></code>, most notably
+<code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code>, are not populated for the new user and instead inherited
+or just emptied.</p>
+<p>This might cause trouble when trying to invoke systemd commands that depend on
+<code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> to access the bus:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span> <span class="nv">$XDG_RUNTIME_DIR</span>
+
+<span class="gp">$ </span>systemctl --user status
+<span class="go">Failed to connect to bus: Permission denied</span>
+</pre></div>
+</div>
+<p>To force <code class="docutils literal notranslate"><span class="pre">become</span></code> to open a new systemd session that goes through
+<code class="docutils literal notranslate"><span class="pre">pam_systemd</span></code>, you can use <code class="docutils literal notranslate"><span class="pre">become_method:</span> <span class="pre">machinectl</span></code>.</p>
+<p>For more information, see <a class="reference external" href="https://github.com/systemd/systemd/issues/825#issuecomment-127917622">this systemd issue</a>.</p>
+</div>
+</div>
+<div class="section" id="become-and-network-automation">
+<span id="become-network"></span><h2><a class="toc-backref" href="#id11">Become and network automation</a><a class="headerlink" href="#become-and-network-automation" title="Permalink to this headline">¶</a></h2>
+<p>As of version 2.6, Ansible supports <code class="docutils literal notranslate"><span class="pre">become</span></code> for privilege escalation (entering <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode or privileged EXEC mode) on all Ansible-maintained network platforms that support <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode. Using <code class="docutils literal notranslate"><span class="pre">become</span></code> replaces the <code class="docutils literal notranslate"><span class="pre">authorize</span></code> and <code class="docutils literal notranslate"><span class="pre">auth_pass</span></code> options in a <code class="docutils literal notranslate"><span class="pre">provider</span></code> dictionary.</p>
+<p>You must set the connection type to either <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">ansible.netcommon.network_cli</span></code> or <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">ansible.netcommon.httpapi</span></code> to use <code class="docutils literal notranslate"><span class="pre">become</span></code> for privilege escalation on network devices. Check the <a class="reference internal" href="../network/user_guide/platform_index.html#platform-options"><span class="std std-ref">Platform Options</span></a> documentation for details.</p>
+<p>You can use escalated privileges on only the specific tasks that need them, on an entire play, or on all plays. Adding <code class="docutils literal notranslate"><span class="pre">become:</span> <span class="pre">yes</span></code> and <code class="docutils literal notranslate"><span class="pre">become_method:</span> <span class="pre">enable</span></code> instructs Ansible to enter <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode before executing the task, play, or playbook where those parameters are set.</p>
+<p>If you see this error message, the task that generated it requires <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode to succeed:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Invalid input (privileged mode required)</span>
+</pre></div>
+</div>
+<p>To set <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode for a specific task, add <code class="docutils literal notranslate"><span class="pre">become</span></code> at the task level:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Gather facts (eos)</span>
+  <span class="nt">arista.eos.eos_facts</span><span class="p">:</span>
+    <span class="nt">gather_subset</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;!hardware&quot;</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">become_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">enable</span>
+</pre></div>
+</div>
+<p>To set enable mode for all tasks in a single play, add <code class="docutils literal notranslate"><span class="pre">become</span></code> at the play level:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eos-switches</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">become_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">enable</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Gather facts (eos)</span>
+      <span class="nt">arista.eos.eos_facts</span><span class="p">:</span>
+        <span class="nt">gather_subset</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;!hardware&quot;</span>
+</pre></div>
+</div>
+<div class="section" id="setting-enable-mode-for-all-tasks">
+<h3><a class="toc-backref" href="#id12">Setting enable mode for all tasks</a><a class="headerlink" href="#setting-enable-mode-for-all-tasks" title="Permalink to this headline">¶</a></h3>
+<p>Often you wish for all tasks in all plays to run using privilege mode, that is best achieved by using <code class="docutils literal notranslate"><span class="pre">group_vars</span></code>:</p>
+<p><strong>group_vars/eos.yml</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ansible_connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.network_cli</span>
+<span class="nt">ansible_network_os</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arista.eos.eos</span>
+<span class="nt">ansible_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myuser</span>
+<span class="nt">ansible_become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="nt">ansible_become_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">enable</span>
+</pre></div>
+</div>
+<div class="section" id="passwords-for-enable-mode">
+<h4><a class="toc-backref" href="#id13">Passwords for enable mode</a><a class="headerlink" href="#passwords-for-enable-mode" title="Permalink to this headline">¶</a></h4>
+<p>If you need a password to enter <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode, you can specify it in one of two ways:</p>
+<ul class="simple">
+<li><p>providing the <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-k"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ask-become-pass</span></code></a> command line option</p></li>
+<li><p>setting the <code class="docutils literal notranslate"><span class="pre">ansible_become_password</span></code> connection variable</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As a reminder passwords should never be stored in plain text. For information on encrypting your passwords and other secrets with Ansible Vault, see <a class="reference internal" href="vault.html#vault"><span class="std std-ref">Encrypting content with Ansible Vault</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="authorize-and-auth-pass">
+<h3><a class="toc-backref" href="#id14">authorize and auth_pass</a><a class="headerlink" href="#authorize-and-auth-pass" title="Permalink to this headline">¶</a></h3>
+<p>Ansible still supports <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode with <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">local</span></code> for legacy network playbooks. To enter <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode with <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">local</span></code>, use the module options <code class="docutils literal notranslate"><span class="pre">authorize</span></code> and <code class="docutils literal notranslate"><span class="pre">auth_pass</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eos-switches</span>
+  <span class="nt">ansible_connection</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Gather facts (eos)</span>
+      <span class="nt">eos_facts</span><span class="p">:</span>
+        <span class="nt">gather_subset</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;!hardware&quot;</span>
+      <span class="nt">provider</span><span class="p">:</span>
+        <span class="nt">authorize</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+        <span class="nt">auth_pass</span><span class="p">:</span> <span class="s">&quot;</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">secret_auth_pass</span><span class="nv"> </span><span class="s">}}&quot;</span>
+</pre></div>
+</div>
+<p>We recommend updating your playbooks to use <code class="docutils literal notranslate"><span class="pre">become</span></code> for network-device <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode consistently. The use of <code class="docutils literal notranslate"><span class="pre">authorize</span></code> and of <code class="docutils literal notranslate"><span class="pre">provider</span></code> dictionaries will be deprecated in future. Check the <a class="reference internal" href="../network/user_guide/platform_index.html#platform-options"><span class="std std-ref">Platform Options</span></a> and <a class="reference external" href="https://docs.ansible.com/ansible/2.9/modules/list_of_network_modules.html#network-modules" title="(in Ansible v2.9)"><span>Network modules</span></a> documentation for details.</p>
+</div>
+</div>
+<div class="section" id="become-and-windows">
+<span id="become-windows"></span><h2><a class="toc-backref" href="#id15">Become and Windows</a><a class="headerlink" href="#become-and-windows" title="Permalink to this headline">¶</a></h2>
+<p>Since Ansible 2.3, <code class="docutils literal notranslate"><span class="pre">become</span></code> can be used on Windows hosts through the
+<code class="docutils literal notranslate"><span class="pre">runas</span></code> method. Become on Windows uses the same inventory setup and
+invocation arguments as <code class="docutils literal notranslate"><span class="pre">become</span></code> on a non-Windows host, so the setup and
+variable names are the same as what is defined in this document.</p>
+<p>While <code class="docutils literal notranslate"><span class="pre">become</span></code> can be used to assume the identity of another user, there are other uses for
+it with Windows hosts. One important use is to bypass some of the
+limitations that are imposed when running on WinRM, such as constrained network
+delegation or accessing forbidden system calls like the WUA API. You can use
+<code class="docutils literal notranslate"><span class="pre">become</span></code> with the same user as <code class="docutils literal notranslate"><span class="pre">ansible_user</span></code> to bypass these limitations
+and run commands that are not normally accessible in a WinRM session.</p>
+<div class="section" id="administrative-rights">
+<h3><a class="toc-backref" href="#id16">Administrative rights</a><a class="headerlink" href="#administrative-rights" title="Permalink to this headline">¶</a></h3>
+<p>Many tasks in Windows require administrative privileges to complete. When using
+the <code class="docutils literal notranslate"><span class="pre">runas</span></code> become method, Ansible will attempt to run the module with the
+full privileges that are available to the remote user. If it fails to elevate
+the user token, it will continue to use the limited token during execution.</p>
+<p>A user must have the <code class="docutils literal notranslate"><span class="pre">SeDebugPrivilege</span></code> to run a become process with elevated
+privileges. This privilege is assigned to Administrators by default. If the
+debug privilege is not available, the become process will run with a limited
+set of privileges and groups.</p>
+<p>To determine the type of token that Ansible was able to get, run the following
+task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Check my user name</span>
+  <span class="l l-Scalar l-Scalar-Plain">ansible.windows.win_whoami</span><span class="p p-Indicator">:</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+</pre></div>
+</div>
+<p>The output will look something similar to the below:</p>
+<div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">ok</span><span class="p">:</span> <span class="p">[</span><span class="nv">windows</span><span class="p">]</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nt">&quot;account&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;account_name&quot;</span><span class="p">:</span> <span class="s">&quot;vagrant-domain&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;domain_name&quot;</span><span class="p">:</span> <span class="s">&quot;DOMAIN&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;sid&quot;</span><span class="p">:</span> <span class="s">&quot;S-1-5-21-3088887838-4058132883-1884671576-1105&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;User&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;authentication_package&quot;</span><span class="p">:</span> <span class="s">&quot;Kerberos&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;changed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;dns_domain_name&quot;</span><span class="p">:</span> <span class="s">&quot;DOMAIN.LOCAL&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;groups&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;account_name&quot;</span><span class="p">:</span> <span class="s">&quot;Administrators&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s">&quot;Mandatory&quot;</span><span class="p">,</span>
+                <span class="s">&quot;Enabled by default&quot;</span><span class="p">,</span>
+                <span class="s">&quot;Enabled&quot;</span><span class="p">,</span>
+                <span class="s">&quot;Owner&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;domain_name&quot;</span><span class="p">:</span> <span class="s">&quot;BUILTIN&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sid&quot;</span><span class="p">:</span> <span class="s">&quot;S-1-5-32-544&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;Alias&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;account_name&quot;</span><span class="p">:</span> <span class="s">&quot;INTERACTIVE&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s">&quot;Mandatory&quot;</span><span class="p">,</span>
+                <span class="s">&quot;Enabled by default&quot;</span><span class="p">,</span>
+                <span class="s">&quot;Enabled&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;domain_name&quot;</span><span class="p">:</span> <span class="s">&quot;NT AUTHORITY&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sid&quot;</span><span class="p">:</span> <span class="s">&quot;S-1-5-4&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;WellKnownGroup&quot;</span>
+        <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;impersonation_level&quot;</span><span class="p">:</span> <span class="s">&quot;SecurityAnonymous&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;account_name&quot;</span><span class="p">:</span> <span class="s">&quot;High Mandatory Level&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;domain_name&quot;</span><span class="p">:</span> <span class="s">&quot;Mandatory Label&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;sid&quot;</span><span class="p">:</span> <span class="s">&quot;S-1-16-12288&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;Label&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;login_domain&quot;</span><span class="p">:</span> <span class="s">&quot;DOMAIN&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;login_time&quot;</span><span class="p">:</span> <span class="s">&quot;2018-11-18T20:35:01.9696884+00:00&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;logon_id&quot;</span><span class="p">:</span> <span class="mi">114196830</span><span class="p">,</span>
+    <span class="nt">&quot;logon_server&quot;</span><span class="p">:</span> <span class="s">&quot;DC01&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;logon_type&quot;</span><span class="p">:</span> <span class="s">&quot;Interactive&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;privileges&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;SeBackupPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeChangeNotifyPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;enabled-by-default&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeCreateGlobalPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;enabled-by-default&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeCreatePagefilePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeCreateSymbolicLinkPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeDebugPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;enabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeDelegateSessionUserImpersonatePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeImpersonatePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;enabled-by-default&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeIncreaseBasePriorityPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeIncreaseQuotaPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeIncreaseWorkingSetPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeLoadDriverPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeManageVolumePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeProfileSingleProcessPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeRemoteShutdownPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeRestorePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeSecurityPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeShutdownPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeSystemEnvironmentPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeSystemProfilePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeSystemtimePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeTakeOwnershipPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeTimeZonePrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;SeUndockPrivilege&quot;</span><span class="p">:</span> <span class="s">&quot;disabled&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;rights&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s">&quot;SeNetworkLogonRight&quot;</span><span class="p">,</span>
+        <span class="s">&quot;SeBatchLogonRight&quot;</span><span class="p">,</span>
+        <span class="s">&quot;SeInteractiveLogonRight&quot;</span><span class="p">,</span>
+        <span class="s">&quot;SeRemoteInteractiveLogonRight&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;token_type&quot;</span><span class="p">:</span> <span class="s">&quot;TokenPrimary&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;upn&quot;</span><span class="p">:</span> <span class="s">&quot;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cabcabadb8aba4bee7aea5a7aba3a48a8e85878b8384e48685898b86">[email&#160;protected]</a>&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_flags&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Under the <code class="docutils literal notranslate"><span class="pre">label</span></code> key, the <code class="docutils literal notranslate"><span class="pre">account_name</span></code> entry determines whether the user
+has Administrative rights. Here are the labels that can be returned and what
+they represent:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Medium</span></code>: Ansible failed to get an elevated token and ran under a limited
+token. Only a subset of the privileges assigned to user are available during
+the module execution and the user does not have administrative rights.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">High</span></code>: An elevated token was used and all the privileges assigned to the
+user are available during the module execution.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">System</span></code>: The <code class="docutils literal notranslate"><span class="pre">NT</span> <span class="pre">AUTHORITY\System</span></code> account is used and has the highest
+level of privileges available.</p></li>
+</ul>
+<p>The output will also show the list of privileges that have been granted to the
+user. When the privilege value is <code class="docutils literal notranslate"><span class="pre">disabled</span></code>, the privilege is assigned to
+the logon token but has not been enabled. In most scenarios these privileges
+are automatically enabled when required.</p>
+<p>If running on a version of Ansible that is older than 2.5 or the normal
+<code class="docutils literal notranslate"><span class="pre">runas</span></code> escalation process fails, an elevated token can be retrieved by:</p>
+<ul>
+<li><p>Set the <code class="docutils literal notranslate"><span class="pre">become_user</span></code> to <code class="docutils literal notranslate"><span class="pre">System</span></code> which has full control over the
+operating system.</p></li>
+<li><p>Grant <code class="docutils literal notranslate"><span class="pre">SeTcbPrivilege</span></code> to the user Ansible connects with on
+WinRM. <code class="docutils literal notranslate"><span class="pre">SeTcbPrivilege</span></code> is a high-level privilege that grants
+full control over the operating system. No user is given this privilege by
+default, and care should be taken if you grant this privilege to a user or group.
+For more information on this privilege, please see
+<a class="reference external" href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn221957(v=ws.11)">Act as part of the operating system</a>.
+You can use the below task to set this privilege on a Windows host:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">grant the ansible user the SeTcbPrivilege right</span>
+  <span class="nt">ansible.windows.win_user_right</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SeTcbPrivilege</span>
+    <span class="nt">users</span><span class="p">:</span> <span class="s">&#39;{{ansible_user}}&#39;</span>
+    <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add</span>
+</pre></div>
+</div>
+</li>
+<li><p>Turn UAC off on the host and reboot before trying to become the user. UAC is
+a security protocol that is designed to run accounts with the
+<code class="docutils literal notranslate"><span class="pre">least</span> <span class="pre">privilege</span></code> principle. You can turn UAC off by running the following
+tasks:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">turn UAC off</span>
+  <span class="nt">win_regedit</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">EnableLUA</span>
+    <span class="nt">data</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dword</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">uac_result</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">reboot after disabling UAC</span>
+  <span class="nt">win_reboot</span><span class="p">:</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">uac_result is changed</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Granting the <code class="docutils literal notranslate"><span class="pre">SeTcbPrivilege</span></code> or turning UAC off can cause Windows
+security vulnerabilities and care should be given if these steps are taken.</p>
+</div>
+</div>
+<div class="section" id="local-service-accounts">
+<h3><a class="toc-backref" href="#id17">Local service accounts</a><a class="headerlink" href="#local-service-accounts" title="Permalink to this headline">¶</a></h3>
+<p>Prior to Ansible version 2.5, <code class="docutils literal notranslate"><span class="pre">become</span></code> only worked on Windows with a local or domain
+user account. Local service accounts like <code class="docutils literal notranslate"><span class="pre">System</span></code> or <code class="docutils literal notranslate"><span class="pre">NetworkService</span></code>
+could not be used as <code class="docutils literal notranslate"><span class="pre">become_user</span></code> in these older versions. This restriction
+has been lifted since the 2.5 release of Ansible. The three service accounts
+that can be set under <code class="docutils literal notranslate"><span class="pre">become_user</span></code> are:</p>
+<ul class="simple">
+<li><p>System</p></li>
+<li><p>NetworkService</p></li>
+<li><p>LocalService</p></li>
+</ul>
+<p>Because local service accounts do not have passwords, the
+<code class="docutils literal notranslate"><span class="pre">ansible_become_password</span></code> parameter is not required and is ignored if
+specified.</p>
+</div>
+<div class="section" id="become-without-setting-a-password">
+<h3><a class="toc-backref" href="#id18">Become without setting a password</a><a class="headerlink" href="#become-without-setting-a-password" title="Permalink to this headline">¶</a></h3>
+<p>As of Ansible 2.8, <code class="docutils literal notranslate"><span class="pre">become</span></code> can be used to become a Windows local or domain account
+without requiring a password for that account. For this method to work, the
+following requirements must be met:</p>
+<ul class="simple">
+<li><p>The connection user has the <code class="docutils literal notranslate"><span class="pre">SeDebugPrivilege</span></code> privilege assigned</p></li>
+<li><p>The connection user is part of the <code class="docutils literal notranslate"><span class="pre">BUILTIN\Administrators</span></code> group</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">become_user</span></code> has either the <code class="docutils literal notranslate"><span class="pre">SeBatchLogonRight</span></code> or <code class="docutils literal notranslate"><span class="pre">SeNetworkLogonRight</span></code> user right</p></li>
+</ul>
+<p>Using become without a password is achieved in one of two different methods:</p>
+<ul class="simple">
+<li><p>Duplicating an existing logon session’s token if the account is already logged on</p></li>
+<li><p>Using S4U to generate a logon token that is valid on the remote host only</p></li>
+</ul>
+<p>In the first scenario, the become process is spawned from another logon of that
+user account. This could be an existing RDP logon, console logon, but this is
+not guaranteed to occur all the time. This is similar to the
+<code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">only</span> <span class="pre">when</span> <span class="pre">user</span> <span class="pre">is</span> <span class="pre">logged</span> <span class="pre">on</span></code> option for a Scheduled Task.</p>
+<p>In the case where another logon of the become account does not exist, S4U is
+used to create a new logon and run the module through that. This is similar to
+the <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">whether</span> <span class="pre">user</span> <span class="pre">is</span> <span class="pre">logged</span> <span class="pre">on</span> <span class="pre">or</span> <span class="pre">not</span></code> with the <code class="docutils literal notranslate"><span class="pre">Do</span> <span class="pre">not</span> <span class="pre">store</span> <span class="pre">password</span></code>
+option for a Scheduled Task. In this scenario, the become process will not be
+able to access any network resources like a normal WinRM process.</p>
+<p>To make a distinction between using become with no password and becoming an
+account that has no password make sure to keep <code class="docutils literal notranslate"><span class="pre">ansible_become_password</span></code> as
+undefined or set <code class="docutils literal notranslate"><span class="pre">ansible_become_password:</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because there are no guarantees an existing token will exist for a
+user when Ansible runs, there’s a high change the become process will only
+have access to local resources. Use become with a password if the task needs
+to access network resources</p>
+</div>
+</div>
+<div class="section" id="accounts-without-a-password">
+<h3><a class="toc-backref" href="#id19">Accounts without a password</a><a class="headerlink" href="#accounts-without-a-password" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As a general security best practice, you should avoid allowing accounts without passwords.</p>
+</div>
+<p>Ansible can be used to become a Windows account that does not have a password (like the
+<code class="docutils literal notranslate"><span class="pre">Guest</span></code> account). To become an account without a password, set up the
+variables like normal but set <code class="docutils literal notranslate"><span class="pre">ansible_become_password:</span> <span class="pre">''</span></code>.</p>
+<p>Before become can work on an account like this, the local policy
+<a class="reference external" href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj852174(v=ws.11)">Accounts: Limit local account use of blank passwords to console logon only</a>
+must be disabled. This can either be done through a Group Policy Object (GPO)
+or with this Ansible task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">allow blank password on become</span>
+  <span class="nt">ansible.windows.win_regedit</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">HKLM:\SYSTEM\CurrentControlSet\Control\Lsa</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LimitBlankPasswordUse</span>
+    <span class="nt">data</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dword</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is only for accounts that do not have a password. You still need
+to set the account’s password under <code class="docutils literal notranslate"><span class="pre">ansible_become_password</span></code> if the
+become_user has a password.</p>
+</div>
+</div>
+<div class="section" id="become-flags-for-windows">
+<h3><a class="toc-backref" href="#id20">Become flags for Windows</a><a class="headerlink" href="#become-flags-for-windows" title="Permalink to this headline">¶</a></h3>
+<p>Ansible 2.5 added the <code class="docutils literal notranslate"><span class="pre">become_flags</span></code> parameter to the <code class="docutils literal notranslate"><span class="pre">runas</span></code> become method.
+This parameter can be set using the <code class="docutils literal notranslate"><span class="pre">become_flags</span></code> task directive or set in
+Ansible’s configuration using <code class="docutils literal notranslate"><span class="pre">ansible_become_flags</span></code>. The two valid values
+that are initially supported for this parameter are <code class="docutils literal notranslate"><span class="pre">logon_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">logon_flags</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These flags should only be set when becoming a normal user account, not a local service account like LocalSystem.</p>
+</div>
+<p>The key <code class="docutils literal notranslate"><span class="pre">logon_type</span></code> sets the type of logon operation to perform. The value
+can be set to one of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">interactive</span></code>: The default logon type. The process will be run under a
+context that is the same as when running a process locally. This bypasses all
+WinRM restrictions and is the recommended method to use.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">batch</span></code>: Runs the process under a batch context that is similar to a
+scheduled task with a password set. This should bypass most WinRM
+restrictions and is useful if the <code class="docutils literal notranslate"><span class="pre">become_user</span></code> is not allowed to log on
+interactively.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">new_credentials</span></code>: Runs under the same credentials as the calling user, but
+outbound connections are run under the context of the <code class="docutils literal notranslate"><span class="pre">become_user</span></code> and
+<code class="docutils literal notranslate"><span class="pre">become_password</span></code>, similar to <code class="docutils literal notranslate"><span class="pre">runas.exe</span> <span class="pre">/netonly</span></code>. The <code class="docutils literal notranslate"><span class="pre">logon_flags</span></code>
+flag should also be set to <code class="docutils literal notranslate"><span class="pre">netcredentials_only</span></code>. Use this flag if
+the process needs to access a network resource (like an SMB share) using a
+different set of credentials.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">network</span></code>: Runs the process under a network context without any cached
+credentials. This results in the same type of logon session as running a
+normal WinRM process without credential delegation, and operates under the same
+restrictions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">network_cleartext</span></code>: Like the <code class="docutils literal notranslate"><span class="pre">network</span></code> logon type, but instead caches
+the credentials so it can access network resources. This is the same type of
+logon session as running a normal WinRM process with credential delegation.</p></li>
+</ul>
+<p>For more information, see
+<a class="reference external" href="https://docs.microsoft.com/en-gb/windows/desktop/api/winbase/nf-winbase-logonusera">dwLogonType</a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">logon_flags</span></code> key specifies how Windows will log the user on when creating
+the new process. The value can be set to none or multiple of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">with_profile</span></code>: The default logon flag set. The process will load the
+user’s profile in the <code class="docutils literal notranslate"><span class="pre">HKEY_USERS</span></code> registry key to <code class="docutils literal notranslate"><span class="pre">HKEY_CURRENT_USER</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">netcredentials_only</span></code>: The process will use the same token as the caller
+but will use the <code class="docutils literal notranslate"><span class="pre">become_user</span></code> and <code class="docutils literal notranslate"><span class="pre">become_password</span></code> when accessing a remote
+resource. This is useful in inter-domain scenarios where there is no trust
+relationship, and should be used with the <code class="docutils literal notranslate"><span class="pre">new_credentials</span></code> <code class="docutils literal notranslate"><span class="pre">logon_type</span></code>.</p></li>
+</ul>
+<p>By default <code class="docutils literal notranslate"><span class="pre">logon_flags=with_profile</span></code> is set, if the profile should not be
+loaded set <code class="docutils literal notranslate"><span class="pre">logon_flags=</span></code> or if the profile should be loaded with
+<code class="docutils literal notranslate"><span class="pre">netcredentials_only</span></code>, set <code class="docutils literal notranslate"><span class="pre">logon_flags=with_profile,netcredentials_only</span></code>.</p>
+<p>For more information, see <a class="reference external" href="https://docs.microsoft.com/en-gb/windows/desktop/api/winbase/nf-winbase-createprocesswithtokenw">dwLogonFlags</a>.</p>
+<p>Here are some examples of how to use <code class="docutils literal notranslate"><span class="pre">become_flags</span></code> with Windows tasks:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">copy a file from a fileshare with custom credentials</span>
+  <span class="nt">ansible.windows.win_copy</span><span class="p">:</span>
+    <span class="nt">src</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">\\server\share\data\file.txt</span>
+    <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\temp\file.txt</span>
+    <span class="nt">remote_src</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">vars</span><span class="p">:</span>
+    <span class="nt">ansible_become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">ansible_become_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">runas</span>
+    <span class="nt">ansible_become_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DOMAIN\user</span>
+    <span class="nt">ansible_become_password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Password01</span>
+    <span class="nt">ansible_become_flags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">logon_type=new_credentials logon_flags=netcredentials_only</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">run a command under a batch logon</span>
+  <span class="nt">ansible.windows.win_whoami</span><span class="p">:</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">become_flags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">logon_type=batch</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">run a command and not load the user profile</span>
+  <span class="nt">ansible.windows.win_whomai</span><span class="p">:</span>
+  <span class="nt">become</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">become_flags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">logon_flags=</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="limitations-of-become-on-windows">
+<h3><a class="toc-backref" href="#id21">Limitations of become on Windows</a><a class="headerlink" href="#limitations-of-become-on-windows" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Running a task with <code class="docutils literal notranslate"><span class="pre">async</span></code> and <code class="docutils literal notranslate"><span class="pre">become</span></code> on Windows Server 2008, 2008 R2
+and Windows 7 only works when using Ansible 2.7 or newer.</p></li>
+<li><p>By default, the become user logs on with an interactive session, so it must
+have the right to do so on the Windows host. If it does not inherit the
+<code class="docutils literal notranslate"><span class="pre">SeAllowLogOnLocally</span></code> privilege or inherits the <code class="docutils literal notranslate"><span class="pre">SeDenyLogOnLocally</span></code>
+privilege, the become process will fail. Either add the privilege or set the
+<code class="docutils literal notranslate"><span class="pre">logon_type</span></code> flag to change the logon type used.</p></li>
+<li><p>Prior to Ansible version 2.3, become only worked when
+<code class="docutils literal notranslate"><span class="pre">ansible_winrm_transport</span></code> was either <code class="docutils literal notranslate"><span class="pre">basic</span></code> or <code class="docutils literal notranslate"><span class="pre">credssp</span></code>. This
+restriction has been lifted since the 2.4 release of Ansible for all hosts
+except Windows Server 2008 (non R2 version).</p></li>
+<li><p>The Secondary Logon service <code class="docutils literal notranslate"><span class="pre">seclogon</span></code> must be running to use <code class="docutils literal notranslate"><span class="pre">ansible_become_method:</span> <span class="pre">runas</span></code></p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://groups.google.com/forum/#!forum/ansible-project">Mailing List</a></dt><dd><p>Questions? Help? Ideas?  Stop by the list on Google Groups</p>
+</dd>
+<dt><a class="reference external" href="https://webchat.freenode.net">webchat.freenode.net</a></dt><dd><p>#ansible IRC chat channel</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+        <a href="playbooks_loops.html" class="btn btn-neutral float-right" title="Loops"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="playbooks_best_practices.html" class="btn btn-neutral" title="Tips and tricks"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Apr 23, 2021.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

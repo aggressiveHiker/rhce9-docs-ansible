@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Virtual machine attributes in VMware dynamic inventory plugin &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Using VMware dynamic inventory plugin - Hostnames" href="vmware_inventory_hostnames.html" />
+    <link rel="prev" title="Using VMware dynamic inventory plugin" href="vmware_inventory.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../virt_guides.html">Virtualization and Containerization Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide_docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_kubernetes.html">Kubernetes Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_vagrant.html">Vagrant Guide</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide_vmware.html">VMware Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="vmware_intro.html">Introduction to Ansible for VMware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_concepts.html">Ansible for VMware Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_requirements.html">VMware Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_inventory.html">Using VMware dynamic inventory plugin</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Using Virtual machine attributes in VMware dynamic inventory plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#virtual-machine-attributes">Virtual machine attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_inventory_hostnames.html">Using VMware dynamic inventory plugin - Hostnames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_inventory_filters.html">Using VMware dynamic inventory plugin - Filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_scenarios.html">Ansible for VMware Scenarios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_troubleshooting.html">Troubleshooting Ansible for VMware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_external_doc_links.html">Other useful VMware resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html">Ansible VMware FAQ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_vmware_rest.html">VMware REST Scenarios</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../virt_guides.html">Virtualization and Containerization Guides</a> &raquo;</li>
+          <li><a href="../guide_vmware.html">VMware Guide</a> &raquo;</li>
+      <li>Using Virtual machine attributes in VMware dynamic inventory plugin</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="using-virtual-machine-attributes-in-vmware-dynamic-inventory-plugin">
+<span id="vmware-inventory-vm-attributes"></span><h1>Using Virtual machine attributes in VMware dynamic inventory plugin<a class="headerlink" href="#using-virtual-machine-attributes-in-vmware-dynamic-inventory-plugin" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#virtual-machine-attributes" id="id9">Virtual machine attributes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#capability" id="id10">capability</a></p>
+<ul>
+<li><p><a class="reference internal" href="#snapshotoperationssupported-bool" id="id11">snapshotOperationsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#multiplesnapshotssupported-bool" id="id12">multipleSnapshotsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#snapshotconfigsupported-bool" id="id13">snapshotConfigSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#poweredoffsnapshotssupported-bool" id="id14">poweredOffSnapshotsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#memorysnapshotssupported-bool" id="id15">memorySnapshotsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#reverttosnapshotsupported-bool" id="id16">revertToSnapshotSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#quiescedsnapshotssupported-bool" id="id17">quiescedSnapshotsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#disablesnapshotssupported-bool" id="id18">disableSnapshotsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#locksnapshotssupported-bool" id="id19">lockSnapshotsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#consolepreferencessupported-bool" id="id20">consolePreferencesSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#cpufeaturemasksupported-bool" id="id21">cpuFeatureMaskSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#s1acpimanagementsupported-bool" id="id22">s1AcpiManagementSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#settingscreenresolutionsupported-bool" id="id23">settingScreenResolutionSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#toolsautoupdatesupported-bool" id="id24">toolsAutoUpdateSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#vmnpivwwnsupported-bool" id="id25">vmNpivWwnSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#npivwwnonnonrdmvmsupported-bool" id="id26">npivWwnOnNonRdmVmSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#vmnpivwwndisablesupported-bool" id="id27">vmNpivWwnDisableSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#vmnpivwwnupdatesupported-bool" id="id28">vmNpivWwnUpdateSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#swapplacementsupported-bool" id="id29">swapPlacementSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#toolssynctimesupported-bool" id="id30">toolsSyncTimeSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#virtualmmuusagesupported-bool" id="id31">virtualMmuUsageSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#disksharessupported-bool" id="id32">diskSharesSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#bootoptionssupported-bool" id="id33">bootOptionsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#bootretryoptionssupported-bool" id="id34">bootRetryOptionsSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#settingvideoramsizesupported-bool" id="id35">settingVideoRamSizeSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#settingdisplaytopologysupported-bool" id="id36">settingDisplayTopologySupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#recordreplaysupported-bool" id="id37">recordReplaySupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#changetrackingsupported-bool" id="id38">changeTrackingSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#multiplecorespersocketsupported-bool" id="id39">multipleCoresPerSocketSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#hostbasedreplicationsupported-bool" id="id40">hostBasedReplicationSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#guestautolocksupported-bool" id="id41">guestAutoLockSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#memoryreservationlocksupported-bool" id="id42">memoryReservationLockSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#featurerequirementsupported-bool" id="id43">featureRequirementSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#poweredonmonitortypechangesupported-bool" id="id44">poweredOnMonitorTypeChangeSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#sesparsedisksupported-bool" id="id45">seSparseDiskSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#nestedhvsupported-bool" id="id46">nestedHVSupported (bool)</a></p></li>
+<li><p><a class="reference internal" href="#vpmcsupported-bool" id="id47">vPMCSupported (bool)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#config" id="id48">config</a></p>
+<ul>
+<li><p><a class="reference internal" href="#changeversion-str" id="id49">changeVersion (str)</a></p></li>
+<li><p><a class="reference internal" href="#modified-datetime" id="id50">modified (datetime)</a></p></li>
+<li><p><a class="reference internal" href="#name-str" id="id51">name (str)</a></p></li>
+<li><p><a class="reference internal" href="#guestfullname-str" id="id52">guestFullName (str)</a></p></li>
+<li><p><a class="reference internal" href="#version-str" id="id53">version (str)</a></p></li>
+<li><p><a class="reference internal" href="#uuid-str" id="id54">uuid (str)</a></p></li>
+<li><p><a class="reference internal" href="#instanceuuid-str-optional" id="id55">instanceUuid (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#npivnodeworldwidename-long-optional" id="id56">npivNodeWorldWideName (long, optional)</a></p></li>
+<li><p><a class="reference internal" href="#npivportworldwidename-long-optional" id="id57">npivPortWorldWideName (long, optional)</a></p></li>
+<li><p><a class="reference internal" href="#npivworldwidenametype-str-optional" id="id58">npivWorldWideNameType (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#npivdesirednodewwns-short-optional" id="id59">npivDesiredNodeWwns (short, optional)</a></p></li>
+<li><p><a class="reference internal" href="#npivdesiredportwwns-short-optional" id="id60">npivDesiredPortWwns (short, optional)</a></p></li>
+<li><p><a class="reference internal" href="#npivtemporarydisabled-bool-optional" id="id61">npivTemporaryDisabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#npivonnonrdmdisks-bool-optional" id="id62">npivOnNonRdmDisks (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#locationid-str-optional" id="id63">locationId (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#template-bool" id="id64">template (bool)</a></p></li>
+<li><p><a class="reference internal" href="#guestid-str" id="id65">guestId (str)</a></p></li>
+<li><p><a class="reference internal" href="#alternateguestname-str" id="id66">alternateGuestName (str)</a></p></li>
+<li><p><a class="reference internal" href="#annotation-str-optional" id="id67">annotation (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#files-vim-vm-fileinfo" id="id68">files (vim.vm.FileInfo)</a></p></li>
+<li><p><a class="reference internal" href="#tools-vim-vm-toolsconfiginfo-optional" id="id69">tools (vim.vm.ToolsConfigInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#flags-vim-vm-flaginfo" id="id70">flags (vim.vm.FlagInfo)</a></p></li>
+<li><p><a class="reference internal" href="#consolepreferences-vim-vm-consolepreferences-optional" id="id71">consolePreferences (vim.vm.ConsolePreferences, optional)</a></p></li>
+<li><p><a class="reference internal" href="#defaultpowerops-vim-vm-defaultpoweropinfo" id="id72">defaultPowerOps (vim.vm.DefaultPowerOpInfo)</a></p></li>
+<li><p><a class="reference internal" href="#hardware-vim-vm-virtualhardware" id="id73">hardware (vim.vm.VirtualHardware)</a></p></li>
+<li><p><a class="reference internal" href="#cpuallocation-vim-resourceallocationinfo-optional" id="id74">cpuAllocation (vim.ResourceAllocationInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#memoryallocation-vim-resourceallocationinfo-optional" id="id75">memoryAllocation (vim.ResourceAllocationInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#latencysensitivity-vim-latencysensitivity-optional" id="id76">latencySensitivity (vim.LatencySensitivity, optional)</a></p></li>
+<li><p><a class="reference internal" href="#memoryhotaddenabled-bool-optional" id="id77">memoryHotAddEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#cpuhotaddenabled-bool-optional" id="id78">cpuHotAddEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#cpuhotremoveenabled-bool-optional" id="id79">cpuHotRemoveEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#hotplugmemorylimit-long-optional" id="id80">hotPlugMemoryLimit (long, optional)</a></p></li>
+<li><p><a class="reference internal" href="#hotplugmemoryincrementsize-long-optional" id="id81">hotPlugMemoryIncrementSize (long, optional)</a></p></li>
+<li><p><a class="reference internal" href="#cpuaffinity-vim-vm-affinityinfo-optional" id="id82">cpuAffinity (vim.vm.AffinityInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#memoryaffinity-vim-vm-affinityinfo-optional" id="id83">memoryAffinity (vim.vm.AffinityInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#networkshaper-vim-vm-networkshaperinfo-optional" id="id84">networkShaper (vim.vm.NetworkShaperInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#extraconfig-vim-option-optionvalue-optional" id="id85">extraConfig (vim.option.OptionValue, optional)</a></p></li>
+<li><p><a class="reference internal" href="#cpufeaturemask-vim-host-cpuidinfo-optional" id="id86">cpuFeatureMask (vim.host.CpuIdInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#datastoreurl-vim-vm-configinfo-datastoreurlpair-optional" id="id87">datastoreUrl (vim.vm.ConfigInfo.DatastoreUrlPair, optional)</a></p></li>
+<li><p><a class="reference internal" href="#swapplacement-str-optional" id="id88">swapPlacement (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#bootoptions-vim-vm-bootoptions-optional" id="id89">bootOptions (vim.vm.BootOptions, optional)</a></p></li>
+<li><p><a class="reference internal" href="#ftinfo-vim-vm-faulttoleranceconfiginfo-optional" id="id90">ftInfo (vim.vm.FaultToleranceConfigInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#vappconfig-vim-vapp-vmconfiginfo-optional" id="id91">vAppConfig (vim.vApp.VmConfigInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#vassertsenabled-bool-optional" id="id92">vAssertsEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#changetrackingenabled-bool-optional" id="id93">changeTrackingEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#firmware-str-optional" id="id94">firmware (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#maxmksconnections-int-optional" id="id95">maxMksConnections (int, optional)</a></p></li>
+<li><p><a class="reference internal" href="#guestautolockenabled-bool-optional" id="id96">guestAutoLockEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#managedby-vim-ext-managedbyinfo-optional" id="id97">managedBy (vim.ext.ManagedByInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#memoryreservationlockedtomax-bool-optional" id="id98">memoryReservationLockedToMax (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#initialoverhead-vim-vm-configinfo-overheadinfo-optional" id="id99">initialOverhead (vim.vm.ConfigInfo.OverheadInfo), optional)</a></p></li>
+<li><p><a class="reference internal" href="#nestedhvenabled-bool-optional" id="id100">nestedHVEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#vpmcenabled-bool-optional" id="id101">vPMCEnabled (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#scheduledhardwareupgradeinfo-vim-vm-scheduledhardwareupgradeinfo-optional" id="id102">scheduledHardwareUpgradeInfo (vim.vm.ScheduledHardwareUpgradeInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#vflashcachereservation-long-optional" id="id103">vFlashCacheReservation (long, optional)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#layout" id="id104">layout</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configfile-str-optional" id="id105">configFile (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#logfile-str-optional" id="id106">logFile (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#disk-vim-vm-filelayout-disklayout-optional" id="id107">disk (vim.vm.FileLayout.DiskLayout, optional)</a></p></li>
+<li><p><a class="reference internal" href="#snapshot-vim-vm-filelayout-snapshotlayout-optional" id="id108">snapshot (vim.vm.FileLayout.SnapshotLayout, optional)</a></p></li>
+<li><p><a class="reference internal" href="#swapfile-str-optional" id="id109">swapFile (str, optional)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#layoutex" id="id110">layoutEx</a></p>
+<ul>
+<li><p><a class="reference internal" href="#file-vim-vm-filelayoutex-fileinfo-optional" id="id111">file (vim.vm.FileLayoutEx.FileInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#disk-vim-vm-filelayoutex-disklayout-optional" id="id112">disk (vim.vm.FileLayoutEx.DiskLayout, optional)</a></p></li>
+<li><p><a class="reference internal" href="#snapshot-vim-vm-filelayoutex-snapshotlayout-optional" id="id113">snapshot (vim.vm.FileLayoutEx.SnapshotLayout, optional)</a></p></li>
+<li><p><a class="reference internal" href="#timestamp-datetime" id="id114">timestamp (datetime)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#storage-vim-vm-storageinfo" id="id115">storage (vim.vm.StorageInfo)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#perdatastoreusage-vim-vm-storageinfo-usageondatastore-optional" id="id116">perDatastoreUsage (vim.vm.StorageInfo.UsageOnDatastore, optional)</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id117">timestamp (datetime)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#environmentbrowser-vim-environmentbrowser" id="id118">environmentBrowser (vim.EnvironmentBrowser)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#datastorebrowser-vim-host-datastorebrowser" id="id119">datastoreBrowser (vim.host.DatastoreBrowser)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#resourcepool-vim-resourcepool" id="id120">resourcePool (vim.ResourcePool)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#summary-vim-resourcepool-summary" id="id121">summary (vim.ResourcePool.Summary)</a></p></li>
+<li><p><a class="reference internal" href="#runtime-vim-resourcepool-runtimeinfo" id="id122">runtime (vim.ResourcePool.RuntimeInfo)</a></p></li>
+<li><p><a class="reference internal" href="#owner-vim-computeresource" id="id123">owner (vim.ComputeResource)</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id124">resourcePool (vim.ResourcePool)</a></p></li>
+<li><p><a class="reference internal" href="#vm-vim-virtualmachine" id="id125">vm (vim.VirtualMachine)</a></p></li>
+<li><p><a class="reference internal" href="#config-vim-resourceconfigspec" id="id126">config (vim.ResourceConfigSpec)</a></p></li>
+<li><p><a class="reference internal" href="#childconfiguration-vim-resourceconfigspec" id="id127">childConfiguration (vim.ResourceConfigSpec)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#parentvapp-vim-managedentity" id="id128">parentVApp (vim.ManagedEntity)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#parent-vim-managedentity" id="id129">parent (vim.ManagedEntity)</a></p></li>
+<li><p><a class="reference internal" href="#customvalue-vim-customfieldsmanager-value" id="id130">customValue (vim.CustomFieldsManager.Value)</a></p></li>
+<li><p><a class="reference internal" href="#overallstatus-vim-managedentity-status" id="id131">overallStatus (vim.ManagedEntity.Status)</a></p></li>
+<li><p><a class="reference internal" href="#configstatus-vim-managedentity-status" id="id132">configStatus (vim.ManagedEntity.Status)</a></p></li>
+<li><p><a class="reference internal" href="#configissue-vim-event-event" id="id133">configIssue (vim.event.Event)</a></p></li>
+<li><p><a class="reference internal" href="#effectiverole-int" id="id134">effectiveRole (int)</a></p></li>
+<li><p><a class="reference internal" href="#permission-vim-authorizationmanager-permission" id="id135">permission (vim.AuthorizationManager.Permission)</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id136">name (str)</a></p></li>
+<li><p><a class="reference internal" href="#disabledmethod-str" id="id137">disabledMethod (str)</a></p></li>
+<li><p><a class="reference internal" href="#recenttask-vim-task" id="id138">recentTask (vim.Task)</a></p></li>
+<li><p><a class="reference internal" href="#declaredalarmstate-vim-alarm-alarmstate" id="id139">declaredAlarmState (vim.alarm.AlarmState)</a></p></li>
+<li><p><a class="reference internal" href="#triggeredalarmstate-vim-alarm-alarmstate" id="id140">triggeredAlarmState (vim.alarm.AlarmState)</a></p></li>
+<li><p><a class="reference internal" href="#alarmactionsenabled-bool" id="id141">alarmActionsEnabled (bool)</a></p></li>
+<li><p><a class="reference internal" href="#tag-vim-tag" id="id142">tag (vim.Tag)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#resourceconfig-vim-resourceconfigspec" id="id143">resourceConfig (vim.ResourceConfigSpec)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#entity-vim-managedentity-optional" id="id144">entity (vim.ManagedEntity, optional)</a></p></li>
+<li><p><a class="reference internal" href="#changeversion-str-optional" id="id145">changeVersion (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#lastmodified-datetime-optional" id="id146">lastModified (datetime, optional)</a></p></li>
+<li><p><a class="reference internal" href="#cpuallocation-vim-resourceallocationinfo" id="id147">cpuAllocation (vim.ResourceAllocationInfo)</a></p></li>
+<li><p><a class="reference internal" href="#memoryallocation-vim-resourceallocationinfo" id="id148">memoryAllocation (vim.ResourceAllocationInfo)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#runtime-vim-vm-runtimeinfo" id="id149">runtime (vim.vm.RuntimeInfo)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#device-vim-vm-deviceruntimeinfo-optional" id="id150">device (vim.vm.DeviceRuntimeInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#host-vim-hostsystem-optional" id="id151">host (vim.HostSystem, optional)</a></p></li>
+<li><p><a class="reference internal" href="#connectionstate-vim-virtualmachine-connectionstate" id="id152">connectionState (vim.VirtualMachine.ConnectionState)</a></p></li>
+<li><p><a class="reference internal" href="#powerstate-vim-virtualmachine-powerstate" id="id153">powerState (vim.VirtualMachine.PowerState)</a></p></li>
+<li><p><a class="reference internal" href="#faulttolerancestate-vim-virtualmachine-faulttolerancestate" id="id154">faultToleranceState (vim.VirtualMachine.FaultToleranceState)</a></p></li>
+<li><p><a class="reference internal" href="#dasvmprotection-vim-vm-runtimeinfo-dasprotectionstate-optional" id="id155">dasVmProtection (vim.vm.RuntimeInfo.DasProtectionState, optional)</a></p></li>
+<li><p><a class="reference internal" href="#toolsinstallermounted-bool" id="id156">toolsInstallerMounted (bool)</a></p></li>
+<li><p><a class="reference internal" href="#suspendtime-datetime-optional" id="id157">suspendTime (datetime, optional)</a></p></li>
+<li><p><a class="reference internal" href="#boottime-datetime-optional" id="id158">bootTime (datetime, optional)</a></p></li>
+<li><p><a class="reference internal" href="#suspendinterval-long-optional" id="id159">suspendInterval (long, optional)</a></p></li>
+<li><p><a class="reference internal" href="#question-vim-vm-questioninfo-optional" id="id160">question (vim.vm.QuestionInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#memoryoverhead-long-optional" id="id161">memoryOverhead (long, optional)</a></p></li>
+<li><p><a class="reference internal" href="#maxcpuusage-int-optional" id="id162">maxCpuUsage (int, optional)</a></p></li>
+<li><p><a class="reference internal" href="#maxmemoryusage-int-optional" id="id163">maxMemoryUsage (int, optional)</a></p></li>
+<li><p><a class="reference internal" href="#nummksconnections-int" id="id164">numMksConnections (int)</a></p></li>
+<li><p><a class="reference internal" href="#recordreplaystate-vim-virtualmachine-recordreplaystate" id="id165">recordReplayState (vim.VirtualMachine.RecordReplayState)</a></p></li>
+<li><p><a class="reference internal" href="#cleanpoweroff-bool-optional" id="id166">cleanPowerOff (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#needsecondaryreason-str-optional" id="id167">needSecondaryReason (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#onlinestandby-bool" id="id168">onlineStandby (bool)</a></p></li>
+<li><p><a class="reference internal" href="#minrequiredevcmodekey-str-optional" id="id169">minRequiredEVCModeKey (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#consolidationneeded-bool" id="id170">consolidationNeeded (bool)</a></p></li>
+<li><p><a class="reference internal" href="#offlinefeaturerequirement-vim-vm-featurerequirement-optional" id="id171">offlineFeatureRequirement (vim.vm.FeatureRequirement, optional)</a></p></li>
+<li><p><a class="reference internal" href="#featurerequirement-vim-vm-featurerequirement-optional" id="id172">featureRequirement (vim.vm.FeatureRequirement, optional)</a></p></li>
+<li><p><a class="reference internal" href="#featuremask-vim-host-featuremask-optional" id="id173">featureMask (vim.host.FeatureMask, optional)</a></p></li>
+<li><p><a class="reference internal" href="#vflashcacheallocation-long-optional" id="id174">vFlashCacheAllocation (long, optional)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#guest-vim-vm-guestinfo" id="id175">guest (vim.vm.GuestInfo)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#toolsstatus-vim-vm-guestinfo-toolsstatus-optional" id="id176">toolsStatus (vim.vm.GuestInfo.ToolsStatus, optional)</a></p></li>
+<li><p><a class="reference internal" href="#toolsversionstatus-str-optional" id="id177">toolsVersionStatus (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#toolsversionstatus2-str-optional" id="id178">toolsVersionStatus2 (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#toolsrunningstatus-str-optional" id="id179">toolsRunningStatus (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#toolsversion-str-optional" id="id180">toolsVersion (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#guestid-str-optional" id="id181">guestId (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#guestfamily-str-optional" id="id182">guestFamily (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#guestfullname-str-optional" id="id183">guestFullName (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#hostname-str-optional" id="id184">hostName (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#ipaddress-str-optional" id="id185">ipAddress (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#net-vim-vm-guestinfo-nicinfo-optional" id="id186">net (vim.vm.GuestInfo.NicInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#ipstack-vim-vm-guestinfo-stackinfo-optional" id="id187">ipStack (vim.vm.GuestInfo.StackInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#disk-vim-vm-guestinfo-diskinfo-optional" id="id188">disk (vim.vm.GuestInfo.DiskInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#screen-vim-vm-guestinfo-screeninfo-optional" id="id189">screen (vim.vm.GuestInfo.ScreenInfo, optional)</a></p></li>
+<li><p><a class="reference internal" href="#gueststate-str" id="id190">guestState (str)</a></p></li>
+<li><p><a class="reference internal" href="#appheartbeatstatus-str-optional" id="id191">appHeartbeatStatus (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#appstate-str-optional" id="id192">appState (str, optional)</a></p></li>
+<li><p><a class="reference internal" href="#guestoperationsready-bool-optional" id="id193">guestOperationsReady (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#interactiveguestoperationsready-bool-optional" id="id194">interactiveGuestOperationsReady (bool, optional)</a></p></li>
+<li><p><a class="reference internal" href="#generationinfo-vim-vm-guestinfo-namespacegenerationinfo-privilege-virtualmachine-namespace-eventnotify-optional" id="id195">generationInfo (vim.vm.GuestInfo.NamespaceGenerationInfo, privilege: VirtualMachine.Namespace.EventNotify, optional)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#summary-vim-vm-summary" id="id196">summary (vim.vm.Summary)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#vm-vim-virtualmachine-optional" id="id197">vm (vim.VirtualMachine, optional)</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id198">runtime (vim.vm.RuntimeInfo)</a></p></li>
+<li><p><a class="reference internal" href="#guest-vim-vm-summary-guestsummary-optional" id="id199">guest (vim.vm.Summary.GuestSummary, optional)</a></p></li>
+<li><p><a class="reference internal" href="#config-vim-vm-summary-configsummary" id="id200">config (vim.vm.Summary.ConfigSummary)</a></p></li>
+<li><p><a class="reference internal" href="#storage-vim-vm-summary-storagesummary-optional" id="id201">storage (vim.vm.Summary.StorageSummary, optional)</a></p></li>
+<li><p><a class="reference internal" href="#quickstats-vim-vm-summary-quickstats" id="id202">quickStats (vim.vm.Summary.QuickStats)</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id203">overallStatus (vim.ManagedEntity.Status)</a></p></li>
+<li><p><a class="reference internal" href="#customvalue-vim-customfieldsmanager-value-optional" id="id204">customValue (vim.CustomFieldsManager.Value, optional)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#datastore-vim-datastore" id="id205">datastore (vim.Datastore)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#info-vim-datastore-info" id="id206">info (vim.Datastore.Info)</a></p></li>
+<li><p><a class="reference internal" href="#summary-vim-datastore-summary" id="id207">summary (vim.Datastore.Summary)</a></p></li>
+<li><p><a class="reference internal" href="#host-vim-datastore-hostmount" id="id208">host (vim.Datastore.HostMount)</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id209">vm (vim.VirtualMachine)</a></p></li>
+<li><p><a class="reference internal" href="#browser-vim-host-datastorebrowser" id="id210">browser (vim.host.DatastoreBrowser)</a></p></li>
+<li><p><a class="reference internal" href="#capability-vim-datastore-capability" id="id211">capability (vim.Datastore.Capability)</a></p></li>
+<li><p><a class="reference internal" href="#iormconfiguration-vim-storageresourcemanager-iormconfiginfo" id="id212">iormConfiguration (vim.StorageResourceManager.IORMConfigInfo)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#network-vim-network" id="id213">network (vim.Network)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id7" id="id214">name (str)</a></p></li>
+<li><p><a class="reference internal" href="#summary-vim-network-summary" id="id215">summary (vim.Network.Summary)</a></p></li>
+<li><p><a class="reference internal" href="#host-vim-hostsystem" id="id216">host (vim.HostSystem)</a></p></li>
+<li><p><a class="reference internal" href="#id8" id="id217">vm (vim.VirtualMachine)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#snapshot-vim-vm-snapshotinfo" id="id218">snapshot (vim.vm.SnapshotInfo)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#currentsnapshot-vim-vm-snapshot-optional" id="id219">currentSnapshot (vim.vm.Snapshot, optional)</a></p></li>
+<li><p><a class="reference internal" href="#rootsnapshotlist-vim-vm-snapshottree" id="id220">rootSnapshotList (vim.vm.SnapshotTree)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#rootsnapshot-vim-vm-snapshot" id="id221">rootSnapshot (vim.vm.Snapshot)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#config-vim-vm-configinfo" id="id222">config (vim.vm.ConfigInfo)</a></p></li>
+<li><p><a class="reference internal" href="#childsnapshot-vim-vm-snapshot" id="id223">childSnapshot (vim.vm.Snapshot)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#guestheartbeatstatus-vim-managedentity-status" id="id224">guestHeartbeatStatus (vim.ManagedEntity.Status)</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="virtual-machine-attributes">
+<h2><a class="toc-backref" href="#id9">Virtual machine attributes</a><a class="headerlink" href="#virtual-machine-attributes" title="Permalink to this headline"></a></h2>
+<p>You can use virtual machine properties which can be used to populate <code class="docutils literal notranslate"><span class="pre">hostvars</span></code> for the given
+virtual machine in a VMware dynamic inventory plugin.</p>
+<div class="section" id="capability">
+<h3><a class="toc-backref" href="#id10">capability</a><a class="headerlink" href="#capability" title="Permalink to this headline"></a></h3>
+<p>This section describes settings for the runtime capabilities of the virtual machine.</p>
+<div class="section" id="snapshotoperationssupported-bool">
+<h4><a class="toc-backref" href="#id11">snapshotOperationsSupported (bool)</a><a class="headerlink" href="#snapshotoperationssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports snapshot operations.</p>
+</div></blockquote>
+</div>
+<div class="section" id="multiplesnapshotssupported-bool">
+<h4><a class="toc-backref" href="#id12">multipleSnapshotsSupported (bool)</a><a class="headerlink" href="#multiplesnapshotssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports multiple snapshots.
+This value is not set when the virtual machine is unavailable, for instance, when it is being created or deleted.</p>
+</div></blockquote>
+</div>
+<div class="section" id="snapshotconfigsupported-bool">
+<h4><a class="toc-backref" href="#id13">snapshotConfigSupported (bool)</a><a class="headerlink" href="#snapshotconfigsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports snapshot config.</p>
+</div></blockquote>
+</div>
+<div class="section" id="poweredoffsnapshotssupported-bool">
+<h4><a class="toc-backref" href="#id14">poweredOffSnapshotsSupported (bool)</a><a class="headerlink" href="#poweredoffsnapshotssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports snapshot operations in <code class="docutils literal notranslate"><span class="pre">poweredOff</span></code> state.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memorysnapshotssupported-bool">
+<h4><a class="toc-backref" href="#id15">memorySnapshotsSupported (bool)</a><a class="headerlink" href="#memorysnapshotssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports memory snapshots.</p>
+</div></blockquote>
+</div>
+<div class="section" id="reverttosnapshotsupported-bool">
+<h4><a class="toc-backref" href="#id16">revertToSnapshotSupported (bool)</a><a class="headerlink" href="#reverttosnapshotsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports reverting to a snapshot.</p>
+</div></blockquote>
+</div>
+<div class="section" id="quiescedsnapshotssupported-bool">
+<h4><a class="toc-backref" href="#id17">quiescedSnapshotsSupported (bool)</a><a class="headerlink" href="#quiescedsnapshotssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports quiesced snapshots.</p>
+</div></blockquote>
+</div>
+<div class="section" id="disablesnapshotssupported-bool">
+<h4><a class="toc-backref" href="#id18">disableSnapshotsSupported (bool)</a><a class="headerlink" href="#disablesnapshotssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not snapshots can be disabled.</p>
+</div></blockquote>
+</div>
+<div class="section" id="locksnapshotssupported-bool">
+<h4><a class="toc-backref" href="#id19">lockSnapshotsSupported (bool)</a><a class="headerlink" href="#locksnapshotssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not the snapshot tree can be locked.</p>
+</div></blockquote>
+</div>
+<div class="section" id="consolepreferencessupported-bool">
+<h4><a class="toc-backref" href="#id20">consolePreferencesSupported (bool)</a><a class="headerlink" href="#consolepreferencessupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether console preferences can be set for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cpufeaturemasksupported-bool">
+<h4><a class="toc-backref" href="#id21">cpuFeatureMaskSupported (bool)</a><a class="headerlink" href="#cpufeaturemasksupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether CPU feature requirements masks can be set for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="s1acpimanagementsupported-bool">
+<h4><a class="toc-backref" href="#id22">s1AcpiManagementSupported (bool)</a><a class="headerlink" href="#s1acpimanagementsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not a virtual machine supports ACPI S1 settings management.</p>
+</div></blockquote>
+</div>
+<div class="section" id="settingscreenresolutionsupported-bool">
+<h4><a class="toc-backref" href="#id23">settingScreenResolutionSupported (bool)</a><a class="headerlink" href="#settingscreenresolutionsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not the virtual machine supports setting the screen resolution of the console window.</p>
+</div></blockquote>
+</div>
+<div class="section" id="toolsautoupdatesupported-bool">
+<h4><a class="toc-backref" href="#id24">toolsAutoUpdateSupported (bool)</a><a class="headerlink" href="#toolsautoupdatesupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Supports tools auto-update.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vmnpivwwnsupported-bool">
+<h4><a class="toc-backref" href="#id25">vmNpivWwnSupported (bool)</a><a class="headerlink" href="#vmnpivwwnsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Supports virtual machine NPIV WWN.</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivwwnonnonrdmvmsupported-bool">
+<h4><a class="toc-backref" href="#id26">npivWwnOnNonRdmVmSupported (bool)</a><a class="headerlink" href="#npivwwnonnonrdmvmsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Supports assigning NPIV WWN to virtual machines that do not have RDM disks.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vmnpivwwndisablesupported-bool">
+<h4><a class="toc-backref" href="#id27">vmNpivWwnDisableSupported (bool)</a><a class="headerlink" href="#vmnpivwwndisablesupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the NPIV disabling operation is supported on the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vmnpivwwnupdatesupported-bool">
+<h4><a class="toc-backref" href="#id28">vmNpivWwnUpdateSupported (bool)</a><a class="headerlink" href="#vmnpivwwnupdatesupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the update of NPIV WWNs are supported on the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="swapplacementsupported-bool">
+<h4><a class="toc-backref" href="#id29">swapPlacementSupported (bool)</a><a class="headerlink" href="#swapplacementsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Flag indicating whether the virtual machine has a configurable (swapfile placement policy).</p>
+</div></blockquote>
+</div>
+<div class="section" id="toolssynctimesupported-bool">
+<h4><a class="toc-backref" href="#id30">toolsSyncTimeSupported (bool)</a><a class="headerlink" href="#toolssynctimesupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether asking tools to sync time with the host is supported.</p>
+</div></blockquote>
+</div>
+<div class="section" id="virtualmmuusagesupported-bool">
+<h4><a class="toc-backref" href="#id31">virtualMmuUsageSupported (bool)</a><a class="headerlink" href="#virtualmmuusagesupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not the use of nested page table hardware support can be explicitly set.</p>
+</div></blockquote>
+</div>
+<div class="section" id="disksharessupported-bool">
+<h4><a class="toc-backref" href="#id32">diskSharesSupported (bool)</a><a class="headerlink" href="#disksharessupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether resource settings for disks can be applied to the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="bootoptionssupported-bool">
+<h4><a class="toc-backref" href="#id33">bootOptionsSupported (bool)</a><a class="headerlink" href="#bootoptionssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether boot options can be configured for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="bootretryoptionssupported-bool">
+<h4><a class="toc-backref" href="#id34">bootRetryOptionsSupported (bool)</a><a class="headerlink" href="#bootretryoptionssupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether automatic boot retry can be configured for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="settingvideoramsizesupported-bool">
+<h4><a class="toc-backref" href="#id35">settingVideoRamSizeSupported (bool)</a><a class="headerlink" href="#settingvideoramsizesupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Flag indicating whether the video RAM size of the virtual machine can be configured.</p>
+</div></blockquote>
+</div>
+<div class="section" id="settingdisplaytopologysupported-bool">
+<h4><a class="toc-backref" href="#id36">settingDisplayTopologySupported (bool)</a><a class="headerlink" href="#settingdisplaytopologysupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not the virtual machine supports setting the display topology of the console window.</p>
+</div></blockquote>
+</div>
+<div class="section" id="recordreplaysupported-bool">
+<h4><a class="toc-backref" href="#id37">recordReplaySupported (bool)</a><a class="headerlink" href="#recordreplaysupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether record and replay functionality is supported on the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="changetrackingsupported-bool">
+<h4><a class="toc-backref" href="#id38">changeTrackingSupported (bool)</a><a class="headerlink" href="#changetrackingsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates that change tracking is supported for virtual disks of the virtual machine.
+However, even if change tracking is supported, it might not be available for all disks of the virtual machine.
+For example, passthru raw disk mappings or disks backed by any Ver1BackingInfo cannot be tracked.</p>
+</div></blockquote>
+</div>
+<div class="section" id="multiplecorespersocketsupported-bool">
+<h4><a class="toc-backref" href="#id39">multipleCoresPerSocketSupported (bool)</a><a class="headerlink" href="#multiplecorespersocketsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether multiple virtual cores per socket is supported on the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="hostbasedreplicationsupported-bool">
+<h4><a class="toc-backref" href="#id40">hostBasedReplicationSupported (bool)</a><a class="headerlink" href="#hostbasedreplicationsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates that host based replication is supported on the virtual machine.
+However, even if host based replication is supported, it might not be available for all disk types.
+For example, passthru raw disk mappings can not be replicated.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestautolocksupported-bool">
+<h4><a class="toc-backref" href="#id41">guestAutoLockSupported (bool)</a><a class="headerlink" href="#guestautolocksupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not guest autolock is supported on the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memoryreservationlocksupported-bool">
+<h4><a class="toc-backref" href="#id42">memoryReservationLockSupported (bool)</a><a class="headerlink" href="#memoryreservationlocksupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether <a class="reference internal" href="#memory-reservation-locked-to-max"><span class="std std-ref">memoryReservationLockedToMax (bool, optional)</span></a> may be set to true for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="featurerequirementsupported-bool">
+<h4><a class="toc-backref" href="#id43">featureRequirementSupported (bool)</a><a class="headerlink" href="#featurerequirementsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the featureRequirement feature is supported.</p>
+</div></blockquote>
+</div>
+<div class="section" id="poweredonmonitortypechangesupported-bool">
+<h4><a class="toc-backref" href="#id44">poweredOnMonitorTypeChangeSupported (bool)</a><a class="headerlink" href="#poweredonmonitortypechangesupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether a monitor type change is supported while the virtual machine is in the <code class="docutils literal notranslate"><span class="pre">poweredOn</span></code> state.</p>
+</div></blockquote>
+</div>
+<div class="section" id="sesparsedisksupported-bool">
+<h4><a class="toc-backref" href="#id45">seSparseDiskSupported (bool)</a><a class="headerlink" href="#sesparsedisksupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the virtual machine supports the Flex-SE (space-efficient, sparse) format for virtual disks.</p>
+</div></blockquote>
+</div>
+<div class="section" id="nestedhvsupported-bool">
+<h4><a class="toc-backref" href="#id46">nestedHVSupported (bool)</a><a class="headerlink" href="#nestedhvsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the virtual machine supports nested hardware-assisted virtualization.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vpmcsupported-bool">
+<h4><a class="toc-backref" href="#id47">vPMCSupported (bool)</a><a class="headerlink" href="#vpmcsupported-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the virtual machine supports virtualized CPU performance counters.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="config">
+<h3><a class="toc-backref" href="#id48">config</a><a class="headerlink" href="#config" title="Permalink to this headline"></a></h3>
+<p>This section describes the configuration settings of the virtual machine, including the name and UUID.
+This property is set when a virtual machine is created or when the <code class="docutils literal notranslate"><span class="pre">reconfigVM</span></code> method is called.
+The virtual machine configuration is not guaranteed to be available.
+For example, the configuration information would be unavailable if the server is unable to access the virtual machine files on disk, and is often also unavailable during the initial phases of virtual machine creation.</p>
+<div class="section" id="changeversion-str">
+<h4><a class="toc-backref" href="#id49">changeVersion (str)</a><a class="headerlink" href="#changeversion-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The changeVersion is a unique identifier for a given version of the configuration.
+Each change to the configuration updates this value. This is typically implemented as an ever increasing count or a time-stamp.
+However, a client should always treat this as an opaque string.</p>
+</div></blockquote>
+</div>
+<div class="section" id="modified-datetime">
+<h4><a class="toc-backref" href="#id50">modified (datetime)</a><a class="headerlink" href="#modified-datetime" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Last time a virtual machine’s configuration was modified.</p>
+</div></blockquote>
+</div>
+<div class="section" id="name-str">
+<h4><a class="toc-backref" href="#id51">name (str)</a><a class="headerlink" href="#name-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Display name of the virtual machine. Any / (slash), (backslash), character used in this name element is escaped. Similarly, any % (percent) character used in this name element is escaped, unless it is used to start an escape sequence. A slash is escaped as %2F or %2f. A backslash is escaped as %5C or %5c, and a percent is escaped as %25.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestfullname-str">
+<span id="guest-full-name"></span><h4><a class="toc-backref" href="#id52">guestFullName (str)</a><a class="headerlink" href="#guestfullname-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>This is the full name of the guest operating system for the virtual machine. For example: Windows 2000 Professional. See <a class="reference internal" href="#alternate-guest-name"><span class="std std-ref">alternateGuestName (str)</span></a>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="version-str">
+<h4><a class="toc-backref" href="#id53">version (str)</a><a class="headerlink" href="#version-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The version string for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="uuid-str">
+<h4><a class="toc-backref" href="#id54">uuid (str)</a><a class="headerlink" href="#uuid-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>128-bit SMBIOS UUID of a virtual machine represented as a hexadecimal string in “12345678-abcd-1234-cdef-123456789abc” format.</p>
+</div></blockquote>
+</div>
+<div class="section" id="instanceuuid-str-optional">
+<h4><a class="toc-backref" href="#id55">instanceUuid (str, optional)</a><a class="headerlink" href="#instanceuuid-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>VirtualCenter-specific 128-bit UUID of a virtual machine, represented as a hexadecimal string. This identifier is used by VirtualCenter to uniquely identify all virtual machine instances, including those that may share the same SMBIOS UUID.</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivnodeworldwidename-long-optional">
+<h4><a class="toc-backref" href="#id56">npivNodeWorldWideName (long, optional)</a><a class="headerlink" href="#npivnodeworldwidename-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A 64-bit node WWN (World Wide Name).</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivportworldwidename-long-optional">
+<h4><a class="toc-backref" href="#id57">npivPortWorldWideName (long, optional)</a><a class="headerlink" href="#npivportworldwidename-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A 64-bit port WWN (World Wide Name).</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivworldwidenametype-str-optional">
+<h4><a class="toc-backref" href="#id58">npivWorldWideNameType (str, optional)</a><a class="headerlink" href="#npivworldwidenametype-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The source that provides/generates the assigned WWNs.</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivdesirednodewwns-short-optional">
+<h4><a class="toc-backref" href="#id59">npivDesiredNodeWwns (short, optional)</a><a class="headerlink" href="#npivdesirednodewwns-short-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The NPIV node WWNs to be extended from the original list of WWN numbers.</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivdesiredportwwns-short-optional">
+<h4><a class="toc-backref" href="#id60">npivDesiredPortWwns (short, optional)</a><a class="headerlink" href="#npivdesiredportwwns-short-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The NPIV port WWNs to be extended from the original list of WWN numbers.</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivtemporarydisabled-bool-optional">
+<h4><a class="toc-backref" href="#id61">npivTemporaryDisabled (bool, optional)</a><a class="headerlink" href="#npivtemporarydisabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>This property is used to enable or disable the NPIV capability on a desired virtual machine on a temporary basis.</p>
+</div></blockquote>
+</div>
+<div class="section" id="npivonnonrdmdisks-bool-optional">
+<h4><a class="toc-backref" href="#id62">npivOnNonRdmDisks (bool, optional)</a><a class="headerlink" href="#npivonnonrdmdisks-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>This property is used to check whether the NPIV can be enabled on the Virtual machine with non-rdm disks in the configuration, so this is potentially not enabling npiv on vmfs disks.
+Also this property is used to check whether RDM is required to generate WWNs for a virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="locationid-str-optional">
+<h4><a class="toc-backref" href="#id63">locationId (str, optional)</a><a class="headerlink" href="#locationid-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Hash incorporating the virtual machine’s config file location and the UUID of the host assigned to run the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="template-bool">
+<h4><a class="toc-backref" href="#id64">template (bool)</a><a class="headerlink" href="#template-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Flag indicating whether or not a virtual machine is a template.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestid-str">
+<h4><a class="toc-backref" href="#id65">guestId (str)</a><a class="headerlink" href="#guestid-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest operating system configured on a virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="alternateguestname-str">
+<span id="alternate-guest-name"></span><h4><a class="toc-backref" href="#id66">alternateGuestName (str)</a><a class="headerlink" href="#alternateguestname-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Used as display name for the operating system if guestId isotherorother-64. See <a class="reference internal" href="#guest-full-name"><span class="std std-ref">guestFullName (str)</span></a>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="annotation-str-optional">
+<h4><a class="toc-backref" href="#id67">annotation (str, optional)</a><a class="headerlink" href="#annotation-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Description for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="files-vim-vm-fileinfo">
+<h4><a class="toc-backref" href="#id68">files (vim.vm.FileInfo)</a><a class="headerlink" href="#files-vim-vm-fileinfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Information about the files associated with a virtual machine.
+This information does not include files for specific virtual disks or snapshots.</p>
+</div></blockquote>
+</div>
+<div class="section" id="tools-vim-vm-toolsconfiginfo-optional">
+<h4><a class="toc-backref" href="#id69">tools (vim.vm.ToolsConfigInfo, optional)</a><a class="headerlink" href="#tools-vim-vm-toolsconfiginfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Configuration of VMware Tools running in the guest operating system.</p>
+</div></blockquote>
+</div>
+<div class="section" id="flags-vim-vm-flaginfo">
+<h4><a class="toc-backref" href="#id70">flags (vim.vm.FlagInfo)</a><a class="headerlink" href="#flags-vim-vm-flaginfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Additional flags for a virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="consolepreferences-vim-vm-consolepreferences-optional">
+<h4><a class="toc-backref" href="#id71">consolePreferences (vim.vm.ConsolePreferences, optional)</a><a class="headerlink" href="#consolepreferences-vim-vm-consolepreferences-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Legacy console viewer preferences when doing power operations.</p>
+</div></blockquote>
+</div>
+<div class="section" id="defaultpowerops-vim-vm-defaultpoweropinfo">
+<h4><a class="toc-backref" href="#id72">defaultPowerOps (vim.vm.DefaultPowerOpInfo)</a><a class="headerlink" href="#defaultpowerops-vim-vm-defaultpoweropinfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Configuration of default power operations.</p>
+</div></blockquote>
+</div>
+<div class="section" id="hardware-vim-vm-virtualhardware">
+<h4><a class="toc-backref" href="#id73">hardware (vim.vm.VirtualHardware)</a><a class="headerlink" href="#hardware-vim-vm-virtualhardware" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Processor, memory, and virtual devices for a virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cpuallocation-vim-resourceallocationinfo-optional">
+<h4><a class="toc-backref" href="#id74">cpuAllocation (vim.ResourceAllocationInfo, optional)</a><a class="headerlink" href="#cpuallocation-vim-resourceallocationinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Resource limits for CPU.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memoryallocation-vim-resourceallocationinfo-optional">
+<h4><a class="toc-backref" href="#id75">memoryAllocation (vim.ResourceAllocationInfo, optional)</a><a class="headerlink" href="#memoryallocation-vim-resourceallocationinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Resource limits for memory.</p>
+</div></blockquote>
+</div>
+<div class="section" id="latencysensitivity-vim-latencysensitivity-optional">
+<h4><a class="toc-backref" href="#id76">latencySensitivity (vim.LatencySensitivity, optional)</a><a class="headerlink" href="#latencysensitivity-vim-latencysensitivity-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The latency-sensitivity of the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memoryhotaddenabled-bool-optional">
+<h4><a class="toc-backref" href="#id77">memoryHotAddEnabled (bool, optional)</a><a class="headerlink" href="#memoryhotaddenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Whether memory can be added while the virtual machine is running.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cpuhotaddenabled-bool-optional">
+<h4><a class="toc-backref" href="#id78">cpuHotAddEnabled (bool, optional)</a><a class="headerlink" href="#cpuhotaddenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Whether virtual processors can be added while the virtual machine is running.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cpuhotremoveenabled-bool-optional">
+<h4><a class="toc-backref" href="#id79">cpuHotRemoveEnabled (bool, optional)</a><a class="headerlink" href="#cpuhotremoveenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Whether virtual processors can be removed while the virtual machine is running.</p>
+</div></blockquote>
+</div>
+<div class="section" id="hotplugmemorylimit-long-optional">
+<h4><a class="toc-backref" href="#id80">hotPlugMemoryLimit (long, optional)</a><a class="headerlink" href="#hotplugmemorylimit-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The maximum amount of memory, in MB, than can be added to a running virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="hotplugmemoryincrementsize-long-optional">
+<h4><a class="toc-backref" href="#id81">hotPlugMemoryIncrementSize (long, optional)</a><a class="headerlink" href="#hotplugmemoryincrementsize-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Memory, in MB that can be added to a running virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cpuaffinity-vim-vm-affinityinfo-optional">
+<h4><a class="toc-backref" href="#id82">cpuAffinity (vim.vm.AffinityInfo, optional)</a><a class="headerlink" href="#cpuaffinity-vim-vm-affinityinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Affinity settings for CPU.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memoryaffinity-vim-vm-affinityinfo-optional">
+<h4><a class="toc-backref" href="#id83">memoryAffinity (vim.vm.AffinityInfo, optional)</a><a class="headerlink" href="#memoryaffinity-vim-vm-affinityinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Affinity settings for memory.</p>
+</div></blockquote>
+</div>
+<div class="section" id="networkshaper-vim-vm-networkshaperinfo-optional">
+<h4><a class="toc-backref" href="#id84">networkShaper (vim.vm.NetworkShaperInfo, optional)</a><a class="headerlink" href="#networkshaper-vim-vm-networkshaperinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Resource limits for network.</p>
+</div></blockquote>
+</div>
+<div class="section" id="extraconfig-vim-option-optionvalue-optional">
+<h4><a class="toc-backref" href="#id85">extraConfig (vim.option.OptionValue, optional)</a><a class="headerlink" href="#extraconfig-vim-option-optionvalue-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Additional configuration information for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cpufeaturemask-vim-host-cpuidinfo-optional">
+<h4><a class="toc-backref" href="#id86">cpuFeatureMask (vim.host.CpuIdInfo, optional)</a><a class="headerlink" href="#cpufeaturemask-vim-host-cpuidinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Specifies CPU feature compatibility masks that override the defaults from the <code class="docutils literal notranslate"><span class="pre">GuestOsDescriptor</span></code> of the virtual machine’s guest OS.</p>
+</div></blockquote>
+</div>
+<div class="section" id="datastoreurl-vim-vm-configinfo-datastoreurlpair-optional">
+<h4><a class="toc-backref" href="#id87">datastoreUrl (vim.vm.ConfigInfo.DatastoreUrlPair, optional)</a><a class="headerlink" href="#datastoreurl-vim-vm-configinfo-datastoreurlpair-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Enumerates the set of datastores that the virtual machine is stored on, as well as the URL identification for each of these.</p>
+</div></blockquote>
+</div>
+<div class="section" id="swapplacement-str-optional">
+<h4><a class="toc-backref" href="#id88">swapPlacement (str, optional)</a><a class="headerlink" href="#swapplacement-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Virtual machine swapfile placement policy.</p>
+</div></blockquote>
+</div>
+<div class="section" id="bootoptions-vim-vm-bootoptions-optional">
+<h4><a class="toc-backref" href="#id89">bootOptions (vim.vm.BootOptions, optional)</a><a class="headerlink" href="#bootoptions-vim-vm-bootoptions-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Configuration options for the boot behavior of the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="ftinfo-vim-vm-faulttoleranceconfiginfo-optional">
+<h4><a class="toc-backref" href="#id90">ftInfo (vim.vm.FaultToleranceConfigInfo, optional)</a><a class="headerlink" href="#ftinfo-vim-vm-faulttoleranceconfiginfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Fault tolerance settings for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vappconfig-vim-vapp-vmconfiginfo-optional">
+<h4><a class="toc-backref" href="#id91">vAppConfig (vim.vApp.VmConfigInfo, optional)</a><a class="headerlink" href="#vappconfig-vim-vapp-vmconfiginfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>vApp meta-data for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vassertsenabled-bool-optional">
+<h4><a class="toc-backref" href="#id92">vAssertsEnabled (bool, optional)</a><a class="headerlink" href="#vassertsenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether user-configured virtual asserts will be triggered during virtual machine replay.</p>
+</div></blockquote>
+</div>
+<div class="section" id="changetrackingenabled-bool-optional">
+<h4><a class="toc-backref" href="#id93">changeTrackingEnabled (bool, optional)</a><a class="headerlink" href="#changetrackingenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether changed block tracking for the virtual machine’s disks is active.</p>
+</div></blockquote>
+</div>
+<div class="section" id="firmware-str-optional">
+<h4><a class="toc-backref" href="#id94">firmware (str, optional)</a><a class="headerlink" href="#firmware-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Information about firmware type for the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="maxmksconnections-int-optional">
+<h4><a class="toc-backref" href="#id95">maxMksConnections (int, optional)</a><a class="headerlink" href="#maxmksconnections-int-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates the maximum number of active remote display connections that the virtual machine will support.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestautolockenabled-bool-optional">
+<h4><a class="toc-backref" href="#id96">guestAutoLockEnabled (bool, optional)</a><a class="headerlink" href="#guestautolockenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the guest operating system will logout any active sessions whenever there are no remote display connections open to the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="managedby-vim-ext-managedbyinfo-optional">
+<h4><a class="toc-backref" href="#id97">managedBy (vim.ext.ManagedByInfo, optional)</a><a class="headerlink" href="#managedby-vim-ext-managedbyinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Specifies that the virtual machine is managed by a VC Extension.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memoryreservationlockedtomax-bool-optional">
+<span id="memory-reservation-locked-to-max"></span><h4><a class="toc-backref" href="#id98">memoryReservationLockedToMax (bool, optional)</a><a class="headerlink" href="#memoryreservationlockedtomax-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>If set true, memory resource reservation for the virtual machine will always be equal to the virtual machine’s memory size; increases in memory size will be rejected when a corresponding reservation increase is not possible.</p>
+</div></blockquote>
+</div>
+<div class="section" id="initialoverhead-vim-vm-configinfo-overheadinfo-optional">
+<h4><a class="toc-backref" href="#id99">initialOverhead (vim.vm.ConfigInfo.OverheadInfo), optional)</a><a class="headerlink" href="#initialoverhead-vim-vm-configinfo-overheadinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Set of values to be used only to perform admission control when determining if a host has sufficient resources for the virtual machine to power on.</p>
+</div></blockquote>
+</div>
+<div class="section" id="nestedhvenabled-bool-optional">
+<h4><a class="toc-backref" href="#id100">nestedHVEnabled (bool, optional)</a><a class="headerlink" href="#nestedhvenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the virtual machine is configured to use nested hardware-assisted virtualization.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vpmcenabled-bool-optional">
+<h4><a class="toc-backref" href="#id101">vPMCEnabled (bool, optional)</a><a class="headerlink" href="#vpmcenabled-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether the virtual machine have virtual CPU performance counters enabled.</p>
+</div></blockquote>
+</div>
+<div class="section" id="scheduledhardwareupgradeinfo-vim-vm-scheduledhardwareupgradeinfo-optional">
+<h4><a class="toc-backref" href="#id102">scheduledHardwareUpgradeInfo (vim.vm.ScheduledHardwareUpgradeInfo, optional)</a><a class="headerlink" href="#scheduledhardwareupgradeinfo-vim-vm-scheduledhardwareupgradeinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Configuration of scheduled hardware upgrades and result from last attempt to run scheduled hardware upgrade.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vflashcachereservation-long-optional">
+<h4><a class="toc-backref" href="#id103">vFlashCacheReservation (long, optional)</a><a class="headerlink" href="#vflashcachereservation-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Specifies the total vFlash resource reservation for the vFlash caches associated with the virtual machine’s virtual disks, in bytes.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="layout">
+<h3><a class="toc-backref" href="#id104">layout</a><a class="headerlink" href="#layout" title="Permalink to this headline"></a></h3>
+<p>Detailed information about the files that comprise the virtual machine.</p>
+<div class="section" id="configfile-str-optional">
+<h4><a class="toc-backref" href="#id105">configFile (str, optional)</a><a class="headerlink" href="#configfile-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A list of files that makes up the configuration of the virtual machine (excluding the .vmx file, since that file is represented in the FileInfo).
+These are relative paths from the configuration directory.
+A slash is always used as a separator.
+This list will typically include the NVRAM file, but could also include other meta-data files.</p>
+</div></blockquote>
+</div>
+<div class="section" id="logfile-str-optional">
+<h4><a class="toc-backref" href="#id106">logFile (str, optional)</a><a class="headerlink" href="#logfile-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A list of files stored in the virtual machine’s log directory.
+These are relative paths from the <code class="docutils literal notranslate"><span class="pre">logDirectory</span></code>.
+A slash is always used as a separator.</p>
+</div></blockquote>
+</div>
+<div class="section" id="disk-vim-vm-filelayout-disklayout-optional">
+<h4><a class="toc-backref" href="#id107">disk (vim.vm.FileLayout.DiskLayout, optional)</a><a class="headerlink" href="#disk-vim-vm-filelayout-disklayout-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Files making up each virtual disk.</p>
+</div></blockquote>
+</div>
+<div class="section" id="snapshot-vim-vm-filelayout-snapshotlayout-optional">
+<h4><a class="toc-backref" href="#id108">snapshot (vim.vm.FileLayout.SnapshotLayout, optional)</a><a class="headerlink" href="#snapshot-vim-vm-filelayout-snapshotlayout-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Files of each snapshot.</p>
+</div></blockquote>
+</div>
+<div class="section" id="swapfile-str-optional">
+<h4><a class="toc-backref" href="#id109">swapFile (str, optional)</a><a class="headerlink" href="#swapfile-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The swapfile specific to the virtual machine, if any. This is a complete datastore path, not a relative path.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="layoutex">
+<h3><a class="toc-backref" href="#id110">layoutEx</a><a class="headerlink" href="#layoutex" title="Permalink to this headline"></a></h3>
+<p>Detailed information about the files that comprise the virtual machine.</p>
+<div class="section" id="file-vim-vm-filelayoutex-fileinfo-optional">
+<h4><a class="toc-backref" href="#id111">file (vim.vm.FileLayoutEx.FileInfo, optional)</a><a class="headerlink" href="#file-vim-vm-filelayoutex-fileinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Information about all the files that constitute the virtual machine including configuration files, disks, swap file, suspend file, log files, core files, memory file and so on.</p>
+</div></blockquote>
+</div>
+<div class="section" id="disk-vim-vm-filelayoutex-disklayout-optional">
+<h4><a class="toc-backref" href="#id112">disk (vim.vm.FileLayoutEx.DiskLayout, optional)</a><a class="headerlink" href="#disk-vim-vm-filelayoutex-disklayout-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Layout of each virtual disk attached to the virtual machine.
+For a virtual machine with snapshots, this property gives only those disks that are attached to it at the current point of running.</p>
+</div></blockquote>
+</div>
+<div class="section" id="snapshot-vim-vm-filelayoutex-snapshotlayout-optional">
+<h4><a class="toc-backref" href="#id113">snapshot (vim.vm.FileLayoutEx.SnapshotLayout, optional)</a><a class="headerlink" href="#snapshot-vim-vm-filelayoutex-snapshotlayout-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Layout of each snapshot of the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="timestamp-datetime">
+<h4><a class="toc-backref" href="#id114">timestamp (datetime)</a><a class="headerlink" href="#timestamp-datetime" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Time when values in this structure were last updated.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="storage-vim-vm-storageinfo">
+<h3><a class="toc-backref" href="#id115">storage (vim.vm.StorageInfo)</a><a class="headerlink" href="#storage-vim-vm-storageinfo" title="Permalink to this headline"></a></h3>
+<p>Storage space used by the virtual machine, split by datastore.</p>
+<div class="section" id="perdatastoreusage-vim-vm-storageinfo-usageondatastore-optional">
+<h4><a class="toc-backref" href="#id116">perDatastoreUsage (vim.vm.StorageInfo.UsageOnDatastore, optional)</a><a class="headerlink" href="#perdatastoreusage-vim-vm-storageinfo-usageondatastore-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Storage space used by the virtual machine on all datastores that it is located on.
+Total storage space committed to the virtual machine across all datastores is simply an aggregate of the property <code class="docutils literal notranslate"><span class="pre">committed</span></code></p>
+</div></blockquote>
+</div>
+<div class="section" id="id1">
+<h4><a class="toc-backref" href="#id117">timestamp (datetime)</a><a class="headerlink" href="#id1" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Time when values in this structure were last updated.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="environmentbrowser-vim-environmentbrowser">
+<h3><a class="toc-backref" href="#id118">environmentBrowser (vim.EnvironmentBrowser)</a><a class="headerlink" href="#environmentbrowser-vim-environmentbrowser" title="Permalink to this headline"></a></h3>
+<p>The current virtual machine’s environment browser object.
+This contains information on all the configurations that can be used on the virtual machine.
+This is identical to the environment browser on the ComputeResource to which the virtual machine belongs.</p>
+<div class="section" id="datastorebrowser-vim-host-datastorebrowser">
+<h4><a class="toc-backref" href="#id119">datastoreBrowser (vim.host.DatastoreBrowser)</a><a class="headerlink" href="#datastorebrowser-vim-host-datastorebrowser" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>DatastoreBrowser to browse datastores that are available on this entity.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="resourcepool-vim-resourcepool">
+<h3><a class="toc-backref" href="#id120">resourcePool (vim.ResourcePool)</a><a class="headerlink" href="#resourcepool-vim-resourcepool" title="Permalink to this headline"></a></h3>
+<p>The current resource pool that specifies resource allocation for the virtual machine.
+This property is set when a virtual machine is created or associated with a different resource pool.
+Returns null if the virtual machine is a template or the session has no access to the resource pool.</p>
+<div class="section" id="summary-vim-resourcepool-summary">
+<h4><a class="toc-backref" href="#id121">summary (vim.ResourcePool.Summary)</a><a class="headerlink" href="#summary-vim-resourcepool-summary" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Basic information about a resource pool.</p>
+</div></blockquote>
+</div>
+<div class="section" id="runtime-vim-resourcepool-runtimeinfo">
+<h4><a class="toc-backref" href="#id122">runtime (vim.ResourcePool.RuntimeInfo)</a><a class="headerlink" href="#runtime-vim-resourcepool-runtimeinfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Runtime information about a resource pool.</p>
+</div></blockquote>
+</div>
+<div class="section" id="owner-vim-computeresource">
+<h4><a class="toc-backref" href="#id123">owner (vim.ComputeResource)</a><a class="headerlink" href="#owner-vim-computeresource" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The ComputeResource to which this set of one or more nested resource pools belong.</p>
+</div></blockquote>
+</div>
+<div class="section" id="id2">
+<h4><a class="toc-backref" href="#id124">resourcePool (vim.ResourcePool)</a><a class="headerlink" href="#id2" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The set of child resource pools.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vm-vim-virtualmachine">
+<h4><a class="toc-backref" href="#id125">vm (vim.VirtualMachine)</a><a class="headerlink" href="#vm-vim-virtualmachine" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The set of virtual machines associated with this resource pool.</p>
+</div></blockquote>
+</div>
+<div class="section" id="config-vim-resourceconfigspec">
+<h4><a class="toc-backref" href="#id126">config (vim.ResourceConfigSpec)</a><a class="headerlink" href="#config-vim-resourceconfigspec" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Configuration of this resource pool.</p>
+</div></blockquote>
+</div>
+<div class="section" id="childconfiguration-vim-resourceconfigspec">
+<h4><a class="toc-backref" href="#id127">childConfiguration (vim.ResourceConfigSpec)</a><a class="headerlink" href="#childconfiguration-vim-resourceconfigspec" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The resource configuration of all direct children (VirtualMachine and ResourcePool) of this resource group.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="parentvapp-vim-managedentity">
+<h3><a class="toc-backref" href="#id128">parentVApp (vim.ManagedEntity)</a><a class="headerlink" href="#parentvapp-vim-managedentity" title="Permalink to this headline"></a></h3>
+<p>Reference to the parent vApp.</p>
+<div class="section" id="parent-vim-managedentity">
+<h4><a class="toc-backref" href="#id129">parent (vim.ManagedEntity)</a><a class="headerlink" href="#parent-vim-managedentity" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Parent of this entity.
+This value is null for the root object and for (VirtualMachine) objects that are part of a (VirtualApp).</p>
+</div></blockquote>
+</div>
+<div class="section" id="customvalue-vim-customfieldsmanager-value">
+<h4><a class="toc-backref" href="#id130">customValue (vim.CustomFieldsManager.Value)</a><a class="headerlink" href="#customvalue-vim-customfieldsmanager-value" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Custom field values.</p>
+</div></blockquote>
+</div>
+<div class="section" id="overallstatus-vim-managedentity-status">
+<h4><a class="toc-backref" href="#id131">overallStatus (vim.ManagedEntity.Status)</a><a class="headerlink" href="#overallstatus-vim-managedentity-status" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>General health of this managed entity.</p>
+</div></blockquote>
+</div>
+<div class="section" id="configstatus-vim-managedentity-status">
+<h4><a class="toc-backref" href="#id132">configStatus (vim.ManagedEntity.Status)</a><a class="headerlink" href="#configstatus-vim-managedentity-status" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The configStatus indicates whether or not the system has detected a configuration issue involving this entity.
+For example, it might have detected a duplicate IP address or MAC address, or a host in a cluster might be out of <code class="docutils literal notranslate"><span class="pre">compliance.property</span></code>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="configissue-vim-event-event">
+<h4><a class="toc-backref" href="#id133">configIssue (vim.event.Event)</a><a class="headerlink" href="#configissue-vim-event-event" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current configuration issues that have been detected for this entity.</p>
+</div></blockquote>
+</div>
+<div class="section" id="effectiverole-int">
+<h4><a class="toc-backref" href="#id134">effectiveRole (int)</a><a class="headerlink" href="#effectiverole-int" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Access rights the current session has to this entity.</p>
+</div></blockquote>
+</div>
+<div class="section" id="permission-vim-authorizationmanager-permission">
+<h4><a class="toc-backref" href="#id135">permission (vim.AuthorizationManager.Permission)</a><a class="headerlink" href="#permission-vim-authorizationmanager-permission" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>List of permissions defined for this entity.</p>
+</div></blockquote>
+</div>
+<div class="section" id="id3">
+<h4><a class="toc-backref" href="#id136">name (str)</a><a class="headerlink" href="#id3" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Name of this entity, unique relative to its parent.
+Any / (slash), (backslash), character used in this name element will be escaped.
+Similarly, any % (percent) character used in this name element will be escaped, unless it is used to start an escape sequence.
+A slash is escaped as %2F or %2f. A backslash is escaped as %5C or %5c, and a percent is escaped as %25.</p>
+</div></blockquote>
+</div>
+<div class="section" id="disabledmethod-str">
+<h4><a class="toc-backref" href="#id137">disabledMethod (str)</a><a class="headerlink" href="#disabledmethod-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>List of operations that are disabled, given the current runtime state of the entity.
+For example, a power-on operation always fails if a virtual machine is already powered on.</p>
+</div></blockquote>
+</div>
+<div class="section" id="recenttask-vim-task">
+<h4><a class="toc-backref" href="#id138">recentTask (vim.Task)</a><a class="headerlink" href="#recenttask-vim-task" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The set of recent tasks operating on this managed entity.
+A task in this list could be in one of the four states: pending, running, success or error.</p>
+</div></blockquote>
+</div>
+<div class="section" id="declaredalarmstate-vim-alarm-alarmstate">
+<h4><a class="toc-backref" href="#id139">declaredAlarmState (vim.alarm.AlarmState)</a><a class="headerlink" href="#declaredalarmstate-vim-alarm-alarmstate" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A set of alarm states for alarms that apply to this managed entity.</p>
+</div></blockquote>
+</div>
+<div class="section" id="triggeredalarmstate-vim-alarm-alarmstate">
+<h4><a class="toc-backref" href="#id140">triggeredAlarmState (vim.alarm.AlarmState)</a><a class="headerlink" href="#triggeredalarmstate-vim-alarm-alarmstate" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A set of alarm states for alarms triggered by this entity or by its descendants.</p>
+</div></blockquote>
+</div>
+<div class="section" id="alarmactionsenabled-bool">
+<h4><a class="toc-backref" href="#id141">alarmActionsEnabled (bool)</a><a class="headerlink" href="#alarmactionsenabled-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Whether alarm actions are enabled for this entity. True if enabled; false otherwise.</p>
+</div></blockquote>
+</div>
+<div class="section" id="tag-vim-tag">
+<h4><a class="toc-backref" href="#id142">tag (vim.Tag)</a><a class="headerlink" href="#tag-vim-tag" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The set of tags associated with this managed entity. Experimental. Subject to change.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="resourceconfig-vim-resourceconfigspec">
+<h3><a class="toc-backref" href="#id143">resourceConfig (vim.ResourceConfigSpec)</a><a class="headerlink" href="#resourceconfig-vim-resourceconfigspec" title="Permalink to this headline"></a></h3>
+<blockquote>
+<div><p>The resource configuration for a virtual machine.</p>
+</div></blockquote>
+<div class="section" id="entity-vim-managedentity-optional">
+<h4><a class="toc-backref" href="#id144">entity (vim.ManagedEntity, optional)</a><a class="headerlink" href="#entity-vim-managedentity-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Reference to the entity with this resource specification: either a VirtualMachine or a ResourcePool.</p>
+</div></blockquote>
+</div>
+<div class="section" id="changeversion-str-optional">
+<h4><a class="toc-backref" href="#id145">changeVersion (str, optional)</a><a class="headerlink" href="#changeversion-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The changeVersion is a unique identifier for a given version of the configuration. Each change to the configuration will update this value.
+This is typically implemented as an ever increasing count or a time-stamp.</p>
+</div></blockquote>
+</div>
+<div class="section" id="lastmodified-datetime-optional">
+<h4><a class="toc-backref" href="#id146">lastModified (datetime, optional)</a><a class="headerlink" href="#lastmodified-datetime-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Timestamp when the resources were last modified. This is ignored when the object is used to update a configuration.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cpuallocation-vim-resourceallocationinfo">
+<h4><a class="toc-backref" href="#id147">cpuAllocation (vim.ResourceAllocationInfo)</a><a class="headerlink" href="#cpuallocation-vim-resourceallocationinfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Resource allocation for CPU.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memoryallocation-vim-resourceallocationinfo">
+<h4><a class="toc-backref" href="#id148">memoryAllocation (vim.ResourceAllocationInfo)</a><a class="headerlink" href="#memoryallocation-vim-resourceallocationinfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Resource allocation for memory.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="runtime-vim-vm-runtimeinfo">
+<h3><a class="toc-backref" href="#id149">runtime (vim.vm.RuntimeInfo)</a><a class="headerlink" href="#runtime-vim-vm-runtimeinfo" title="Permalink to this headline"></a></h3>
+<p>Execution state and history for the virtual machine.</p>
+<div class="section" id="device-vim-vm-deviceruntimeinfo-optional">
+<h4><a class="toc-backref" href="#id150">device (vim.vm.DeviceRuntimeInfo, optional)</a><a class="headerlink" href="#device-vim-vm-deviceruntimeinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Per-device runtime info. This array will be empty if the host software does not provide runtime info for any of the device types currently in use by the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="host-vim-hostsystem-optional">
+<h4><a class="toc-backref" href="#id151">host (vim.HostSystem, optional)</a><a class="headerlink" href="#host-vim-hostsystem-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The host that is responsible for running a virtual machine.
+This property is null if the virtual machine is not running and is not assigned to run on a particular host.</p>
+</div></blockquote>
+</div>
+<div class="section" id="connectionstate-vim-virtualmachine-connectionstate">
+<h4><a class="toc-backref" href="#id152">connectionState (vim.VirtualMachine.ConnectionState)</a><a class="headerlink" href="#connectionstate-vim-virtualmachine-connectionstate" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Indicates whether or not the virtual machine is available for management.</p>
+</div></blockquote>
+</div>
+<div class="section" id="powerstate-vim-virtualmachine-powerstate">
+<h4><a class="toc-backref" href="#id153">powerState (vim.VirtualMachine.PowerState)</a><a class="headerlink" href="#powerstate-vim-virtualmachine-powerstate" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The current power state of the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="faulttolerancestate-vim-virtualmachine-faulttolerancestate">
+<h4><a class="toc-backref" href="#id154">faultToleranceState (vim.VirtualMachine.FaultToleranceState)</a><a class="headerlink" href="#faulttolerancestate-vim-virtualmachine-faulttolerancestate" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The fault tolerance state of the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="dasvmprotection-vim-vm-runtimeinfo-dasprotectionstate-optional">
+<h4><a class="toc-backref" href="#id155">dasVmProtection (vim.vm.RuntimeInfo.DasProtectionState, optional)</a><a class="headerlink" href="#dasvmprotection-vim-vm-runtimeinfo-dasprotectionstate-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The vSphere HA protection state for a virtual machine.
+Property is unset if vSphere HA is not enabled.</p>
+</div></blockquote>
+</div>
+<div class="section" id="toolsinstallermounted-bool">
+<h4><a class="toc-backref" href="#id156">toolsInstallerMounted (bool)</a><a class="headerlink" href="#toolsinstallermounted-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Flag to indicate whether or not the VMware Tools installer is mounted as a CD-ROM.</p>
+</div></blockquote>
+</div>
+<div class="section" id="suspendtime-datetime-optional">
+<h4><a class="toc-backref" href="#id157">suspendTime (datetime, optional)</a><a class="headerlink" href="#suspendtime-datetime-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The timestamp when the virtual machine was most recently suspended.
+This property is updated every time the virtual machine is suspended.</p>
+</div></blockquote>
+</div>
+<div class="section" id="boottime-datetime-optional">
+<h4><a class="toc-backref" href="#id158">bootTime (datetime, optional)</a><a class="headerlink" href="#boottime-datetime-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The timestamp when the virtual machine was most recently powered on.
+This property is updated when the virtual machine is powered on from the poweredOff state, and is cleared when the virtual machine is powered off.
+This property is not updated when a virtual machine is resumed from a suspended state.</p>
+</div></blockquote>
+</div>
+<div class="section" id="suspendinterval-long-optional">
+<h4><a class="toc-backref" href="#id159">suspendInterval (long, optional)</a><a class="headerlink" href="#suspendinterval-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The total time the virtual machine has been suspended since it was initially powered on.
+This time excludes the current period, if the virtual machine is currently suspended.
+This property is updated when the virtual machine resumes, and is reset to zero when the virtual machine is powered off.</p>
+</div></blockquote>
+</div>
+<div class="section" id="question-vim-vm-questioninfo-optional">
+<h4><a class="toc-backref" href="#id160">question (vim.vm.QuestionInfo, optional)</a><a class="headerlink" href="#question-vim-vm-questioninfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The current question, if any, that is blocking the virtual machine’s execution.</p>
+</div></blockquote>
+</div>
+<div class="section" id="memoryoverhead-long-optional">
+<h4><a class="toc-backref" href="#id161">memoryOverhead (long, optional)</a><a class="headerlink" href="#memoryoverhead-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The amount of memory resource (in bytes) that will be used by the virtual machine above its guest memory requirements.
+This value is set if and only if the virtual machine is registered on a host that supports memory resource allocation features.
+For powered off VMs, this is the minimum overhead required to power on the VM on the registered host.
+For powered on VMs, this is the current overhead reservation, a value which is almost always larger than the minimum overhead, and which grows with time.</p>
+</div></blockquote>
+</div>
+<div class="section" id="maxcpuusage-int-optional">
+<h4><a class="toc-backref" href="#id162">maxCpuUsage (int, optional)</a><a class="headerlink" href="#maxcpuusage-int-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current upper-bound on CPU usage.
+The upper-bound is based on the host the virtual machine is current running on, as well as limits configured on the virtual machine itself or any parent resource pool.
+Valid while the virtual machine is running.</p>
+</div></blockquote>
+</div>
+<div class="section" id="maxmemoryusage-int-optional">
+<h4><a class="toc-backref" href="#id163">maxMemoryUsage (int, optional)</a><a class="headerlink" href="#maxmemoryusage-int-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current upper-bound on memory usage.
+The upper-bound is based on memory configuration of the virtual machine, as well as limits configured on the virtual machine itself or any parent resource pool.
+Valid while the virtual machine is running.</p>
+</div></blockquote>
+</div>
+<div class="section" id="nummksconnections-int">
+<h4><a class="toc-backref" href="#id164">numMksConnections (int)</a><a class="headerlink" href="#nummksconnections-int" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Number of active MKS connections to the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="recordreplaystate-vim-virtualmachine-recordreplaystate">
+<h4><a class="toc-backref" href="#id165">recordReplayState (vim.VirtualMachine.RecordReplayState)</a><a class="headerlink" href="#recordreplaystate-vim-virtualmachine-recordreplaystate" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Record / replay state of the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="cleanpoweroff-bool-optional">
+<h4><a class="toc-backref" href="#id166">cleanPowerOff (bool, optional)</a><a class="headerlink" href="#cleanpoweroff-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>For a powered off virtual machine, indicates whether the virtual machine’s last shutdown was an orderly power off or not.
+Unset if the virtual machine is running or suspended.</p>
+</div></blockquote>
+</div>
+<div class="section" id="needsecondaryreason-str-optional">
+<h4><a class="toc-backref" href="#id167">needSecondaryReason (str, optional)</a><a class="headerlink" href="#needsecondaryreason-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>If set, indicates the reason the virtual machine needs a secondary.</p>
+</div></blockquote>
+</div>
+<div class="section" id="onlinestandby-bool">
+<h4><a class="toc-backref" href="#id168">onlineStandby (bool)</a><a class="headerlink" href="#onlinestandby-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>This property indicates whether the guest has gone into one of the s1, s2 or s3 standby modes. False indicates the guest is awake.</p>
+</div></blockquote>
+</div>
+<div class="section" id="minrequiredevcmodekey-str-optional">
+<h4><a class="toc-backref" href="#id169">minRequiredEVCModeKey (str, optional)</a><a class="headerlink" href="#minrequiredevcmodekey-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>For a powered-on or suspended virtual machine in a cluster with Enhanced VMotion Compatibility (EVC) enabled, this identifies the least-featured EVC mode (among those for the appropriate CPU vendor) that could admit the virtual machine.
+This property will be unset if the virtual machine is powered off or is not in an EVC cluster.
+This property may be used as a general indicator of the CPU feature baseline currently in use by the virtual machine.
+However, the virtual machine may be suppressing some of the features present in the CPU feature baseline of the indicated mode, either explicitly (in the virtual machine’s configured <code class="docutils literal notranslate"><span class="pre">cpuFeatureMask</span></code>) or implicitly (in the default masks for the <code class="docutils literal notranslate"><span class="pre">GuestOsDescriptor</span></code> appropriate for the virtual machine’s configured guest OS).</p>
+</div></blockquote>
+</div>
+<div class="section" id="consolidationneeded-bool">
+<h4><a class="toc-backref" href="#id170">consolidationNeeded (bool)</a><a class="headerlink" href="#consolidationneeded-bool" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Whether any disk of the virtual machine requires consolidation.
+This can happen for example when a snapshot is deleted but its associated disk is not committed back to the base disk.</p>
+</div></blockquote>
+</div>
+<div class="section" id="offlinefeaturerequirement-vim-vm-featurerequirement-optional">
+<h4><a class="toc-backref" href="#id171">offlineFeatureRequirement (vim.vm.FeatureRequirement, optional)</a><a class="headerlink" href="#offlinefeaturerequirement-vim-vm-featurerequirement-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>These requirements must have equivalent host capabilities <code class="docutils literal notranslate"><span class="pre">featureCapability</span></code> in order to power on.</p>
+</div></blockquote>
+</div>
+<div class="section" id="featurerequirement-vim-vm-featurerequirement-optional">
+<h4><a class="toc-backref" href="#id172">featureRequirement (vim.vm.FeatureRequirement, optional)</a><a class="headerlink" href="#featurerequirement-vim-vm-featurerequirement-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>These requirements must have equivalent host capabilities <code class="docutils literal notranslate"><span class="pre">featureCapability</span></code> in order to power on, resume, or migrate to the host.</p>
+</div></blockquote>
+</div>
+<div class="section" id="featuremask-vim-host-featuremask-optional">
+<h4><a class="toc-backref" href="#id173">featureMask (vim.host.FeatureMask, optional)</a><a class="headerlink" href="#featuremask-vim-host-featuremask-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>The masks applied to an individual virtual machine as a result of its configuration.</p>
+</div></blockquote>
+</div>
+<div class="section" id="vflashcacheallocation-long-optional">
+<h4><a class="toc-backref" href="#id174">vFlashCacheAllocation (long, optional)</a><a class="headerlink" href="#vflashcacheallocation-long-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Specifies the total allocated vFlash resource for the vFlash caches associated with VM’s VMDKs when VM is powered on, in bytes.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="guest-vim-vm-guestinfo">
+<h3><a class="toc-backref" href="#id175">guest (vim.vm.GuestInfo)</a><a class="headerlink" href="#guest-vim-vm-guestinfo" title="Permalink to this headline"></a></h3>
+<p>Information about VMware Tools and about the virtual machine from the perspective of VMware Tools.
+Information about the guest operating system is available in VirtualCenter.
+Guest operating system information reflects the last known state of the virtual machine.
+For powered on machines, this is current information.
+For powered off machines, this is the last recorded state before the virtual machine was powered off.</p>
+<div class="section" id="toolsstatus-vim-vm-guestinfo-toolsstatus-optional">
+<h4><a class="toc-backref" href="#id176">toolsStatus (vim.vm.GuestInfo.ToolsStatus, optional)</a><a class="headerlink" href="#toolsstatus-vim-vm-guestinfo-toolsstatus-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current status of VMware Tools in the guest operating system, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="toolsversionstatus-str-optional">
+<h4><a class="toc-backref" href="#id177">toolsVersionStatus (str, optional)</a><a class="headerlink" href="#toolsversionstatus-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current version status of VMware Tools in the guest operating system, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="toolsversionstatus2-str-optional">
+<h4><a class="toc-backref" href="#id178">toolsVersionStatus2 (str, optional)</a><a class="headerlink" href="#toolsversionstatus2-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current version status of VMware Tools in the guest operating system, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="toolsrunningstatus-str-optional">
+<h4><a class="toc-backref" href="#id179">toolsRunningStatus (str, optional)</a><a class="headerlink" href="#toolsrunningstatus-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current running status of VMware Tools in the guest operating system, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="toolsversion-str-optional">
+<h4><a class="toc-backref" href="#id180">toolsVersion (str, optional)</a><a class="headerlink" href="#toolsversion-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current version of VMware Tools, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestid-str-optional">
+<h4><a class="toc-backref" href="#id181">guestId (str, optional)</a><a class="headerlink" href="#guestid-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest operating system identifier (short name), if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestfamily-str-optional">
+<h4><a class="toc-backref" href="#id182">guestFamily (str, optional)</a><a class="headerlink" href="#guestfamily-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest operating system family, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestfullname-str-optional">
+<h4><a class="toc-backref" href="#id183">guestFullName (str, optional)</a><a class="headerlink" href="#guestfullname-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>See <a class="reference internal" href="#guest-full-name"><span class="std std-ref">guestFullName (str)</span></a>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="hostname-str-optional">
+<h4><a class="toc-backref" href="#id184">hostName (str, optional)</a><a class="headerlink" href="#hostname-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Hostname of the guest operating system, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="ipaddress-str-optional">
+<h4><a class="toc-backref" href="#id185">ipAddress (str, optional)</a><a class="headerlink" href="#ipaddress-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Primary IP address assigned to the guest operating system, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="net-vim-vm-guestinfo-nicinfo-optional">
+<h4><a class="toc-backref" href="#id186">net (vim.vm.GuestInfo.NicInfo, optional)</a><a class="headerlink" href="#net-vim-vm-guestinfo-nicinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest information about network adapters, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="ipstack-vim-vm-guestinfo-stackinfo-optional">
+<h4><a class="toc-backref" href="#id187">ipStack (vim.vm.GuestInfo.StackInfo, optional)</a><a class="headerlink" href="#ipstack-vim-vm-guestinfo-stackinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest information about IP networking stack, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="disk-vim-vm-guestinfo-diskinfo-optional">
+<h4><a class="toc-backref" href="#id188">disk (vim.vm.GuestInfo.DiskInfo, optional)</a><a class="headerlink" href="#disk-vim-vm-guestinfo-diskinfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest information about disks.
+You can obtain Linux guest disk information for the following file system types only: Ext2, Ext3, Ext4, ReiserFS, ZFS, NTFS, VFAT, UFS, PCFS, HFS, and MS-DOS.</p>
+</div></blockquote>
+</div>
+<div class="section" id="screen-vim-vm-guestinfo-screeninfo-optional">
+<h4><a class="toc-backref" href="#id189">screen (vim.vm.GuestInfo.ScreenInfo, optional)</a><a class="headerlink" href="#screen-vim-vm-guestinfo-screeninfo-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest screen resolution info, if known.</p>
+</div></blockquote>
+</div>
+<div class="section" id="gueststate-str">
+<h4><a class="toc-backref" href="#id190">guestState (str)</a><a class="headerlink" href="#gueststate-str" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Operation mode of guest operating system.</p>
+</div></blockquote>
+</div>
+<div class="section" id="appheartbeatstatus-str-optional">
+<h4><a class="toc-backref" href="#id191">appHeartbeatStatus (str, optional)</a><a class="headerlink" href="#appheartbeatstatus-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Application heartbeat status.</p>
+</div></blockquote>
+</div>
+<div class="section" id="appstate-str-optional">
+<h4><a class="toc-backref" href="#id192">appState (str, optional)</a><a class="headerlink" href="#appstate-str-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Application state.
+If vSphere HA is enabled and the vm is configured for Application Monitoring and this field’s value is <code class="docutils literal notranslate"><span class="pre">appStateNeedReset</span></code> then HA will attempt immediately reset the virtual machine.
+There are some system conditions which may delay the immediate reset.
+The immediate reset will be performed as soon as allowed by vSphere HA and ESX.
+If during these conditions the value is changed to <code class="docutils literal notranslate"><span class="pre">appStateOk</span></code> the reset will be cancelled.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guestoperationsready-bool-optional">
+<h4><a class="toc-backref" href="#id193">guestOperationsReady (bool, optional)</a><a class="headerlink" href="#guestoperationsready-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest Operations availability. If true, the virtual machine is ready to process guest operations.</p>
+</div></blockquote>
+</div>
+<div class="section" id="interactiveguestoperationsready-bool-optional">
+<h4><a class="toc-backref" href="#id194">interactiveGuestOperationsReady (bool, optional)</a><a class="headerlink" href="#interactiveguestoperationsready-bool-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Interactive Guest Operations availability. If true, the virtual machine is ready to process guest operations as the user interacting with the guest desktop.</p>
+</div></blockquote>
+</div>
+<div class="section" id="generationinfo-vim-vm-guestinfo-namespacegenerationinfo-privilege-virtualmachine-namespace-eventnotify-optional">
+<h4><a class="toc-backref" href="#id195">generationInfo (vim.vm.GuestInfo.NamespaceGenerationInfo, privilege: VirtualMachine.Namespace.EventNotify, optional)</a><a class="headerlink" href="#generationinfo-vim-vm-guestinfo-namespacegenerationinfo-privilege-virtualmachine-namespace-eventnotify-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A list of namespaces and their corresponding generation numbers. Only namespaces with non-zero <code class="docutils literal notranslate"><span class="pre">maxSizeEventsFromGuest</span></code> are guaranteed to be present here.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="summary-vim-vm-summary">
+<h3><a class="toc-backref" href="#id196">summary (vim.vm.Summary)</a><a class="headerlink" href="#summary-vim-vm-summary" title="Permalink to this headline"></a></h3>
+<blockquote>
+<div><p>Basic information about the virtual machine.</p>
+</div></blockquote>
+<div class="section" id="vm-vim-virtualmachine-optional">
+<h4><a class="toc-backref" href="#id197">vm (vim.VirtualMachine, optional)</a><a class="headerlink" href="#vm-vim-virtualmachine-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Reference to the virtual machine managed object.</p>
+</div></blockquote>
+</div>
+<div class="section" id="id4">
+<h4><a class="toc-backref" href="#id198">runtime (vim.vm.RuntimeInfo)</a><a class="headerlink" href="#id4" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Runtime and state information of a running virtual machine.
+Most of this information is also available when a virtual machine is powered off.
+In that case, it contains information from the last run, if available.</p>
+</div></blockquote>
+</div>
+<div class="section" id="guest-vim-vm-summary-guestsummary-optional">
+<h4><a class="toc-backref" href="#id199">guest (vim.vm.Summary.GuestSummary, optional)</a><a class="headerlink" href="#guest-vim-vm-summary-guestsummary-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Guest operating system and VMware Tools information.</p>
+</div></blockquote>
+</div>
+<div class="section" id="config-vim-vm-summary-configsummary">
+<h4><a class="toc-backref" href="#id200">config (vim.vm.Summary.ConfigSummary)</a><a class="headerlink" href="#config-vim-vm-summary-configsummary" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Basic configuration information about the virtual machine.
+This information is not available when the virtual machine is unavailable, for instance, when it is being created or deleted.</p>
+</div></blockquote>
+</div>
+<div class="section" id="storage-vim-vm-summary-storagesummary-optional">
+<h4><a class="toc-backref" href="#id201">storage (vim.vm.Summary.StorageSummary, optional)</a><a class="headerlink" href="#storage-vim-vm-summary-storagesummary-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Storage information of the virtual machine.</p>
+</div></blockquote>
+</div>
+<div class="section" id="quickstats-vim-vm-summary-quickstats">
+<h4><a class="toc-backref" href="#id202">quickStats (vim.vm.Summary.QuickStats)</a><a class="headerlink" href="#quickstats-vim-vm-summary-quickstats" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>A set of statistics that are typically updated with near real-time regularity.</p>
+</div></blockquote>
+</div>
+<div class="section" id="id5">
+<h4><a class="toc-backref" href="#id203">overallStatus (vim.ManagedEntity.Status)</a><a class="headerlink" href="#id5" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Overall alarm status on this node.</p>
+</div></blockquote>
+</div>
+<div class="section" id="customvalue-vim-customfieldsmanager-value-optional">
+<h4><a class="toc-backref" href="#id204">customValue (vim.CustomFieldsManager.Value, optional)</a><a class="headerlink" href="#customvalue-vim-customfieldsmanager-value-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Custom field values.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="datastore-vim-datastore">
+<h3><a class="toc-backref" href="#id205">datastore (vim.Datastore)</a><a class="headerlink" href="#datastore-vim-datastore" title="Permalink to this headline"></a></h3>
+<blockquote>
+<div><p>A collection of references to the subset of datastore objects in the datacenter that is used by the virtual machine.</p>
+</div></blockquote>
+<div class="section" id="info-vim-datastore-info">
+<h4><a class="toc-backref" href="#id206">info (vim.Datastore.Info)</a><a class="headerlink" href="#info-vim-datastore-info" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Specific information about the datastore.</p>
+</div></blockquote>
+</div>
+<div class="section" id="summary-vim-datastore-summary">
+<h4><a class="toc-backref" href="#id207">summary (vim.Datastore.Summary)</a><a class="headerlink" href="#summary-vim-datastore-summary" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Global properties of the datastore.</p>
+</div></blockquote>
+</div>
+<div class="section" id="host-vim-datastore-hostmount">
+<h4><a class="toc-backref" href="#id208">host (vim.Datastore.HostMount)</a><a class="headerlink" href="#host-vim-datastore-hostmount" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Hosts attached to this datastore.</p>
+</div></blockquote>
+</div>
+<div class="section" id="id6">
+<h4><a class="toc-backref" href="#id209">vm (vim.VirtualMachine)</a><a class="headerlink" href="#id6" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Virtual machines stored on this datastore.</p>
+</div></blockquote>
+</div>
+<div class="section" id="browser-vim-host-datastorebrowser">
+<h4><a class="toc-backref" href="#id210">browser (vim.host.DatastoreBrowser)</a><a class="headerlink" href="#browser-vim-host-datastorebrowser" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>DatastoreBrowser used to browse this datastore.</p>
+</div></blockquote>
+</div>
+<div class="section" id="capability-vim-datastore-capability">
+<h4><a class="toc-backref" href="#id211">capability (vim.Datastore.Capability)</a><a class="headerlink" href="#capability-vim-datastore-capability" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Capabilities of this datastore.</p>
+</div></blockquote>
+</div>
+<div class="section" id="iormconfiguration-vim-storageresourcemanager-iormconfiginfo">
+<h4><a class="toc-backref" href="#id212">iormConfiguration (vim.StorageResourceManager.IORMConfigInfo)</a><a class="headerlink" href="#iormconfiguration-vim-storageresourcemanager-iormconfiginfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Configuration of storage I/O resource management for the datastore.
+Currently VMware only support storage I/O resource management on VMFS volumes of a datastore.
+This configuration may not be available if the datastore is not accessible from any host, or if the datastore does not have VMFS volume.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="network-vim-network">
+<h3><a class="toc-backref" href="#id213">network (vim.Network)</a><a class="headerlink" href="#network-vim-network" title="Permalink to this headline"></a></h3>
+<blockquote>
+<div><p>A collection of references to the subset of network objects in the datacenter that is used by the virtual machine.</p>
+</div></blockquote>
+<div class="section" id="id7">
+<h4><a class="toc-backref" href="#id214">name (str)</a><a class="headerlink" href="#id7" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Name of this network.</p>
+</div></blockquote>
+</div>
+<div class="section" id="summary-vim-network-summary">
+<h4><a class="toc-backref" href="#id215">summary (vim.Network.Summary)</a><a class="headerlink" href="#summary-vim-network-summary" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Properties of a network.</p>
+</div></blockquote>
+</div>
+<div class="section" id="host-vim-hostsystem">
+<h4><a class="toc-backref" href="#id216">host (vim.HostSystem)</a><a class="headerlink" href="#host-vim-hostsystem" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Hosts attached to this network.</p>
+</div></blockquote>
+</div>
+<div class="section" id="id8">
+<h4><a class="toc-backref" href="#id217">vm (vim.VirtualMachine)</a><a class="headerlink" href="#id8" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Virtual machines using this network.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="snapshot-vim-vm-snapshotinfo">
+<h3><a class="toc-backref" href="#id218">snapshot (vim.vm.SnapshotInfo)</a><a class="headerlink" href="#snapshot-vim-vm-snapshotinfo" title="Permalink to this headline"></a></h3>
+<p>Current snapshot and tree.
+The property is valid if snapshots have been created for the virtual machine.</p>
+<div class="section" id="currentsnapshot-vim-vm-snapshot-optional">
+<h4><a class="toc-backref" href="#id219">currentSnapshot (vim.vm.Snapshot, optional)</a><a class="headerlink" href="#currentsnapshot-vim-vm-snapshot-optional" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Current snapshot of the virtual machine. This property is set by calling <code class="docutils literal notranslate"><span class="pre">Snapshot.revert</span></code> or <code class="docutils literal notranslate"><span class="pre">VirtualMachine.createSnapshot</span></code>.
+This property will be empty when the working snapshot is at the root of the snapshot tree.</p>
+</div></blockquote>
+</div>
+<div class="section" id="rootsnapshotlist-vim-vm-snapshottree">
+<h4><a class="toc-backref" href="#id220">rootSnapshotList (vim.vm.SnapshotTree)</a><a class="headerlink" href="#rootsnapshotlist-vim-vm-snapshottree" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Data for the entire set of snapshots for one virtual machine.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="rootsnapshot-vim-vm-snapshot">
+<h3><a class="toc-backref" href="#id221">rootSnapshot (vim.vm.Snapshot)</a><a class="headerlink" href="#rootsnapshot-vim-vm-snapshot" title="Permalink to this headline"></a></h3>
+<p>The roots of all snapshot trees for the virtual machine.</p>
+<div class="section" id="config-vim-vm-configinfo">
+<h4><a class="toc-backref" href="#id222">config (vim.vm.ConfigInfo)</a><a class="headerlink" href="#config-vim-vm-configinfo" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>Information about the configuration of the virtual machine when this snapshot was taken.
+The datastore paths for the virtual machine disks point to the head of the disk chain that represents the disk at this given snapshot.</p>
+</div></blockquote>
+</div>
+<div class="section" id="childsnapshot-vim-vm-snapshot">
+<h4><a class="toc-backref" href="#id223">childSnapshot (vim.vm.Snapshot)</a><a class="headerlink" href="#childsnapshot-vim-vm-snapshot" title="Permalink to this headline"></a></h4>
+<blockquote>
+<div><p>All snapshots for which this snapshot is the parent.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="guestheartbeatstatus-vim-managedentity-status">
+<h3><a class="toc-backref" href="#id224">guestHeartbeatStatus (vim.ManagedEntity.Status)</a><a class="headerlink" href="#guestheartbeatstatus-vim-managedentity-status" title="Permalink to this headline"></a></h3>
+<blockquote>
+<div><p>The guest heartbeat.</p>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://github.com/vmware/pyvmomi">pyVmomi</a></dt><dd><p>The GitHub Page of pyVmomi</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/vmware/pyvmomi/issues">pyVmomi Issue Tracker</a></dt><dd><p>The issue tracker for the pyVmomi project</p>
+</dd>
+<dt>rst/scenario_guides/guide_vmware.rst</dt><dd><p>The GitHub Page of vSphere Automation SDK for Python</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/vmware/vsphere-automation-sdk-python/issues">vSphere Automation SDK Issue Tracker</a></dt><dd><p>The issue tracker for vSphere Automation SDK for Python</p>
+</dd>
+<dt><a class="reference internal" href="../../user_guide/playbooks.html#working-with-playbooks"><span class="std std-ref">Working with playbooks</span></a></dt><dd><p>An introduction to playbooks</p>
+</dd>
+<dt><a class="reference internal" href="../../user_guide/vault.html#playbooks-vault"><span class="std std-ref">Using encrypted variables and files</span></a></dt><dd><p>Using Vault in playbooks</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vmware_inventory.html" class="btn btn-neutral float-left" title="Using VMware dynamic inventory plugin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vmware_inventory_hostnames.html" class="btn btn-neutral float-right" title="Using VMware dynamic inventory plugin - Hostnames" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Dec 21, 2021.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

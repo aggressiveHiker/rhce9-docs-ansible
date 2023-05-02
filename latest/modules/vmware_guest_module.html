@@ -1,0 +1,1562 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>vmware_guest – Manages virtual machines in vCenter &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/modules/vmware_guest_module.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'2.9',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="2.9">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.9
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9_ja";
+            if ( "2.9_ja" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.9_ja");
+            } else {
+              option.value = current_url.replace("latest","2.9_ja");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.8";
+            if ( "2.8" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.8");
+            } else {
+              option.value = current_url.replace("latest","2.8");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.7";
+            if ( "2.7" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.7");
+            } else {
+              option.value = current_url.replace("latest","2.7");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+<!--  <form id="rtd-search-form" class="wy-form" action="../search.html" -->
+  <form id="rtd-search-form" class="wy-form"  method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>vmware_guest – Manages virtual machines in vCenter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/cloud/vmware/vmware_guest.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+  <script>
+    startsWith = function(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("This is a testing site. For the official docs go to https://docs.ansible.com/");
+      para.appendChild(banner_text);
+      element = document.getElementById('testing_banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    }
+    
+      // Create a banner if we're not the latest version
+      current_url_path = window.location.pathname;
+      if (startsWith(current_url_path, "/ansible/latest/") || startsWith(current_url_path, "/ansible/2.9/")) {
+       // no banner for latest release
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        document.write('<div id="banner_id" class="admonition caution">');
+        para = document.createElement('p');
+        banner_text=document.createTextNode("You are reading the *devel* version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.");
+        para.appendChild(banner_text);
+        element = document.getElementById('banner_id');
+        element.appendChild(para);
+        document.write('</div>');
+      } else {
+        document.write('<div id="banner_id" class="admonition caution">');
+        para = document.createElement('p');
+        banner_text=document.createTextNode("You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.");
+        para.appendChild(banner_text);
+        element = document.getElementById('banner_id');
+        element.appendChild(para);
+        document.write('</div>');
+      }
+    
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="vmware-guest-manages-virtual-machines-in-vcenter">
+<span id="vmware-guest-module"></span><h1>vmware_guest – Manages virtual machines in vCenter<a class="headerlink" href="#vmware-guest-manages-virtual-machines-in-vcenter" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#requirements" id="id2">Requirements</a></li>
+<li><a class="reference internal" href="#parameters" id="id3">Parameters</a></li>
+<li><a class="reference internal" href="#notes" id="id4">Notes</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#return-values" id="id6">Return Values</a></li>
+<li><a class="reference internal" href="#status" id="id7">Status</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This module can be used to create new virtual machines from templates or other virtual machines, manage power state of virtual machine such as power on, power off, suspend, shutdown, reboot, restart etc., modify various virtual machine components like network, disk, customization etc., rename a virtual machine and remove a virtual machine with associated components.</li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li>python &gt;= 2.6</li>
+<li>PyVmomi</li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-annotation"></div>
+                <b>annotation</b>
+                <a class="ansibleOptionLink" href="#parameter-annotation" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A note or annotation to include in the virtual machine.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cdrom"></div>
+                <b>cdrom</b>
+                <a class="ansibleOptionLink" href="#parameter-cdrom" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.5</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A CD-ROM configuration for the virtual machine.</div>
+                                        <div>Or a list of CD-ROMs configuration for the virtual machine. Added in version 2.9.</div>
+                                        <div>Parameters <code>controller_type</code>, <code>controller_number</code>, <code>unit_number</code>, <code>state</code> are added for a list of CD-ROMs configuration support.</div>
+                                        <div>Valid attributes are:</div>
+                                        <div>- <code>type</code> (string): The type of CD-ROM, valid options are <code>none</code>, <code>client</code> or <code>iso</code>. With <code>none</code> the CD-ROM will be disconnected but present.</div>
+                                        <div>- <code>iso_path</code> (string): The datastore path to the ISO file to use, in the form of <code>[datastore1] path/to/file.iso</code>. Required if type is set <code>iso</code>.</div>
+                                        <div>- <code>controller_type</code> (string): Default value is <code>ide</code>. Only <code>ide</code> controller type for CD-ROM is supported for now, will add SATA controller type in the future.</div>
+                                        <div>- <code>controller_number</code> (int): For <code>ide</code> controller, valid value is 0 or 1.</div>
+                                        <div>- <code>unit_number</code> (int): For CD-ROM device attach to <code>ide</code> controller, valid value is 0 or 1. <code>controller_number</code> and <code>unit_number</code> are mandatory attributes.</div>
+                                        <div>- <code>state</code> (string): Valid value is <code>present</code> or <code>absent</code>. Default is <code>present</code>. If set to <code>absent</code>, then the specified CD-ROM will be removed. For <code>ide</code> controller, hot-add or hot-remove CD-ROM is not supported.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cluster"></div>
+                <b>cluster</b>
+                <a class="ansibleOptionLink" href="#parameter-cluster" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The cluster name where the virtual machine will run.</div>
+                                        <div>This is a required parameter, if <code>esxi_hostname</code> is not set.</div>
+                                        <div><code>esxi_hostname</code> and <code>cluster</code> are mutually exclusive parameters.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-convert"></div>
+                <b>convert</b>
+                <a class="ansibleOptionLink" href="#parameter-convert" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.8</div>                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>thin</li>
+                                                                                                                                                                                            <li>thick</li>
+                                                                                                                                                                                            <li>eagerzeroedthick</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify convert disk type while cloning template or virtual machine.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-customization"></div>
+                <b>customization</b>
+                <a class="ansibleOptionLink" href="#parameter-customization" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Parameters for OS customization when cloning from the template or the virtual machine, or apply to the existing virtual machine directly.</div>
+                                        <div>Not all operating systems are supported for customization with respective vCenter version, please check VMware documentation for respective OS customization.</div>
+                                        <div>For supported customization operating system matrix, (see <a href='http://partnerweb.vmware.com/programs/guestOS/guest-os-customization-matrix.pdf'>http://partnerweb.vmware.com/programs/guestOS/guest-os-customization-matrix.pdf</a>)</div>
+                                        <div>All parameters and VMware object names are case sensitive.</div>
+                                        <div>Linux based OSes requires Perl package to be installed for OS customizations.</div>
+                                        <div>Common parameters (Linux/Windows):</div>
+                                        <div>- <code>existing_vm</code> (bool): If set to <code>True</code>, do OS customization on the specified virtual machine directly. If set to <code>False</code> or not specified, do OS customization when cloning from the template or the virtual machine. version_added: 2.8</div>
+                                        <div>- <code>dns_servers</code> (list): List of DNS servers to configure.</div>
+                                        <div>- <code>dns_suffix</code> (list): List of domain suffixes, also known as DNS search path (default: <code>domain</code> parameter).</div>
+                                        <div>- <code>domain</code> (string): DNS domain name to use.</div>
+                                        <div>- <code>hostname</code> (string): Computer hostname (default: shorted <code>name</code> parameter). Allowed characters are alphanumeric (uppercase and lowercase) and minus, rest of the characters are dropped as per RFC 952.</div>
+                                        <div>Parameters related to Linux customization:</div>
+                                        <div>- <code>timezone</code> (string): Timezone (See List of supported time zones for different vSphere versions in Linux/Unix systems (2145518) <a href='https://kb.vmware.com/s/article/2145518'>https://kb.vmware.com/s/article/2145518</a>). version_added: 2.9</div>
+                                        <div>- <code>hwclockUTC</code> (bool): Specifies whether the hardware clock is in UTC or local time. True when the hardware clock is in UTC, False when the hardware clock is in local time. version_added: 2.9</div>
+                                        <div>Parameters related to Windows customization:</div>
+                                        <div>- <code>autologon</code> (bool): Auto logon after virtual machine customization (default: False).</div>
+                                        <div>- <code>autologoncount</code> (int): Number of autologon after reboot (default: 1).</div>
+                                        <div>- <code>domainadmin</code> (string): User used to join in AD domain (mandatory with <code>joindomain</code>).</div>
+                                        <div>- <code>domainadminpassword</code> (string): Password used to join in AD domain (mandatory with <code>joindomain</code>).</div>
+                                        <div>- <code>fullname</code> (string): Server owner name (default: Administrator).</div>
+                                        <div>- <code>joindomain</code> (string): AD domain to join (Not compatible with <code>joinworkgroup</code>).</div>
+                                        <div>- <code>joinworkgroup</code> (string): Workgroup to join (Not compatible with <code>joindomain</code>, default: WORKGROUP).</div>
+                                        <div>- <code>orgname</code> (string): Organisation name (default: ACME).</div>
+                                        <div>- <code>password</code> (string): Local administrator password.</div>
+                                        <div>- <code>productid</code> (string): Product ID.</div>
+                                        <div>- <code>runonce</code> (list): List of commands to run at first user logon.</div>
+                                        <div>- <code>timezone</code> (int): Timezone (See <a href='https://msdn.microsoft.com/en-us/library/ms912391.aspx'>https://msdn.microsoft.com/en-us/library/ms912391.aspx</a>).</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-customization_spec"></div>
+                <b>customization_spec</b>
+                <a class="ansibleOptionLink" href="#parameter-customization_spec" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.6</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Unique name identifying the requested customization specification.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>If set, then overrides <code>customization</code> parameter values.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-customvalues"></div>
+                <b>customvalues</b>
+                <a class="ansibleOptionLink" href="#parameter-customvalues" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Define a list of custom values to set on virtual machine.</div>
+                                        <div>A custom value object takes two fields <code>key</code> and <code>value</code>.</div>
+                                        <div>Incorrect key and values will be ignored.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
+                <b>datacenter</b>
+                <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
+                                </td>
+                                                            <td>
+                                        <div>Destination datacenter for the deploy operation.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-datastore"></div>
+                <b>datastore</b>
+                <a class="ansibleOptionLink" href="#parameter-datastore" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.7</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Specify datastore or datastore cluster to provision virtual machine.</div>
+                                        <div>This parameter takes precedence over &quot;disk.datastore&quot; parameter.</div>
+                                        <div>This parameter can be used to override datastore or datastore cluster setting of the virtual machine when deployed from the template.</div>
+                                        <div>Please see example for more usage.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-disk"></div>
+                <b>disk</b>
+                <a class="ansibleOptionLink" href="#parameter-disk" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A list of disks to add.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>Shrinking disks is not supported.</div>
+                                        <div>Removing existing disks of the virtual machine is not supported.</div>
+                                        <div>Valid attributes are:</div>
+                                        <div>- <code>size_[tb,gb,mb,kb]</code> (integer): Disk storage size in specified unit.</div>
+                                        <div>- <code>type</code> (string): Valid values are:</div>
+                                        <div>- <code>thin</code> thin disk</div>
+                                        <div>- <code>eagerzeroedthick</code> eagerzeroedthick disk, added in version 2.5</div>
+                                        <div>Default: <code>None</code> thick disk, no eagerzero.</div>
+                                        <div>- <code>datastore</code> (string): The name of datastore which will be used for the disk. If <code>autoselect_datastore</code> is set to True, then will select the less used datastore whose name contains this &quot;disk.datastore&quot; string.</div>
+                                        <div>- <code>filename</code> (string): Existing disk image to be used. Filename must already exist on the datastore.</div>
+                                        <div>Specify filename string in <code>[datastore_name] path/to/file.vmdk</code> format. Added in version 2.8.</div>
+                                        <div>- <code>autoselect_datastore</code> (bool): select the less used datastore. &quot;disk.datastore&quot; and &quot;disk.autoselect_datastore&quot; will not be used if <code>datastore</code> is specified outside this <code>disk</code> configuration.</div>
+                                        <div>- <code>disk_mode</code> (string): Type of disk mode. Added in version 2.6</div>
+                                        <div>- Available options are :</div>
+                                        <div>- <code>persistent</code>: Changes are immediately and permanently written to the virtual disk. This is default.</div>
+                                        <div>- <code>independent_persistent</code>: Same as persistent, but not affected by snapshots.</div>
+                                        <div>- <code>independent_nonpersistent</code>: Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
+                <b>esxi_hostname</b>
+                <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The ESXi hostname where the virtual machine will run.</div>
+                                        <div>This is a required parameter, if <code>cluster</code> is not set.</div>
+                                        <div><code>esxi_hostname</code> and <code>cluster</code> are mutually exclusive parameters.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-folder"></div>
+                <b>folder</b>
+                <a class="ansibleOptionLink" href="#parameter-folder" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Destination folder, absolute path to find an existing guest or create the new guest.</div>
+                                        <div>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>This parameter is required, while deploying new virtual machine. version_added 2.5.</div>
+                                        <div>If multiple machines are found with same name, this parameter is used to identify uniqueness of the virtual machine. version_added 2.5</div>
+                                        <div>Examples:</div>
+                                        <div>folder: /ha-datacenter/vm</div>
+                                        <div>folder: ha-datacenter/vm</div>
+                                        <div>folder: /datacenter1/vm</div>
+                                        <div>folder: datacenter1/vm</div>
+                                        <div>folder: /datacenter1/vm/folder1</div>
+                                        <div>folder: datacenter1/vm/folder1</div>
+                                        <div>folder: /folder1/datacenter1/vm</div>
+                                        <div>folder: folder1/datacenter1/vm</div>
+                                        <div>folder: /folder1/datacenter1/vm/folder2</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-force"></div>
+                <b>force</b>
+                <a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Ignore warnings and complete the actions.</div>
+                                        <div>This parameter is useful while removing virtual machine which is powered on state.</div>
+                                        <div>This module reflects the VMware vCenter API and UI workflow, as such, in some cases the `force` flag will be mandatory to perform the action to ensure you are certain the action has to be taken, no matter what the consequence. This is specifically the case for removing a powered on the virtual machine when <code>state</code> is set to <code>absent</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-guest_id"></div>
+                <b>guest_id</b>
+                <a class="ansibleOptionLink" href="#parameter-guest_id" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Set the guest ID.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>Examples:</div>
+                                        <div>virtual machine with RHEL7 64 bit, will be &#x27;rhel7_64Guest&#x27;</div>
+                                        <div>virtual machine with CentOS 64 bit, will be &#x27;centos64Guest&#x27;</div>
+                                        <div>virtual machine with Ubuntu 64 bit, will be &#x27;ubuntu64Guest&#x27;</div>
+                                        <div>This field is required when creating a virtual machine, not required when creating from the template.</div>
+                                        <div>Valid values are referenced here: <a href='https://code.vmware.com/apis/358/doc/vim.vm.GuestOsDescriptor.GuestOsIdentifier.html'>https://code.vmware.com/apis/358/doc/vim.vm.GuestOsDescriptor.GuestOsIdentifier.html</a></div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-hardware"></div>
+                <b>hardware</b>
+                <a class="ansibleOptionLink" href="#parameter-hardware" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Manage virtual machine&#x27;s hardware attributes.</div>
+                                        <div>All parameters case sensitive.</div>
+                                        <div>Valid attributes are:</div>
+                                        <div>- <code>hotadd_cpu</code> (boolean): Allow virtual CPUs to be added while the virtual machine is running.</div>
+                                        <div>- <code>hotremove_cpu</code> (boolean): Allow virtual CPUs to be removed while the virtual machine is running. version_added: 2.5</div>
+                                        <div>- <code>hotadd_memory</code> (boolean): Allow memory to be added while the virtual machine is running.</div>
+                                        <div>- <code>memory_mb</code> (integer): Amount of memory in MB.</div>
+                                        <div>- <code>nested_virt</code> (bool): Enable nested virtualization. version_added: 2.5</div>
+                                        <div>- <code>num_cpus</code> (integer): Number of CPUs.</div>
+                                        <div>- <code>num_cpu_cores_per_socket</code> (integer): Number of Cores Per Socket.</div>
+                                        <div><code>num_cpus</code> must be a multiple of <code>num_cpu_cores_per_socket</code>. For example to create a VM with 2 sockets of 4 cores, specify <code>num_cpus</code>: 8 and <code>num_cpu_cores_per_socket</code>: 4</div>
+                                        <div>- <code>scsi</code> (string): Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code> and <code>paravirtual</code> (default).</div>
+                                        <div>- <code>memory_reservation_lock</code> (boolean): If set true, memory resource reservation for the virtual machine will always be equal to the virtual machine&#x27;s memory size. version_added: 2.5</div>
+                                        <div>- <code>max_connections</code> (integer): Maximum number of active remote display connections for the virtual machines. version_added: 2.5.</div>
+                                        <div>- <code>mem_limit</code> (integer): The memory utilization of a virtual machine will not exceed this limit. Unit is MB. version_added: 2.5</div>
+                                        <div>- <code>mem_reservation</code> (integer): The amount of memory resource that is guaranteed available to the virtual machine. Unit is MB. <code>memory_reservation</code> is alias to this. version_added: 2.5</div>
+                                        <div>- <code>cpu_limit</code> (integer): The CPU utilization of a virtual machine will not exceed this limit. Unit is MHz. version_added: 2.5</div>
+                                        <div>- <code>cpu_reservation</code> (integer): The amount of CPU resource that is guaranteed available to the virtual machine. Unit is MHz. version_added: 2.5</div>
+                                        <div>- <code>version</code> (integer): The Virtual machine hardware versions. Default is 10 (ESXi 5.5 and onwards). Please check VMware documentation for correct virtual machine hardware version. Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given version then no action is taken. version_added: 2.6</div>
+                                        <div>- <code>boot_firmware</code> (string): Choose which firmware should be used to boot the virtual machine. Allowed values are &quot;bios&quot; and &quot;efi&quot;. version_added: 2.7</div>
+                                        <div>- <code>virt_based_security</code> (bool): Enable Virtualization Based Security feature for Windows 10. (Support from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016)</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
+                <b>hostname</b>
+                <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
+                                        <div>Environment variable support added in Ansible 2.6.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-is_template"></div>
+                <b>is_template</b>
+                <a class="ansibleOptionLink" href="#parameter-is_template" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Flag the instance as a template.</div>
+                                        <div>This will mark the given virtual machine as template.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-linked_clone"></div>
+                <b>linked_clone</b>
+                <a class="ansibleOptionLink" href="#parameter-linked_clone" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.4</div>                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Whether to create a linked clone from the snapshot specified.</div>
+                                        <div>If specified, then <code>snapshot_src</code> is required parameter.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-name"></div>
+                <b>name</b>
+                <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                             / <span style="color: red">required</span>                    </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Name of the virtual machine to work with.</div>
+                                        <div>Virtual machine names in vCenter are not necessarily unique, which may be problematic, see <code>name_match</code>.</div>
+                                        <div>If multiple virtual machines with same name exists, then <code>folder</code> is required parameter to identify uniqueness of the virtual machine.</div>
+                                        <div>This parameter is required, if <code>state</code> is set to <code>poweredon</code>, <code>poweredoff</code>, <code>present</code>, <code>restarted</code>, <code>suspended</code> and virtual machine does not exists.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-name_match"></div>
+                <b>name_match</b>
+                <a class="ansibleOptionLink" href="#parameter-name_match" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>first</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>last</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>If multiple virtual machines matching the name, use the first or last found.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-networks"></div>
+                <b>networks</b>
+                <a class="ansibleOptionLink" href="#parameter-networks" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A list of networks (in the order of the NICs).</div>
+                                        <div>Removing NICs is not allowed, while reconfiguring the virtual machine.</div>
+                                        <div>All parameters and VMware object names are case sensitive.</div>
+                                        <div>One of the below parameters is required per entry:</div>
+                                        <div>- <code>name</code> (string): Name of the portgroup or distributed virtual portgroup for this interface. When specifying distributed virtual portgroup make sure given <code>esxi_hostname</code> or <code>cluster</code> is associated with it.</div>
+                                        <div>- <code>vlan</code> (integer): VLAN number for this interface.</div>
+                                        <div>Optional parameters per entry (used for virtual hardware):</div>
+                                        <div>- <code>device_type</code> (string): Virtual network device (one of <code>e1000</code>, <code>e1000e</code>, <code>pcnet32</code>, <code>vmxnet2</code>, <code>vmxnet3</code> (default), <code>sriov</code>).</div>
+                                        <div>- <code>mac</code> (string): Customize MAC address.</div>
+                                        <div>- <code>dvswitch_name</code> (string): Name of the distributed vSwitch. This value is required if multiple distributed portgroups exists with the same name. version_added 2.7</div>
+                                        <div>- <code>start_connected</code> (bool): Indicates that virtual network adapter starts with associated virtual machine powers on. version_added: 2.5</div>
+                                        <div>Optional parameters per entry (used for OS customization):</div>
+                                        <div>- <code>type</code> (string): Type of IP assignment (either <code>dhcp</code> or <code>static</code>). <code>dhcp</code> is default.</div>
+                                        <div>- <code>ip</code> (string): Static IP address (implies <code>type: static</code>).</div>
+                                        <div>- <code>netmask</code> (string): Static netmask required for <code>ip</code>.</div>
+                                        <div>- <code>gateway</code> (string): Static gateway.</div>
+                                        <div>- <code>dns_servers</code> (string): DNS servers for this network interface (Windows).</div>
+                                        <div>- <code>domain</code> (string): Domain name for this network interface (Windows).</div>
+                                        <div>- <code>wake_on_lan</code> (bool): Indicates if wake-on-LAN is enabled on this virtual network adapter. version_added: 2.5</div>
+                                        <div>- <code>allow_guest_control</code> (bool): Enables guest control over whether the connectable device is connected. version_added: 2.5</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-password"></div>
+                <b>password</b>
+                <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The password of the vSphere vCenter or ESXi server.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
+                                        <div>Environment variable support added in Ansible 2.6.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-port"></div>
+                <b>port</b>
+                <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.5</div>                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">443</div>
+                                </td>
+                                                            <td>
+                                        <div>The port number of the vSphere vCenter or ESXi server.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
+                                        <div>Environment variable support added in Ansible 2.6.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
+                <b>proxy_host</b>
+                <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
+                                        <div>The format is a hostname or a IP.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
+                                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
+                <b>proxy_port</b>
+                <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-resource_pool"></div>
+                <b>resource_pool</b>
+                <a class="ansibleOptionLink" href="#parameter-resource_pool" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Use the given resource pool for virtual machine operation.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>Resource pool should be child of the selected host parent.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-snapshot_src"></div>
+                <b>snapshot_src</b>
+                <a class="ansibleOptionLink" href="#parameter-snapshot_src" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.4</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Name of the existing snapshot to use to create a clone of a virtual machine.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>While creating linked clone using <code>linked_clone</code> parameter, this parameter is required.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-state"></div>
+                <b>state</b>
+                <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>absent</li>
+                                                                                                                                                                                            <li>poweredon</li>
+                                                                                                                                                                                            <li>poweredoff</li>
+                                                                                                                                                                                            <li>restarted</li>
+                                                                                                                                                                                            <li>suspended</li>
+                                                                                                                                                                                            <li>shutdownguest</li>
+                                                                                                                                                                                            <li>rebootguest</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Specify the state the virtual machine should be in.</div>
+                                        <div>If <code>state</code> is set to <code>present</code> and virtual machine exists, ensure the virtual machine configurations conforms to task arguments.</div>
+                                        <div>If <code>state</code> is set to <code>absent</code> and virtual machine exists, then the specified virtual machine is removed with its associated components.</div>
+                                        <div>If <code>state</code> is set to one of the following <code>poweredon</code>, <code>poweredoff</code>, <code>present</code>, <code>restarted</code>, <code>suspended</code> and virtual machine does not exists, then virtual machine is deployed with given parameters.</div>
+                                        <div>If <code>state</code> is set to <code>poweredon</code> and virtual machine exists with powerstate other than powered on, then the specified virtual machine is powered on.</div>
+                                        <div>If <code>state</code> is set to <code>poweredoff</code> and virtual machine exists with powerstate other than powered off, then the specified virtual machine is powered off.</div>
+                                        <div>If <code>state</code> is set to <code>restarted</code> and virtual machine exists, then the virtual machine is restarted.</div>
+                                        <div>If <code>state</code> is set to <code>suspended</code> and virtual machine exists, then the virtual machine is set to suspended mode.</div>
+                                        <div>If <code>state</code> is set to <code>shutdownguest</code> and virtual machine exists, then the virtual machine is shutdown.</div>
+                                        <div>If <code>state</code> is set to <code>rebootguest</code> and virtual machine exists, then the virtual machine is rebooted.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-state_change_timeout"></div>
+                <b>state_change_timeout</b>
+                <a class="ansibleOptionLink" href="#parameter-state_change_timeout" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.6</div>                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
+                                                            <td>
+                                        <div>If the <code>state</code> is set to <code>shutdownguest</code>, by default the module will return immediately after sending the shutdown signal.</div>
+                                        <div>If this argument is set to a positive integer, the module will instead wait for the virtual machine to reach the poweredoff state.</div>
+                                        <div>The value sets a timeout in seconds for the module to wait for the state change.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-template"></div>
+                <b>template</b>
+                <a class="ansibleOptionLink" href="#parameter-template" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>Template or existing virtual machine used to create new virtual machine.</div>
+                                        <div>If this value is not set, virtual machine is created without using a template.</div>
+                                        <div>If the virtual machine already exists, this parameter will be ignored.</div>
+                                        <div>This parameter is case sensitive.</div>
+                                        <div>You can also specify template or VM UUID for identifying source. version_added 2.8. Use <code>hw_product_uuid</code> from <span class='module'>vmware_guest_facts</span> as UUID value.</div>
+                                        <div>From version 2.8 onwards, absolute path to virtual machine or template can be used.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: template_src</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-use_instance_uuid"></div>
+                <b>use_instance_uuid</b>
+                <a class="ansibleOptionLink" href="#parameter-use_instance_uuid" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.8</div>                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-username"></div>
+                <b>username</b>
+                <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The username of the vSphere vCenter or ESXi server.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
+                                        <div>Environment variable support added in Ansible 2.6.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-uuid"></div>
+                <b>uuid</b>
+                <a class="ansibleOptionLink" href="#parameter-uuid" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>UUID of the virtual machine to manage if known, this is VMware&#x27;s unique identifier.</div>
+                                        <div>This is required if <code>name</code> is not supplied.</div>
+                                        <div>If virtual machine does not exists, then this parameter is ignored.</div>
+                                        <div>Please note that a supplied UUID will be ignored on virtual machine creation, as VMware creates the UUID internally.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+                <b>validate_certs</b>
+                <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
+                                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
+                                        <div>Environment variable support added in Ansible 2.6.</div>
+                                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-vapp_properties"></div>
+                <b>vapp_properties</b>
+                <a class="ansibleOptionLink" href="#parameter-vapp_properties" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">-</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.6</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>A list of vApp properties</div>
+                                        <div>For full list of attributes and types refer to: <a href='https://github.com/vmware/pyvmomi/blob/master/docs/vim/vApp/PropertyInfo.rst'>https://github.com/vmware/pyvmomi/blob/master/docs/vim/vApp/PropertyInfo.rst</a></div>
+                                        <div>Basic attributes are:</div>
+                                        <div>- <code>id</code> (string): Property id - required.</div>
+                                        <div>- <code>value</code> (string): Property value.</div>
+                                        <div>- <code>type</code> (string): Value type, string type by default.</div>
+                                        <div>- <code>operation</code>: <code>remove</code>: This attribute is required only when removing properties.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-wait_for_customization"></div>
+                <b>wait_for_customization</b>
+                <a class="ansibleOptionLink" href="#parameter-wait_for_customization" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.8</div>                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Wait until vCenter detects all guest customizations as successfully completed.</div>
+                                        <div>When enabled, the VM will automatically be powered on.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-wait_for_ip_address"></div>
+                <b>wait_for_ip_address</b>
+                <a class="ansibleOptionLink" href="#parameter-wait_for_ip_address" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Wait until vCenter detects an IP address for the virtual machine.</div>
+                                        <div>This requires vmware-tools (vmtoolsd) to properly work after creation.</div>
+                                        <div>vmware-tools needs to be installed on the given virtual machine in order to work with this parameter.</div>
+                                                    </td>
+        </tr>
+                    </table>
+<br/></div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id4">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Please make sure that the user used for vmware_guest has the correct level of privileges.</li>
+<li>For example, following is the list of minimum privileges required by users to create virtual machines.</li>
+<li>DataStore &gt; Allocate Space</li>
+<li>Virtual Machine &gt; Configuration &gt; Add New Disk</li>
+<li>Virtual Machine &gt; Configuration &gt; Add or Remove Device</li>
+<li>Virtual Machine &gt; Inventory &gt; Create New</li>
+<li>Network &gt; Assign Network</li>
+<li>Resource &gt; Assign Virtual Machine to Resource Pool</li>
+<li>Module may require additional privileges as well, which may be required for gathering facts - e.g. ESXi configurations.</li>
+<li>Tested on vSphere 5.5, 6.0, 6.5 and 6.7</li>
+<li>Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller</li>
+<li>For additional information please visit Ansible VMware community wiki - <a class="reference external" href="https://github.com/ansible/community/wiki/VMware">https://github.com/ansible/community/wiki/VMware</a>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a virtual machine on given ESXi hostname</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">folder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/DC1/vm/</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test_vm_0001</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">poweredon</span>
+    <span class="nt">guest_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centos64Guest</span>
+    <span class="c1"># This is hostname of particular ESXi server on which user wants VM to be deployed</span>
+    <span class="nt">esxi_hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">esxi_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">disk</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">size_gb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">thin</span>
+      <span class="nt">datastore</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">datastore1</span>
+    <span class="nt">hardware</span><span class="p">:</span>
+      <span class="nt">memory_mb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">512</span>
+      <span class="nt">num_cpus</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+      <span class="nt">scsi</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">paravirtual</span>
+    <span class="nt">networks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VM Network</span>
+      <span class="nt">mac</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">aa:bb:dd:aa:00:14</span>
+      <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.10.10.100</span>
+      <span class="nt">netmask</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">255.255.255.0</span>
+      <span class="nt">device_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vmxnet3</span>
+    <span class="nt">wait_for_ip_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">deploy_vm</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a virtual machine from a template</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">folder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/testvms</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm_2</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">poweredon</span>
+    <span class="nt">template</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">template_el7</span>
+    <span class="nt">disk</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">size_gb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">thin</span>
+      <span class="nt">datastore</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">g73_datastore</span>
+    <span class="nt">hardware</span><span class="p">:</span>
+      <span class="nt">memory_mb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">512</span>
+      <span class="nt">num_cpus</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">6</span>
+      <span class="nt">num_cpu_cores_per_socket</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+      <span class="nt">scsi</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">paravirtual</span>
+      <span class="nt">memory_reservation_lock</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+      <span class="nt">mem_limit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8096</span>
+      <span class="nt">mem_reservation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4096</span>
+      <span class="nt">cpu_limit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8096</span>
+      <span class="nt">cpu_reservation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4096</span>
+      <span class="nt">max_connections</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+      <span class="nt">hotadd_cpu</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+      <span class="nt">hotremove_cpu</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+      <span class="nt">hotadd_memory</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+      <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">12</span> <span class="c1"># Hardware version of virtual machine</span>
+      <span class="nt">boot_firmware</span><span class="p">:</span> <span class="s">&quot;efi&quot;</span>
+    <span class="nt">cdrom</span><span class="p">:</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">iso</span>
+      <span class="nt">iso_path</span><span class="p">:</span> <span class="s">&quot;[datastore1]</span><span class="nv"> </span><span class="s">livecd.iso&quot;</span>
+    <span class="nt">networks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VM Network</span>
+      <span class="nt">mac</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">aa:bb:dd:aa:00:14</span>
+    <span class="nt">wait_for_ip_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">deploy</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Clone a virtual machine from Windows template and customize</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">datacenter</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">datacenter1</span>
+    <span class="nt">cluster</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cluster</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testvm-2</span>
+    <span class="nt">template</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">template_windows</span>
+    <span class="nt">networks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VM Network</span>
+      <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.100</span>
+      <span class="nt">netmask</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">255.255.255.0</span>
+      <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+      <span class="nt">mac</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">aa:bb:dd:aa:00:14</span>
+      <span class="nt">domain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_domain</span>
+      <span class="nt">dns_servers</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.2</span>
+    <span class="p p-Indicator">-</span> <span class="nt">vlan</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1234</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dhcp</span>
+    <span class="nt">customization</span><span class="p">:</span>
+      <span class="nt">autologon</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+      <span class="nt">dns_servers</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">192.168.1.2</span>
+      <span class="nt">domain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_domain</span>
+      <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">new_vm_password</span>
+      <span class="nt">runonce</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">powershell.exe -ExecutionPolicy Unrestricted -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert -EnableCredSSP</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span>  <span class="l l-Scalar l-Scalar-Plain">Clone a virtual machine from Linux template and customize</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">datacenter</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">datacenter</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">folder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/DC1/vm</span>
+    <span class="nt">template</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">template</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vm_name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">cluster</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DC1_C1</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">VM Network</span>
+        <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">192.168.10.11</span>
+        <span class="nt">netmask</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">255.255.255.0</span>
+    <span class="nt">wait_for_ip_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="nt">customization</span><span class="p">:</span>
+      <span class="nt">domain</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">guest_domain</span> <span class="cp">}}</span><span class="s">&quot;</span>
+      <span class="nt">dns_servers</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">8.9.9.9</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">7.8.8.9</span>
+      <span class="nt">dns_suffix</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">example.com</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">example2.com</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Rename a virtual machine (requires the virtual machine&#39;s uuid)</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">uuid</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vm_uuid</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">new_name</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Remove a virtual machine by uuid</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">uuid</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vm_uuid</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Manipulate vApp properties</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vm_name</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">vapp_properties</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remoteIP</span>
+        <span class="nt">category</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Backup</span>
+        <span class="nt">label</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Backup server IP</span>
+        <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">str</span>
+        <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.10.10.1</span>
+      <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">old_property</span>
+        <span class="nt">operation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set powerstate of a virtual machine to poweroff by using UUID</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+    <span class="nt">uuid</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vm_uuid</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">poweredoff</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Deploy a virtual machine in a datastore different from the datastore of the template</span>
+  <span class="nt">vmware_guest</span><span class="p">:</span>
+    <span class="nt">hostname</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vm_name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+    <span class="nt">template</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">template_name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="c1"># Here datastore can be different which holds template</span>
+    <span class="nt">datastore</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">virtual_machine_datastore</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">hardware</span><span class="p">:</span>
+      <span class="nt">memory_mb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">512</span>
+      <span class="nt">num_cpus</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+      <span class="nt">scsi</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">paravirtual</span>
+  <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id6">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
+<p>Common return values are documented <a class="reference internal" href="../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Key</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                <tr>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-instance"></div>
+                <b>instance</b>
+                <a class="ansibleOptionLink" href="#return-instance" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">dictionary</span>
+                                      </div>
+                                </td>
+            <td>always</td>
+            <td>
+                                        <div>metadata about the new virtual machine</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">None</div>
+                                </td>
+        </tr>
+                    </table>
+<br/><br/></div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id7">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This module is not guaranteed to have a backwards compatible interface. <em>[preview]</em></li>
+<li>This module is <a class="reference internal" href="../user_guide/modules_support.html#modules-support"><span class="std std-ref">maintained by the Ansible Community</span></a>. <em>[community]</em></li>
+</ul>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Loic Blot (&#64;nerzhul) &lt;<a class="reference external" href="/cdn-cgi/l/email-protection#f79b989e94d1d4c3c1cc959b9883d1d4c4c0ccd1d4c2c5ccd1d4c3cfcc82999e8fda928f8792859e92999492d1d4c3c1cc9185">loic<span>&#46;</span>blot<span>&#64;</span>unix-experience<span>&#46;</span>fr</a>&gt;</li>
+<li>Philippe Dellaert (&#64;pdellaert) &lt;<a class="reference external" href="/cdn-cgi/l/email-protection#96e6fefffaffe6e6f3b0b5a5a1adb0b5a3a4adb0b5a2aeadf2f3fafaf7f3e4e2b0b5a2a0adf9e4f1">philippe<span>&#64;</span>dellaert<span>&#46;</span>org</a>&gt;</li>
+<li>Abhijeet Kasurde (&#64;Akasurde) &lt;<a class="reference external" href="/cdn-cgi/l/email-protection#d4b5bfb5a7a1a6b0b1f2f7e7e3eff2f7e1e6eff2f7e0ecefa6b1b0bcb5a0f2f7e0e2efb7bbb9">akasurde<span>&#64;</span>redhat<span>&#46;</span>com</a>&gt;</li>
+</ul>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you notice any issues in this documentation, you can <a class="reference external" href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/cloud/vmware/vmware_guest.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr">edit this document</a> to improve it.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Aug 11, 2020.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

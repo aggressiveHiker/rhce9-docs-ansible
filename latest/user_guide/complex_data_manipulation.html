@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data manipulation &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/complex_data_manipulation.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Rejecting modules" href="plugin_filtering_config.html" />
+    <link rel="prev" title="Advanced Syntax" href="playbooks_advanced_syntax.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#traditional-table-of-contents">Traditional Table of Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vault.html">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Data manipulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#loops-and-list-comprehensions">Loops and list comprehensions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#complex-type-transformations">Complex Type transformations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Data manipulation</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/complex_data_manipulation.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="data-manipulation">
+<span id="complex-data-manipulation"></span><h1>Data manipulation<a class="headerlink" href="#data-manipulation" title="Permalink to this headline"></a></h1>
+<p>In many cases, you need to do some complex operation with your variables, while Ansible is not recommended as a data processing/manipulation tool, you can use the existing Jinja2 templating in conjunction with the many added Ansible filters, lookups and tests to do some very complex transformations.</p>
+<dl class="simple">
+<dt>Let’s start with a quick definition of each type of plugin:</dt><dd><ul class="simple">
+<li><p>lookups: Mainly used to query ‘external data’, in Ansible these were the primary part of loops using the <code class="docutils literal notranslate"><span class="pre">with_&lt;lookup&gt;</span></code> construct, but they can be used independently to return data for processing. They normally return a list due to their primary function in loops as mentioned previously. Used with the <code class="docutils literal notranslate"><span class="pre">lookup</span></code> or <code class="docutils literal notranslate"><span class="pre">query</span></code> Jinja2 operators.</p></li>
+<li><p>filters: used to change/transform data, used with the <code class="docutils literal notranslate"><span class="pre">|</span></code> Jinja2 operator.</p></li>
+<li><p>tests: used to validate data, used with the <code class="docutils literal notranslate"><span class="pre">is</span></code> Jinja2 operator.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="loops-and-list-comprehensions">
+<span id="for-loops-or-list-comprehensions"></span><h2>Loops and list comprehensions<a class="headerlink" href="#loops-and-list-comprehensions" title="Permalink to this headline"></a></h2>
+<p>Most programming languages have loops (<code class="docutils literal notranslate"><span class="pre">for</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>, and so on) and list comprehensions to do transformations on lists including lists of objects. Jinja2 has a few filters that provide this functionality: <code class="docutils literal notranslate"><span class="pre">map</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>, <code class="docutils literal notranslate"><span class="pre">reject</span></code>, <code class="docutils literal notranslate"><span class="pre">selectattr</span></code>, <code class="docutils literal notranslate"><span class="pre">rejectattr</span></code>.</p>
+<ul class="simple">
+<li><p>map: this is a basic for loop that just allows you to change every item in a list, using the ‘attribute’ keyword you can do the transformation based on attributes of the list elements.</p></li>
+<li><p>select/reject: this is a for loop with a condition, that allows you to create a subset of a list that matches (or not) based on the result of the condition.</p></li>
+<li><p>selectattr/rejectattr: very similar to the above but it uses a specific attribute of the list elements for the conditional statement.</p></li>
+</ul>
+<p id="exponential-backoff">Use a loop to create exponential backoff for retries/until.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">retry ping 10 times with exponential backup delay</span>
+  <span class="nt">ping</span><span class="p">:</span>
+  <span class="nt">retries</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+  <span class="nt">delay</span><span class="p">:</span> <span class="s">&#39;{{item|int}}&#39;</span>
+  <span class="nt">loop</span><span class="p">:</span> <span class="s">&#39;{{</span><span class="nv"> </span><span class="s">range(1,</span><span class="nv"> </span><span class="s">10)|map(&#39;</span><span class="l l-Scalar l-Scalar-Plain">pow&#39;, 2) }}&#39;</span>
+</pre></div>
+</div>
+<div class="section" id="extract-keys-from-a-dictionary-matching-elements-from-a-list">
+<span id="keys-from-dict-matching-list"></span><h3>Extract keys from a dictionary matching elements from a list<a class="headerlink" href="#extract-keys-from-a-dictionary-matching-elements-from-a-list" title="Permalink to this headline"></a></h3>
+<p>The Python equivalent code would be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">chains</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">chains</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">chains_config</span><span class="p">[</span><span class="n">chain</span><span class="p">][</span><span class="s1">&#39;configs&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>There are several ways to do it in Ansible, this is just one example:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Way to extract matching keys from a list of dictionaries</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span> <span class="nt">tasks</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show extracted list of keys from a list of dictionaries</span>
+     <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="hll">       <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">chains</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="nv">chains_config</span><span class="o">)</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;configs&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">flatten</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;type&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">flatten</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</span>     <span class="nt">vars</span><span class="p">:</span>
+       <span class="nt">chains</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">]</span>
+       <span class="nt">chains_config</span><span class="p">:</span>
+           <span class="nt">1</span><span class="p">:</span>
+               <span class="nt">foo</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bar</span>
+               <span class="nt">configs</span><span class="p">:</span>
+                   <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">routed</span>
+                     <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.1</span>
+                   <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bridged</span>
+                     <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.2</span>
+           <span class="nt">2</span><span class="p">:</span>
+               <span class="nt">foo</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">baz</span>
+               <span class="nt">configs</span><span class="p">:</span>
+                   <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">routed</span>
+                     <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0</span>
+                   <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bridged</span>
+                     <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.1</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Results of debug task, a list with the extracted keys</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span>   ok: [localhost] =&gt; {
+       &quot;msg&quot;: [
+           &quot;routed&quot;,
+           &quot;bridged&quot;,
+           &quot;routed&quot;,
+           &quot;bridged&quot;
+       ]
+   }
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Get the unique list of values of a variable that vary per host</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>   <span class="nt">vars</span><span class="p">:</span>
+       <span class="nt">unique_value_list</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;all&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span> <span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="nv">hostvars</span><span class="o">,</span> <span class="s1">&#39;varname&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="o">|</span> <span class="nf">unique</span><span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="find-mount-point">
+<span id="id1"></span><h3>Find mount point<a class="headerlink" href="#find-mount-point" title="Permalink to this headline"></a></h3>
+<p>In this case, we want to find the mount point for a given path across our machines, since we already collect mount facts, we can use the following:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Use selectattr to filter mounts into list I can then sort and select the last from</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>  <span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+    <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="nt">vars</span><span class="p">:</span>
+       <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/lib/cache</span>
+    <span class="nt">tasks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The mount point for </span><span class="cp">{{</span><span class="nv">path</span><span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">, found using the Ansible mount facts, [-1] is the same as the &#39;last&#39; filter</span>
+      <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="hll">       <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="o">(</span><span class="nv">ansible_facts.mounts</span> <span class="o">|</span> <span class="nf">selectattr</span><span class="o">(</span><span class="s1">&#39;mount&#39;</span><span class="o">,</span> <span class="s1">&#39;in&#39;</span><span class="o">,</span> <span class="nv">path</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="o">|</span> <span class="nf">sort</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;mount&#39;</span><span class="o">))[-</span><span class="m">1</span><span class="o">][</span><span class="s1">&#39;mount&#39;</span><span class="o">]</span><span class="cp">}}</span><span class="s">&quot;</span>
+</span></pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="omit-elements-from-a-list">
+<span id="omit-elements-from-list"></span><h3>Omit elements from a list<a class="headerlink" href="#omit-elements-from-a-list" title="Permalink to this headline"></a></h3>
+<p>The special <code class="docutils literal notranslate"><span class="pre">omit</span></code> variable ONLY works with module options, but we can still use it in other ways as an identifier to tailor a list of elements:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Inline list filtering when feeding a module option</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Enable a list of Windows features, by name</span>
+     <span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
+<span class="hll">       <span class="nt">win_feature_list</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">namestuff</span> <span class="o">|</span> <span class="nf">reject</span><span class="o">(</span><span class="s1">&#39;equalto&#39;</span><span class="o">,</span> <span class="nv">omit</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</span>     <span class="nt">vars</span><span class="p">:</span>
+       <span class="nt">namestuff</span><span class="p">:</span>
+<span class="hll">         <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">fs_installed_smb_v1</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="kp">False</span><span class="o">))</span> <span class="o">|</span> <span class="nf">ternary</span><span class="o">(</span><span class="nv">omit</span><span class="o">,</span> <span class="s1">&#39;FS-SMB1&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</span>         <span class="p p-Indicator">-</span> <span class="s">&quot;foo&quot;</span>
+         <span class="p p-Indicator">-</span> <span class="s">&quot;bar&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>Another way is to avoid adding elements to the list in the first place, so you can just use it directly:</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Using set_fact in a loop to increment a list conditionally</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Build unique list with some items conditionally omitted</span>
+     <span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
+<span class="hll">        <span class="nt">namestuff</span><span class="p">:</span> <span class="s">&#39;</span><span class="nv"> </span><span class="cp">{{</span> <span class="o">(</span><span class="nv">namestuff</span> <span class="o">|</span> <span class="nf">default</span><span class="o">([]))</span> <span class="o">|</span> <span class="nf">union</span><span class="o">([</span><span class="nv">item</span><span class="o">])</span> <span class="cp">}}</span><span class="s">&#39;</span>
+</span><span class="hll">     <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">item != omit</span>
+</span>     <span class="nt">loop</span><span class="p">:</span>
+<span class="hll">         <span class="p p-Indicator">-</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">fs_installed_smb_v1</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="kp">False</span><span class="o">))</span> <span class="o">|</span> <span class="nf">ternary</span><span class="o">(</span><span class="nv">omit</span><span class="o">,</span> <span class="s1">&#39;FS-SMB1&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</span>         <span class="p p-Indicator">-</span> <span class="s">&quot;foo&quot;</span>
+         <span class="p p-Indicator">-</span> <span class="s">&quot;bar&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="combine-values-from-same-list-of-dicts">
+<span id="combine-optional-values"></span><h3>Combine values from same list of dicts<a class="headerlink" href="#combine-values-from-same-list-of-dicts" title="Permalink to this headline"></a></h3>
+<p>Combining positive and negative filters from examples above, you can get a ‘value when it exists’ and a ‘fallback’ when it doesn’t.</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Use selectattr and rejectattr to get the ansible_host or inventory_hostname as needed</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>   <span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+     <span class="nt">tasks</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Check hosts in inventory that respond to ssh port</span>
+         <span class="nt">wait_for</span><span class="p">:</span>
+           <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+           <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+         <span class="nt">loop</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">has_ah</span> <span class="o">+</span> <span class="nv">no_ah</span> <span class="cp">}}</span><span class="s">&#39;</span>
+         <span class="nt">vars</span><span class="p">:</span>
+           <span class="nt">has_ah</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">|</span><span class="nf">dictsort</span><span class="o">|</span><span class="nf">selectattr</span><span class="o">(</span><span class="s2">&quot;1.ansible_host&quot;</span><span class="o">,</span> <span class="s2">&quot;defined&quot;</span><span class="o">)|</span><span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s2">&quot;1.ansible_host&quot;</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&#39;</span>
+           <span class="nt">no_ah</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">|</span><span class="nf">dictsort</span><span class="o">|</span><span class="nf">rejectattr</span><span class="o">(</span><span class="s2">&quot;1.ansible_host&quot;</span><span class="o">,</span> <span class="s2">&quot;defined&quot;</span><span class="o">)|</span><span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="o">)|</span><span class="nf">list</span> <span class="cp">}}</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="custom-fileglob-based-on-a-variable">
+<span id="custom-fileglob-variable"></span><h3>Custom Fileglob Based on a Variable<a class="headerlink" href="#custom-fileglob-based-on-a-variable" title="Permalink to this headline"></a></h3>
+<p>This example uses <a class="reference external" href="https://docs.python.org/3/tutorial/controlflow.html#unpacking-argument-lists">Python argument list unpacking</a> to create a custom list of fileglobs based on a variable.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Using fileglob with a list based on a variable.</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>  <span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+    <span class="nt">vars</span><span class="p">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">mygroups</span>
+        <span class="l l-Scalar l-Scalar-Plain">- prod</span>
+        <span class="l l-Scalar l-Scalar-Plain">- web</span>
+    <span class="nt">tasks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy a glob of files based on a list of groups</span>
+        <span class="nt">copy</span><span class="p">:</span>
+          <span class="nt">src</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+          <span class="nt">dest</span><span class="p">:</span> <span class="s">&quot;/tmp/</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+        <span class="nt">loop</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">q</span><span class="o">(</span><span class="s2">&quot;fileglob&quot;</span><span class="o">,</span> <span class="o">*</span><span class="nv">globlist</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
+        <span class="nt">vars</span><span class="p">:</span>
+          <span class="nt">globlist</span><span class="p">:</span> <span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">mygroups</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s2">&quot;regex_replace&quot;</span><span class="o">,</span> <span class="s2">&quot;^(.*)$&quot;</span><span class="o">,</span> <span class="s2">&quot;files/\1/*.conf&quot;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="complex-type-transformations">
+<span id="id2"></span><h2>Complex Type transformations<a class="headerlink" href="#complex-type-transformations" title="Permalink to this headline"></a></h2>
+<p>Jinja provides filters for simple data type transformations (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, and so on), but when you want to transform data structures things are not as easy.
+You can use loops and list comprehensions as shown above to help, also other filters and lookups can be chained and used to achieve more complex transformations.</p>
+<div class="section" id="create-dictionary-from-list">
+<span id="id3"></span><h3>Create dictionary from list<a class="headerlink" href="#create-dictionary-from-list" title="Permalink to this headline"></a></h3>
+<p>In most languages it is easy to create a dictionary (a.k.a. map/associative array/hash and so on) from a list of pairs, in Ansible there are a couple of ways to do it and the best one for you might depend on the source of your data.</p>
+<p>These example produces <code class="docutils literal notranslate"><span class="pre">{&quot;a&quot;:</span> <span class="pre">&quot;b&quot;,</span> <span class="pre">&quot;c&quot;:</span> <span class="pre">&quot;d&quot;}</span></code></p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Simple list to dict by assuming the list is [key, value , key, value, …]</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span> <span class="nt">vars</span><span class="p">:</span>
+     <span class="nt">single_list</span><span class="p">:</span> <span class="p p-Indicator">[</span> <span class="s">&#39;a&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;b&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;c&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;d&#39;</span> <span class="p p-Indicator">]</span>
+     <span class="nt">mydict</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dict</span><span class="o">(</span><span class="nv">single_list</span> <span class="o">|</span> <span class="nf">slice</span><span class="o">(</span><span class="m">2</span><span class="o">))</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">It is simpler when we have a list of pairs:</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span> <span class="nt">vars</span><span class="p">:</span>
+     <span class="nt">list_of_pairs</span><span class="p">:</span> <span class="p p-Indicator">[</span> <span class="p p-Indicator">[</span><span class="s">&#39;a&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;b&#39;</span><span class="p p-Indicator">],</span> <span class="p p-Indicator">[</span><span class="s">&#39;c&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;d&#39;</span><span class="p p-Indicator">]</span> <span class="p p-Indicator">]</span>
+     <span class="nt">mydict</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dict</span><span class="o">(</span><span class="nv">list_of_pairs</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>Both end up being the same thing, with <code class="docutils literal notranslate"><span class="pre">slice(2)</span></code> transforming <code class="docutils literal notranslate"><span class="pre">single_list</span></code> to a <code class="docutils literal notranslate"><span class="pre">list_of_pairs</span></code> generator.</p>
+<p>A bit more complex, using <code class="docutils literal notranslate"><span class="pre">set_fact</span></code> and a <code class="docutils literal notranslate"><span class="pre">loop</span></code> to create/update a dictionary with key value pairs from 2 lists:</p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Using set_fact to create a dictionary from a set of lists</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Uses &#39;combine&#39; to update the dictionary and &#39;zip&#39; to make pairs of both lists</span>
+      <span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
+<span class="hll">        <span class="nt">mydict</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">mydict</span> <span class="o">|</span> <span class="nf">default</span><span class="o">({})</span> <span class="o">|</span> <span class="nf">combine</span><span class="o">({</span><span class="nv">item</span><span class="o">[</span><span class="m">0</span><span class="o">]:</span> <span class="nv">item</span><span class="o">[</span><span class="m">1</span><span class="o">]})</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</span><span class="hll">      <span class="nt">loop</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">keys</span> <span class="o">|</span> <span class="nf">zip</span><span class="o">(</span><span class="nv">values</span><span class="o">))</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</span>      <span class="nt">vars</span><span class="p">:</span>
+        <span class="nt">keys</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">var</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">bar</span>
+        <span class="nt">values</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">b</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">c</span>
+</pre></div>
+</div>
+</div>
+<p>This results in <code class="docutils literal notranslate"><span class="pre">{&quot;foo&quot;:</span> <span class="pre">&quot;a&quot;,</span> <span class="pre">&quot;var&quot;:</span> <span class="pre">&quot;b&quot;,</span> <span class="pre">&quot;bar&quot;:</span> <span class="pre">&quot;c&quot;}</span></code>.</p>
+<p>You can even combine these simple examples with other filters and lookups to create a dictionary dynamically by matching patterns to variable names:</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Using ‘vars’ to define dictionary from a set of lists without needing a task</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span>   <span class="nt">vars</span><span class="p">:</span>
+       <span class="nt">myvarnames</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">q</span><span class="o">(</span><span class="s1">&#39;varnames&#39;</span><span class="o">,</span> <span class="s1">&#39;^my&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+       <span class="nt">mydict</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dict</span><span class="o">(</span><span class="nv">myvarnames</span> <span class="o">|</span> <span class="nf">zip</span><span class="o">(</span><span class="nv">q</span><span class="o">(</span><span class="s1">&#39;vars&#39;</span><span class="o">,</span> <span class="o">*</span><span class="nv">myvarnames</span><span class="o">)))</span> <span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>A quick explanation, since there is a lot to unpack from these two lines:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">varnames</span></code> lookup returns a list of variables that match “begin with <code class="docutils literal notranslate"><span class="pre">my</span></code>”.</p></li>
+<li><p>Then feeding the list from the previous step into the <code class="docutils literal notranslate"><span class="pre">vars</span></code> lookup to get the list of values.
+The <code class="docutils literal notranslate"><span class="pre">*</span></code> is used to ‘dereference the list’ (a pythonism that works in Jinja), otherwise it would take the list as a single argument.</p></li>
+<li><p>Both lists get passed to the <code class="docutils literal notranslate"><span class="pre">zip</span></code> filter to pair them off into a unified list (key, value, key2, value2, …).</p></li>
+<li><p>The dict function then takes this ‘list of pairs’ to create the dictionary.</p></li>
+</ul>
+</div></blockquote>
+<p>An example on how to use facts to find a host’s data that meets condition X:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+  <span class="nt">uptime_of_host_most_recently_rebooted</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span><span class="nv">ansible_play_hosts_all</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="nv">hostvars</span><span class="o">,</span> <span class="s1">&#39;ansible_uptime_seconds&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">sort</span> <span class="o">|</span> <span class="nf">first</span><span class="cp">}}</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p>Using an example from &#64;zoradache on reddit, to show the ‘uptime in days/hours/minutes’ (assumes facts where gathered).
+<a class="reference external" href="https://www.reddit.com/r/ansible/comments/gj5a93/trying_to_get_uptime_from_seconds/fqj2qr3/">https://www.reddit.com/r/ansible/comments/gj5a93/trying_to_get_uptime_from_seconds/fqj2qr3/</a></p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Show the uptime in a certain format</span>
+  <span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+   <span class="nt">msg</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Timedelta</span> <span class="cp">{{</span> <span class="nv">now</span><span class="o">()</span> <span class="o">-</span> <span class="nv">now</span><span class="o">()</span><span class="nv">.fromtimestamp</span><span class="o">(</span><span class="nv">now</span><span class="o">(</span><span class="nv">fmt</span><span class="o">=</span><span class="s1">&#39;%s&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">int</span> <span class="o">-</span> <span class="nv">ansible_uptime_seconds</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="playbooks_filters.html#playbooks-filters"><span class="std std-ref">Using filters to manipulate data</span></a></dt><dd><p>Jinja2 filters included with Ansible</p>
+</dd>
+<dt><a class="reference internal" href="playbooks_tests.html#playbooks-tests"><span class="std std-ref">Tests</span></a></dt><dd><p>Jinja2 tests included with Ansible</p>
+</dd>
+<dt><a class="reference external" href="https://jinja.palletsprojects.com/">Jinja2 Docs</a></dt><dd><p>Jinja2 documentation, includes lists for core filters and tests</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_advanced_syntax.html" class="btn btn-neutral float-left" title="Advanced Syntax" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plugin_filtering_config.html" class="btn btn-neutral float-right" title="Rejecting modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on May 27, 2022.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

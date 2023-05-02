@@ -1,0 +1,906 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Developing dynamic inventory &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developing ansible-base" href="developing_core.html" />
+    <link rel="prev" title="Developing plugins" href="developing_plugins.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="2.10">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.10
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "2.10" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.10") > -1) {
+              option.value = current_url.replace("2.10","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9";
+            if ( "2.9" == "2.10" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.10") > -1) {
+              option.value = current_url.replace("2.10","2.9");
+            } else {
+              option.value = current_url.replace("latest","2.9");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9_ja";
+            if ( "2.9_ja" == "2.10" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.10") > -1) {
+              option.value = current_url.replace("2.10","2.9_ja");
+            } else {
+              option.value = current_url.replace("latest","2.9_ja");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.8";
+            if ( "2.8" == "2.10" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.10") > -1) {
+              option.value = current_url.replace("2.10","2.8");
+            } else {
+              option.value = current_url.replace("latest","2.8");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "2.10" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.10") > -1) {
+              option.value = current_url.replace("2.10","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+<!--  <form id="rtd-search-form" class="wy-form" action="../search.html" -->
+  <form id="rtd-search-form" class="wy-form"  method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="developing_locally.html">Adding modules and plugins locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules.html">Should you develop a module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general.html">Ansible module development: getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_checklist.html">Contributing your module to an existing Ansible collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_best_practices.html">Conventions, tips, and pitfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_python_3.html">Ansible and Python 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_documenting.html">Module format and documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_windows.html">Windows module development walkthrough</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_aci.html">Developing Cisco ACI modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/aws_guidelines.html">Guidelines for Ansible Amazon AWS module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/openstack_guidelines.html">OpenStack Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/ovirt_dev_guide.html">oVirt Ansible Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platforms/vmware_guidelines.html">Guidelines for VMware module development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_in_groups.html">Creating a new collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_lifecycle.html">The lifecycle of an Ansible module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_plugins.html">Developing plugins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Developing dynamic inventory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#inventory-sources">Inventory sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inventory-plugins">Inventory plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#developing-an-inventory-plugin">Developing an inventory plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#common-format-for-inventory-sources">Common format for inventory sources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-auto-plugin">The ‘auto’ plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#developing-inventory-scripts">Inventory scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inventory-script-conventions">Inventory script conventions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tuning-the-external-inventory-script">Tuning the external inventory script</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="developing_core.html">Developing <code class="docutils literal notranslate"><span class="pre">ansible-base</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_program_flow_modules.html">Ansible module architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections_galaxy_meta.html">Collection Galaxy metadata structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_architecture.html">Ansible architecture</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Guide</a> &raquo;</li>
+        
+      <li>Developing dynamic inventory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                <!--  <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a> -->
+                  <br>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+  <script>
+    startsWith = function(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">');
+      document.write('<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>');
+      document.write('</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+      if (startsWith(current_url_path, "/ansible/latest/") || startsWith(current_url_path, "/ansible/2.10/")) {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.</p>');
+        document.write('</div>');
+
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this, or select any version in version selection to the left, including <b>latest</b> for the most recent community version.</p>');
+        document.write('</div>');
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp banner to advertise survey
+        document.write('<div id="banner_id" class="admonition important">');
+        document.write('<br><p>Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.</p><br>');
+        document.write('</div>'); */
+
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+
+      } else {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+      }
+    
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="developing-dynamic-inventory">
+<span id="developing-inventory"></span><h1>Developing dynamic inventory<a class="headerlink" href="#developing-dynamic-inventory" title="Permalink to this headline">¶</a></h1>
+<p>Ansible can pull inventory information from dynamic sources, including cloud sources, by using the supplied <a class="reference internal" href="../plugins/inventory.html#inventory-plugins"><span class="std std-ref">inventory plugins</span></a>. For details about how to pull inventory information, see <a class="reference internal" href="../user_guide/intro_dynamic_inventory.html#dynamic-inventory"><span class="std std-ref">Working with dynamic inventory</span></a>. If the source you want is not currently covered by existing plugins, you can create your own inventory plugin as with any other plugin type.</p>
+<p>In previous versions, you had to create a script or program that could output JSON in the correct format when invoked with the proper arguments.
+You can still use and write inventory scripts, as we ensured backwards compatibility via the <a class="reference internal" href="../collections/ansible/builtin/script_inventory.html#script-inventory"><span class="std std-ref">script inventory plugin</span></a>
+and there is no restriction on the programming language used.
+If you choose to write a script, however, you will need to implement some features yourself such as caching, configuration management, dynamic variable and group composition, and so on.
+If you use <a class="reference internal" href="../plugins/inventory.html#inventory-plugins"><span class="std std-ref">inventory plugins</span></a> instead, you can leverage the Ansible codebase and add these common features automatically.</p>
+<div class="contents local topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#inventory-sources" id="id5">Inventory sources</a></p></li>
+<li><p><a class="reference internal" href="#inventory-plugins" id="id6">Inventory plugins</a></p>
+<ul>
+<li><p><a class="reference internal" href="#developing-an-inventory-plugin" id="id7">Developing an inventory plugin</a></p>
+<ul>
+<li><p><a class="reference internal" href="#verify-file-method" id="id8">verify_file method</a></p></li>
+<li><p><a class="reference internal" href="#parse-method" id="id9">parse method</a></p></li>
+<li><p><a class="reference internal" href="#inventory-cache" id="id10">inventory cache</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#common-format-for-inventory-sources" id="id11">Common format for inventory sources</a></p></li>
+<li><p><a class="reference internal" href="#the-auto-plugin" id="id12">The ‘auto’ plugin</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#developing-inventory-scripts" id="id13">Inventory scripts</a></p>
+<ul>
+<li><p><a class="reference internal" href="#inventory-script-conventions" id="id14">Inventory script conventions</a></p></li>
+<li><p><a class="reference internal" href="#tuning-the-external-inventory-script" id="id15">Tuning the external inventory script</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="inventory-sources">
+<span id="id1"></span><h2><a class="toc-backref" href="#id5">Inventory sources</a><a class="headerlink" href="#inventory-sources" title="Permalink to this headline">¶</a></h2>
+<p>Inventory sources are the input strings that inventory plugins work with.
+An inventory source can be a path to a file or to a script, or it can be raw data that the plugin can interpret.</p>
+<p>The table below shows some examples of inventory plugins and the source types that you can pass to them with <code class="docutils literal notranslate"><span class="pre">-i</span></code> on the command line.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Plugin</p></td>
+<td><p>Source</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../collections/ansible/builtin/host_list_inventory.html#host-list-inventory"><span class="std std-ref">host list</span></a></p></td>
+<td><p>A comma-separated list of hosts</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../collections/ansible/builtin/yaml_inventory.html#yaml-inventory"><span class="std std-ref">yaml</span></a></p></td>
+<td><p>Path to a YAML format data file</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../collections/ansible/builtin/constructed_inventory.html#constructed-inventory"><span class="std std-ref">constructed</span></a></p></td>
+<td><p>Path to a YAML configuration file</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../collections/ansible/builtin/ini_inventory.html#ini-inventory"><span class="std std-ref">ini</span></a></p></td>
+<td><p>Path to an INI formatted data file</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/inventory/virtualbox.html#virtualbox-inventory" title="(in Ansible v2.9)"><span class="xref std std-ref">virtualbox</span></a></p></td>
+<td><p>Path to a YAML configuration file</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../collections/ansible/builtin/script_inventory.html#script-inventory"><span class="std std-ref">script plugin</span></a></p></td>
+<td><p>Path to an executable that outputs JSON</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="inventory-plugins">
+<span id="developing-inventory-inventory-plugins"></span><h2><a class="toc-backref" href="#id6">Inventory plugins</a><a class="headerlink" href="#inventory-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Like most plugin types (except modules), inventory plugins must be developed in Python. They execute on the controller and should therefore adhere to the <a class="reference internal" href="../installation_guide/intro_installation.html#control-node-requirements"><span class="std std-ref">Control node requirements</span></a>.</p>
+<p>Most of the documentation in <a class="reference internal" href="developing_plugins.html#developing-plugins"><span class="std std-ref">Developing plugins</span></a> also applies here. You should read that document first for a general understanding and then come back to this document for specifics on inventory plugins.</p>
+<p>Normally, inventory plugins are executed at the start of a run, and before the playbooks, plays, or roles are loaded.
+However, you can use the <code class="docutils literal notranslate"><span class="pre">meta:</span> <span class="pre">refresh_inventory</span></code> task to clear the current inventory and execute the inventory plugins again, and this task will generate a new inventory.</p>
+<p>If you use the persistent cache, inventory plugins can also use the configured cache plugin to store and retrieve data. Caching inventory avoids making repeated and costly external calls.</p>
+<div class="section" id="developing-an-inventory-plugin">
+<span id="id2"></span><h3><a class="toc-backref" href="#id7">Developing an inventory plugin</a><a class="headerlink" href="#developing-an-inventory-plugin" title="Permalink to this headline">¶</a></h3>
+<p>The first thing you want to do is use the base class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.inventory</span> <span class="kn">import</span> <span class="n">BaseInventoryPlugin</span>
+
+<span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">):</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>  <span class="c1"># used internally by Ansible, it should match the file name but not required</span>
+</pre></div>
+</div>
+<p>If the inventory plugin is in a collection, the NAME should be in the ‘namespace.collection_name.myplugin’ format. The base class has a couple of methods that each plugin should implement and a few helpers for parsing the inventory source and updating the inventory.</p>
+<p>After you have the basic plugin working, you can incorporate other features by adding more base classes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.inventory</span> <span class="kn">import</span> <span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span>
+
+<span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span><span class="p">):</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
+</pre></div>
+</div>
+<p>For the bulk of the work in a plugin, we mostly want to deal with 2 methods <code class="docutils literal notranslate"><span class="pre">verify_file</span></code> and <code class="docutils literal notranslate"><span class="pre">parse</span></code>.</p>
+<div class="section" id="verify-file-method">
+<span id="inventory-plugin-verify-file"></span><h4><a class="toc-backref" href="#id8">verify_file method</a><a class="headerlink" href="#verify-file-method" title="Permalink to this headline">¶</a></h4>
+<p>Ansible uses this method to quickly determine if the inventory source is usable by the plugin. The determination does not need to be 100% accurate, as there might be an overlap in what plugins can handle and by default Ansible will try the enabled plugins as per their sequence.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">verify_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; return true/false if this is possibly a valid file for this plugin to consume &#39;&#39;&#39;</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">verify_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="c1"># base class verifies that file exists and is readable by current user</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;virtualbox.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;virtualbox.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;vbox.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;vbox.yml&#39;</span><span class="p">)):</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">valid</span>
+</pre></div>
+</div>
+<p>In the above example, from the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/inventory/virtualbox.html#virtualbox-inventory" title="(in Ansible v2.9)"><span class="xref std std-ref">virtualbox inventory plugin</span></a>, we screen for specific file name patterns to avoid attempting to consume any valid YAML file. You can add any type of condition here, but the most common one is ‘extension matching’. If you implement extension matching for YAML configuration files, the path suffix &lt;plugin_name&gt;.&lt;yml|yaml&gt; should be accepted. All valid extensions should be documented in the plugin description.</p>
+<p>The following is another example that does not use a ‘file’ but the inventory source string itself,
+from the <a class="reference internal" href="../collections/ansible/builtin/host_list_inventory.html#host-list-inventory"><span class="std std-ref">host list</span></a> plugin:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">verify_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; don&#39;t call base class as we don&#39;t expect a path, but a host list &#39;&#39;&#39;</span>
+    <span class="n">host_list</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">b_path</span> <span class="o">=</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">host_list</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;surrogate_or_strict&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">b_path</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;,&#39;</span> <span class="ow">in</span> <span class="n">host_list</span><span class="p">:</span>
+        <span class="c1"># the path does NOT exist and there is a comma to indicate this is a &#39;host list&#39;</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">valid</span>
+</pre></div>
+</div>
+<p>This method is just to expedite the inventory process and avoid unnecessary parsing of sources that are easy to filter out before causing a parse error.</p>
+</div>
+<div class="section" id="parse-method">
+<span id="inventory-plugin-parse"></span><h4><a class="toc-backref" href="#id9">parse method</a><a class="headerlink" href="#parse-method" title="Permalink to this headline">¶</a></h4>
+<p>This method does the bulk of the work in the plugin.
+It takes the following parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>inventory: inventory object with existing data and the methods to add hosts/groups/variables to inventory</p></li>
+<li><p>loader: Ansible’s DataLoader. The DataLoader can read files, auto load JSON/YAML and decrypt vaulted data, and cache read files.</p></li>
+<li><p>path: string with inventory source (this is usually a path, but is not required)</p></li>
+<li><p>cache: indicates whether the plugin should use or avoid caches (cache plugin and/or loader)</p></li>
+</ul>
+</div></blockquote>
+<p>The base class does some minimal assignment for reuse in other methods.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+ <span class="bp">self</span><span class="o">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">loader</span>
+ <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span> <span class="o">=</span> <span class="n">inventory</span>
+ <span class="bp">self</span><span class="o">.</span><span class="n">templar</span> <span class="o">=</span> <span class="n">Templar</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">loader</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is up to the plugin now to parse the provided inventory source and translate it into Ansible inventory.
+To facilitate this, the example below uses a few helper functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
+
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+     <span class="c1"># call base method to ensure properties are available for use with other helper methods</span>
+     <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
+
+     <span class="c1"># this method will parse &#39;common format&#39; inventory sources and</span>
+     <span class="c1"># update any options declared in DOCUMENTATION as needed</span>
+     <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_config_data</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+     <span class="c1"># if NOT using _read_config_data you should call set_options directly,</span>
+     <span class="c1"># to process any defined configuration for this plugin,</span>
+     <span class="c1"># if you don&#39;t define any options you can skip</span>
+     <span class="c1">#self.set_options()</span>
+
+     <span class="c1"># example consuming options from inventory source</span>
+     <span class="n">mysession</span> <span class="o">=</span> <span class="n">apilib</span><span class="o">.</span><span class="n">session</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;api_user&#39;</span><span class="p">),</span>
+                                <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;api_pass&#39;</span><span class="p">),</span>
+                                <span class="n">server</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;api_server&#39;</span><span class="p">)</span>
+     <span class="p">)</span>
+
+
+     <span class="c1"># make requests to get data to feed into inventory</span>
+     <span class="n">mydata</span> <span class="o">=</span> <span class="n">mysession</span><span class="o">.</span><span class="n">getitall</span><span class="p">()</span>
+
+     <span class="c1">#parse data and create inventory objects:</span>
+     <span class="k">for</span> <span class="n">colo</span> <span class="ow">in</span> <span class="n">mydata</span><span class="p">:</span>
+         <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">mydata</span><span class="p">[</span><span class="n">colo</span><span class="p">][</span><span class="s1">&#39;servers&#39;</span><span class="p">]:</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span><span class="o">.</span><span class="n">add_host</span><span class="p">(</span><span class="n">server</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="n">server</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="s1">&#39;ansible_host&#39;</span><span class="p">,</span> <span class="n">server</span><span class="p">[</span><span class="s1">&#39;external_ip&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The specifics will vary depending on API and structure returned. Remember that if you get an inventory source error or any other issue, you should <code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">AnsibleParserError</span></code> to let Ansible know that the source was invalid or the process failed.</p>
+<p>For examples on how to implement an inventory plugin, see the source code here:
+<a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/inventory">lib/ansible/plugins/inventory</a>.</p>
+</div>
+<div class="section" id="inventory-cache">
+<span id="inventory-plugin-caching"></span><h4><a class="toc-backref" href="#id10">inventory cache</a><a class="headerlink" href="#inventory-cache" title="Permalink to this headline">¶</a></h4>
+<p>To cache the inventory, extend the inventory plugin documentation with the inventory_cache documentation fragment and use the Cacheable base class.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extends_documentation_fragment</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">inventory_cache</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span><span class="p">):</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
+</pre></div>
+</div>
+<p>Next, load the cache plugin specified by the user to read from and update the cache. If your inventory plugin uses YAML-based configuration files and the <code class="docutils literal notranslate"><span class="pre">_read_config_data</span></code> method, the cache plugin is loaded within that method. If your inventory plugin does not use <code class="docutils literal notranslate"><span class="pre">_read_config_data</span></code>, you must load the cache explicitly with <code class="docutils literal notranslate"><span class="pre">load_cache_plugin</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
+
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">load_cache_plugin</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Before using the cache plugin, you must retrieve a unique cache key by using the <code class="docutils literal notranslate"><span class="pre">get_cache_key</span></code> method. This task needs to be done by all inventory modules using the cache, so that you don’t use/overwrite other parts of the cache.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">load_cache_plugin</span><span class="p">()</span>
+    <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now that you’ve enabled caching, loaded the correct plugin, and retrieved a unique cache key, you can set up the flow of data between the cache and your inventory using the <code class="docutils literal notranslate"><span class="pre">cache</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">parse</span></code> method. This value comes from the inventory manager and indicates whether the inventory is being refreshed (such as via <code class="docutils literal notranslate"><span class="pre">--flush-cache</span></code> or the meta task <code class="docutils literal notranslate"><span class="pre">refresh_inventory</span></code>). Although the cache shouldn’t be used to populate the inventory when being refreshed, the cache should be updated with the new inventory if the user has enabled caching. You can use <code class="docutils literal notranslate"><span class="pre">self._cache</span></code> like a dictionary. The following pattern allows refreshing the inventory to work in conjunction with caching.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">load_cache_plugin</span><span class="p">()</span>
+    <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="c1"># cache may be True or False at this point to indicate if the inventory is being refreshed</span>
+    <span class="c1"># get the user&#39;s cache option too to see if we should save the cache if it is changing</span>
+    <span class="n">user_cache_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;cache&#39;</span><span class="p">)</span>
+
+    <span class="c1"># read if the user has caching enabled and the cache isn&#39;t being refreshed</span>
+    <span class="n">attempt_to_read_cache</span> <span class="o">=</span> <span class="n">user_cache_setting</span> <span class="ow">and</span> <span class="n">cache</span>
+    <span class="c1"># update if the user has caching enabled and the cache is being refreshed; update this value to True if the cache has expired below</span>
+    <span class="n">cache_needs_update</span> <span class="o">=</span> <span class="n">user_cache_setting</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cache</span>
+
+    <span class="c1"># attempt to read the cache if inventory isn&#39;t being refreshed and the user has caching enabled</span>
+    <span class="k">if</span> <span class="n">attempt_to_read_cache</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="c1"># This occurs if the cache_key is not in the cache or if the cache_key expired, so the cache needs to be updated</span>
+            <span class="n">cache_needs_update</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">cache_needs_update</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inventory</span><span class="p">()</span>
+
+        <span class="c1"># set the cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">populate</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After the <code class="docutils literal notranslate"><span class="pre">parse</span></code> method is complete, the contents of <code class="docutils literal notranslate"><span class="pre">self._cache</span></code> is used to set the cache plugin if the contents of the cache have changed.</p>
+<dl class="simple">
+<dt>You have three other cache methods available:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">set_cache_plugin</span></code> forces the cache plugin to be set with the contents of <code class="docutils literal notranslate"><span class="pre">self._cache</span></code>, before the <code class="docutils literal notranslate"><span class="pre">parse</span></code> method completes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_cache_if_changed</span></code> sets the cache plugin only if <code class="docutils literal notranslate"><span class="pre">self._cache</span></code> has been modified, before the <code class="docutils literal notranslate"><span class="pre">parse</span></code> method completes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clear_cache</span></code> flushes the cache, ultimately by calling the cache plugin’s <code class="docutils literal notranslate"><span class="pre">flush()</span></code> method, whose implementation is dependent upon the particular cache plugin in use. Note that if the user is using the same cache backend for facts and inventory, both will get flushed. To avoid this, the user can specify a distinct cache backend in their inventory plugin configuration.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="common-format-for-inventory-sources">
+<span id="inventory-source-common-format"></span><h3><a class="toc-backref" href="#id11">Common format for inventory sources</a><a class="headerlink" href="#common-format-for-inventory-sources" title="Permalink to this headline">¶</a></h3>
+<p>To simplify development, most plugins use a standard YAML-based configuration file as the inventory source. The file has only one required field <code class="docutils literal notranslate"><span class="pre">plugin</span></code>, which should contain the name of the plugin that is expected to consume the file.
+Depending on other common features used, you might need other fields, and you can add custom options in each plugin as required.
+For example, if you use the integrated caching, <code class="docutils literal notranslate"><span class="pre">cache_plugin</span></code>, <code class="docutils literal notranslate"><span class="pre">cache_timeout</span></code> and other cache-related fields could be present.</p>
+</div>
+<div class="section" id="the-auto-plugin">
+<span id="inventory-development-auto"></span><h3><a class="toc-backref" href="#id12">The ‘auto’ plugin</a><a class="headerlink" href="#the-auto-plugin" title="Permalink to this headline">¶</a></h3>
+<p>From Ansible 2.5 onwards, we include the <a class="reference internal" href="../collections/ansible/builtin/auto_inventory.html#auto-inventory"><span class="std std-ref">auto inventory plugin</span></a> and enable it by default. If the <code class="docutils literal notranslate"><span class="pre">plugin</span></code> field in your standard configuration file matches the name of your inventory plugin, the <code class="docutils literal notranslate"><span class="pre">auto</span></code> inventory plugin will load your plugin. The ‘auto’ plugin makes it easier to use your plugin without having to update configurations.</p>
+</div>
+</div>
+<div class="section" id="developing-inventory-scripts">
+<span id="inventory-scripts"></span><span id="id3"></span><h2><a class="toc-backref" href="#id13">Inventory scripts</a><a class="headerlink" href="#developing-inventory-scripts" title="Permalink to this headline">¶</a></h2>
+<p>Even though we now have inventory plugins, we still support inventory scripts, not only for backwards compatibility but also to allow users to leverage other programming languages.</p>
+<div class="section" id="inventory-script-conventions">
+<span id="id4"></span><h3><a class="toc-backref" href="#id14">Inventory script conventions</a><a class="headerlink" href="#inventory-script-conventions" title="Permalink to this headline">¶</a></h3>
+<p>Inventory scripts must accept the <code class="docutils literal notranslate"><span class="pre">--list</span></code> and <code class="docutils literal notranslate"><span class="pre">--host</span> <span class="pre">&lt;hostname&gt;</span></code> arguments. Although other arguments are allowed, Ansible will not use them.
+Such arguments might still be useful for executing the scripts directly.</p>
+<p>When the script is called with the single argument <code class="docutils literal notranslate"><span class="pre">--list</span></code>, the script must output to stdout a JSON-encoded hash or
+dictionary that contains all the groups to be managed. Each group’s value should be either a hash or dictionary containing a list of each host, any child groups, and potential group variables, or simply a list of hosts:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;group001&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;hosts&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;host001&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;host002&quot;</span><span class="p p-Indicator">],</span>
+        <span class="s">&quot;vars&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;var1&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;children&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;group002&quot;</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;group002&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;hosts&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;host003&quot;</span><span class="p p-Indicator">,</span><span class="s">&quot;host004&quot;</span><span class="p p-Indicator">],</span>
+        <span class="s">&quot;vars&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;var2&quot;</span><span class="p p-Indicator">:</span> <span class="nv">500</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;children&quot;</span><span class="p p-Indicator">:[]</span>
+    <span class="p p-Indicator">}</span>
+
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>If any of the elements of a group are empty, they may be omitted from the output.</p>
+<p>When called with the argument <code class="docutils literal notranslate"><span class="pre">--host</span> <span class="pre">&lt;hostname&gt;</span></code> (where &lt;hostname&gt; is a host from above), the script must print either an empty JSON hash/dictionary, or a hash/dictionary of variables to make them available to templates and playbooks. For example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;VAR001&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;VALUE&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;VAR002&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;VALUE&quot;</span><span class="p p-Indicator">,</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>Printing variables is optional. If the script does not print variables, it should print an empty hash or dictionary.</p>
+</div>
+<div class="section" id="tuning-the-external-inventory-script">
+<span id="inventory-script-tuning"></span><h3><a class="toc-backref" href="#id15">Tuning the external inventory script</a><a class="headerlink" href="#tuning-the-external-inventory-script" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.</span></p>
+</div>
+<p>The stock inventory script system mentioned above works for all versions of Ansible, but calling <code class="docutils literal notranslate"><span class="pre">--host</span></code> for every host can be rather inefficient, especially if it involves API calls to a remote subsystem.</p>
+<p>To avoid this inefficiency, if the inventory script returns a top-level element called “_meta”, it is possible to return all the host variables in a single script execution. When this meta element contains a value for “hostvars”, the inventory script will not be invoked with <code class="docutils literal notranslate"><span class="pre">--host</span></code> for each host. This behavior results in a significant performance increase for large numbers of hosts.</p>
+<p>The data to be added to the top-level JSON dictionary looks like this:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+
+    <span class="c1"># results of inventory script as above go here</span>
+    <span class="c1"># ...</span>
+
+    <span class="s">&quot;_meta&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;hostvars&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;host001&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+                <span class="s">&quot;var001&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="s">&quot;value&quot;</span>
+            <span class="p p-Indicator">},</span>
+            <span class="s">&quot;host002&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+                <span class="s">&quot;var002&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;value&quot;</span>
+            <span class="p p-Indicator">}</span>
+        <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>To satisfy the requirements of using <code class="docutils literal notranslate"><span class="pre">_meta</span></code>, to prevent ansible from calling your inventory with <code class="docutils literal notranslate"><span class="pre">--host</span></code> you must at least populate <code class="docutils literal notranslate"><span class="pre">_meta</span></code> with an empty <code class="docutils literal notranslate"><span class="pre">hostvars</span></code> dictionary.
+For example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+
+    <span class="c1"># results of inventory script as above go here</span>
+    <span class="c1"># ...</span>
+
+    <span class="s">&quot;_meta&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;hostvars&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{}</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p id="replacing-inventory-ini-with-dynamic-provider">If you intend to replace an existing static inventory file with an inventory script, it must return a JSON object which contains an ‘all’ group that includes every host in the inventory as a member and every group in the inventory as a child. It should also include an ‘ungrouped’ group which contains all hosts which are not members of any other group.
+A skeleton example of this JSON object is:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;hostvars&quot;</span><span class="p">:</span> <span class="p">{}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;all&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ungrouped&quot;</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ungrouped&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An easy way to see how this should look is using <a class="reference internal" href="../cli/ansible-inventory.html#ansible-inventory"><span class="std std-ref">ansible-inventory</span></a>, which also supports <code class="docutils literal notranslate"><span class="pre">--list</span></code> and <code class="docutils literal notranslate"><span class="pre">--host</span></code> parameters like an inventory script would.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="developing_api.html#developing-api"><span class="std std-ref">Python API</span></a></dt><dd><p>Python API to Playbooks and Ad Hoc Task Execution</p>
+</dd>
+<dt><a class="reference internal" href="developing_modules_general.html#developing-modules-general"><span class="std std-ref">Ansible module development: getting started</span></a></dt><dd><p>Get started with developing a module</p>
+</dd>
+<dt><a class="reference internal" href="developing_plugins.html#developing-plugins"><span class="std std-ref">Developing plugins</span></a></dt><dd><p>How to develop plugins</p>
+</dd>
+<dt><a class="reference external" href="https://www.ansible.com/products/tower">Ansible Tower</a></dt><dd><p>REST API endpoint and GUI for Ansible, syncs with dynamic inventory</p>
+</dd>
+<dt><a class="reference external" href="https://groups.google.com/group/ansible-devel">Development Mailing List</a></dt><dd><p>Mailing list for development topics</p>
+</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt><dd><p>#ansible IRC chat channel</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+        <a href="developing_core.html" class="btn btn-neutral float-right" title="Developing ansible-base"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="developing_plugins.html" class="btn btn-neutral" title="Developing plugins"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Jan 18, 2021.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

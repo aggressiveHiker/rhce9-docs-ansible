@@ -1,0 +1,1184 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>psrp – Run tasks over Microsoft PowerShell Remoting Protocol &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/plugins/connection/psrp.html"/>
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'2.9',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="qubes – Interact with an existing QubesOS AppVM" href="qubes.html" />
+    <link rel="prev" title="podman – Interact with an existing podman container" href="podman.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="2.9">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.9
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9_ja";
+            if ( "2.9_ja" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.9_ja");
+            } else {
+              option.value = current_url.replace("latest","2.9_ja");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.8";
+            if ( "2.8" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.8");
+            } else {
+              option.value = current_url.replace("latest","2.8");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.7";
+            if ( "2.7" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.7");
+            } else {
+              option.value = current_url.replace("latest","2.7");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+<!--  <form id="rtd-search-form" class="wy-form" action="../../search.html" -->
+  <form id="rtd-search-form" class="wy-form"  method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/intro_adhoc.html">Introduction to ad-hoc commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/playbooks.html">Working With Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/vault.html">Ansible Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/modules.html">Working With Modules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plugins.html">Working With Plugins</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../action.html">Action Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../become.html">Become Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cache.html">Cache Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../callback.html">Callback Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cliconf.html">Cliconf Plugins</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../connection.html">Connection Plugins</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../connection.html#ssh-plugins"><code class="docutils literal notranslate"><span class="pre">ssh</span></code> plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../connection.html#adding-connection-plugins">Adding connection plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../connection.html#using-connection-plugins">Using connection plugins</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../connection.html#plugin-list">Plugin List</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../httpapi.html">Httpapi Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inventory.html">Inventory Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../lookup.html">Lookup Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../netconf.html">Netconf Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../shell.html">Shell Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../strategy.html">Strategy Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vars.html">Vars Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/playbooks_filters.html">Filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/plugin_filtering_config.html">Plugin Filter Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/windows.html">Windows Guides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../user_guide/index.html">User Guide</a> &raquo;</li>
+        
+          <li><a href="../../user_guide/playbooks.html">Working With Playbooks</a> &raquo;</li>
+        
+          <li><a href="../../user_guide/playbooks_special_topics.html">Advanced Playbooks Features</a> &raquo;</li>
+        
+          <li><a href="../plugins.html">Working With Plugins</a> &raquo;</li>
+        
+          <li><a href="../connection.html">Connection Plugins</a> &raquo;</li>
+        
+      <li>psrp – Run tasks over Microsoft PowerShell Remoting Protocol</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/plugins/connection/psrp.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+  <script>
+    startsWith = function(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">');
+      document.write('<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>');
+      document.write('</div>');
+    }
+    
+      // Create a banner if we're not the latest version
+      current_url_path = window.location.pathname;
+      if (startsWith(current_url_path, "/ansible/latest/") || startsWith(current_url_path, "/ansible/2.9/")) {
+       // no banner for latest release
+       // temp banner to advertise AnsibleFest
+        document.write('<div id="banner_id" class="admonition important">');
+        document.write('<p><a href="https://www.ansible.com/ansiblefest">AnsibleFest</a> is going virtual with two days of expert speakers, live demos and hands-on labs Oct 13-14!</p>');
+        document.write('</div>');
+
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading the *devel* version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+      } else {
+        document.write('<div id="banner_id" class="admonition caution">');
+        document.write('<p>You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.</p>');
+        document.write('</div>');
+      }
+    
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="psrp-run-tasks-over-microsoft-powershell-remoting-protocol">
+<span id="psrp-connection"></span><h1>psrp – Run tasks over Microsoft PowerShell Remoting Protocol<a class="headerlink" href="#psrp-run-tasks-over-microsoft-powershell-remoting-protocol" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.7.</span></p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#requirements" id="id2">Requirements</a></li>
+<li><a class="reference internal" href="#parameters" id="id3">Parameters</a></li>
+<li><a class="reference internal" href="#status" id="id4">Status</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Run commands or put/fetch on a target via PSRP (WinRM plugin)</li>
+<li>This is similar to the <em>winrm</em> connection plugin which uses the same underlying transport but instead runs in a PowerShell interpreter.</li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>The below requirements are needed on the local master node that executes this connection.</p>
+<ul class="simple">
+<li>pypsrp (Python library)</li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                        <th>Configuration</th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-auth"></div>
+                <b>auth</b>
+                <a class="ansibleOptionLink" href="#parameter-auth" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>basic</li>
+                                                                                                                                                                                            <li>certificate</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>negotiate</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>kerberos</li>
+                                                                                                                                                                                            <li>ntlm</li>
+                                                                                                                                                                                            <li>credssp</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_auth</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The authentication protocol to use when authenticating the remote user.</div>
+                                        <div>The default, <code>negotiate</code>, will attempt to use <code>Kerberos</code> if it is available and fall back to <code>NTLM</code> if it isn&#x27;t.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-ca_cert"></div>
+                <b>ca_cert</b>
+                <a class="ansibleOptionLink" href="#parameter-ca_cert" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">path</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_cert_trust_path</div>
+                                                        <div>var: ansible_psrp_ca_cert</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The path to a PEM certificate chain to use when validating the server&#x27;s certificate.</div>
+                                        <div>This value is ignored if <em>cert_validation</em> is set to <code>ignore</code>.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: cert_trust_path</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-cert_validation"></div>
+                <b>cert_validation</b>
+                <a class="ansibleOptionLink" href="#parameter-cert_validation" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>validate</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>ignore</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_cert_validation</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Whether to validate the remote server&#x27;s certificate or not.</div>
+                                        <div>Set to <code>ignore</code> to not validate any certificates.</div>
+                                        <div><em>ca_cert</em> can be set to the path of a PEM certificate chain to use in the validation.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-certificate_key_pem"></div>
+                <b>certificate_key_pem</b>
+                <a class="ansibleOptionLink" href="#parameter-certificate_key_pem" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">path</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_certificate_key_pem</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The local path to an X509 certificate key to use with certificate auth.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-certificate_pem"></div>
+                <b>certificate_pem</b>
+                <a class="ansibleOptionLink" href="#parameter-certificate_pem" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">path</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_certificate_pem</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The local path to an X509 certificate to use with certificate auth.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-configuration_name"></div>
+                <b>configuration_name</b>
+                <a class="ansibleOptionLink" href="#parameter-configuration_name" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"Microsoft.PowerShell"</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_configuration_name</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The name of the PowerShell configuration endpoint to connect to.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-connection_timeout"></div>
+                <b>connection_timeout</b>
+                <a class="ansibleOptionLink" href="#parameter-connection_timeout" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">30</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_connection_timeout</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The connection timeout for making the request to the remote host.</div>
+                                        <div>This is measured in seconds.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-credssp_auth_mechanism"></div>
+                <b>credssp_auth_mechanism</b>
+                <a class="ansibleOptionLink" href="#parameter-credssp_auth_mechanism" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>auto</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>kerberos</li>
+                                                                                                                                                                                            <li>ntlm</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_credssp_auth_mechanism</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The sub authentication mechanism to use with CredSSP auth.</div>
+                                        <div>When <code>auto</code>, both Kerberos and NTLM is attempted with kerberos being preferred.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-credssp_disable_tlsv1_2"></div>
+                <b>credssp_disable_tlsv1_2</b>
+                <a class="ansibleOptionLink" href="#parameter-credssp_disable_tlsv1_2" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_credssp_disable_tlsv1_2</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Disables the use of TLSv1.2 on the CredSSP authentication channel.</div>
+                                        <div>This should not be set to <code>yes</code> unless dealing with a host that does not have TLSv1.2.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-credssp_minimum_version"></div>
+                <b>credssp_minimum_version</b>
+                <a class="ansibleOptionLink" href="#parameter-credssp_minimum_version" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">2</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_credssp_minimum_version</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The minimum CredSSP server authentication version that will be accepted.</div>
+                                        <div>Set to <code>5</code> to ensure the server has been patched and is not vulnerable to CVE 2018-0886.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-ignore_proxy"></div>
+                <b>ignore_proxy</b>
+                <a class="ansibleOptionLink" href="#parameter-ignore_proxy" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_ignore_proxy</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Will disable any environment proxy settings and connect directly to the remote host.</div>
+                                        <div>This option is ignored if <code>proxy</code> is set.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-max_envelope_size"></div>
+                <b>max_envelope_size</b>
+                <a class="ansibleOptionLink" href="#parameter-max_envelope_size" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">153600</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_max_envelope_size</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Sets the maximum size of each WSMan message sent to the remote host.</div>
+                                        <div>This is measured in bytes.</div>
+                                        <div>Defaults to <code>150KiB</code> for compatibility with older hosts.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-message_encryption"></div>
+                <b>message_encryption</b>
+                <a class="ansibleOptionLink" href="#parameter-message_encryption" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>auto</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>always</li>
+                                                                                                                                                                                            <li>never</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_message_encryption</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Controls the message encryption settings, this is different from TLS encryption when <em>ansible_psrp_protocol</em> is <code>https</code>.</div>
+                                        <div>Only the auth protocols <code>negotiate</code>, <code>kerberos</code>, <code>ntlm</code>, and <code>credssp</code> can do message encryption. The other authentication protocols only support encryption when <code>protocol</code> is set to <code>https</code>.</div>
+                                        <div><code>auto</code> means means message encryption is only used when not using TLS/HTTPS.</div>
+                                        <div><code>always</code> is the same as <code>auto</code> but message encryption is always used even when running over TLS/HTTPS.</div>
+                                        <div><code>never</code> disables any encryption checks that are in place when running over HTTP and disables any authentication encryption processes.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-negotiate_delegate"></div>
+                <b>negotiate_delegate</b>
+                <a class="ansibleOptionLink" href="#parameter-negotiate_delegate" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_negotiate_delegate</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Allow the remote user the ability to delegate it&#x27;s credentials to another server, i.e. credential delegation.</div>
+                                        <div>Only valid when Kerberos was the negotiated auth or was explicitly set as the authentication.</div>
+                                        <div>Ignored when NTLM was the negotiated auth.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-negotiate_hostname_override"></div>
+                <b>negotiate_hostname_override</b>
+                <a class="ansibleOptionLink" href="#parameter-negotiate_hostname_override" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_negotiate_hostname_override</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Override the remote hostname when searching for the host in the Kerberos lookup.</div>
+                                        <div>This allows Ansible to connect over IP but authenticate with the remote server using it&#x27;s DNS name.</div>
+                                        <div>Only valid when Kerberos was the negotiated auth or was explicitly set as the authentication.</div>
+                                        <div>Ignored when NTLM was the negotiated auth.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-negotiate_send_cbt"></div>
+                <b>negotiate_send_cbt</b>
+                <a class="ansibleOptionLink" href="#parameter-negotiate_send_cbt" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_negotiate_send_cbt</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Send the Channel Binding Token (CBT) structure when authenticating.</div>
+                                        <div>CBT is used to provide extra protection against Man in the Middle <code>MitM</code> attacks by binding the outer transport channel to the auth channel.</div>
+                                        <div>CBT is not used when using just <code>HTTP</code>, only <code>HTTPS</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-negotiate_service"></div>
+                <b>negotiate_service</b>
+                <a class="ansibleOptionLink" href="#parameter-negotiate_service" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"WSMAN"</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_negotiate_service</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Override the service part of the SPN used during Kerberos authentication.</div>
+                                        <div>Only valid when Kerberos was the negotiated auth or was explicitly set as the authentication.</div>
+                                        <div>Ignored when NTLM was the negotiated auth.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-operation_timeout"></div>
+                <b>operation_timeout</b>
+                <a class="ansibleOptionLink" href="#parameter-operation_timeout" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">20</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_operation_timeout</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Sets the WSMan timeout for each operation.</div>
+                                        <div>This is measured in seconds.</div>
+                                        <div>This should not exceed the value for <code>connection_timeout</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-path"></div>
+                <b>path</b>
+                <a class="ansibleOptionLink" href="#parameter-path" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"wsman"</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_path</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The URI path to connect to.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-port"></div>
+                <b>port</b>
+                <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_port</div>
+                                                        <div>var: ansible_psrp_port</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The port for PSRP to connect on the remote target.</div>
+                                        <div>Default is <code>5986</code> if <em>protocol</em> is not defined or is <code>https</code>, otherwise the port is <code>5985</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-protocol"></div>
+                <b>protocol</b>
+                <a class="ansibleOptionLink" href="#parameter-protocol" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>http</li>
+                                                                                                                                                                                            <li>https</li>
+                                                                                </ul>
+                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_protocol</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Set the protocol to use for the connection.</div>
+                                        <div>Default is <code>https</code> if <em>port</em> is not defined or <em>port</em> is not <code>5985</code>.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-proxy"></div>
+                <b>proxy</b>
+                <a class="ansibleOptionLink" href="#parameter-proxy" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_proxy</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Set the proxy URL to use when connecting to the remote host.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-read_timeout"></div>
+                <b>read_timeout</b>
+                <a class="ansibleOptionLink" href="#parameter-read_timeout" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.8</div>                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">30</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_read_timeout</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The read timeout for receiving data from the remote host.</div>
+                                        <div>This value must always be greater than <em>operation_timeout</em>.</div>
+                                        <div>This option requires pypsrp &gt;= 0.3.</div>
+                                        <div>This is measured in seconds.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-reconnection_backoff"></div>
+                <b>reconnection_backoff</b>
+                <a class="ansibleOptionLink" href="#parameter-reconnection_backoff" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.8</div>                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">2</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_connection_backoff</div>
+                                                        <div>var: ansible_psrp_reconnection_backoff</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The backoff time to use in between reconnection attempts. (First sleeps X, then sleeps 2*X, then sleeps 4*X, ...)</div>
+                                        <div>This is measured in seconds.</div>
+                                        <div>The <code>ansible_psrp_reconnection_backoff</code> variable was added in Ansible 2.9.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-reconnection_retries"></div>
+                <b>reconnection_retries</b>
+                <a class="ansibleOptionLink" href="#parameter-reconnection_retries" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">integer</span>
+                                                                </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.8</div>                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">0</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_psrp_reconnection_retries</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The number of retries on connection errors.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-remote_addr"></div>
+                <b>remote_addr</b>
+                <a class="ansibleOptionLink" href="#parameter-remote_addr" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"inventory_hostname"</div>
+                                </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_host</div>
+                                                        <div>var: ansible_psrp_host</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The hostname or IP address of the remote host.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-remote_password"></div>
+                <b>remote_password</b>
+                <a class="ansibleOptionLink" href="#parameter-remote_password" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_password</div>
+                                                        <div>var: ansible_winrm_pass</div>
+                                                        <div>var: ansible_winrm_password</div>
+                                                                    </td>
+                                            <td>
+                                        <div>Authentication password for the <code>remote_user</code>. Can be supplied as CLI option.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: password</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-remote_user"></div>
+                <b>remote_user</b>
+                <a class="ansibleOptionLink" href="#parameter-remote_user" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                <td>
+                                                                                                                                <div>var: ansible_user</div>
+                                                        <div>var: ansible_psrp_user</div>
+                                                                    </td>
+                                            <td>
+                                        <div>The user to log in as.</div>
+                                                    </td>
+        </tr>
+                    </table>
+<br/></div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id4">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This connection is not guaranteed to have a backwards compatible interface. <em>[preview]</em></li>
+<li>This connection is <a class="reference internal" href="../../user_guide/modules_support.html#modules-support"><span class="std std-ref">maintained by the Ansible Community</span></a>. <em>[community]</em></li>
+</ul>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Ansible Core Team</li>
+</ul>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you notice any issues in this documentation, you can <a class="reference external" href="https://github.com/ansible/ansible/edit/devel/lib/ansible/plugins/connection/psrp.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr">edit this document</a> to improve it.</p>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">Configuration entries for each entry type have a low to high priority order. For example, a variable that is lower in the list will override a variable that is higher up.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+        <a href="qubes.html" class="btn btn-neutral float-right" title="qubes – Interact with an existing QubesOS AppVM"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="podman.html" class="btn btn-neutral" title="podman – Interact with an existing podman container"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Sep 11, 2020.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>

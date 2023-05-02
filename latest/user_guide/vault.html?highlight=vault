@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Encrypting content with Ansible Vault &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/user_guide/vault.html"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Interactive input: prompts" href="playbooks_prompts.html" />
+    <link rel="prev" title="Discovering variables: facts and magic variables" href="playbooks_vars_facts.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#writing-tasks-plays-and-playbooks">Writing tasks, plays, and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#working-with-inventory">Working with inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#interacting-with-data">Interacting with data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#executing-playbooks">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-features-and-reference">Advanced features and reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#traditional-table-of-contents">Traditional Table of Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html">Ansible Quickstart Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_concepts.html">Ansible concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_adhoc.html">Introduction to ad hoc commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_intro.html">Intro to playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_best_practices.html">Tips and tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="become.html">Understanding privilege escalation: become</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_includes.html">Including and importing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tags.html">Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_inventory.html">How to build your inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_dynamic_inventory.html">Working with dynamic inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_patterns.html">Patterns: targeting hosts and groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command_line_tools.html">Working with command line tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Encrypting content with Ansible Vault</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#managing-vault-passwords">Managing vault passwords</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Encrypting content with Ansible Vault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-encrypted-variables-and-files">Using encrypted variables and files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-defaults-for-using-encrypted-content">Configuring defaults for using encrypted content</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#when-are-encrypted-files-made-visible">When are encrypted files made visible?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#format-of-files-encrypted-with-ansible-vault">Format of files encrypted with Ansible Vault</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_checkmode.html">Validating tasks: check mode and diff mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_startnstep.html">Executing playbooks for troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_debugger.html">Debugging tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_strategies.html">Controlling playbook execution: strategies and more</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_async.html">Asynchronous actions and polling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex_data_manipulation.html">Data manipulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugin_filtering_config.html">Rejecting modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_setup.html">Sample Ansible setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html">Working With Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Working with plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_bsd.html">Ansible and BSD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows.html">Windows Guides</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collections_using.html">Using collections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Encrypting content with Ansible Vault</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/user_guide/vault.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="encrypting-content-with-ansible-vault">
+<span id="vault"></span><h1>Encrypting content with Ansible Vault<a class="headerlink" href="#encrypting-content-with-ansible-vault" title="Permalink to this headline"></a></h1>
+<p>Ansible Vault encrypts variables and files so you can protect sensitive content such as passwords or keys rather than leaving it visible as plaintext in playbooks or roles. To use Ansible Vault you need one or more passwords to encrypt and decrypt content. If you store your vault passwords in a third-party tool such as a secret manager, you need a script to access them. Use the passwords with the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault"><span class="std std-ref">ansible-vault</span></a> command-line tool to create and view encrypted variables, create encrypted files, encrypt existing files, or edit, re-key, or decrypt files. You can then place encrypted content under source control and share it more safely.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<ul class="simple">
+<li><p>Encryption with Ansible Vault ONLY protects ‘data at rest’.  Once the content is decrypted (‘data in use’), play and plugin authors are responsible for avoiding any secret disclosure, see <a class="reference internal" href="../reference_appendices/faq.html#keep-secret-data"><span class="std std-ref">no_log</span></a> for details on hiding output and <a class="reference internal" href="#vault-securing-editor"><span class="std std-ref">Steps to secure your editor</span></a> for security considerations on editors you use with Ansible Vault.</p></li>
+</ul>
+</div>
+<p>You can use encrypted variables and files in ad hoc commands and playbooks by supplying the passwords you used to encrypt them. You can modify your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file to specify the location of a password file or to always prompt for the password.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#managing-vault-passwords" id="id4">Managing vault passwords</a></p>
+<ul>
+<li><p><a class="reference internal" href="#choosing-between-a-single-password-and-multiple-passwords" id="id5">Choosing between a single password and multiple passwords</a></p></li>
+<li><p><a class="reference internal" href="#managing-multiple-passwords-with-vault-ids" id="id6">Managing multiple passwords with vault IDs</a></p>
+<ul>
+<li><p><a class="reference internal" href="#limitations-of-vault-ids" id="id7">Limitations of vault IDs</a></p></li>
+<li><p><a class="reference internal" href="#enforcing-vault-id-matching" id="id8">Enforcing vault ID matching</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#storing-and-accessing-vault-passwords" id="id9">Storing and accessing vault passwords</a></p>
+<ul>
+<li><p><a class="reference internal" href="#storing-passwords-in-files" id="id10">Storing passwords in files</a></p></li>
+<li><p><a class="reference internal" href="#storing-passwords-in-third-party-tools-with-vault-password-client-scripts" id="id11">Storing passwords in third-party tools with vault password client scripts</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id1" id="id12">Encrypting content with Ansible Vault</a></p>
+<ul>
+<li><p><a class="reference internal" href="#encrypting-individual-variables-with-ansible-vault" id="id13">Encrypting individual variables with Ansible Vault</a></p>
+<ul>
+<li><p><a class="reference internal" href="#advantages-and-disadvantages-of-encrypting-variables" id="id14">Advantages and disadvantages of encrypting variables</a></p></li>
+<li><p><a class="reference internal" href="#creating-encrypted-variables" id="id15">Creating encrypted variables</a></p></li>
+<li><p><a class="reference internal" href="#viewing-encrypted-variables" id="id16">Viewing encrypted variables</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#encrypting-files-with-ansible-vault" id="id17">Encrypting files with Ansible Vault</a></p>
+<ul>
+<li><p><a class="reference internal" href="#advantages-and-disadvantages-of-encrypting-files" id="id18">Advantages and disadvantages of encrypting files</a></p></li>
+<li><p><a class="reference internal" href="#creating-encrypted-files" id="id19">Creating encrypted files</a></p></li>
+<li><p><a class="reference internal" href="#encrypting-existing-files" id="id20">Encrypting existing files</a></p></li>
+<li><p><a class="reference internal" href="#viewing-encrypted-files" id="id21">Viewing encrypted files</a></p></li>
+<li><p><a class="reference internal" href="#editing-encrypted-files" id="id22">Editing encrypted files</a></p></li>
+<li><p><a class="reference internal" href="#changing-the-password-and-or-vault-id-on-encrypted-files" id="id23">Changing the password and/or vault ID on encrypted files</a></p></li>
+<li><p><a class="reference internal" href="#decrypting-encrypted-files" id="id24">Decrypting encrypted files</a></p></li>
+<li><p><a class="reference internal" href="#steps-to-secure-your-editor" id="id25">Steps to secure your editor</a></p>
+<ul>
+<li><p><a class="reference internal" href="#vim" id="id26">vim</a></p></li>
+<li><p><a class="reference internal" href="#emacs" id="id27">Emacs</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-encrypted-variables-and-files" id="id28">Using encrypted variables and files</a></p>
+<ul>
+<li><p><a class="reference internal" href="#passing-a-single-password" id="id29">Passing a single password</a></p></li>
+<li><p><a class="reference internal" href="#passing-vault-ids" id="id30">Passing vault IDs</a></p></li>
+<li><p><a class="reference internal" href="#passing-multiple-vault-passwords" id="id31">Passing multiple vault passwords</a></p></li>
+<li><p><a class="reference internal" href="#using-vault-id-without-a-vault-id" id="id32">Using <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> without a vault ID</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#configuring-defaults-for-using-encrypted-content" id="id33">Configuring defaults for using encrypted content</a></p>
+<ul>
+<li><p><a class="reference internal" href="#setting-a-default-vault-id" id="id34">Setting a default vault ID</a></p></li>
+<li><p><a class="reference internal" href="#setting-a-default-password-source" id="id35">Setting a default password source</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#when-are-encrypted-files-made-visible" id="id36">When are encrypted files made visible?</a></p></li>
+<li><p><a class="reference internal" href="#format-of-files-encrypted-with-ansible-vault" id="id37">Format of files encrypted with Ansible Vault</a></p>
+<ul>
+<li><p><a class="reference internal" href="#ansible-vault-payload-format-1-1-1-2" id="id38">Ansible Vault payload format 1.1 - 1.2</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="managing-vault-passwords">
+<h2><a class="toc-backref" href="#id4">Managing vault passwords</a><a class="headerlink" href="#managing-vault-passwords" title="Permalink to this headline"></a></h2>
+<p>Managing your encrypted content is easier if you develop a strategy for managing your vault passwords. A vault password can be any string you choose. There is no special command to create a vault password. However, you need to keep track of your vault passwords. Each time you encrypt a variable or file with Ansible Vault, you must provide a password. When you use an encrypted variable or file in a command or playbook, you must provide the same password that was used to encrypt it. To develop a strategy for managing vault passwords, start with two questions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Do you want to encrypt all your content with the same password, or use different passwords for different needs?</p></li>
+<li><p>Where do you want to store your password or passwords?</p></li>
+</ul>
+</div></blockquote>
+<div class="section" id="choosing-between-a-single-password-and-multiple-passwords">
+<h3><a class="toc-backref" href="#id5">Choosing between a single password and multiple passwords</a><a class="headerlink" href="#choosing-between-a-single-password-and-multiple-passwords" title="Permalink to this headline"></a></h3>
+<p>If you have a small team or few sensitive values, you can use a single password for everything you encrypt with Ansible Vault. Store your vault password securely in a file or a secret manager as described below.</p>
+<p>If you have a larger team or many sensitive values, you can use multiple passwords. For example, you can use different passwords for different users or different levels of access. Depending on your needs, you might want a different password for each encrypted file, for each directory, or for each environment. For example, you might have a playbook that includes two vars files, one for the dev environment and one for the production environment, encrypted with two different passwords. When you run the playbook, select the correct vault password for the environment you are targeting, using a vault ID.</p>
+</div>
+<div class="section" id="managing-multiple-passwords-with-vault-ids">
+<span id="vault-ids"></span><h3><a class="toc-backref" href="#id6">Managing multiple passwords with vault IDs</a><a class="headerlink" href="#managing-multiple-passwords-with-vault-ids" title="Permalink to this headline"></a></h3>
+<p>If you use multiple vault passwords, you can differentiate one password from another with vault IDs. You use the vault ID in three ways:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Pass it with <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> to the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault"><span class="std std-ref">ansible-vault</span></a> command when you create encrypted content</p></li>
+<li><p>Include it wherever you store the password for that vault ID (see <a class="reference internal" href="#storing-vault-passwords"><span class="std std-ref">Storing and accessing vault passwords</span></a>)</p></li>
+<li><p>Pass it with <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> to the <a class="reference internal" href="../cli/ansible-playbook.html#ansible-playbook"><span class="std std-ref">ansible-playbook</span></a> command when you run a playbook that uses content you encrypted with that vault ID</p></li>
+</ul>
+</div></blockquote>
+<p>When you pass a vault ID as an option to the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault"><span class="std std-ref">ansible-vault</span></a> command, you add a label (a hint or nickname) to the encrypted content. This label documents which password you used to encrypt it. The encrypted variable or file includes the vault ID label in plain text in the header. The vault ID is the last element before the encrypted content. For example:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">my_encrypted_var</span><span class="p">:</span> <span class="kt">!vault</span> <span class="p p-Indicator">|</span>
+          <span class="no">$ANSIBLE_VAULT;1.2;AES256;dev</span>
+          <span class="no">30613233633461343837653833666333643061636561303338373661313838333565653635353162</span>
+          <span class="no">3263363434623733343538653462613064333634333464660a663633623939393439316636633863</span>
+          <span class="no">61636237636537333938306331383339353265363239643939666639386530626330633337633833</span>
+          <span class="no">6664656334373166630a363736393262666465663432613932613036303963343263623137386239</span>
+          <span class="no">6330</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In addition to the label, you must provide a source for the related password. The source can be a prompt, a file, or a script, depending on how you are storing your vault passwords. The pattern looks like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aec2cfcccbc2eeddc1dbdccdcb">[email&#160;protected]</a>
+</pre></div>
+</div>
+<p>If your playbook uses multiple encrypted variables or files that you encrypted with different passwords, you must pass the vault IDs when you run that playbook. You can use <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> by itself, with <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-password-file"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-password-file</span></code></a>, or with <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-ask-vault-password"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ask-vault-pass</span></code></a>. The pattern is the same as when you create encrypted content: include the label and the source for the matching password.</p>
+<p>See below for examples of encrypting content with vault IDs and using content encrypted with vault IDs. The <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> option works with any Ansible command that interacts with vaults, including <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault"><span class="std std-ref">ansible-vault</span></a>, <a class="reference internal" href="../cli/ansible-playbook.html#ansible-playbook"><span class="std std-ref">ansible-playbook</span></a>, and so on.</p>
+<div class="section" id="limitations-of-vault-ids">
+<h4><a class="toc-backref" href="#id7">Limitations of vault IDs</a><a class="headerlink" href="#limitations-of-vault-ids" title="Permalink to this headline"></a></h4>
+<p>Ansible does not enforce using the same password every time you use a particular vault ID label. You can encrypt different variables or files with the same vault ID label but different passwords. This usually happens when you type the password at a prompt and make a mistake. It is possible to use different passwords with the same vault ID label on purpose. For example, you could use each label as a reference to a class of passwords, rather than a single password. In this scenario, you must always know which specific password or file to use in context. However, you are more likely to encrypt two files with the same vault ID label and different passwords by mistake. If you encrypt two files with the same label but different passwords by accident, you can <a class="reference internal" href="#rekeying-files"><span class="std std-ref">rekey</span></a> one file to fix the issue.</p>
+</div>
+<div class="section" id="enforcing-vault-id-matching">
+<h4><a class="toc-backref" href="#id8">Enforcing vault ID matching</a><a class="headerlink" href="#enforcing-vault-id-matching" title="Permalink to this headline"></a></h4>
+<p>By default the vault ID label is only a hint to remind you which password you used to encrypt a variable or file. Ansible does not check that the vault ID in the header of the encrypted content matches the vault ID you provide when you use the content. Ansible decrypts all files and variables called by your command or playbook that are encrypted with the password you provide. To check the encrypted content and decrypt it only when the vault ID it contains matches the one you provide with <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code>, set the config option <a class="reference internal" href="../reference_appendices/config.html#default-vault-id-match"><span class="std std-ref">DEFAULT_VAULT_ID_MATCH</span></a>. When you set <a class="reference internal" href="../reference_appendices/config.html#default-vault-id-match"><span class="std std-ref">DEFAULT_VAULT_ID_MATCH</span></a>, each password is only used to decrypt data that was encrypted with the same label. This is efficient, predictable, and can reduce errors when different values are encrypted with different passwords.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even with the <a class="reference internal" href="../reference_appendices/config.html#default-vault-id-match"><span class="std std-ref">DEFAULT_VAULT_ID_MATCH</span></a> setting enabled, Ansible does not enforce using the same password every time you use a particular vault ID label.</p>
+</div>
+</div>
+</div>
+<div class="section" id="storing-and-accessing-vault-passwords">
+<span id="storing-vault-passwords"></span><h3><a class="toc-backref" href="#id9">Storing and accessing vault passwords</a><a class="headerlink" href="#storing-and-accessing-vault-passwords" title="Permalink to this headline"></a></h3>
+<p>You can memorize your vault password, or manually copy vault passwords from any source and paste them at a command-line prompt, but most users store them securely and access them as needed from within Ansible. You have two options for storing vault passwords that work from within Ansible: in files, or in a third-party tool such as the system keyring or a secret manager. If you store your passwords in a third-party tool, you need a vault password client script to retrieve them from within Ansible.</p>
+<div class="section" id="storing-passwords-in-files">
+<h4><a class="toc-backref" href="#id10">Storing passwords in files</a><a class="headerlink" href="#storing-passwords-in-files" title="Permalink to this headline"></a></h4>
+<p>To store a vault password in a file, enter the password as a string on a single line in the file. Make sure the permissions on the file are appropriate. Do not add password files to source control.</p>
+</div>
+<div class="section" id="storing-passwords-in-third-party-tools-with-vault-password-client-scripts">
+<span id="vault-password-client-scripts"></span><h4><a class="toc-backref" href="#id11">Storing passwords in third-party tools with vault password client scripts</a><a class="headerlink" href="#storing-passwords-in-third-party-tools-with-vault-password-client-scripts" title="Permalink to this headline"></a></h4>
+<p>You can store your vault passwords on the system keyring, in a database, or in a secret manager and retrieve them from within Ansible using a vault password client script. Enter the password as a string on a single line. If your password has a vault ID, store it in a way that works with your password storage tool.</p>
+<p>To create a vault password client script:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Create a file with a name ending in either <code class="docutils literal notranslate"><span class="pre">-client</span></code> or <code class="docutils literal notranslate"><span class="pre">-client.EXTENSION</span></code></p></li>
+<li><p>Make the file executable</p></li>
+<li><dl class="simple">
+<dt>Within the script itself:</dt><dd><ul>
+<li><p>Print the passwords to standard output</p></li>
+<li><p>Accept a <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> option</p></li>
+<li><p>If the script prompts for data (for example, a database password), send the prompts to standard error</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>When you run a playbook that uses vault passwords stored in a third-party tool, specify the script as the source within the <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> flag. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86e2e3f0c6e5e9e8f2f4efe4">[email&#160;protected]</a>/vault/vault-keyring-client.py
+</pre></div>
+</div>
+<p>Ansible executes the client script with a <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> option so the script knows which vault ID label you specified. For example a script loading passwords from a secret manager can use the vault ID label to pick either the ‘dev’ or ‘prod’ password. The example command above results in the following execution of the client script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>contrib/vault/vault-keyring-client.py --vault-id dev
+</pre></div>
+</div>
+<p>For an example of a client script that loads passwords from the system keyring, see the <a class="reference external" href="https://github.com/ansible-community/contrib-scripts/blob/main/vault/vault-keyring-client.py">vault-keyring-client script</a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id12">Encrypting content with Ansible Vault</a><a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<p>Once you have a strategy for managing and storing vault passwords, you can start encrypting content. You can encrypt two types of content with Ansible Vault: variables and files. Encrypted content always includes the <code class="docutils literal notranslate"><span class="pre">!vault</span></code> tag, which tells Ansible and YAML that the content needs to be decrypted, and a <code class="docutils literal notranslate"><span class="pre">|</span></code> character, which allows multi-line strings. Encrypted content created with <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> also contains the vault ID label. For more details about the encryption process and the format of content encrypted with Ansible Vault, see <a class="reference internal" href="#vault-format"><span class="std std-ref">Format of files encrypted with Ansible Vault</span></a>. This table shows the main differences between encrypted variables and encrypted files:</p>
+<table class="documentation-table docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 36%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Encrypted variables</p></th>
+<th class="head"><p>Encrypted files</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>How much is encrypted?</p></td>
+<td><p>Variables within a plaintext file</p></td>
+<td><p>The entire file</p></td>
+</tr>
+<tr class="row-odd"><td><p>When is it decrypted?</p></td>
+<td><p>On demand, only when needed</p></td>
+<td><p>Whenever loaded or referenced <a class="footnote-reference brackets" href="#f1" id="id2">1</a></p></td>
+</tr>
+<tr class="row-even"><td><p>What can be encrypted?</p></td>
+<td><p>Only variables</p></td>
+<td><p>Any structured data file</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p>Ansible cannot know if it needs content from an encrypted file unless it decrypts the file, so it decrypts all encrypted files referenced in your playbooks and roles.</p>
+</dd>
+</dl>
+<div class="section" id="encrypting-individual-variables-with-ansible-vault">
+<span id="single-encrypted-variable"></span><span id="encrypting-variables"></span><h3><a class="toc-backref" href="#id13">Encrypting individual variables with Ansible Vault</a><a class="headerlink" href="#encrypting-individual-variables-with-ansible-vault" title="Permalink to this headline"></a></h3>
+<p>You can encrypt single values inside a YAML file using the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-encrypt-string"><span class="std std-ref">ansible-vault encrypt_string</span></a> command. For one way to keep your vaulted variables safely visible, see <a class="reference internal" href="playbooks_best_practices.html#tip-for-variables-and-vaults"><span class="std std-ref">Keep vaulted variables safely visible</span></a>.</p>
+<div class="section" id="advantages-and-disadvantages-of-encrypting-variables">
+<h4><a class="toc-backref" href="#id14">Advantages and disadvantages of encrypting variables</a><a class="headerlink" href="#advantages-and-disadvantages-of-encrypting-variables" title="Permalink to this headline"></a></h4>
+<p>With variable-level encryption, your files are still easily legible. You can mix plaintext and encrypted variables, even inline in a play or role. However, password rotation is not as simple as with file-level encryption. You cannot <a class="reference internal" href="#rekeying-files"><span class="std std-ref">rekey</span></a> encrypted variables. Also, variable-level encryption only works on variables. If you want to encrypt tasks or other content, you must encrypt the entire file.</p>
+</div>
+<div class="section" id="creating-encrypted-variables">
+<span id="encrypt-string-for-use-in-yaml"></span><h4><a class="toc-backref" href="#id15">Creating encrypted variables</a><a class="headerlink" href="#creating-encrypted-variables" title="Permalink to this headline"></a></h4>
+<p>The <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-encrypt-string"><span class="std std-ref">ansible-vault encrypt_string</span></a> command encrypts and formats any string you type (or copy or generate) into a format that can be included in a playbook, role, or variables file. To create a basic encrypted variable, pass three options to the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-encrypt-string"><span class="std std-ref">ansible-vault encrypt_string</span></a> command:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a source for the vault password (prompt, file, or script, with or without a vault ID)</p></li>
+<li><p>the string to encrypt</p></li>
+<li><p>the string name (the name of the variable)</p></li>
+</ul>
+</div></blockquote>
+<p>The pattern looks like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault encrypt_string &lt;password_source&gt; <span class="s1">&#39;&lt;string_to_encrypt&gt;&#39;</span> --name <span class="s1">&#39;&lt;string_name_of_variable&gt;&#39;</span>
+</pre></div>
+</div>
+<p>For example, to encrypt the string ‘foobar’ using the only password stored in ‘a_password_file’ and name the variable ‘the_secret’:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault encrypt_string --vault-password-file a_password_file <span class="s1">&#39;foobar&#39;</span> --name <span class="s1">&#39;the_secret&#39;</span>
+</pre></div>
+</div>
+<p>The command above creates this content:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">the_secret</span><span class="p">:</span> <span class="kt">!vault</span> <span class="p p-Indicator">|</span>
+      <span class="no">$ANSIBLE_VAULT;1.1;AES256</span>
+      <span class="no">62313365396662343061393464336163383764373764613633653634306231386433626436623361</span>
+      <span class="no">6134333665353966363534333632666535333761666131620a663537646436643839616531643561</span>
+      <span class="no">63396265333966386166373632626539326166353965363262633030333630313338646335303630</span>
+      <span class="no">3438626666666137650a353638643435666633633964366338633066623234616432373231333331</span>
+      <span class="no">6564</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To encrypt the string ‘foooodev’, add the vault ID label ‘dev’ with the ‘dev’ vault password stored in ‘a_password_file’, and call the encrypted variable ‘the_dev_secret’:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault encrypt_string --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b4f4e5d6b4a">[email&#160;protected]</a>_password_file <span class="s1">&#39;foooodev&#39;</span> --name <span class="s1">&#39;the_dev_secret&#39;</span>
+</pre></div>
+</div>
+<p>The command above creates this content:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">the_dev_secret</span><span class="p">:</span> <span class="kt">!vault</span> <span class="p p-Indicator">|</span>
+          <span class="no">$ANSIBLE_VAULT;1.2;AES256;dev</span>
+          <span class="no">30613233633461343837653833666333643061636561303338373661313838333565653635353162</span>
+          <span class="no">3263363434623733343538653462613064333634333464660a663633623939393439316636633863</span>
+          <span class="no">61636237636537333938306331383339353265363239643939666639386530626330633337633833</span>
+          <span class="no">6664656334373166630a363736393262666465663432613932613036303963343263623137386239</span>
+          <span class="no">6330</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To encrypt the string ‘letmein’ read from stdin, add the vault ID ‘dev’ using the ‘dev’ vault password stored in <cite>a_password_file</cite>, and name the variable ‘db_password’:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> -n <span class="s1">&#39;letmein&#39;</span> <span class="p">|</span> ansible-vault encrypt_string --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c18190a3c1d">[email&#160;protected]</a>_password_file --stdin-name <span class="s1">&#39;db_password&#39;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Typing secret content directly at the command line (without a prompt) leaves the secret string in your shell history. Do not do this outside of testing.</p>
+</div>
+<p>The command above creates this output:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Reading plaintext input from stdin. (ctrl-d to end input, twice if your content does not already have a new line)</span>
+<span class="go">db_password: !vault |</span>
+<span class="gp">          $</span>ANSIBLE_VAULT<span class="p">;</span><span class="m">1</span>.2<span class="p">;</span>AES256<span class="p">;</span>dev
+<span class="go">          61323931353866666336306139373937316366366138656131323863373866376666353364373761</span>
+<span class="go">          3539633234313836346435323766306164626134376564330a373530313635343535343133316133</span>
+<span class="go">          36643666306434616266376434363239346433643238336464643566386135356334303736353136</span>
+<span class="go">          6565633133366366360a326566323363363936613664616364623437336130623133343530333739</span>
+<span class="go">          3039</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To be prompted for a string to encrypt, encrypt it with the ‘dev’ vault password from ‘a_password_file’, name the variable ‘new_user_password’ and give it the vault ID label ‘dev’:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault encrypt_string --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="781c1d0e3819">[email&#160;protected]</a>_password_file --stdin-name <span class="s1">&#39;new_user_password&#39;</span>
+</pre></div>
+</div>
+<p>The command above triggers this prompt:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reading plaintext input from stdin. (ctrl-d to end input, twice if your content does not already have a new line)
+</pre></div>
+</div>
+<p>Type the string to encrypt (for example, ‘hunter2’), hit ctrl-d, and wait.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not press <code class="docutils literal notranslate"><span class="pre">Enter</span></code> after supplying the string to encrypt. That will add a newline to the encrypted value.</p>
+</div>
+<p>The sequence above creates this output:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">new_user_password</span><span class="p">:</span> <span class="kt">!vault</span> <span class="p p-Indicator">|</span>
+          <span class="no">$ANSIBLE_VAULT;1.2;AES256;dev</span>
+          <span class="no">37636561366636643464376336303466613062633537323632306566653533383833366462366662</span>
+          <span class="no">6565353063303065303831323539656138653863353230620a653638643639333133306331336365</span>
+          <span class="no">62373737623337616130386137373461306535383538373162316263386165376131623631323434</span>
+          <span class="no">3866363862363335620a376466656164383032633338306162326639643635663936623939666238</span>
+          <span class="no">3161</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can add the output from any of the examples above to any playbook, variables file, or role for future use. Encrypted variables are larger than plain-text variables, but they protect your sensitive content while leaving the rest of the playbook, variables file, or role in plain text so you can easily read it.</p>
+</div>
+<div class="section" id="viewing-encrypted-variables">
+<h4><a class="toc-backref" href="#id16">Viewing encrypted variables</a><a class="headerlink" href="#viewing-encrypted-variables" title="Permalink to this headline"></a></h4>
+<p>You can view the original value of an encrypted variable using the debug module. You must pass the password that was used to encrypt the variable. For example, if you stored the variable created by the last example above in a file called ‘vars.yml’, you could view the unencrypted value of that variable like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ansible localhost -m ansible.builtin.debug -a var=&quot;new_user_password&quot; -e &quot;@vars.yml&quot; --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="412524370120">[email&#160;protected]</a>_password_file</span>
+
+<span class="go">localhost | SUCCESS =&gt; {</span>
+<span class="go">    &quot;new_user_password&quot;: &quot;hunter2&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="encrypting-files-with-ansible-vault">
+<h3><a class="toc-backref" href="#id17">Encrypting files with Ansible Vault</a><a class="headerlink" href="#encrypting-files-with-ansible-vault" title="Permalink to this headline"></a></h3>
+<p>Ansible Vault can encrypt any structured data file used by Ansible, including:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>group variables files from inventory</p></li>
+<li><p>host variables files from inventory</p></li>
+<li><p>variables files passed to ansible-playbook with <code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&#64;file.yml</span></code> or <code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&#64;file.json</span></code></p></li>
+<li><p>variables files loaded by <code class="docutils literal notranslate"><span class="pre">include_vars</span></code> or <code class="docutils literal notranslate"><span class="pre">vars_files</span></code></p></li>
+<li><p>variables files in roles</p></li>
+<li><p>defaults files in roles</p></li>
+<li><p>tasks files</p></li>
+<li><p>handlers files</p></li>
+<li><p>binary files or other arbitrary files</p></li>
+</ul>
+</div></blockquote>
+<p>The full file is encrypted in the vault.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Ansible Vault uses an editor to create or modify encrypted files. See <a class="reference internal" href="#vault-securing-editor"><span class="std std-ref">Steps to secure your editor</span></a> for some guidance on securing the editor.</p>
+</div>
+<div class="section" id="advantages-and-disadvantages-of-encrypting-files">
+<h4><a class="toc-backref" href="#id18">Advantages and disadvantages of encrypting files</a><a class="headerlink" href="#advantages-and-disadvantages-of-encrypting-files" title="Permalink to this headline"></a></h4>
+<p>File-level encryption is easy to use. Password rotation for encrypted files is straightforward with the <a class="reference internal" href="#rekeying-files"><span class="std std-ref">rekey</span></a> command. Encrypting files can hide not only sensitive values, but the names of the variables you use. However, with file-level encryption the contents of files are no longer easy to access and read. This may be a problem with encrypted tasks files. When encrypting a variables file, see <a class="reference internal" href="playbooks_best_practices.html#tip-for-variables-and-vaults"><span class="std std-ref">Keep vaulted variables safely visible</span></a> for one way to keep references to these variables in a non-encrypted file. Ansible always decrypts the entire encrypted file when it is when loaded or referenced, because Ansible cannot know if it needs the content unless it decrypts it.</p>
+</div>
+<div class="section" id="creating-encrypted-files">
+<span id="creating-files"></span><h4><a class="toc-backref" href="#id19">Creating encrypted files</a><a class="headerlink" href="#creating-encrypted-files" title="Permalink to this headline"></a></h4>
+<p>To create a new encrypted data file called ‘foo.yml’ with the ‘test’ vault password from ‘multi_password_file’:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault create --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="becadbcdcafed3cbd2cad7">[email&#160;protected]</a>_password_file foo.yml
+</pre></div>
+</div>
+<p>The tool launches an editor (whatever editor you have defined with $EDITOR, default editor is vi). Add the content. When you close the editor session, the file is saved as encrypted data. The file header reflects the vault ID used to create it:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>``$ANSIBLE_VAULT;1.2;AES256;test``
+</pre></div>
+</div>
+<p>To create a new encrypted data file with the vault ID ‘my_new_password’ assigned to it and be prompted for the password:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault create --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ef3e7c1f0fbe9c1eeffedede9f1ecfadeeeecf1f3eeea">[email&#160;protected]</a> foo.yml
+</pre></div>
+</div>
+<p>Again, add content to the file in the editor and save. Be sure to store the new password you created at the prompt, so you can find it when you want to decrypt that file.</p>
+</div>
+<div class="section" id="encrypting-existing-files">
+<span id="encrypting-files"></span><h4><a class="toc-backref" href="#id20">Encrypting existing files</a><a class="headerlink" href="#encrypting-existing-files" title="Permalink to this headline"></a></h4>
+<p>To encrypt an existing file, use the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-encrypt"><span class="std std-ref">ansible-vault encrypt</span></a> command. This command can operate on multiple files at once. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault encrypt foo.yml bar.yml baz.yml
+</pre></div>
+</div>
+<p>To encrypt existing files with the ‘project’ ID and be prompted for the password:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault encrypt --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0474766b6e6167704474766b697470">[email&#160;protected]</a> foo.yml bar.yml baz.yml
+</pre></div>
+</div>
+</div>
+<div class="section" id="viewing-encrypted-files">
+<span id="viewing-files"></span><h4><a class="toc-backref" href="#id21">Viewing encrypted files</a><a class="headerlink" href="#viewing-encrypted-files" title="Permalink to this headline"></a></h4>
+<p>To view the contents of an encrypted file without editing it, you can use the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-view"><span class="std std-ref">ansible-vault view</span></a> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault view foo.yml bar.yml baz.yml
+</pre></div>
+</div>
+</div>
+<div class="section" id="editing-encrypted-files">
+<span id="id3"></span><h4><a class="toc-backref" href="#id22">Editing encrypted files</a><a class="headerlink" href="#editing-encrypted-files" title="Permalink to this headline"></a></h4>
+<p>To edit an encrypted file in place, use the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-edit"><span class="std std-ref">ansible-vault edit</span></a> command. This command decrypts the file to a temporary file, allows you to edit the content, then saves and re-encrypts the content and removes the temporary file when you close the editor. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault edit foo.yml
+</pre></div>
+</div>
+<p>To edit a file encrypted with the <code class="docutils literal notranslate"><span class="pre">vault2</span></code> password file and assigned the vault ID <code class="docutils literal notranslate"><span class="pre">pass2</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault edit --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="621203111150221403170e1650">[email&#160;protected]</a> foo.yml
+</pre></div>
+</div>
+</div>
+<div class="section" id="changing-the-password-and-or-vault-id-on-encrypted-files">
+<span id="rekeying-files"></span><h4><a class="toc-backref" href="#id23">Changing the password and/or vault ID on encrypted files</a><a class="headerlink" href="#changing-the-password-and-or-vault-id-on-encrypted-files" title="Permalink to this headline"></a></h4>
+<p>To change the password on an encrypted file or files, use the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-rekey"><span class="std std-ref">rekey</span></a> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault rekey foo.yml bar.yml baz.yml
+</pre></div>
+</div>
+<p>This command can rekey multiple data files at once and will ask for the original password and also the new password. To set a different ID for the rekeyed files, pass the new ID to <code class="docutils literal notranslate"><span class="pre">--new-vault-id</span></code>. For example, to rekey a list of files encrypted with the ‘preprod1’ vault ID from the ‘ppold’ file to the ‘preprod2’ vault ID and be prompted for the new password:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault rekey --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a7d7d5c2d7d5c8c396e7d7d7c8cbc3">[email&#160;protected]</a> --new-vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="38484a5d484a575c0a78484a5755484c">[email&#160;protected]</a> foo.yml bar.yml baz.yml
+</pre></div>
+</div>
+</div>
+<div class="section" id="decrypting-encrypted-files">
+<span id="decrypting-files"></span><h4><a class="toc-backref" href="#id24">Decrypting encrypted files</a><a class="headerlink" href="#decrypting-encrypted-files" title="Permalink to this headline"></a></h4>
+<p>If you have an encrypted file that you no longer want to keep encrypted, you can permanently decrypt it by running the <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-decrypt"><span class="std std-ref">ansible-vault decrypt</span></a> command. This command will save the file unencrypted to the disk, so be sure you do not want to <a class="reference internal" href="../cli/ansible-vault.html#ansible-vault-edit"><span class="std std-ref">edit</span></a> it instead.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-vault decrypt foo.yml bar.yml baz.yml
+</pre></div>
+</div>
+</div>
+<div class="section" id="steps-to-secure-your-editor">
+<span id="vault-securing-editor"></span><h4><a class="toc-backref" href="#id25">Steps to secure your editor</a><a class="headerlink" href="#steps-to-secure-your-editor" title="Permalink to this headline"></a></h4>
+<p>Ansible Vault relies on your configured editor, which can be a source of disclosures. Most editors have ways to prevent loss of data, but these normally rely on extra plain text files that can have a clear text copy of your secrets. Consult your editor documentation to configure the editor to avoid disclosing secure data. The following sections provide some guidance on common editors but should not be taken as a complete guide to securing your editor.</p>
+<div class="section" id="vim">
+<h5><a class="toc-backref" href="#id26">vim</a><a class="headerlink" href="#vim" title="Permalink to this headline"></a></h5>
+<p>You can set the following <code class="docutils literal notranslate"><span class="pre">vim</span></code> options in command mode to avoid cases of disclosure. There may be more settings you need to modify to ensure security, especially when using plugins, so consult the <code class="docutils literal notranslate"><span class="pre">vim</span></code> documentation.</p>
+<ol class="arabic simple">
+<li><p>Disable swapfiles that act like an autosave in case of crash or interruption.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>set noswapfile
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Disable creation of backup files.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>set nobackup
+set nowritebackup
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Disable the viminfo file from copying data from your current session.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>set viminfo=
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Disable copying to the system clipboard.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>set clipboard=
+</pre></div>
+</div>
+<p>You can optionally add these settings in <code class="docutils literal notranslate"><span class="pre">.vimrc</span></code> for all files, or just specific paths or extensions. See the <code class="docutils literal notranslate"><span class="pre">vim</span></code> manual for details.</p>
+</div>
+<div class="section" id="emacs">
+<h5><a class="toc-backref" href="#id27">Emacs</a><a class="headerlink" href="#emacs" title="Permalink to this headline"></a></h5>
+<p>You can set the following Emacs options to avoid cases of disclosure. There may be more settings you need to modify to ensure security, especially when using plugins, so consult the Emacs documentation.</p>
+<ol class="arabic simple">
+<li><p>Do not copy data to the system clipboard.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>(setq x-select-enable-clipboard nil)
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Disable creation of backup files.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>(setq make-backup-files nil)
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Disable autosave files.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>(setq auto-save-default nil)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="using-encrypted-variables-and-files">
+<span id="providing-vault-passwords"></span><span id="playbooks-vault"></span><h2><a class="toc-backref" href="#id28">Using encrypted variables and files</a><a class="headerlink" href="#using-encrypted-variables-and-files" title="Permalink to this headline"></a></h2>
+<p>When you run a task or playbook that uses encrypted variables or files, you must provide the passwords to decrypt the variables or files. You can do this at the command line or in the playbook itself.</p>
+<div class="section" id="passing-a-single-password">
+<h3><a class="toc-backref" href="#id29">Passing a single password</a><a class="headerlink" href="#passing-a-single-password" title="Permalink to this headline"></a></h3>
+<p>If all the encrypted variables and files your task or playbook needs use a single password, you can use the <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-ask-vault-password"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ask-vault-pass</span></code></a> or <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-password-file"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-password-file</span></code></a> cli options.</p>
+<p>To prompt for the password:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --ask-vault-pass site.yml
+</pre></div>
+</div>
+<p>To retrieve the password from the <code class="file docutils literal notranslate"><span class="pre">/path/to/my/vault-password-file</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-password-file /path/to/my/vault-password-file site.yml
+</pre></div>
+</div>
+<p>To get the password from the vault password client script <code class="file docutils literal notranslate"><span class="pre">my-vault-password-client.py</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-password-file my-vault-password-client.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="passing-vault-ids">
+<span id="specifying-vault-ids"></span><h3><a class="toc-backref" href="#id30">Passing vault IDs</a><a class="headerlink" href="#passing-vault-ids" title="Permalink to this headline"></a></h3>
+<p>You can also use the <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> option to pass a single password with its vault label. This approach is clearer when multiple vaults are used within a single inventory.</p>
+<p>To prompt for the password for the ‘dev’ vault ID:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aecacbd8eededcc1c3deda">[email&#160;protected]</a> site.yml
+</pre></div>
+</div>
+<p>To retrieve the password for the ‘dev’ vault ID from the <code class="file docutils literal notranslate"><span class="pre">dev-password</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b2f2e3d0b2f2e3d663b2a38383c24392f">[email&#160;protected]</a> site.yml
+</pre></div>
+</div>
+<p>To get the password for the ‘dev’ vault ID from the vault password client script <code class="file docutils literal notranslate"><span class="pre">my-vault-password-client.py</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3f5b5a497f524612495e4a534b124f5e4c4c48504d5b125c53565a514b114f46">[email&#160;protected]</a>
+</pre></div>
+</div>
+</div>
+<div class="section" id="passing-multiple-vault-passwords">
+<h3><a class="toc-backref" href="#id31">Passing multiple vault passwords</a><a class="headerlink" href="#passing-multiple-vault-passwords" title="Permalink to this headline"></a></h3>
+<p>If your task or playbook requires multiple encrypted variables or files that you encrypted with different vault IDs, you must use the <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> option, passing multiple <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> options to specify the vault IDs (‘dev’, ‘prod’, ‘cloud’, ‘db’) and sources for the passwords (prompt, file, script). . For example, to use a ‘dev’ password read from a file and to be prompted for the ‘prod’ password:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="17737261577372613a6776646460786573">[email&#160;protected]</a> --vault-id <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4333312c270333312c2e3337">[email&#160;protected]</a> site.yml
+</pre></div>
+</div>
+<p>By default the vault ID labels (dev, prod and so on) are only hints. Ansible attempts to decrypt vault content with each password. The password with the same label as the encrypted data will be tried first, after that each vault secret will be tried in the order they were provided on the command line.</p>
+<p>Where the encrypted data has no label, or the label does not match any of the provided labels, the passwords will be tried in the order they are specified. In the example above, the ‘dev’ password will be tried first, then the ‘prod’ password for cases where Ansible doesn’t know which vault ID is used to encrypt something.</p>
+</div>
+<div class="section" id="using-vault-id-without-a-vault-id">
+<h3><a class="toc-backref" href="#id32">Using <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> without a vault ID</a><a class="headerlink" href="#using-vault-id-without-a-vault-id" title="Permalink to this headline"></a></h3>
+<p>The <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> option can also be used without specifying a vault-id. This behavior is equivalent to <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-ask-vault-password"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ask-vault-pass</span></code></a> or <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-password-file"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-password-file</span></code></a> so is rarely used.</p>
+<p>For example, to use a password file <code class="file docutils literal notranslate"><span class="pre">dev-password</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id dev-password site.yml
+</pre></div>
+</div>
+<p>To prompt for the password:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id @prompt site.yml
+</pre></div>
+</div>
+<p>To get the password from an executable script <code class="file docutils literal notranslate"><span class="pre">my-vault-password-client.py</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook --vault-id my-vault-password-client.py
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="configuring-defaults-for-using-encrypted-content">
+<h2><a class="toc-backref" href="#id33">Configuring defaults for using encrypted content</a><a class="headerlink" href="#configuring-defaults-for-using-encrypted-content" title="Permalink to this headline"></a></h2>
+<div class="section" id="setting-a-default-vault-id">
+<h3><a class="toc-backref" href="#id34">Setting a default vault ID</a><a class="headerlink" href="#setting-a-default-vault-id" title="Permalink to this headline"></a></h3>
+<p>If you use one vault ID more frequently than any other, you can set the config option <a class="reference internal" href="../reference_appendices/config.html#default-vault-identity-list"><span class="std std-ref">DEFAULT_VAULT_IDENTITY_LIST</span></a> to specify a default vault ID and password source. Ansible will use the default vault ID and source any time you do not specify <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a>. You can set multiple values for this option. Setting multiple values is equivalent to passing multiple <a class="reference internal" href="../cli/ansible-playbook.html#cmdoption-ansible-playbook-vault-id"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault-id</span></code></a> cli options.</p>
+</div>
+<div class="section" id="setting-a-default-password-source">
+<h3><a class="toc-backref" href="#id35">Setting a default password source</a><a class="headerlink" href="#setting-a-default-password-source" title="Permalink to this headline"></a></h3>
+<p>If you use one vault password file more frequently than any other, you can set the <a class="reference internal" href="../reference_appendices/config.html#default-vault-password-file"><span class="std std-ref">DEFAULT_VAULT_PASSWORD_FILE</span></a> config option or the <span class="target" id="index-0"></span><a class="reference internal" href="../reference_appendices/config.html#envvar-ANSIBLE_VAULT_PASSWORD_FILE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VAULT_PASSWORD_FILE</span></code></a> environment variable to specify that file. For example, if you set <code class="docutils literal notranslate"><span class="pre">ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt</span></code>, Ansible will automatically search for the password in that file. This is useful if, for example, you use Ansible from a continuous integration system such as Jenkins.</p>
+</div>
+</div>
+<div class="section" id="when-are-encrypted-files-made-visible">
+<h2><a class="toc-backref" href="#id36">When are encrypted files made visible?</a><a class="headerlink" href="#when-are-encrypted-files-made-visible" title="Permalink to this headline"></a></h2>
+<p>In general, content you encrypt with Ansible Vault remains encrypted after execution. However, there is one exception. If you pass an encrypted file as the <code class="docutils literal notranslate"><span class="pre">src</span></code> argument to the <a class="reference internal" href="../collections/ansible/builtin/copy_module.html#copy-module"><span class="std std-ref">copy</span></a>, <a class="reference internal" href="../collections/ansible/builtin/template_module.html#template-module"><span class="std std-ref">template</span></a>, <a class="reference internal" href="../collections/ansible/builtin/unarchive_module.html#unarchive-module"><span class="std std-ref">unarchive</span></a>, <a class="reference internal" href="../collections/ansible/builtin/script_module.html#script-module"><span class="std std-ref">script</span></a> or <a class="reference internal" href="../collections/ansible/builtin/assemble_module.html#assemble-module"><span class="std std-ref">assemble</span></a> module, the file will not be encrypted on the target host (assuming you supply the correct vault password when you run the play). This behavior is intended and useful. You can encrypt a configuration file or template to avoid sharing the details of your configuration, but when you copy that configuration to servers in your environment, you want it to be decrypted so local users and processes can access it.</p>
+</div>
+<div class="section" id="format-of-files-encrypted-with-ansible-vault">
+<span id="vault-format"></span><h2><a class="toc-backref" href="#id37">Format of files encrypted with Ansible Vault</a><a class="headerlink" href="#format-of-files-encrypted-with-ansible-vault" title="Permalink to this headline"></a></h2>
+<p>Ansible Vault creates UTF-8 encoded txt files. The file format includes a newline terminated header. For example:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ANSIBLE_VAULT;1.1;AES256
+</pre></div>
+</div>
+</div></blockquote>
+<p>or</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ANSIBLE_VAULT;1.2;AES256;vault-id-label
+</pre></div>
+</div>
+</div></blockquote>
+<p>The header contains up to four elements, separated by semi-colons (<code class="docutils literal notranslate"><span class="pre">;</span></code>).</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The format ID (<code class="docutils literal notranslate"><span class="pre">$ANSIBLE_VAULT</span></code>). Currently <code class="docutils literal notranslate"><span class="pre">$ANSIBLE_VAULT</span></code> is the only valid format ID. The format ID identifies content that is encrypted with Ansible Vault (via vault.is_encrypted_file()).</p></li>
+<li><p>The vault format version (<code class="docutils literal notranslate"><span class="pre">1.X</span></code>). All supported versions of Ansible will currently default to ‘1.1’ or ‘1.2’ if a labeled vault ID is supplied. The ‘1.0’ format is supported for reading only (and will be converted automatically to the ‘1.1’ format on write). The format version is currently used as an exact string compare only (version numbers are not currently ‘compared’).</p></li>
+<li><p>The cipher algorithm used to encrypt the data (<code class="docutils literal notranslate"><span class="pre">AES256</span></code>). Currently <code class="docutils literal notranslate"><span class="pre">AES256</span></code> is the only supported cipher algorithm. Vault format 1.0 used ‘AES’, but current code always uses ‘AES256’.</p></li>
+<li><p>The vault ID label used to encrypt the data (optional, <code class="docutils literal notranslate"><span class="pre">vault-id-label</span></code>) For example, if you encrypt a file with <code class="docutils literal notranslate"><span class="pre">--vault-id</span> <span class="pre">dev&#64;prompt</span></code>, the vault-id-label is <code class="docutils literal notranslate"><span class="pre">dev</span></code>.</p></li>
+</ol>
+</div></blockquote>
+<p>Note: In the future, the header could change. Fields after the format ID and format version depend on the format version, and future vault format versions may add more cipher algorithm options and/or additional fields.</p>
+<p>The rest of the content of the file is the ‘vaulttext’. The vaulttext is a text armored version of the
+encrypted ciphertext. Each line is 80 characters wide, except for the last line which may be shorter.</p>
+<div class="section" id="ansible-vault-payload-format-1-1-1-2">
+<h3><a class="toc-backref" href="#id38">Ansible Vault payload format 1.1 - 1.2</a><a class="headerlink" href="#ansible-vault-payload-format-1-1-1-2" title="Permalink to this headline"></a></h3>
+<p>The vaulttext is a concatenation of the ciphertext and a SHA256 digest with the result ‘hexlifyied’.</p>
+<p>‘hexlify’ refers to the <code class="docutils literal notranslate"><span class="pre">hexlify()</span></code> method of the Python Standard Library’s <a class="reference external" href="https://docs.python.org/3/library/binascii.html">binascii</a> module.</p>
+<p>hexlify()’ed result of:</p>
+<ul class="simple">
+<li><p>hexlify()’ed string of the salt, followed by a newline (<code class="docutils literal notranslate"><span class="pre">0x0a</span></code>)</p></li>
+<li><p>hexlify()’ed string of the crypted HMAC, followed by a newline. The HMAC is:</p>
+<ul>
+<li><p>a <a class="reference external" href="https://www.ietf.org/rfc/rfc2104.txt">RFC2104</a> style HMAC</p>
+<ul>
+<li><p>inputs are:</p>
+<ul>
+<li><p>The AES256 encrypted ciphertext</p></li>
+<li><p>A PBKDF2 key. This key, the cipher key, and the cipher IV are generated from:</p>
+<ul>
+<li><p>the salt, in bytes</p></li>
+<li><p>10000 iterations</p></li>
+<li><p>SHA256() algorithm</p></li>
+<li><p>the first 32 bytes are the cipher key</p></li>
+<li><p>the second 32 bytes are the HMAC key</p></li>
+<li><p>remaining 16 bytes are the cipher IV</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>hexlify()’ed string of the ciphertext. The ciphertext is:</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>AES256 encrypted data. The data is encrypted using:</p>
+<ul>
+<li><p>AES-CTR stream cipher</p></li>
+<li><p>cipher key</p></li>
+<li><p>IV</p></li>
+<li><p>a 128 bit counter block seeded from an integer IV</p></li>
+<li><p>the plaintext</p>
+<ul>
+<li><p>the original plaintext</p></li>
+<li><p>padding up to the AES256 blocksize. (The data used for padding is based on <a class="reference external" href="https://tools.ietf.org/html/rfc5652#section-6.3">RFC5652</a>)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_vars_facts.html" class="btn btn-neutral float-left" title="Discovering variables: facts and magic variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_prompts.html" class="btn btn-neutral float-right" title="Interactive input: prompts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Dec 01, 2021.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

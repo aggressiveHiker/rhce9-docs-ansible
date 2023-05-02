@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using VMware dynamic inventory plugin - Filters &mdash; Ansible Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/vmware_scenarios/vmware_inventory_filters.html"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ansible for VMware Scenarios" href="vmware_scenarios.html" />
+    <link rel="prev" title="Using VMware dynamic inventory plugin - Hostnames" href="vmware_inventory_hostnames.html" /><!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="5">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','https://s.swiftypecdn.com/install/v2/st.js','_st');
+
+_st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Ansible
+          </a>
+              <div class="version">
+                5
+              </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/5/") > -1
+            ? "/5/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="2.9"
+            
+        >
+            2.9
+        </option>
+        
+        <option
+            value="devel"
+            
+        >
+            devel
+        </option>
+        
+      </select>
+    </div>
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../virt_guides.html">Virtualization and Containerization Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guide_docker.html">Docker Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_kubernetes.html">Kubernetes Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_vagrant.html">Vagrant Guide</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guide_vmware.html">VMware Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="vmware_intro.html">Introduction to Ansible for VMware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_concepts.html">Ansible for VMware Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_requirements.html">VMware Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_inventory.html">Using VMware dynamic inventory plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_inventory_vm_attributes.html">Using Virtual machine attributes in VMware dynamic inventory plugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_inventory_hostnames.html">Using VMware dynamic inventory plugin - Hostnames</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Using VMware dynamic inventory plugin - Filters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vmware-dynamic-inventory-plugin-filtering-vmware-guests">VMware dynamic inventory plugin - filtering VMware guests</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_scenarios.html">Ansible for VMware Scenarios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_troubleshooting.html">Troubleshooting Ansible for VMware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vmware_external_doc_links.html">Other useful VMware resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html">Ansible VMware FAQ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_vmware_rest.html">VMware REST Scenarios</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../virt_guides.html">Virtualization and Containerization Guides</a> &raquo;</li>
+          <li><a href="../guide_vmware.html">VMware Guide</a> &raquo;</li>
+      <li>Using VMware dynamic inventory plugin - Filters</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- Ansible-specific additions for modules etc -->
+            
+              <a href="https://github.com/ansible/ansible/edit/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_filters.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      var extra_banner = '';
+    /*use extra_banner for when marketing wants something extra, like a survey or AnsibleFest notice
+    var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+      '<br>' +
+      '<p>' +
+        'You\'re invited to AnsibleFest 2021! ' +
+      '<p>' +
+        'Explore ways to automate, innovate, and accelerate with our free virtual event September 29-30. ' +
+      '<pr>' +
+        '<a href="https://reg.ansiblefest.redhat.com/flow/redhat/ansible21/regGenAttendee/login?sc_cid=7013a000002pemAAAQ">Register now!</a> ' +
+      '</p>' +
+      '<br>' +
+      '</div>'; */
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/5/"])) {
+        /* temp extra banner to advertise AnsibeFest2021 */
+        banner += extra_banner;
+
+        msg += 'You are reading the latest community version of the Ansible documentation. Red Hat subscribers, select <b>2.9</b> in the version selection to the left for the most recent Red Hat release.';
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+        /* temp extra banner to advertise AnsibleFest2021 */
+        banner += extra_banner;
+
+        /* temp banner to advertise survey
+        important = true;
+        msg += 'Please take our <a href="https://www.surveymonkey.co.uk/r/B9V3CDY">Docs survey</a> before December 31 to help us improve Ansible documentation.';
+        */
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the latest stable released version.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.';
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <div class="section" id="using-vmware-dynamic-inventory-plugin-filters">
+<span id="vmware-ansible-inventory-using-filters"></span><h1>Using VMware dynamic inventory plugin - Filters<a class="headerlink" href="#using-vmware-dynamic-inventory-plugin-filters" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#vmware-dynamic-inventory-plugin-filtering-vmware-guests" id="id2">VMware dynamic inventory plugin - filtering VMware guests</a></p>
+<ul>
+<li><p><a class="reference internal" href="#requirements" id="id3">Requirements</a></p>
+<ul>
+<li><p><a class="reference internal" href="#using-or-conditions-in-filters" id="id4">Using <code class="docutils literal notranslate"><span class="pre">or</span></code> conditions in filters</a></p></li>
+<li><p><a class="reference internal" href="#using-regular-expression-in-filters" id="id5">Using regular expression in filters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#what-to-expect" id="id6">What to expect</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting-filters" id="id7">Troubleshooting filters</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="vmware-dynamic-inventory-plugin-filtering-vmware-guests">
+<h2><a class="toc-backref" href="#id2">VMware dynamic inventory plugin - filtering VMware guests</a><a class="headerlink" href="#vmware-dynamic-inventory-plugin-filtering-vmware-guests" title="Permalink to this headline"></a></h2>
+<p>VMware inventory plugin allows you to filter VMware guests using the <code class="docutils literal notranslate"><span class="pre">filters</span></code> configuration parameter.</p>
+<p>This section shows how you configure <code class="docutils literal notranslate"><span class="pre">filters</span></code> for the given VMware guest in the inventory.</p>
+<div class="section" id="requirements">
+<h3><a class="toc-backref" href="#id3">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h3>
+<p>To use the VMware dynamic inventory plugins, you must install <a class="reference external" href="https://github.com/vmware/pyvmomi">pyVmomi</a>
+on your control node (the host running Ansible).</p>
+<p>To include tag-related information for the virtual machines in your dynamic inventory, you also need the <a class="reference external" href="https://code.vmware.com/web/sdk/65/vsphere-automation-python">vSphere Automation SDK</a>, which supports REST API features such as tagging and content libraries, on your control node.
+You can install the <code class="docutils literal notranslate"><span class="pre">vSphere</span> <span class="pre">Automation</span> <span class="pre">SDK</span></code> following <a class="reference external" href="https://github.com/vmware/vsphere-automation-sdk-python#installing-required-python-packages">these instructions</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install pyvmomi
+</pre></div>
+</div>
+<p>Starting in Ansible 2.10, the VMware dynamic inventory plugin is available in the <code class="docutils literal notranslate"><span class="pre">community.vmware</span></code> collection included Ansible.
+Alternately, to install the latest <code class="docutils literal notranslate"><span class="pre">community.vmware</span></code> collection:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ansible-galaxy collection install community.vmware
+</pre></div>
+</div>
+<p>To use this VMware dynamic inventory plugin:</p>
+<ol class="arabic simple">
+<li><p>Enable it first by specifying the following in the <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file:</p></li>
+</ol>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[inventory]</span>
+<span class="na">enable_plugins</span> <span class="o">=</span> <span class="s">community.vmware.vmware_vm_inventory</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Create a file that ends in <code class="docutils literal notranslate"><span class="pre">vmware.yml</span></code> or <code class="docutils literal notranslate"><span class="pre">vmware.yaml</span></code> in your working directory.</p></li>
+</ol>
+<p>The <code class="docutils literal notranslate"><span class="pre">vmware_vm_inventory</span></code> inventory plugin takes in the same authentication information as any other VMware modules does.</p>
+<p>Let us assume we want to list all RHEL7 VMs with the power state as “poweredOn”. A valid inventory file with filters for the given VMware guest looks as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">plugin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">community.vmware.vmware_vm_inventory</span>
+<span class="nt">strict</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.223.31</span>
+<span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c7d78717572756f686e7d68736e5c6a6f6c74796e793270737f7d70">[email&#160;protected]</a></span>
+<span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a4e1d7dccde4959697">[email&#160;protected]</a>$%</span>
+<span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">with_tags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostnames</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">config.name</span>
+<span class="nt">filters</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">config.guestId == &quot;rhel7_64Guest&quot;</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">summary.runtime.powerState == &quot;poweredOn&quot;</span>
+</pre></div>
+</div>
+<p>Here, we have configured two filters -</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config.guestId</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">rhel7_64Guest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">summary.runtime.powerState</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">poweredOn</span></code></p></li>
+</ul>
+<p>This retrieves all the VMs which satisfy these two conditions and populates them in the inventory.
+Notice that the conditions are combined using an <code class="docutils literal notranslate"><span class="pre">and</span></code> operation.</p>
+<div class="section" id="using-or-conditions-in-filters">
+<h4><a class="toc-backref" href="#id4">Using <code class="docutils literal notranslate"><span class="pre">or</span></code> conditions in filters</a><a class="headerlink" href="#using-or-conditions-in-filters" title="Permalink to this headline"></a></h4>
+<p>Let us assume you want filter RHEL7 and Ubuntu VMs. You can use multiple filters using <code class="docutils literal notranslate"><span class="pre">or</span></code> condition in your inventory file.</p>
+<p>A valid filter in the VMware inventory file for this example is:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">plugin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">community.vmware.vmware_vm_inventory</span>
+<span class="nt">strict</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.223.31</span>
+<span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82e3e6efebecebf1f6f0e3f6edf0c2f4f1f2eae7f0e7aceeede1e3ee">[email&#160;protected]</a></span>
+<span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fabf898293bacbc8c9">[email&#160;protected]</a>$%</span>
+<span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">with_tags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostnames</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">config.name</span>
+<span class="nt">filters</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">config.guestId == &quot;rhel7_64Guest&quot; or config.guestId == &quot;ubuntu64Guest&quot;</span>
+</pre></div>
+</div>
+<p>You can check all allowed properties for filters for the given virtual machine at <a class="reference internal" href="vmware_inventory_vm_attributes.html#vmware-inventory-vm-attributes"><span class="std std-ref">Using Virtual machine attributes in VMware dynamic inventory plugin</span></a>.</p>
+<p>If you are using the <code class="docutils literal notranslate"><span class="pre">properties</span></code> parameter with custom VM properties, make sure that you include all the properties used by filters as well in your VM property list.</p>
+<p>For example, if we want all RHEL7 and Ubuntu VMs that are poweredOn, you can use inventory file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">plugin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">community.vmware.vmware_vm_inventory</span>
+<span class="nt">strict</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.223.31</span>
+<span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80e1e4ede9eee9f3f4f2e1f4eff2c0f6f3f0e8e5f2e5aeecefe3e1ec">[email&#160;protected]</a></span>
+<span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="490c3a312009787b7a">[email&#160;protected]</a>$%</span>
+<span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">with_tags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostnames</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;config.name&#39;</span>
+<span class="nt">properties</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;config.name&#39;</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;config.guestId&#39;</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;guest.ipAddress&#39;</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;summary.runtime.powerState&#39;</span>
+<span class="nt">filters</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">config.guestId == &quot;rhel7_64Guest&quot; or config.guestId == &quot;ubuntu64Guest&quot;</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">summary.runtime.powerState == &quot;poweredOn&quot;</span>
+</pre></div>
+</div>
+<p>Here, we are using minimum VM properties, that is <code class="docutils literal notranslate"><span class="pre">config.name</span></code>, <code class="docutils literal notranslate"><span class="pre">config.guestId</span></code>, <code class="docutils literal notranslate"><span class="pre">summary.runtime.powerState</span></code>, and <code class="docutils literal notranslate"><span class="pre">guest.ipAddress</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config.name</span></code> is used by the <code class="docutils literal notranslate"><span class="pre">hostnames</span></code> parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">config.guestId</span></code> and <code class="docutils literal notranslate"><span class="pre">summary.runtime.powerState</span></code> are used by the <code class="docutils literal notranslate"><span class="pre">filters</span></code> parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">guest.guestId</span></code> is used by <code class="docutils literal notranslate"><span class="pre">ansible_host</span></code> internally by the inventory plugin.</p></li>
+</ul>
+</div>
+<div class="section" id="using-regular-expression-in-filters">
+<h4><a class="toc-backref" href="#id5">Using regular expression in filters</a><a class="headerlink" href="#using-regular-expression-in-filters" title="Permalink to this headline"></a></h4>
+<p>Let us assume you want filter VMs with specific IP range. You can use regular expression in <code class="docutils literal notranslate"><span class="pre">filters</span></code> in your inventory file.</p>
+<p>For example, if we want all RHEL7 and Ubuntu VMs that are poweredOn, you can use inventory file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">plugin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">community.vmware.vmware_vm_inventory</span>
+<span class="nt">strict</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.65.223.31</span>
+<span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f59491989c9b9c86818794819a87b58386859d908790db999a969499">[email&#160;protected]</a></span>
+<span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e9ac9a9180a9d8dbda">[email&#160;protected]</a>$%</span>
+<span class="nt">validate_certs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">with_tags</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">hostnames</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;config.name&#39;</span>
+<span class="nt">properties</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;config.name&#39;</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;config.guestId&#39;</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;guest.ipAddress&#39;</span>
+<span class="p p-Indicator">-</span> <span class="s">&#39;summary.runtime.powerState&#39;</span>
+<span class="nt">filters</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">guest.ipAddress is defined and guest.ipAddress is match(&#39;192.168.*&#39;)</span>
+</pre></div>
+</div>
+<p>Here, we are using <code class="docutils literal notranslate"><span class="pre">guest.ipAddress</span></code> VM property. This property is optional and depended upon VMware tools installed on VMs.
+We are using <code class="docutils literal notranslate"><span class="pre">match</span></code> to validate the regular expression for the given IP range.</p>
+<p>Executing <code class="docutils literal notranslate"><span class="pre">ansible-inventory</span> <span class="pre">--list</span> <span class="pre">-i</span> <span class="pre">&lt;filename&gt;.vmware.yml</span></code> creates a list of the virtual machines that are ready to be configured using Ansible.</p>
+</div>
+</div>
+<div class="section" id="what-to-expect">
+<h3><a class="toc-backref" href="#id6">What to expect</a><a class="headerlink" href="#what-to-expect" title="Permalink to this headline"></a></h3>
+<p>You will notice that the inventory hosts are filtered depending on your <code class="docutils literal notranslate"><span class="pre">filters</span></code> section.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;_meta&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;hostvars&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;template_001&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;config.name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;template_001&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;config.guestId&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ubuntu64Guest&quot;</span><span class="p p-Indicator">,</span>
+            <span class="nv">...</span>
+            <span class="nv">&quot;guest.toolsStatus&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;toolsNotInstalled&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;summary.runtime.powerState&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;poweredOn&quot;</span><span class="p p-Indicator">,</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;vm_8046&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;config.name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;vm_8046&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;config.guestId&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;rhel7_64Guest&quot;</span><span class="p p-Indicator">,</span>
+            <span class="nv">...</span>
+            <span class="nv">&quot;guest.toolsStatus&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;toolsNotInstalled&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;summary.runtime.powerState&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;poweredOn&quot;</span><span class="p p-Indicator">,</span>
+        <span class="p p-Indicator">},</span>
+    <span class="nv">...</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="troubleshooting-filters">
+<h3><a class="toc-backref" href="#id7">Troubleshooting filters</a><a class="headerlink" href="#troubleshooting-filters" title="Permalink to this headline"></a></h3>
+<p>If the custom property specified in <code class="docutils literal notranslate"><span class="pre">filters</span></code> fails:</p>
+<ul class="simple">
+<li><p>Check if the values provided for username and password are correct.</p></li>
+<li><p>Make sure it is a valid property, see <a class="reference internal" href="vmware_inventory_vm_attributes.html#vmware-inventory-vm-attributes"><span class="std std-ref">Using Virtual machine attributes in VMware dynamic inventory plugin</span></a>.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">strict:</span> <span class="pre">True</span></code> to get more information about the error.</p></li>
+<li><p>Please make sure that you are using latest version of the VMware collection.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://github.com/vmware/pyvmomi">pyVmomi</a></dt><dd><p>The GitHub Page of pyVmomi</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/vmware/pyvmomi/issues">pyVmomi Issue Tracker</a></dt><dd><p>The issue tracker for the pyVmomi project</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/vmware/vsphere-automation-sdk-python">vSphere Automation SDK GitHub Page</a></dt><dd><p>The GitHub Page of vSphere Automation SDK for Python</p>
+</dd>
+<dt><a class="reference external" href="https://github.com/vmware/vsphere-automation-sdk-python/issues">vSphere Automation SDK Issue Tracker</a></dt><dd><p>The issue tracker for vSphere Automation SDK for Python</p>
+</dd>
+<dt><a class="reference internal" href="vmware_inventory_vm_attributes.html#vmware-inventory-vm-attributes"><span class="std std-ref">Using Virtual machine attributes in VMware dynamic inventory plugin</span></a></dt><dd><p>Using Virtual machine attributes in VMware dynamic inventory plugin</p>
+</dd>
+<dt><a class="reference internal" href="../../user_guide/playbooks.html#working-with-playbooks"><span class="std std-ref">Working with playbooks</span></a></dt><dd><p>An introduction to playbooks</p>
+</dd>
+<dt><a class="reference internal" href="../../user_guide/vault.html#playbooks-vault"><span class="std std-ref">Using encrypted variables and files</span></a></dt><dd><p>Using Vault in playbooks</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vmware_inventory_hostnames.html" class="btn btn-neutral float-left" title="Using VMware dynamic inventory plugin - Hostnames" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vmware_scenarios.html" class="btn btn-neutral float-right" title="Ansible for VMware Scenarios" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Dec 21, 2021.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

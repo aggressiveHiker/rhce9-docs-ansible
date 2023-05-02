@@ -1,0 +1,1463 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stat – Retrieve file or file system status &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/modules/stat_module.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'2.9',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/ansible.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> <!---- extra head elements for Ansible beyond RTD Sphinx Theme --->
+<script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+<!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
+<meta class="swiftype" name="version" data-type="string" content="2.9">
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for Ansible beyond RTD Sphinx Theme --->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+  <div class="DocSite-globalNav ansibleNav">
+      <ul>
+          <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+          <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+          <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+          <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+          <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+      </ul>
+  </div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/logo_invert.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">
+    Documentation
+  </div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Ansible
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.9
+              </div>
+            
+          
+
+          <!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <div class="version-dropdown">
+      <select class="version-list" id="version-list" onchange="javascript:location.href = this.value;">
+        <script> x = document.getElementById("version-list"); </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "latest";
+            if ( "latest" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","latest");
+            } else {
+              option.value = current_url.replace("latest","latest");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.9_ja";
+            if ( "2.9_ja" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.9_ja");
+            } else {
+              option.value = current_url.replace("latest","2.9_ja");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.8";
+            if ( "2.8" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.8");
+            } else {
+              option.value = current_url.replace("latest","2.8");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "2.7";
+            if ( "2.7" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","2.7");
+            } else {
+              option.value = current_url.replace("latest","2.7");
+            }
+            x.add(option);
+          </script>
+        
+          <script>
+            current_url = window.location.href;
+            option = document.createElement("option");
+            option.text = "devel";
+            if ( "devel" == "2.9" ) {
+              option.selected = true;
+            }
+            if (current_url.search("2.9") > -1) {
+              option.value = current_url.replace("2.9","devel");
+            } else {
+              option.value = current_url.replace("latest","devel");
+            }
+            x.add(option);
+          </script>
+        
+      </select>
+    </div>
+  
+</div>
+          
+<div role="search">
+<!--  <form id="rtd-search-form" class="wy-form" action="../search.html" -->
+  <form id="rtd-search-form" class="wy-form"  method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+         <!-- extra nav elements for Ansible beyond RTD Sphinx Theme --->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
+      </div>
+    </nav>
+  </div>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>stat – Retrieve file or file system status</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- Ansible-specific additions for modules etc -->
+                
+                  <a href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/files/stat.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+                
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <!--- Based on sphinx versionwarning extension. Extension currently only works on READTHEDOCS -->
+  <script>
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("This is a testing site. For the official docs go to https://docs.ansible.com/");
+      para.appendChild(banner_text);
+      element = document.getElementById('testing_banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    }
+
+    // Create a banner if we're not the latest version
+    current_url = window.location.href;
+    if ((current_url.search("latest") > -1) || (current_url.search("/2.9/") > -1)) {
+     // no banner for latest release
+    } else if (current_url.search("devel") > -1) {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading the *devel* version of the Ansible documentation - most module documentation is currently missing as the modules have moved to collections. Until docs catches up to this change, use the version selection to the left if you want module documentation or the latest stable release version. The *devel* version is not guaranteed stable.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    } else {
+      document.write('<div id="banner_id" class="admonition caution">');
+      para = document.createElement('p');
+      banner_text=document.createTextNode("You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the latest stable released version.");
+      para.appendChild(banner_text);
+      element = document.getElementById('banner_id');
+      element.appendChild(para);
+      document.write('</div>');
+    }
+  </script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="stat-retrieve-file-or-file-system-status">
+<span id="stat-module"></span><h1>stat – Retrieve file or file system status<a class="headerlink" href="#stat-retrieve-file-or-file-system-status" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></li>
+<li><a class="reference internal" href="#parameters" id="id2">Parameters</a></li>
+<li><a class="reference internal" href="#see-also" id="id3">See Also</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#return-values" id="id5">Return Values</a></li>
+<li><a class="reference internal" href="#status" id="id6">Status</a></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Retrieves facts for a file similar to the Linux/Unix ‘stat’ command.</li>
+<li>For Windows targets, use the <a class="reference internal" href="win_stat_module.html#win-stat-module"><span class="std std-ref">win_stat</span></a> module instead.</li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id2">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-checksum_algorithm"></div>
+                <b>checksum_algorithm</b>
+                <a class="ansibleOptionLink" href="#parameter-checksum_algorithm" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">string</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>md5</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>sha1</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>sha224</li>
+                                                                                                                                                                                            <li>sha256</li>
+                                                                                                                                                                                            <li>sha384</li>
+                                                                                                                                                                                            <li>sha512</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Algorithm to determine checksum of file.</div>
+                                        <div>Will throw an error if the host is unable to use specified algorithm.</div>
+                                        <div>The remote host has to support the hashing method specified, <code>md5</code> can be unavailable if the host is FIPS-140 compliant.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: checksum, checksum_algo</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-follow"></div>
+                <b>follow</b>
+                <a class="ansibleOptionLink" href="#parameter-follow" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Whether to follow symlinks.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-get_attributes"></div>
+                <b>get_attributes</b>
+                <a class="ansibleOptionLink" href="#parameter-get_attributes" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Get file attributes using lsattr tool if present.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: attr, attributes</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-get_checksum"></div>
+                <b>get_checksum</b>
+                <a class="ansibleOptionLink" href="#parameter-get_checksum" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Whether to return a checksum of the file.</div>
+                                                    </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-get_mime"></div>
+                <b>get_mime</b>
+                <a class="ansibleOptionLink" href="#parameter-get_mime" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">boolean</span>
+                                                                </div>
+                                </td>
+                            <td>
+                                                                                                                                                                                                                <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                        <div>Use file magic and return data about the nature of the file. this uses the &#x27;file&#x27; utility found on most Linux/Unix systems.</div>
+                                        <div>This will add both `mime_type` and &#x27;charset&#x27; fields to the return, if possible.</div>
+                                        <div>In Ansible 2.3 this option changed from &#x27;mime&#x27; to &#x27;get_mime&#x27; and the default changed to &#x27;Yes&#x27;.</div>
+                                                            <div style="font-size: small; color: darkgreen"><br/>aliases: mime, mime_type, mime-type</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="parameter-path"></div>
+                <b>path</b>
+                <a class="ansibleOptionLink" href="#parameter-path" title="Permalink to this option"></a>
+                <div style="font-size: small">
+                    <span style="color: purple">path</span>
+                                             / <span style="color: red">required</span>                    </div>
+                                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                        <div>The full path of the file/object to get the facts of.</div>
+                                                    </td>
+        </tr>
+                    </table>
+<br/></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id3">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="file_module.html#file-module"><span class="std std-ref">file – Manage files and file properties</span></a></dt>
+<dd>The official documentation on the <strong>file</strong> module.</dd>
+<dt><a class="reference internal" href="win_stat_module.html#win-stat-module"><span class="std std-ref">win_stat – Get information about Windows files</span></a></dt>
+<dd>The official documentation on the <strong>win_stat</strong> module.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Obtain the stats of /etc/foo.conf, and check that the file still belongs</span>
+<span class="c1"># to &#39;root&#39;. Fail otherwise.</span>
+<span class="p p-Indicator">-</span> <span class="nt">stat</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/foo.conf</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">st</span>
+<span class="p p-Indicator">-</span> <span class="nt">fail</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Whoops!</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">ownership</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">changed&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">st.stat.pw_name != &#39;root&#39;</span>
+
+<span class="c1"># Determine if a path exists and is a symlink. Note that if the path does</span>
+<span class="c1"># not exist, and we test sym.stat.islnk, it will fail with an error. So</span>
+<span class="c1"># therefore, we must test whether it is defined.</span>
+<span class="c1"># Run this to understand the structure, the skipped ones do not pass the</span>
+<span class="c1"># check performed by &#39;when&#39;</span>
+<span class="p p-Indicator">-</span> <span class="nt">stat</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/something</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sym</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;islnk</span><span class="nv"> </span><span class="s">isn&#39;t</span><span class="nv"> </span><span class="s">defined</span><span class="nv"> </span><span class="s">(path</span><span class="nv"> </span><span class="s">doesn&#39;t</span><span class="nv"> </span><span class="s">exist)&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sym.stat.islnk is not defined</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;islnk</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">defined</span><span class="nv"> </span><span class="s">(path</span><span class="nv"> </span><span class="s">must</span><span class="nv"> </span><span class="s">exist)&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sym.stat.islnk is defined</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Path</span><span class="nv"> </span><span class="s">exists</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">symlink&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sym.stat.islnk is defined and sym.stat.islnk</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Path</span><span class="nv"> </span><span class="s">exists</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">isn&#39;t</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">symlink&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sym.stat.islnk is defined and sym.stat.islnk == False</span>
+
+
+<span class="c1"># Determine if a path exists and is a directory.  Note that we need to test</span>
+<span class="c1"># both that p.stat.isdir actually exists, and also that it&#39;s set to true.</span>
+<span class="p p-Indicator">-</span> <span class="nt">stat</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/something</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">p</span>
+<span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">msg</span><span class="p">:</span> <span class="s">&quot;Path</span><span class="nv"> </span><span class="s">exists</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">directory&quot;</span>
+  <span class="nt">when</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">p.stat.isdir is defined and p.stat.isdir</span>
+
+<span class="c1"># Don&#39;t do checksum</span>
+<span class="p p-Indicator">-</span> <span class="nt">stat</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/myhugefile</span>
+    <span class="nt">get_checksum</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
+
+<span class="c1"># Use sha256 to calculate checksum</span>
+<span class="p p-Indicator">-</span> <span class="nt">stat</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/path/to/something</span>
+    <span class="nt">checksum_algorithm</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sha256</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id5">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
+<p>Common return values are documented <a class="reference internal" href="../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="2">Key</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                <tr>
+                            <td colspan="2">
+                <div class="ansibleOptionAnchor" id="return-stat"></div>
+                <b>stat</b>
+                <a class="ansibleOptionLink" href="#return-stat" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">complex</span>
+                                      </div>
+                                </td>
+            <td>success</td>
+            <td>
+                                        <div>dictionary containing all the stat data, some platforms might add additional fields</div>
+                                    <br/>
+                                </td>
+        </tr>
+                                                        <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/atime"></div>
+                <b>atime</b>
+                <a class="ansibleOptionLink" href="#return-stat/atime" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">float</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Time of last access</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1424348972.575</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/attributes"></div>
+                <b>attributes</b>
+                <a class="ansibleOptionLink" href="#return-stat/attributes" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">list</span>
+                                      </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3</div>                </td>
+            <td>success, path exists and user can execute the path</td>
+            <td>
+                                        <div>list of file attributes</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;immutable&#x27;, &#x27;extent&#x27;]</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/charset"></div>
+                <b>charset</b>
+                <a class="ansibleOptionLink" href="#return-stat/charset" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats and installed python supports it and the `mime` option was true, will return &#x27;unknown&#x27; on error.</td>
+            <td>
+                                        <div>file character set or encoding</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">us-ascii</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/checksum"></div>
+                <b>checksum</b>
+                <a class="ansibleOptionLink" href="#return-stat/checksum" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists, user can read stats, path supports hashing and supplied checksum algorithm is available</td>
+            <td>
+                                        <div>hash of the path</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">50ba294cdf28c0d5bcde25708df53346825a429f</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/ctime"></div>
+                <b>ctime</b>
+                <a class="ansibleOptionLink" href="#return-stat/ctime" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">float</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Time of last metadata update or creation (depends on OS)</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1424348972.575</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/dev"></div>
+                <b>dev</b>
+                <a class="ansibleOptionLink" href="#return-stat/dev" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Device the inode resides on</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">33</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/executable"></div>
+                <b>executable</b>
+                <a class="ansibleOptionLink" href="#return-stat/executable" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.2</div>                </td>
+            <td>success, path exists and user can execute the path</td>
+            <td>
+                                        <div>Tells you if the invoking user has execute permission on the path</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/exists"></div>
+                <b>exists</b>
+                <a class="ansibleOptionLink" href="#return-stat/exists" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success</td>
+            <td>
+                                        <div>If the destination path actually exists or not</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/gid"></div>
+                <b>gid</b>
+                <a class="ansibleOptionLink" href="#return-stat/gid" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Numeric id representing the group of the owner</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1003</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/gr_name"></div>
+                <b>gr_name</b>
+                <a class="ansibleOptionLink" href="#return-stat/gr_name" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats and installed python supports it</td>
+            <td>
+                                        <div>Group name of owner</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">www-data</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/inode"></div>
+                <b>inode</b>
+                <a class="ansibleOptionLink" href="#return-stat/inode" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Inode number of the path</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">12758</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/isblk"></div>
+                <b>isblk</b>
+                <a class="ansibleOptionLink" href="#return-stat/isblk" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the path is a block device</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/ischr"></div>
+                <b>ischr</b>
+                <a class="ansibleOptionLink" href="#return-stat/ischr" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the path is a character device</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/isdir"></div>
+                <b>isdir</b>
+                <a class="ansibleOptionLink" href="#return-stat/isdir" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the path is a directory</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/isfifo"></div>
+                <b>isfifo</b>
+                <a class="ansibleOptionLink" href="#return-stat/isfifo" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the path is a named pipe</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/isgid"></div>
+                <b>isgid</b>
+                <a class="ansibleOptionLink" href="#return-stat/isgid" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the invoking user&#x27;s group id matches the owner&#x27;s group id</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/islnk"></div>
+                <b>islnk</b>
+                <a class="ansibleOptionLink" href="#return-stat/islnk" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the path is a symbolic link</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/isreg"></div>
+                <b>isreg</b>
+                <a class="ansibleOptionLink" href="#return-stat/isreg" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the path is a regular file</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/issock"></div>
+                <b>issock</b>
+                <a class="ansibleOptionLink" href="#return-stat/issock" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the path is a unix domain socket</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/isuid"></div>
+                <b>isuid</b>
+                <a class="ansibleOptionLink" href="#return-stat/isuid" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the invoking user&#x27;s id matches the owner&#x27;s id</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/lnk_source"></div>
+                <b>lnk_source</b>
+                <a class="ansibleOptionLink" href="#return-stat/lnk_source" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats and the path is a symbolic link</td>
+            <td>
+                                        <div>Target of the symlink normalized for the remote filesystem</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">/home/foobar/21102015-1445431274-908472971</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/lnk_target"></div>
+                <b>lnk_target</b>
+                <a class="ansibleOptionLink" href="#return-stat/lnk_target" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.4</div>                </td>
+            <td>success, path exists and user can read stats and the path is a symbolic link</td>
+            <td>
+                                        <div>Target of the symlink.  Note that relative paths remain relative</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">../foobar/21102015-1445431274-908472971</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/md5"></div>
+                <b>md5</b>
+                <a class="ansibleOptionLink" href="#return-stat/md5" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats and path supports hashing and md5 is supported</td>
+            <td>
+                                        <div>md5 hash of the path; this will be removed in Ansible 2.9 in favor of the checksum return value</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">f88fa92d8cf2eeecf4c0a50ccc96d0c0</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/mimetype"></div>
+                <b>mimetype</b>
+                <a class="ansibleOptionLink" href="#return-stat/mimetype" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats and installed python supports it and the `mime` option was true, will return &#x27;unknown&#x27; on error.</td>
+            <td>
+                                        <div>file magic data or mime-type</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">application/pdf; charset=binary</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/mode"></div>
+                <b>mode</b>
+                <a class="ansibleOptionLink" href="#return-stat/mode" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Unix permissions of the file in octal representation as a string</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1755</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/mtime"></div>
+                <b>mtime</b>
+                <a class="ansibleOptionLink" href="#return-stat/mtime" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">float</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Time of last modification</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1424348972.575</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/nlink"></div>
+                <b>nlink</b>
+                <a class="ansibleOptionLink" href="#return-stat/nlink" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Number of links to the inode (hard links)</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/path"></div>
+                <b>path</b>
+                <a class="ansibleOptionLink" href="#return-stat/path" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success and if path exists</td>
+            <td>
+                                        <div>The full path of the file/object to get the facts of</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">/path/to/file</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/pw_name"></div>
+                <b>pw_name</b>
+                <a class="ansibleOptionLink" href="#return-stat/pw_name" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">string</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats and installed python supports it</td>
+            <td>
+                                        <div>User name of owner</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">httpd</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/readable"></div>
+                <b>readable</b>
+                <a class="ansibleOptionLink" href="#return-stat/readable" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.2</div>                </td>
+            <td>success, path exists and user can read the path</td>
+            <td>
+                                        <div>Tells you if the invoking user has the right to read the path</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/rgrp"></div>
+                <b>rgrp</b>
+                <a class="ansibleOptionLink" href="#return-stat/rgrp" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the owner&#x27;s group has read permission</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/roth"></div>
+                <b>roth</b>
+                <a class="ansibleOptionLink" href="#return-stat/roth" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if others have read permission</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/rusr"></div>
+                <b>rusr</b>
+                <a class="ansibleOptionLink" href="#return-stat/rusr" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the owner has read permission</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/size"></div>
+                <b>size</b>
+                <a class="ansibleOptionLink" href="#return-stat/size" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Size in bytes for a plain file, amount of data for some special files</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">203</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/uid"></div>
+                <b>uid</b>
+                <a class="ansibleOptionLink" href="#return-stat/uid" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">integer</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Numeric id representing the file owner</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1003</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/wgrp"></div>
+                <b>wgrp</b>
+                <a class="ansibleOptionLink" href="#return-stat/wgrp" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the owner&#x27;s group has write permission</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/woth"></div>
+                <b>woth</b>
+                <a class="ansibleOptionLink" href="#return-stat/woth" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if others have write permission</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/writeable"></div>
+                <b>writeable</b>
+                <a class="ansibleOptionLink" href="#return-stat/writeable" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.2</div>                </td>
+            <td>success, path exists and user can write the path</td>
+            <td>
+                                        <div>Tells you if the invoking user has the right to write the path</div>
+                                    <br/>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/wusr"></div>
+                <b>wusr</b>
+                <a class="ansibleOptionLink" href="#return-stat/wusr" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the owner has write permission</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/xgrp"></div>
+                <b>xgrp</b>
+                <a class="ansibleOptionLink" href="#return-stat/xgrp" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the owner&#x27;s group has execute permission</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/xoth"></div>
+                <b>xoth</b>
+                <a class="ansibleOptionLink" href="#return-stat/xoth" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if others have execute permission</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+                            <tr>
+                                <td class="elbow-placeholder">&nbsp;</td>
+                            <td colspan="1">
+                <div class="ansibleOptionAnchor" id="return-stat/xusr"></div>
+                <b>xusr</b>
+                <a class="ansibleOptionLink" href="#return-stat/xusr" title="Permalink to this return value"></a>
+                <div style="font-size: small">
+                  <span style="color: purple">boolean</span>
+                                      </div>
+                                </td>
+            <td>success, path exists and user can read stats</td>
+            <td>
+                                        <div>Tells you if the owner has execute permission</div>
+                                    <br/>
+                                        <div style="font-size: smaller"><b>Sample:</b></div>
+                                            <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                </td>
+        </tr>
+
+                                    </table>
+<br/><br/></div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id6">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This module is guaranteed to have backward compatible interface changes going forward. <em>[stableinterface]</em></li>
+<li>This module is <a class="reference internal" href="../user_guide/modules_support.html#modules-support"><span class="std std-ref">maintained by the Ansible Core Team</span></a>. <em>[core]</em></li>
+</ul>
+<div class="section" id="red-hat-support">
+<h3>Red Hat Support<a class="headerlink" href="#red-hat-support" title="Permalink to this headline">¶</a></h3>
+<p>More information about Red Hat’s support of this module is available from this <a class="reference external" href="https://access.redhat.com/articles/3166901">Red Hat Knowledge Base article</a>.</p>
+</div>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Bruce Pennypacker (&#64;bpennypacker)</li>
+</ul>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you notice any issues in this documentation, you can <a class="reference external" href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/files/stat.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr">edit this document</a> to improve it.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 Red Hat, Inc.
+      <span class="lastupdated">
+        Last updated on Jul 21, 2020.
+      </span>
+
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script>
+
+  
+  
+    
+   <!-- extra footer elements for Ansible beyond RTD Sphinx Theme --->
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script> 
+
+</body>
+</html>
