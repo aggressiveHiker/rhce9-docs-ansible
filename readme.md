@@ -22,7 +22,7 @@ After the download and tweaks, the website should now be a fairly accurate copy 
 ## Usage
 To get this up and running, simply clone it into the data folder of a functional web server using the following command:
 ```
-git clone git@github.com:aggressiveHiker/rhce9-docs-ansible.git
+git clone https://github.com/aggressiveHiker/rhce9-docs-ansible.git
 ```
 
 ## Repoduction
