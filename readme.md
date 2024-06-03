@@ -25,6 +25,13 @@ To get this up and running, simply clone it into the data folder of a functional
 git clone https://github.com/aggressiveHiker/rhce9-docs-ansible.git
 ```
 
+## Podman
+To run inside a podman nginx container
+```bash
+podman run -v "$(pwd)/latest:/usr/share/nginx/html:ro" -p 8080:80 nginx
+```
+Then navigate to [localhost:8080](http://localhost:8080)
+
 ## Repoduction
 This website was built on a minimal install of RHEL 9.0 with httpd installed. Here are the steps that were taken to produce this repo, so you can reproduce it on your own if you would like:
 ```
